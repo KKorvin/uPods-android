@@ -1,16 +1,26 @@
 package com.chickenkiller.upods2;
 
-import android.support.v7.app.ActionBarActivity;
+import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.GridView;
 
-public class ActivityMain extends ActionBarActivity {
+import com.chickenkiller.upods2.controllers.MediaItemsAdapter;
+import com.chickenkiller.upods2.models.RadioItem;
+
+public class ActivityMain extends Activity {
+
+    private GridView gvMain;
+    private MediaItemsAdapter adapterGvMain;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        gvMain = (GridView)findViewById(R.id.gvMain);
+        adapterGvMain = new MediaItemsAdapter(this,R.layout.item_main_greed,RadioItem.generateDebugList(20));
+        gvMain.setAdapter(adapterGvMain);
     }
 
     @Override
