@@ -70,7 +70,7 @@ public class SlidingMenu {
             }
         };
         mDrawerLayout.setDrawerListener(mDrawerToggle);
-
+        mDrawerToggle.syncState();
     }
 
     public void toogle() {
