@@ -5,5 +5,5 @@
     <color name="sliding_menu_background">#FAFAFA</color>
     <color name="white">#FFFFFF</color>
     <color name="black">#000000</color>
-
+    <color name="sliding_menu_devider_color">#dcdcdc</color>
 </resources>

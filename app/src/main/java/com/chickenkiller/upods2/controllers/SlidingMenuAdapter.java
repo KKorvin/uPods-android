@@ -9,13 +9,14 @@ import android.widget.TextView;
 
 import com.chickenkiller.upods2.R;
 import com.chickenkiller.upods2.models.SlidingMenuItem;
+import com.yqritc.recyclerviewflexibledivider.FlexibleDividerDecoration;
 
 import java.util.List;
 
 /**
  * Created by alonzilberman on 7/4/15.
  */
-public class SlidingMenuAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class SlidingMenuAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements FlexibleDividerDecoration.VisibilityProvider {
 
     private static final int HEADER = 1;
     private static final int ITEMS_HEADER = 2;
@@ -97,4 +98,8 @@ public class SlidingMenuAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         return position == 0;
     }
 
+    @Override
+    public boolean shouldHideDivider(int i, RecyclerView recyclerView) {
+        return !items.get(i).hasDevider;
+    }
 }
