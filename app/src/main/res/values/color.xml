@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="color_primary">#FF5722</color>
-    <color name="color_primary_dark">#E64A19</color>
+    <color name="color_primary">#3F51B5</color>
+    <color name="color_primary_dark">#1A237E</color>
+    <color name="sliding_menu_background">#FAFAFA</color>
+
 </resources>
