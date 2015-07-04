@@ -15,35 +15,37 @@ import java.util.List;
 /**
  * Created by alonzilberman on 7/4/15.
  */
-public class SlidingMenuAdapter extends RecyclerView.Adapter<SlidingMenuAdapter.ViewHolder> {
+public class SlidingMenuAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private static final int HEADER = 1;
-    private static final int ITEM = 2;
+    private static final int ITEMS_HEADER = 2;
+    private static final int ITEM = 3;
     private static final int HEADER_LAYOUT = R.layout.sliding_menu_header;
 
     private List<SlidingMenuItem> items;
     private int itemLayout;
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
-        public int type;
+    private class ViewHolderItem extends RecyclerView.ViewHolder {
         public ImageView image;
         public TextView text;
 
+        public ViewHolderItem(View itemView, int type) {
+            super(itemView);
+            this.image = (ImageView) itemView.findViewById(R.id.imgSMenutIcon);
+            this.text = (TextView) itemView.findViewById(R.id.tvSMenuTitle);
+        }
+    }
+
+    private class ViewHolderHeader extends RecyclerView.ViewHolder {
         public ImageView headerAvater;
         public TextView headerText;
         public TextView headerEmail;
 
-        public ViewHolder(View itemView, int type) {
+        public ViewHolderHeader(View itemView, int type) {
             super(itemView);
-            this.type = type;
-            if (type == ITEM) {
-                this.image = (ImageView) itemView.findViewById(R.id.imgSMenutIcon);
-                this.text = (TextView) itemView.findViewById(R.id.tvSMenuTitle);
-            } else {
-                this.headerAvater = (ImageView) itemView.findViewById(R.id.imgSMHeaderAvatar);
-                this.headerText = (TextView) itemView.findViewById(R.id.tvSMHeaderName);
-                this.headerEmail = (TextView) itemView.findViewById(R.id.tvSMHeaderEmail);
-            }
+            this.headerAvater = (ImageView) itemView.findViewById(R.id.imgSMHeaderAvatar);
+            this.headerText = (TextView) itemView.findViewById(R.id.tvSMHeaderName);
+            this.headerEmail = (TextView) itemView.findViewById(R.id.tvSMHeaderEmail);
         }
     }
 
@@ -55,22 +57,25 @@ public class SlidingMenuAdapter extends RecyclerView.Adapter<SlidingMenuAdapter.
     }
 
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = null;
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View view = null;
+        RecyclerView.ViewHolder viewHolder = null;
         if (viewType == ITEM) {
-            v = LayoutInflater.from(parent.getContext()).inflate(itemLayout, parent, false);
+            view = LayoutInflater.from(parent.getContext()).inflate(itemLayout, parent, false);
+            viewHolder = new ViewHolderItem(view, viewType);
         } else {
-            v = LayoutInflater.from(parent.getContext()).inflate(HEADER_LAYOUT, parent, false);
+            view = LayoutInflater.from(parent.getContext()).inflate(HEADER_LAYOUT, parent, false);
+            viewHolder = new ViewHolderHeader(view, viewType);
         }
-        return new ViewHolder(v, viewType);
+        return viewHolder;
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         SlidingMenuItem item = items.get(position);
-        if (holder.type == ITEM) {
-            holder.text.setText(item.getTitle());
-            holder.image.setImageResource(item.getIconId());
+        if (holder instanceof ViewHolderItem) {
+            ((ViewHolderItem) holder).text.setText(item.getTitle());
+            ((ViewHolderItem) holder).image.setImageResource(item.getIconId());
         }
         holder.itemView.setTag(item);
     }
