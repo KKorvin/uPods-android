@@ -1,6 +1,36 @@
 <resources>
+
+    <!-- Name of App Block -->
     <string name="app_name">Upods2</string>
 
-    <string name="hello_world">Hello world!</string>
+    <!-- User Profile block -->
+    <string name="profile_my_profile">My Profile</string>
+    <string name="profile_followed_stations">Followed Stations</string>
+    <string name="profile_downloaded">Downloaded</string>
+    <string name="profile_subscribed">Subscribed Podcasts</string>
+
+    <!-- Radio block -->
+    <string name="radio_main">Radio</string>
+    <string name="radio_discover">Discover</string>
+    <string name="radio_featured">Featured</string>
+
+    <!-- Podcasts block -->
+    <string name="podcasts_main">Podcasts</string>
+    <string name="podcasts_audio">Audio Podcasts</string>
+    <string name="podcasts_video">Video Podcasts</string>
+
+    <!-- Cloud sync block -->
+    <string name="cloud_sync">Cloud Sync</string>
+    <string name="cloud_synchronization">Sync in progress</string>
+
+    <!-- Additional block -->
+    <string name="main_rate_app">Rate App</string>
+    <string name="main_about">About App</string>
+    <string name="main_help">Help\FAQ</string>
+
+    <!-- Podcasts block -->
+    <string name="main_settings">Settings</string>
+
+    <!-- Trash staff block -->
     <string name="action_settings">Settings</string>
 </resources>
