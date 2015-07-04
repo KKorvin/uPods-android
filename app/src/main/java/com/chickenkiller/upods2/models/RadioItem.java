@@ -17,7 +17,7 @@ public class RadioItem extends MediaItem {
         ArrayList<MediaItem> debugList = new ArrayList<MediaItem>();
         for (int i = 0; i < count; i++) {
             debugList.add(new RadioItem("Test" + String.valueOf(i),
-                    "","https://media.licdn.com/mpr/mpr/shrinknp_400_400/p/6/005/06d/0cb/20e5317.jpg"));
+                    "","https://igcdn-photos-g-a.akamaihd.net/hphotos-ak-xaf1/t51.2885-15/11356537_1775007156059126_1886851436_n.jpg"));
         }
         return debugList;
     }
