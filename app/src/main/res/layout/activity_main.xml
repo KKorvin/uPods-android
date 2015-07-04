@@ -3,13 +3,15 @@
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:elevation="7dp"
     tools:context=".ActivityMain"
     tools:ignore="MissingPrefix">
 
-    <FrameLayout
+    <LinearLayout
         android:id="@+id/content_frame"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
         <include layout="@layout/toolbar_main"></include>
 
@@ -23,7 +25,7 @@
             android:numColumns="2"
             android:stretchMode="columnWidth"
             android:verticalSpacing="10dp" />
-    </FrameLayout>
+    </LinearLayout>
 
     <include layout="@layout/slidng_menu"></include>
 </android.support.v4.widget.DrawerLayout>
