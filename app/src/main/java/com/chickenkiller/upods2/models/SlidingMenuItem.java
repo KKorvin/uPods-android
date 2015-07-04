@@ -38,10 +38,12 @@ public class SlidingMenuItem {
 
     public static List<SlidingMenuItem> fromDefaultSlidingMenuSet(Context mContext) {
         ArrayList<SlidingMenuItem> allItems = new ArrayList<SlidingMenuItem>();
-        allItems.add(new SlidingMenuItem("test1", R.drawable.ic_temp));
-        allItems.add(new SlidingMenuItem("test1", R.drawable.ic_temp));
-        allItems.add(new SlidingMenuItem("test1", R.drawable.ic_temp));
-        allItems.add(new SlidingMenuItem("test1", R.drawable.ic_temp));
+        allItems.add(new SlidingMenuItem("test1", R.drawable.ic_android_black_36dp));
+        allItems.add(new SlidingMenuItem("test1", R.drawable.ic_backup_black_36dp));
+        allItems.add(new SlidingMenuItem("test1", R.drawable.ic_folder_black_36dp));
+        allItems.add(new SlidingMenuItem("test1", R.drawable.ic_home_black_36dp));
+        allItems.add(new SlidingMenuItem("test1", R.drawable.ic_info_black_36dp));
+        allItems.add(new SlidingMenuItem("test1", R.drawable.ic_mood_black_36dp));
         return allItems;
     }
 

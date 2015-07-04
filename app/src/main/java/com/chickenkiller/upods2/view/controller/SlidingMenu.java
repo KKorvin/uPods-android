@@ -39,7 +39,6 @@ public class SlidingMenu {
         this.rvDrawerList.setHasFixedSize(true);
         this.rvDrawerList.setAdapter(slidingMenuAdapter);
         this.rvDrawerList.setLayoutManager(this.layoutManager);
-
         this.mDrawerToggle = new ActionBarDrawerToggle(activity, mDrawerLayout,
                 mToolbar,
                 R.string.app_name, R.string.app_name) {
