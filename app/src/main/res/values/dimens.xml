@@ -3,4 +3,6 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="rv_cards_column_width">120dp</dimen>
+    <dimen name="drawer_elevation">7dp</dimen>
+    <dimen name="toolbar_elevation">4dp</dimen>
 </resources>
