@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_margin="10dp"
+    android:layout_margin="@dimen/drawer_item_ln_m"
     android:orientation="horizontal">
 
     <ImageView
@@ -15,7 +15,7 @@
     <TextView
         android:layout_gravity="center"
         android:text="test"
-        android:layout_marginLeft="10dp"
+        android:layout_marginLeft="@dimen/drawer_item_t_m_l"
         android:id="@+id/tvSMenuTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />

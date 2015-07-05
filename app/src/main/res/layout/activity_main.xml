@@ -15,7 +15,7 @@
 
         <include layout="@layout/toolbar_main"></include>
 
-        <com.chickenkiller.upods2.views.RecyclerViewCards
+        <com.chickenkiller.upods2.views.AutofitRecyclerView
             android:id="@+id/rvMain"
             android:columnWidth="@dimen/rv_cards_column_width"
             android:clipToPadding="false"

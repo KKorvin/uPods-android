@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="178dp"
+    android:layout_height="@dimen/drawer_rv_header_height"
     android:background="@drawable/header_image_640x400_tiny"
     android:orientation="vertical"
     android:weightSum="1">
@@ -9,7 +9,8 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="56dp"
+        android:layout_height="@dimen/drawer_rv_user_ln_width"
+        android:layout_marginLeft="@dimen/drawer_rv_user_ln_margin_left"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
@@ -19,10 +20,9 @@
             android:id="@+id/tvSMHeaderName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
             android:text="John Doe"
             android:textColor="@color/white"
-            android:textSize="14sp"
+            android:textSize="@dimen/default_text_size_14"
             android:textStyle="bold"
 
             />
@@ -31,11 +31,10 @@
             android:id="@+id/tvSMHeaderEmail"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="@dimen/user_name_mr_top"
             android:text="john.doe@gmail.com"
             android:textColor="@color/white"
-            android:textSize="14sp"
+            android:textSize="@dimen/default_text_size_14"
             android:textStyle="normal"
 
             />
@@ -43,9 +42,9 @@
 
     <ImageView
         android:id="@+id/imgSMHeaderAvatar"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="38dp"
+        android:layout_width="@dimen/img_user_avatar_size"
+        android:layout_height="@dimen/img_user_avatar_size"
+        android:layout_marginLeft="@dimen/img_user_m_left"
+        android:layout_marginTop="@dimen/img_user_m_top"
         android:src="@drawable/ic_temp" />
 </RelativeLayout>

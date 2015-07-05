@@ -9,21 +9,21 @@ import android.util.AttributeSet;
 /**
  * Created by alonzilberman on 7/5/15.
  */
-public class RecyclerViewCards extends RecyclerView {
+public class AutofitRecyclerView extends RecyclerView {
     private GridLayoutManager manager;
     private int columnWidth = -1;
 
-    public RecyclerViewCards(Context context) {
+    public AutofitRecyclerView(Context context) {
         super(context);
         init(context, null);
     }
 
-    public RecyclerViewCards(Context context, AttributeSet attrs) {
+    public AutofitRecyclerView(Context context, AttributeSet attrs) {
         super(context, attrs);
         init(context, attrs);
     }
 
-    public RecyclerViewCards(Context context, AttributeSet attrs, int defStyle) {
+    public AutofitRecyclerView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         init(context, attrs);
     }

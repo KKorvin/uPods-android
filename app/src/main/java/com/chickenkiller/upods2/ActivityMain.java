@@ -8,11 +8,11 @@ import android.view.MenuItem;
 import com.chickenkiller.upods2.controllers.MediaItemsAdapter;
 import com.chickenkiller.upods2.models.RadioItem;
 import com.chickenkiller.upods2.view.controller.SlidingMenu;
-import com.chickenkiller.upods2.views.RecyclerViewCards;
+import com.chickenkiller.upods2.views.AutofitRecyclerView;
 
 public class ActivityMain extends Activity {
 
-    private RecyclerViewCards rvMain;
+    private AutofitRecyclerView rvMain;
     private MediaItemsAdapter adapterRvMain;
     private Toolbar toolbar;
     private SlidingMenu slidingMenu;
@@ -28,7 +28,7 @@ public class ActivityMain extends Activity {
 
         adapterRvMain = new MediaItemsAdapter(this,R.layout.card_media_item,RadioItem.generateDebugList(200));
 
-        rvMain = (RecyclerViewCards)findViewById(R.id.rvMain);
+        rvMain = (AutofitRecyclerView)findViewById(R.id.rvMain);
         rvMain.setHasFixedSize(true);
         rvMain.setAdapter(adapterRvMain);
     }
