@@ -1,10 +1,10 @@
 package com.chickenkiller.upods2.controllers;
 
 import android.content.Context;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -12,53 +12,55 @@ import com.chickenkiller.upods2.R;
 import com.chickenkiller.upods2.models.MediaItem;
 import com.chickenkiller.upods2.views.ImageViewSquare;
 
-import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by alonzilberman on 7/2/15.
  */
-public class MediaItemsAdapter extends ArrayAdapter<MediaItem> {
+public class MediaItemsAdapter extends RecyclerView.Adapter<MediaItemsAdapter.ViewHolder> {
 
+    private int itemLayout;
+    private List<MediaItem> items;
     private Context mContext;
-    private int layoutId;
-    private ArrayList<MediaItem> allItems;
 
-
-    public MediaItemsAdapter(Context context, int layoutId, ArrayList<MediaItem> allItems) {
-        super(context, layoutId, allItems);
-        this.mContext = context;
-        this.layoutId = layoutId;
-        this.allItems = allItems;
-    }
-
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        View itemView = convertView;
-        MediaItem currentItem = getItem(position);
-        if (itemView == null) {
-            LayoutInflater inflater = (LayoutInflater) mContext
-                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            itemView = inflater.inflate(layoutId, parent, false);
-            ViewHolder viewHolder = new ViewHolder();
-            viewHolder.imgSquare = (ImageViewSquare) itemView.findViewById(R.id.imgSquare);
-            viewHolder.tvSquareTitle = (TextView) itemView.findViewById(R.id.tvSquareTitle);
-            itemView.setTag(viewHolder);
-        }
-        ViewHolder holder = (ViewHolder) itemView.getTag();
-        //holder.imgSquare.setImageResource(R.drawable.abc_list_pressed_holo_light);
-        Glide.with(mContext).load(currentItem.getImageUrl()).centerCrop().crossFade().into(holder.imgSquare);
-        holder.tvSquareTitle.setText(currentItem.getName());
-
-        return itemView;
-    }
-
-    @Override
-    public int getCount() {
-        return allItems.size();
-    }
-
-    private class ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder {
         public ImageViewSquare imgSquare;
         public TextView tvSquareTitle;
+
+        public ViewHolder(View view) {
+            super(view);
+            this.imgSquare = (ImageViewSquare) view.findViewById(R.id.imgSquare);
+            this.tvSquareTitle = (TextView) view.findViewById(R.id.tvSquareTitle);
+        }
+    }
+
+    public MediaItemsAdapter(Context mContext, int itemLayout, List<MediaItem> items) {
+        super();
+        this.items = items;
+        this.itemLayout = itemLayout;
+        this.mContext = mContext;
+    }
+
+    @Override
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View view = null;
+        ViewHolder viewHolder = null;
+        view = LayoutInflater.from(parent.getContext()).inflate(itemLayout, parent, false);
+        viewHolder = new ViewHolder(view);
+        return viewHolder;
+    }
+
+    @Override
+    public void onBindViewHolder(MediaItemsAdapter.ViewHolder holder, int position) {
+        MediaItem currentItem = items.get(position);
+        Glide.with(mContext).load(currentItem.getImageUrl()).centerCrop().crossFade().into(holder.imgSquare);
+        holder.tvSquareTitle.setText(currentItem.getName());
+        //StaggeredGridLayoutManager.LayoutParams layoutParams = (StaggeredGridLayoutManager.LayoutParams) holder.itemView.getLayoutParams();
+        //layoutParams.setFullSpan(true);
+    }
+
+    @Override
+    public int getItemCount() {
+        return items.size();
     }
 }
