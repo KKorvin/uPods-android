@@ -2,10 +2,14 @@ package com.chickenkiller.upods2;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
+import com.chickenkiller.upods2.controllers.BanerItemsAdapter;
 import com.chickenkiller.upods2.controllers.MediaItemsAdapter;
+import com.chickenkiller.upods2.models.BanerItem;
 import com.chickenkiller.upods2.models.RadioItem;
 import com.chickenkiller.upods2.view.controller.SlidingMenu;
 import com.chickenkiller.upods2.views.AutofitRecyclerView;
@@ -13,7 +17,9 @@ import com.chickenkiller.upods2.views.AutofitRecyclerView;
 public class ActivityMain extends Activity {
 
     private AutofitRecyclerView rvMain;
-    private MediaItemsAdapter adapterRvMain;
+    private RecyclerView rvBanners;
+    private MediaItemsAdapter mediaItemsAdapter;
+    private BanerItemsAdapter banerItemsAdapter;
     private Toolbar toolbar;
     private SlidingMenu slidingMenu;
 
@@ -26,11 +32,17 @@ public class ActivityMain extends Activity {
         toolbar.inflateMenu(R.menu.menu_activity_main);
         slidingMenu = new SlidingMenu(this, toolbar);
 
-        adapterRvMain = new MediaItemsAdapter(this,R.layout.card_media_item,RadioItem.generateDebugList(200));
+        mediaItemsAdapter = new MediaItemsAdapter(this,R.layout.card_media_item,RadioItem.generateDebugList(200));
+        banerItemsAdapter = new BanerItemsAdapter(this, R.layout.baner_item, BanerItem.generateDebugList(1));
 
         rvMain = (AutofitRecyclerView)findViewById(R.id.rvMain);
         rvMain.setHasFixedSize(true);
-        rvMain.setAdapter(adapterRvMain);
+        rvMain.setAdapter(mediaItemsAdapter);
+
+        rvBanners = (RecyclerView)findViewById(R.id.rvBanners);
+        rvBanners.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        rvBanners.setHasFixedSize(true);
+        rvBanners.setAdapter(banerItemsAdapter);
     }
 
     @Override

@@ -15,12 +15,18 @@
 
         <include layout="@layout/toolbar_main"></include>
 
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rvBanners"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:clipToPadding="false" />
+
         <com.chickenkiller.upods2.views.AutofitRecyclerView
             android:id="@+id/rvMain"
-            android:columnWidth="@dimen/rv_cards_column_width"
-            android:clipToPadding="false"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:columnWidth="@dimen/rv_cards_column_width" />
     </LinearLayout>
 
     <include layout="@layout/slidng_menu"></include>

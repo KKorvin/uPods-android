@@ -6,6 +6,8 @@ import java.util.ArrayList;
  * Created by alonzilberman on 7/3/15.
  */
 public class RadioItem extends MediaItem {
+    protected String name;
+    protected String url;
 
     public RadioItem(String name, String url, String imageUrl) {
         this.name = name;
@@ -17,8 +19,24 @@ public class RadioItem extends MediaItem {
         ArrayList<MediaItem> debugList = new ArrayList<MediaItem>();
         for (int i = 0; i < count; i++) {
             debugList.add(new RadioItem("Test" + String.valueOf(i),
-                    "","https://igcdn-photos-g-a.akamaihd.net/hphotos-ak-xaf1/t51.2885-15/11356537_1775007156059126_1886851436_n.jpg"));
+                    "", "https://igcdn-photos-g-a.akamaihd.net/hphotos-ak-xaf1/t51.2885-15/11356537_1775007156059126_1886851436_n.jpg"));
         }
         return debugList;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

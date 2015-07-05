@@ -5,37 +5,34 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.chickenkiller.upods2.R;
-import com.chickenkiller.upods2.models.MediaItem;
-import com.chickenkiller.upods2.models.RadioItem;
-import com.chickenkiller.upods2.views.ImageViewSquare;
+import com.chickenkiller.upods2.models.BanerItem;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by alonzilberman on 7/2/15.
+ * Created by alonzilberman on 7/5/15.
  */
-public class MediaItemsAdapter extends RecyclerView.Adapter<MediaItemsAdapter.ViewHolder> {
+public class BanerItemsAdapter extends RecyclerView.Adapter<BanerItemsAdapter.ViewHolder> {
 
     private int itemLayout;
-    private List<MediaItem> items;
+    private List<BanerItem> items;
     private Context mContext;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        public ImageViewSquare imgSquare;
-        public TextView tvSquareTitle;
+        public ImageView imgBaner;
 
         public ViewHolder(View view) {
             super(view);
-            this.imgSquare = (ImageViewSquare) view.findViewById(R.id.imgSquare);
-            this.tvSquareTitle = (TextView) view.findViewById(R.id.tvSquareTitle);
+            this.imgBaner = (ImageView) view.findViewById(R.id.imgBaner);
         }
     }
 
-    public MediaItemsAdapter(Context mContext, int itemLayout, List<MediaItem> items) {
+    public BanerItemsAdapter(Context mContext, int itemLayout, ArrayList<BanerItem> items) {
         super();
         this.items = items;
         this.itemLayout = itemLayout;
@@ -52,10 +49,9 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<MediaItemsAdapter.Vi
     }
 
     @Override
-    public void onBindViewHolder(MediaItemsAdapter.ViewHolder holder, int position) {
-        RadioItem currentItem = (RadioItem)items.get(position);
-        Glide.with(mContext).load(currentItem.getImageUrl()).centerCrop().crossFade().into(holder.imgSquare);
-        holder.tvSquareTitle.setText(currentItem.getName());
+    public void onBindViewHolder(BanerItemsAdapter.ViewHolder holder, int position) {
+        BanerItem currentItem = items.get(position);
+        Glide.with(mContext).load(currentItem.getImageUrl()).centerCrop().crossFade().into(holder.imgBaner);
         holder.itemView.setTag(currentItem);
     }
 
@@ -63,4 +59,5 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<MediaItemsAdapter.Vi
     public int getItemCount() {
         return items.size();
     }
+
 }
