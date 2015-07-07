@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/tvMediaCardTitle"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="@dimen/tv_top40_ch_ml"
+    android:layout_marginTop="@dimen/tv_top40_ch_mt"
+    android:text="@string/top40_chanels"
+    android:textColor="@color/black"
+    android:textSize="@dimen/default_text_size_20"
+    android:textStyle="bold" />

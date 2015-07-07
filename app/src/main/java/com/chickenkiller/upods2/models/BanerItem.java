@@ -10,6 +10,15 @@ public class BanerItem extends MediaItem {
     public BanerItem(String imageUrl) {
         this.imageUrl = imageUrl;
     }
+    protected String imageUrl;
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
 
     public static ArrayList<BanerItem> generateDebugList(int count) {
         ArrayList<BanerItem> debugList = new ArrayList<BanerItem>();

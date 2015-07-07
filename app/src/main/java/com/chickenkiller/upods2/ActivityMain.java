@@ -2,6 +2,7 @@ package com.chickenkiller.upods2;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -32,18 +33,27 @@ public class ActivityMain extends Activity {
         toolbar.inflateMenu(R.menu.menu_activity_main);
         slidingMenu = new SlidingMenu(this, toolbar);
 
-        mediaItemsAdapter = new MediaItemsAdapter(this, R.layout.card_media_item, RadioItem.generateDebugList(200));
+        mediaItemsAdapter = new MediaItemsAdapter(this, R.layout.card_media_item,
+                R.layout.media_item_title, RadioItem.generateDebugList(40, this));
         banerItemsAdapter = new BanerItemsAdapter(this, R.layout.baner_item, BanerItem.generateDebugList(1));
 
         rvMain = (AutofitRecyclerView) findViewById(R.id.rvMain);
         rvMain.setHasFixedSize(true);
         rvMain.setAdapter(mediaItemsAdapter);
+        rvMain.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+            @Override
+            public int getSpanSize(int position) {
+                int viewType = mediaItemsAdapter.getItemViewType(position);
+                return viewType != MediaItemsAdapter.HEADER ? 1 : rvMain.getSpanCount();
+            }
+        });
 
         rvBanners = (RecyclerView) findViewById(R.id.rvBanners);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         rvBanners.setLayoutManager(layoutManager);
         rvBanners.setHasFixedSize(true);
         rvBanners.setAdapter(banerItemsAdapter);
+
         layoutManager.scrollToPosition(banerItemsAdapter.MIDDLE);
     }
 
