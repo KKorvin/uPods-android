@@ -6,12 +6,12 @@
     android:background="@color/white"
     android:orientation="vertical">
 
-    <com.chickenkiller.upods2.views.ImageViewBanner
-        android:src="@drawable/ic_temp"
+    <ImageView
         android:id="@+id/imgBaner"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:adjustViewBounds="true" />
+        android:scaleType="fitXY"
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/rv_banners_height"
+        android:src="@drawable/ic_temp" />
 </LinearLayout>
 
 

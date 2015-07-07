@@ -19,6 +19,7 @@
 
     <!-- Cards grid -->
     <dimen name="rv_cards_column_width">120dp</dimen>
+    <dimen name="rv_banners_height">130dp</dimen>
 
 
 </resources>

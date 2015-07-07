@@ -32,15 +32,16 @@ public class ActivityMain extends Activity {
         toolbar.inflateMenu(R.menu.menu_activity_main);
         slidingMenu = new SlidingMenu(this, toolbar);
 
-        mediaItemsAdapter = new MediaItemsAdapter(this,R.layout.card_media_item,RadioItem.generateDebugList(200));
+        mediaItemsAdapter = new MediaItemsAdapter(this, R.layout.card_media_item, RadioItem.generateDebugList(200));
         banerItemsAdapter = new BanerItemsAdapter(this, R.layout.baner_item, BanerItem.generateDebugList(1));
 
-        rvMain = (AutofitRecyclerView)findViewById(R.id.rvMain);
+        rvMain = (AutofitRecyclerView) findViewById(R.id.rvMain);
         rvMain.setHasFixedSize(true);
         rvMain.setAdapter(mediaItemsAdapter);
 
-        rvBanners = (RecyclerView)findViewById(R.id.rvBanners);
-        rvBanners.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        rvBanners = (RecyclerView) findViewById(R.id.rvBanners);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        rvBanners.setLayoutManager(layoutManager);
         rvBanners.setHasFixedSize(true);
         rvBanners.setAdapter(banerItemsAdapter);
     }

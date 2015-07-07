@@ -18,7 +18,7 @@
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rvBanners"
             android:layout_width="match_parent"
-            android:layout_height="130dp"
+            android:layout_height="@dimen/rv_banners_height"
             android:clipToPadding="false" />
 
         <com.chickenkiller.upods2.views.AutofitRecyclerView
