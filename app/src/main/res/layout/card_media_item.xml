@@ -3,9 +3,9 @@
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:id="@+id/cvSquare"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
+    android:layout_height="@dimen/card_media_item_height"
     android:layout_gravity="center"
-    android:layout_margin="10dp"
+    android:layout_margin="@dimen/card_media_item_m"
     android:background="@color/white"
     card_view:cardCornerRadius="2dp">
 
@@ -17,7 +17,7 @@
         <com.chickenkiller.upods2.views.ImageViewSquare
             android:id="@+id/imgSquare"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:scaleType="fitXY"
             android:src="@drawable/ic_temp" />
 

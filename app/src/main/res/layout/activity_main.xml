@@ -21,11 +21,22 @@
             android:layout_height="@dimen/rv_banners_height"
             android:clipToPadding="false" />
 
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/tv_top40_ch_ml"
+            android:layout_marginTop="@dimen/tv_top40_ch_mt"
+            android:text="@string/top40_chanels"
+            android:textColor="@color/black"
+            android:textSize="@dimen/default_text_size_20"
+            android:textStyle="bold" />
+
         <com.chickenkiller.upods2.views.AutofitRecyclerView
             android:id="@+id/rvMain"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:clipToPadding="false"
+            android:layout_margin="@dimen/card_media_item_m"
+            android:clipToPadding="true"
             android:columnWidth="@dimen/rv_cards_column_width" />
     </LinearLayout>
 
