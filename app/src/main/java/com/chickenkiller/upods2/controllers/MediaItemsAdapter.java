@@ -56,7 +56,7 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<MediaItemsAdapter.Vi
         RadioItem currentItem = (RadioItem)items.get(position);
         Glide.with(mContext).load(currentItem.getImageUrl()).centerCrop().crossFade().into(holder.imgSquare);
         holder.tvSquareTitle.setText(currentItem.getName());
-        holder.itemView.setTag(currentItem);
+        //holder.itemView.setTag(currentItem);
     }
 
     @Override

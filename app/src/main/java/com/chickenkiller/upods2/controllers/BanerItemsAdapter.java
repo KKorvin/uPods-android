@@ -22,6 +22,9 @@ import java.util.List;
  */
 public class BanerItemsAdapter extends RecyclerView.Adapter<BanerItemsAdapter.ViewHolder> {
 
+    private static final int HALF_MAX_VALUE = Integer.MAX_VALUE / 2;
+    public final int MIDDLE;
+
     private int itemLayout;
     private List<BanerItem> items;
     private Context mContext;
@@ -43,6 +46,8 @@ public class BanerItemsAdapter extends RecyclerView.Adapter<BanerItemsAdapter.Vi
         this.mContext = mContext;
         this.displaymetrics = new DisplayMetrics();
         ((Activity) mContext).getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
+        MIDDLE = HALF_MAX_VALUE - HALF_MAX_VALUE % items.size();
+
     }
 
     @Override
@@ -56,16 +61,19 @@ public class BanerItemsAdapter extends RecyclerView.Adapter<BanerItemsAdapter.Vi
 
     @Override
     public void onBindViewHolder(BanerItemsAdapter.ViewHolder holder, int position) {
-        BanerItem currentItem = items.get(position);
-        LinearLayout.LayoutParams params= (LinearLayout.LayoutParams)holder.imgBaner.getLayoutParams();
+        BanerItem currentItem = getItem(position);
+        LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) holder.imgBaner.getLayoutParams();
         params.width = displaymetrics.widthPixels;
         Glide.with(mContext).load(currentItem.getImageUrl()).into(holder.imgBaner);
-        holder.imgBaner.setTag(currentItem);
+        //holder.imgBaner.setTag(currentItem);
     }
 
     @Override
     public int getItemCount() {
-        return items.size();
+        return Integer.MAX_VALUE;
     }
 
+    public BanerItem getItem(int position) {
+        return items.get(position % items.size());
+    }
 }

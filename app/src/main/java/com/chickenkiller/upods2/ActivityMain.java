@@ -44,6 +44,7 @@ public class ActivityMain extends Activity {
         rvBanners.setLayoutManager(layoutManager);
         rvBanners.setHasFixedSize(true);
         rvBanners.setAdapter(banerItemsAdapter);
+        layoutManager.scrollToPosition(banerItemsAdapter.MIDDLE);
     }
 
     @Override
