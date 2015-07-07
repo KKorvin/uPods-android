@@ -14,10 +14,11 @@ public class BanerItem extends MediaItem {
     public static ArrayList<BanerItem> generateDebugList(int count) {
         ArrayList<BanerItem> debugList = new ArrayList<BanerItem>();
         for (int i = 0; i < count; i++) {
-            debugList.add(new BanerItem("http://www.topofandroid.com/wp-content/uploads/2015/05/ahagzjsozh.jpg"));
-            debugList.add(new BanerItem("http://www.lirent.net/wp-content/uploads/2014/10/Android-Lollipop-wallpapers-p-800x500.png"));
-            debugList.add(new BanerItem("http://www.img.lirent.net/2014/10/Android-Lollipop-wallpapers-Wall1.png"));
-            debugList.add(new BanerItem("https://smexyyweby.files.wordpress.com/2010/11/header-mana1.jpg"));
+            debugList.add(new BanerItem("http://www.linuxspace.org/wp-content/uploads/2015/examples/example_1.png"));
+            debugList.add(new BanerItem("http://www.linuxspace.org/wp-content/uploads/2015/examples/example_2.png"));
+            debugList.add(new BanerItem("http://www.linuxspace.org/wp-content/uploads/2015/examples/example_3.png"));
+            debugList.add(new BanerItem("http://www.linuxspace.org/wp-content/uploads/2015/examples/example_4.png"));
+            debugList.add(new BanerItem("http://www.linuxspace.org/wp-content/uploads/2015/examples/example_5.png"));
         }
         return debugList;
     }
