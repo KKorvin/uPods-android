@@ -1,0 +1,36 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory android:title="Test1">
+
+        <CheckBoxPreference
+            android:defaultValue="Test2"
+            android:key="checkbox_preference"
+            android:title="Test3" />
+
+        <EditTextPreference
+            android:dependency="checkbox_preference"
+            android:dialogTitle="Test3"
+            android:key="edittext_preference"
+            android:summary="Test4"
+            android:title="Test5" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="Test6">
+
+        <ListPreference
+            android:dialogTitle="Test7"
+            android:entries="@array/entries_list_preference"
+            android:entryValues="@array/entries_list_values"
+            android:key="list_preference"
+            android:title="Test10" />
+
+        <Preference android:title="Test8">
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:data="http://codepath.com/" />
+        </Preference>
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

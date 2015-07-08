@@ -6,10 +6,12 @@
     android:layout_height="@dimen/card_media_item_height"
     android:layout_gravity="center"
     android:layout_margin="@dimen/card_media_item_m"
-    android:background="@color/white"
     card_view:cardCornerRadius="2dp">
 
     <RelativeLayout
+        android:focusable="true"
+        android:clickable="true"
+        android:background="?android:attr/selectableItemBackground"
         android:padding="10dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
