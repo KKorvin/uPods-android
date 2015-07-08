@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.chickenkiller.upods2.R;
 import com.chickenkiller.upods2.models.SlidingMenuItem;
@@ -26,14 +27,20 @@ public class SlidingMenuAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     private List<SlidingMenuItem> items;
     private int itemLayout;
 
-    private class ViewHolderItem extends RecyclerView.ViewHolder {
+    private class ViewHolderItem extends RecyclerView.ViewHolder implements View.OnClickListener {
         public ImageView image;
         public TextView text;
 
-        public ViewHolderItem(View itemView, int type) {
+        public ViewHolderItem(View itemView) {
             super(itemView);
             this.image = (ImageView) itemView.findViewById(R.id.imgSMenutIcon);
             this.text = (TextView) itemView.findViewById(R.id.tvSMenuTitle);
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View view) {
+            Toast.makeText(view.getContext(), "TEST" + String.valueOf(getAdapterPosition()), Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -58,12 +65,12 @@ public class SlidingMenuAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     }
 
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public RecyclerView.ViewHolder onCreateViewHolder(final ViewGroup parent, int viewType) {
         View view = null;
         RecyclerView.ViewHolder viewHolder = null;
         if (viewType == ITEM) {
             view = LayoutInflater.from(parent.getContext()).inflate(itemLayout, parent, false);
-            viewHolder = new ViewHolderItem(view, viewType);
+            viewHolder = new ViewHolderItem(view);
         } else {
             view = LayoutInflater.from(parent.getContext()).inflate(HEADER_LAYOUT, parent, false);
             viewHolder = new ViewHolderHeader(view, viewType);
