@@ -8,27 +8,14 @@
     tools:ignore="MissingPrefix">
 
     <LinearLayout
-        android:id="@+id/content_frame"
+        android:id="@+id/ln_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
         <include layout="@layout/toolbar_main"></include>
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/rvBanners"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/rv_banners_height"
-            android:clipToPadding="false" />
 
-
-        <com.chickenkiller.upods2.views.AutofitRecyclerView
-            android:id="@+id/rvMain"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="@dimen/card_media_item_m"
-            android:clipToPadding="true"
-            android:columnWidth="@dimen/rv_cards_column_width" />
     </LinearLayout>
 
     <include layout="@layout/slidng_menu"></include>

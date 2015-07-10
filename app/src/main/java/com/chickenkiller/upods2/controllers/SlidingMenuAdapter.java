@@ -1,5 +1,6 @@
 package com.chickenkiller.upods2.controllers;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,7 +10,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.chickenkiller.upods2.R;
+import com.chickenkiller.upods2.interfaces.IFragmentsManager;
+import com.chickenkiller.upods2.interfaces.ISlidingMenuManager;
 import com.chickenkiller.upods2.models.SlidingMenuItem;
+import com.chickenkiller.upods2.view.controller.FragmentSettings;
 import com.yqritc.recyclerviewflexibledivider.FlexibleDividerDecoration;
 
 import java.util.List;
@@ -24,8 +28,10 @@ public class SlidingMenuAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     private static final int ITEM = 3;
     private static final int HEADER_LAYOUT = R.layout.sliding_menu_header;
 
-    private List<SlidingMenuItem> items;
     private int itemLayout;
+    private List<SlidingMenuItem> items;
+    private IFragmentsManager fragmentsManager;
+    private ISlidingMenuManager slidingMenuManager;
 
     private class ViewHolderItem extends RecyclerView.ViewHolder implements View.OnClickListener {
         public ImageView image;
@@ -40,7 +46,17 @@ public class SlidingMenuAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
         @Override
         public void onClick(View view) {
-            Toast.makeText(view.getContext(), "TEST" + String.valueOf(getAdapterPosition()), Toast.LENGTH_SHORT).show();
+            if (items.get(getAdapterPosition()) instanceof SlidingMenuItem) {
+                SlidingMenuItem clickedMenuItem = items.get(getAdapterPosition());
+                Context context = view.getContext();
+                if (clickedMenuItem.getTitle().equals(context.getString(R.string.main_settings))) {
+                    FragmentSettings settingsFragment = new FragmentSettings();
+                    fragmentsManager.showFragment(fragmentsManager.getCurrentMainFragmentId(), settingsFragment);
+                } else {
+                    Toast.makeText(context, "TEST" + clickedMenuItem.getTitle(), Toast.LENGTH_SHORT).show();
+                }
+                slidingMenuManager.toggle();
+            }
         }
     }
 
@@ -57,11 +73,17 @@ public class SlidingMenuAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         }
     }
 
+    public SlidingMenuAdapter(List<SlidingMenuItem> items, int itemLayout, ISlidingMenuManager slidingMenuManager,
+                              IFragmentsManager fragmentsManager) {
+        this(items, itemLayout, slidingMenuManager);
+        this.fragmentsManager = fragmentsManager;
+    }
 
-    public SlidingMenuAdapter(List<SlidingMenuItem> items, int itemLayout) {
+    public SlidingMenuAdapter(List<SlidingMenuItem> items, int itemLayout, ISlidingMenuManager slidingMenuManager) {
         super();
         this.items = items;
         this.itemLayout = itemLayout;
+        this.slidingMenuManager = slidingMenuManager;
     }
 
     @Override

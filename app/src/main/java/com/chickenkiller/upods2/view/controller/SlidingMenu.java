@@ -12,13 +12,15 @@ import android.view.View;
 
 import com.chickenkiller.upods2.R;
 import com.chickenkiller.upods2.controllers.SlidingMenuAdapter;
+import com.chickenkiller.upods2.interfaces.IFragmentsManager;
+import com.chickenkiller.upods2.interfaces.ISlidingMenuManager;
 import com.chickenkiller.upods2.models.SlidingMenuItem;
 import com.yqritc.recyclerviewflexibledivider.HorizontalDividerItemDecoration;
 
 /**
  * Created by alonzilberman on 7/4/15.
  */
-public class SlidingMenu {
+public class SlidingMenu implements ISlidingMenuManager {
 
     private final int DEVIDER_SIZE = 2;
     private final int DEVIDER_MARGIN = 10;
@@ -39,7 +41,13 @@ public class SlidingMenu {
         this.layoutManager.setOrientation(OrientationHelper.VERTICAL);
         this.mDrawerLayout = (DrawerLayout) activity.findViewById(R.id.drawer_layout);
 
-        this.slidingMenuAdapter = new SlidingMenuAdapter(SlidingMenuItem.fromDefaultSlidingMenuSet(activity), R.layout.sliding_menu_item);
+        if (activity instanceof IFragmentsManager) {
+            this.slidingMenuAdapter = new SlidingMenuAdapter(SlidingMenuItem.fromDefaultSlidingMenuSet(activity),
+                    R.layout.sliding_menu_item, this, (IFragmentsManager) activity);
+        } else {
+            this.slidingMenuAdapter = new SlidingMenuAdapter(SlidingMenuItem.fromDefaultSlidingMenuSet(activity),
+                    R.layout.sliding_menu_item, this);
+        }
 
         this.devider = new HorizontalDividerItemDecoration.Builder(mActivity)
                 .color(R.color.sliding_menu_devider_color)
@@ -73,7 +81,8 @@ public class SlidingMenu {
         mDrawerToggle.syncState();
     }
 
-    public void toogle() {
+    @Override
+    public void toggle() {
         if (!mDrawerLayout.isDrawerOpen(Gravity.LEFT)) {
             mDrawerLayout.openDrawer(Gravity.LEFT);
         } else {
