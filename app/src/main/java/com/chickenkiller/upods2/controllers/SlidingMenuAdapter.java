@@ -12,7 +12,9 @@ import android.widget.Toast;
 import com.chickenkiller.upods2.R;
 import com.chickenkiller.upods2.interfaces.IFragmentsManager;
 import com.chickenkiller.upods2.interfaces.ISlidingMenuManager;
+import com.chickenkiller.upods2.models.SlidingMenuHeader;
 import com.chickenkiller.upods2.models.SlidingMenuItem;
+import com.chickenkiller.upods2.models.SlidingMenuRow;
 import com.chickenkiller.upods2.view.controller.FragmentSettings;
 import com.yqritc.recyclerviewflexibledivider.FlexibleDividerDecoration;
 
@@ -24,8 +26,7 @@ import java.util.List;
 public class SlidingMenuAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements FlexibleDividerDecoration.VisibilityProvider {
 
     private static final int HEADER = 1;
-    private static final int ITEMS_HEADER = 2;
-    private static final int ITEM = 3;
+    private static final int ITEM = 2;
     private static final int HEADER_LAYOUT = R.layout.sliding_menu_header;
 
     private int itemLayout;
@@ -46,8 +47,8 @@ public class SlidingMenuAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
         @Override
         public void onClick(View view) {
-            if (items.get(getAdapterPosition()) instanceof SlidingMenuItem) {
-                SlidingMenuItem clickedMenuItem = items.get(getAdapterPosition());
+            if (items.get(getAdapterPosition()) instanceof SlidingMenuRow) {
+                SlidingMenuRow clickedMenuItem = (SlidingMenuRow) items.get(getAdapterPosition());
                 Context context = view.getContext();
                 if (clickedMenuItem.getTitle().equals(context.getString(R.string.main_settings))) {
                     FragmentSettings settingsFragment = new FragmentSettings();
@@ -65,7 +66,7 @@ public class SlidingMenuAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         public TextView headerText;
         public TextView headerEmail;
 
-        public ViewHolderHeader(View itemView, int type) {
+        public ViewHolderHeader(View itemView) {
             super(itemView);
             this.headerAvater = (ImageView) itemView.findViewById(R.id.imgSMHeaderAvatar);
             this.headerText = (TextView) itemView.findViewById(R.id.tvSMHeaderName);
@@ -95,7 +96,7 @@ public class SlidingMenuAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             viewHolder = new ViewHolderItem(view);
         } else {
             view = LayoutInflater.from(parent.getContext()).inflate(HEADER_LAYOUT, parent, false);
-            viewHolder = new ViewHolderHeader(view, viewType);
+            viewHolder = new ViewHolderHeader(view);
         }
         return viewHolder;
     }
@@ -104,8 +105,8 @@ public class SlidingMenuAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         SlidingMenuItem item = items.get(position);
         if (holder instanceof ViewHolderItem) {
-            ((ViewHolderItem) holder).text.setText(item.getTitle());
-            ((ViewHolderItem) holder).image.setImageResource(item.getIconId());
+            ((ViewHolderItem) holder).text.setText(((SlidingMenuRow) item).getTitle());
+            ((ViewHolderItem) holder).image.setImageResource(((SlidingMenuRow) item).getIconId());
         }
         holder.itemView.setTag(item);
     }
@@ -117,14 +118,10 @@ public class SlidingMenuAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     @Override
     public int getItemViewType(int position) {
-        if (this.isPositionHeader(position))
+        if (items.get(position) instanceof SlidingMenuHeader)
             return HEADER;
 
         return ITEM;
-    }
-
-    private boolean isPositionHeader(int position) {
-        return position == 0;
     }
 
     @Override

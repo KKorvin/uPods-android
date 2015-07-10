@@ -65,6 +65,7 @@ public class BanerItemsAdapter extends RecyclerView.Adapter<BanerItemsAdapter.Vi
         LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) holder.imgBaner.getLayoutParams();
         params.width = displaymetrics.widthPixels;
         Glide.with(mContext).load(currentItem.getImageUrl()).into(holder.imgBaner);
+        holder.itemView.setTag(currentItem);
     }
 
     @Override

@@ -82,9 +82,11 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             RadioItem currentItem = (RadioItem) items.get(position);
             Glide.with(mContext).load(currentItem.getImageUrl()).centerCrop().crossFade().into(((ViewHolderCardItem) holder).imgSquare);
             ((ViewHolderCardItem) holder).tvSquareTitle.setText(currentItem.getName());
+            holder.itemView.setTag(currentItem);
         } else {
             MediaItemTitle currentItem = (MediaItemTitle) items.get(position);
             ((ViewHolderMediaItemTitle) holder).tvMediaCardTitle.setText(currentItem.getTitle());
+            holder.itemView.setTag(currentItem);
         }
     }
 

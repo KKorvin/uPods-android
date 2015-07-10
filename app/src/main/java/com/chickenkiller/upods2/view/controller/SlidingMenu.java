@@ -14,8 +14,13 @@ import com.chickenkiller.upods2.R;
 import com.chickenkiller.upods2.controllers.SlidingMenuAdapter;
 import com.chickenkiller.upods2.interfaces.IFragmentsManager;
 import com.chickenkiller.upods2.interfaces.ISlidingMenuManager;
+import com.chickenkiller.upods2.models.SlidingMenuHeader;
 import com.chickenkiller.upods2.models.SlidingMenuItem;
+import com.chickenkiller.upods2.models.SlidingMenuRow;
 import com.yqritc.recyclerviewflexibledivider.HorizontalDividerItemDecoration;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by alonzilberman on 7/4/15.
@@ -41,11 +46,14 @@ public class SlidingMenu implements ISlidingMenuManager {
         this.layoutManager.setOrientation(OrientationHelper.VERTICAL);
         this.mDrawerLayout = (DrawerLayout) activity.findViewById(R.id.drawer_layout);
 
+        List<SlidingMenuItem> slidingMenuItems = new ArrayList<>();
+        slidingMenuItems.add(new SlidingMenuHeader());
+        slidingMenuItems.addAll(SlidingMenuRow.fromDefaultSlidingMenuSet(activity));
         if (activity instanceof IFragmentsManager) {
-            this.slidingMenuAdapter = new SlidingMenuAdapter(SlidingMenuItem.fromDefaultSlidingMenuSet(activity),
+            this.slidingMenuAdapter = new SlidingMenuAdapter(slidingMenuItems,
                     R.layout.sliding_menu_item, this, (IFragmentsManager) activity);
         } else {
-            this.slidingMenuAdapter = new SlidingMenuAdapter(SlidingMenuItem.fromDefaultSlidingMenuSet(activity),
+            this.slidingMenuAdapter = new SlidingMenuAdapter(slidingMenuItems,
                     R.layout.sliding_menu_item, this);
         }
 
