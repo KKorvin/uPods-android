@@ -7,7 +7,8 @@
 
     <!-- Elevation -->
     <dimen name="drawer_elevation">7dp</dimen>
-    <dimen name="toolbar_elevation">4dp</dimen>
+    <dimen name="toolbar_elevation">0dp</dimen>
+    <dimen name="banner_elevation">7dp</dimen>
 
     <!-- Sliding menu -->
     <dimen name="drawer_rv_header_height">178dp</dimen>
@@ -27,6 +28,8 @@
     <dimen name="card_media_item_height">170dp</dimen>
     <dimen name="tv_top40_ch_ml">30dp</dimen>
     <dimen name="tv_top40_ch_mt">20dp</dimen>
+    <dimen name="banner_shadow_radius">2dp</dimen>
+    <dimen name="banner_shadow_bottom">2dp</dimen>
 
 
 </resources>
