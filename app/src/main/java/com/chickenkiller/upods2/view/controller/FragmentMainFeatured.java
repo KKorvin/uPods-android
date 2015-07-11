@@ -66,7 +66,7 @@ public class FragmentMainFeatured extends Fragment {
                     public void run() {
                         try {
                             JSONObject jResponse = new JSONObject(response.body().string());
-                            ArrayList<MediaItem> topRadioStations = RadioItem.withJsonArray(jResponse.getJSONArray("result"));
+                            ArrayList<MediaItem> topRadioStations = RadioItem.withJsonArray(jResponse.getJSONArray("result"), getActivity());
                             mediaItemsAdapter = new MediaItemsAdapter(getActivity(), R.layout.card_media_item,
                                     R.layout.media_item_title, topRadioStations);
                             rvMain.setAdapter(mediaItemsAdapter);

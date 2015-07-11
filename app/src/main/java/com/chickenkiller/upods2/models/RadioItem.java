@@ -48,8 +48,10 @@ public class RadioItem extends MediaItem {
         }
     }
 
-    public static ArrayList<MediaItem> withJsonArray(JSONArray jsonRadioItems) {
+    public static ArrayList<MediaItem> withJsonArray(JSONArray jsonRadioItems, Context mContext) {
         ArrayList<MediaItem> items = new ArrayList<MediaItem>();
+        items.add(new MediaItemTitle(mContext.getString(R.string.top40_chanels)));
+
         try {
             for (int i = 0; i < jsonRadioItems.length(); i++) {
                 JSONObject jsonRadionItem = (JSONObject) jsonRadioItems.get(i);
