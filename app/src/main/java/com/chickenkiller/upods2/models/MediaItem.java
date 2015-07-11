@@ -5,9 +5,14 @@ package com.chickenkiller.upods2.models;
  */
 public abstract class MediaItem {
 
+    protected int id;
 
     public MediaItem() {
 
+    }
+
+    public int getId() {
+        return id;
     }
 
 }
