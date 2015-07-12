@@ -4,6 +4,7 @@
     <dimen name="default_text_size_16">16sp</dimen>
     <dimen name="default_text_size_18">18sp</dimen>
     <dimen name="default_text_size_20">20sp</dimen>
+    <dimen name="default_card_corner_radius">2dp</dimen>
 
     <!-- Elevation -->
     <dimen name="drawer_elevation">7dp</dimen>
@@ -23,13 +24,12 @@
 
     <!-- Cards grid -->
     <dimen name="rv_cards_column_width">110dp</dimen>
-    <dimen name="rv_banners_height">130dp</dimen>
+    <dimen name="rv_banners_height">140dp</dimen>
     <dimen name="card_media_item_m">5dp</dimen>
     <dimen name="card_media_item_height">170dp</dimen>
-    <dimen name="tv_top40_ch_ml">30dp</dimen>
-    <dimen name="tv_top40_ch_mt">20dp</dimen>
+
+    <!-- Banner -->
     <dimen name="banner_shadow_radius">2dp</dimen>
     <dimen name="banner_shadow_bottom">2dp</dimen>
-
 
 </resources>

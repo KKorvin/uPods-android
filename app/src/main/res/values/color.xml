@@ -6,4 +6,8 @@
     <color name="white">#FFFFFF</color>
     <color name="black">#000000</color>
     <color name="sliding_menu_devider_color">#dcdcdc</color>
+    <color name="starFullySelected">#646464</color>
+    <color name="starPartiallySelected">#afafaf</color>
+    <color name="starNotSelected">#ababab</color>
+
 </resources>

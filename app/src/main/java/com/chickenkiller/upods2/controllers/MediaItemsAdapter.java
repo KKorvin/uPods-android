@@ -1,10 +1,13 @@
 package com.chickenkiller.upods2.controllers;
 
 import android.content.Context;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.LayerDrawable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -33,11 +36,18 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     public static class ViewHolderCardItem extends RecyclerView.ViewHolder {
         public ImageViewSquare imgSquare;
         public TextView tvSquareTitle;
+        public RatingBar rbMediaItem;
 
         public ViewHolderCardItem(View view) {
             super(view);
             this.imgSquare = (ImageViewSquare) view.findViewById(R.id.imgSquare);
             this.tvSquareTitle = (TextView) view.findViewById(R.id.tvSquareTitle);
+            this.rbMediaItem = (RatingBar)view.findViewById(R.id.rbMediaItem);
+            Context context = view.getContext();
+            LayerDrawable stars = (LayerDrawable) rbMediaItem.getProgressDrawable();
+            stars.getDrawable(2).setColorFilter(context.getResources().getColor(R.color.starFullySelected), PorterDuff.Mode.SRC_ATOP);
+            stars.getDrawable(1).setColorFilter(context.getResources().getColor(R.color.starPartiallySelected), PorterDuff.Mode.SRC_ATOP);
+            stars.getDrawable(0).setColorFilter(context.getResources().getColor(R.color.starNotSelected), PorterDuff.Mode.SRC_ATOP);
         }
     }
 
