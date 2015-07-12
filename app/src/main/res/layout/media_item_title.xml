@@ -5,6 +5,7 @@
     android:layout_height="wrap_content"
     android:layout_marginLeft="5dp"
     android:layout_marginTop="10dp"
+    android:layout_marginBottom="10dp"
     android:text="@string/top40_chanels"
     android:textColor="@color/black"
     android:textSize="@dimen/default_text_size_20"

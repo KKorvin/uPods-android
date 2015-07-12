@@ -35,6 +35,17 @@ public class FragmentMainFeatured extends Fragment {
     private MediaItemsAdapter mediaItemsAdapter;
     private BanerItemsAdapter banerItemsAdapter;
 
+    private RecyclerView.OnScrollListener rvMainScrollListener = new RecyclerView.OnScrollListener() {
+        @Override
+        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+            if (((GridLayoutManager) rvMain.getLayoutManager()).findFirstCompletelyVisibleItemPosition() == 0) {
+                rvBanners.setVisibility(View.VISIBLE);
+            } else {
+                rvBanners.setVisibility(View.GONE);
+            }
+        }
+    };
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,6 +56,7 @@ public class FragmentMainFeatured extends Fragment {
 
         rvMain = (AutofitRecyclerView) view.findViewById(R.id.rvMain);
         rvMain.setHasFixedSize(true);
+        rvMain.addOnScrollListener(rvMainScrollListener);
         showTops();
 
         rvBanners = (RecyclerView) view.findViewById(R.id.rvBanners);
