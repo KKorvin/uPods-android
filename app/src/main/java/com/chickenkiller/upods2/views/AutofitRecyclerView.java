@@ -5,6 +5,7 @@ import android.content.res.TypedArray;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
+import android.view.View;
 
 /**
  * Created by alonzilberman on 7/5/15.
@@ -59,4 +60,7 @@ public class AutofitRecyclerView extends RecyclerView {
         }
     }
 
+    protected int getTotalSpan(View view, RecyclerView parent) {
+        return manager.getSpanCount();
+    }
 }

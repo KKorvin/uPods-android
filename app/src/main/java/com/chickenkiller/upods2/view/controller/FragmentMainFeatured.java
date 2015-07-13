@@ -2,20 +2,18 @@ package com.chickenkiller.upods2.view.controller;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.chickenkiller.upods2.R;
-import com.chickenkiller.upods2.controllers.BanerItemsAdapter;
 import com.chickenkiller.upods2.controllers.MediaItemsAdapter;
 import com.chickenkiller.upods2.controllers.RadioTopManager;
 import com.chickenkiller.upods2.interfaces.INetworkUIupdater;
-import com.chickenkiller.upods2.models.BanerItem;
 import com.chickenkiller.upods2.models.MediaItem;
 import com.chickenkiller.upods2.models.RadioItem;
 import com.chickenkiller.upods2.views.AutofitRecyclerView;
@@ -31,20 +29,39 @@ import java.util.ArrayList;
 public class FragmentMainFeatured extends Fragment {
 
     private AutofitRecyclerView rvMain;
-    private RecyclerView rvBanners;
     private MediaItemsAdapter mediaItemsAdapter;
-    private BanerItemsAdapter banerItemsAdapter;
 
-    private RecyclerView.OnScrollListener rvMainScrollListener = new RecyclerView.OnScrollListener() {
+    public class SpacesItemDecoration extends RecyclerView.ItemDecoration {
+        private int space;
+
+        public SpacesItemDecoration(int space) {
+            this.space = space;
+        }
+
         @Override
-        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-            if (((GridLayoutManager) rvMain.getLayoutManager()).findFirstCompletelyVisibleItemPosition() == 0) {
-                rvBanners.setVisibility(View.VISIBLE);
+        public void getItemOffsets(Rect outRect, View view,
+                                   RecyclerView parent, RecyclerView.State state) {
+            int spanCount = rvMain.getSpanCount();
+            int position = rvMain.getChildAdapterPosition(view);
+            if (mediaItemsAdapter.getItemViewType(position) != MediaItemsAdapter.ITEM) {
+                outRect.bottom = 0;
+                outRect.top = 0;
+                outRect.left = 0;
+                outRect.right = 0;
             } else {
-                rvBanners.setVisibility(View.GONE);
+                int spanIndex = (position - mediaItemsAdapter.getOneColumnItemsCount()) % spanCount;
+                outRect.bottom = space;
+                outRect.top = space;
+                if (spanIndex == 1) {
+                    outRect.left = space / 2;
+                    outRect.right = space / 2;
+                } else {
+                    outRect.left = space;
+                    outRect.right = space;
+                }
             }
         }
-    };
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -52,20 +69,11 @@ public class FragmentMainFeatured extends Fragment {
         View view = inflater.inflate(R.layout.fragment_main_featured, container, false);
         Activity mActivity = getActivity();
 
-        banerItemsAdapter = new BanerItemsAdapter(mActivity, R.layout.baner_item, BanerItem.generateDebugList(1));
-
         rvMain = (AutofitRecyclerView) view.findViewById(R.id.rvMain);
         rvMain.setHasFixedSize(true);
-        rvMain.addOnScrollListener(rvMainScrollListener);
+        rvMain.addItemDecoration(new SpacesItemDecoration(20));
         showTops();
 
-        rvBanners = (RecyclerView) view.findViewById(R.id.rvBanners);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(mActivity, LinearLayoutManager.HORIZONTAL, false);
-        rvBanners.setLayoutManager(layoutManager);
-        rvBanners.setHasFixedSize(true);
-        rvBanners.setAdapter(banerItemsAdapter);
-
-        layoutManager.scrollToPosition(banerItemsAdapter.MIDDLE);
         return view;
     }
 
@@ -86,7 +94,8 @@ public class FragmentMainFeatured extends Fragment {
                                 @Override
                                 public int getSpanSize(int position) {
                                     int viewType = mediaItemsAdapter.getItemViewType(position);
-                                    return viewType != MediaItemsAdapter.HEADER ? 1 : rvMain.getSpanCount();
+                                    return (viewType != MediaItemsAdapter.HEADER && viewType != MediaItemsAdapter.BANNERS_LAYOUT) ?
+                                            1 : rvMain.getSpanCount();
                                 }
                             });
                         } catch (Exception e) {
@@ -103,4 +112,5 @@ public class FragmentMainFeatured extends Fragment {
 
         });
     }
+
 }

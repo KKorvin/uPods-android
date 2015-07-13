@@ -23,9 +23,9 @@
     <dimen name="drawer_item_t_m_l">10dp</dimen>
 
     <!-- Cards grid -->
-    <dimen name="rv_cards_column_width">110dp</dimen>
+    <dimen name="rv_cards_column_width">120dp</dimen>
     <dimen name="rv_banners_height">140dp</dimen>
-    <dimen name="card_media_item_m">5dp</dimen>
+    <dimen name="card_media_item_m">0dp</dimen>
     <dimen name="card_media_item_height">170dp</dimen>
 
     <!-- Banner -->

@@ -3,6 +3,8 @@ package com.chickenkiller.upods2.controllers;
 import android.content.Context;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.LayerDrawable;
+import android.support.v7.widget.CardView;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +14,8 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.chickenkiller.upods2.R;
+import com.chickenkiller.upods2.models.BanerItem;
+import com.chickenkiller.upods2.models.BannersLayoutItem;
 import com.chickenkiller.upods2.models.MediaItem;
 import com.chickenkiller.upods2.models.MediaItemTitle;
 import com.chickenkiller.upods2.models.RadioItem;
@@ -27,22 +31,42 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     public static final int HEADER = 1;
     public static final int ITEM = 2;
+    public static final int BANNERS_LAYOUT = 3;
 
     private int itemLayout;
     private int titleLayout;
+
     private List<MediaItem> items;
     private Context mContext;
+
+    public static class ViewHolderBannersLayout extends RecyclerView.ViewHolder {
+        private RecyclerView rvBanners;
+        private BannerItemsAdapter bannerItemsAdapter;
+
+        public ViewHolderBannersLayout(View view) {
+            super(view);
+            rvBanners = (RecyclerView) view.findViewById(R.id.rvBanners);
+            bannerItemsAdapter = new BannerItemsAdapter(view.getContext(), R.layout.baner_item, BanerItem.generateDebugList(1));
+            LinearLayoutManager layoutManager = new LinearLayoutManager(view.getContext(), LinearLayoutManager.HORIZONTAL, false);
+            rvBanners.setLayoutManager(layoutManager);
+            rvBanners.setHasFixedSize(true);
+            rvBanners.setAdapter(bannerItemsAdapter);
+            layoutManager.scrollToPosition(bannerItemsAdapter.MIDDLE);
+        }
+    }
 
     public static class ViewHolderCardItem extends RecyclerView.ViewHolder {
         public ImageViewSquare imgSquare;
         public TextView tvSquareTitle;
         public RatingBar rbMediaItem;
+        public CardView cvSquare;
 
         public ViewHolderCardItem(View view) {
             super(view);
             this.imgSquare = (ImageViewSquare) view.findViewById(R.id.imgSquare);
             this.tvSquareTitle = (TextView) view.findViewById(R.id.tvSquareTitle);
-            this.rbMediaItem = (RatingBar)view.findViewById(R.id.rbMediaItem);
+            this.rbMediaItem = (RatingBar) view.findViewById(R.id.rbMediaItem);
+            this.cvSquare = (CardView) view;
             Context context = view.getContext();
             LayerDrawable stars = (LayerDrawable) rbMediaItem.getProgressDrawable();
             stars.getDrawable(2).setColorFilter(context.getResources().getColor(R.color.starFullySelected), PorterDuff.Mode.SRC_ATOP);
@@ -76,9 +100,13 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = null;
         RecyclerView.ViewHolder viewHolder = null;
-        if (viewType == ITEM) {
+        if (viewType == BANNERS_LAYOUT) {
+            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.rv_banners_layout, parent, false);
+            viewHolder = new ViewHolderBannersLayout(view);
+        } else if (viewType == ITEM) {
             view = LayoutInflater.from(parent.getContext()).inflate(itemLayout, parent, false);
             viewHolder = new ViewHolderCardItem(view);
+
         } else {
             view = LayoutInflater.from(parent.getContext()).inflate(titleLayout, parent, false);
             viewHolder = new ViewHolderMediaItemTitle(view);
@@ -88,12 +116,12 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        if (items.get(position) instanceof RadioItem) {
+        if (holder instanceof ViewHolderCardItem) {
             RadioItem currentItem = (RadioItem) items.get(position);
             Glide.with(mContext).load(currentItem.getImageUrl()).centerCrop().crossFade().into(((ViewHolderCardItem) holder).imgSquare);
             ((ViewHolderCardItem) holder).tvSquareTitle.setText(currentItem.getName());
             holder.itemView.setTag(currentItem);
-        } else {
+        } else if (holder instanceof ViewHolderMediaItemTitle) {
             MediaItemTitle currentItem = (MediaItemTitle) items.get(position);
             ((ViewHolderMediaItemTitle) holder).tvMediaCardTitle.setText(currentItem.getTitle());
             holder.itemView.setTag(currentItem);
@@ -102,6 +130,8 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     @Override
     public int getItemViewType(int position) {
+        if (items.get(position) instanceof BannersLayoutItem)
+            return BANNERS_LAYOUT;
         if (items.get(position) instanceof MediaItemTitle)
             return HEADER;
 
@@ -111,6 +141,16 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     @Override
     public int getItemCount() {
         return items.size();
+    }
+
+    public int getOneColumnItemsCount() {
+        int count = 0;
+        for (MediaItem item : items) {
+            if (!(item instanceof RadioItem)) {
+                count++;
+            }
+        }
+        return count;
     }
 
 }

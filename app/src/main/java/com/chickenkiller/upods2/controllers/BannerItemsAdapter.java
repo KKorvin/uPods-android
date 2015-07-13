@@ -20,7 +20,7 @@ import java.util.List;
 /**
  * Created by alonzilberman on 7/5/15.
  */
-public class BanerItemsAdapter extends RecyclerView.Adapter<BanerItemsAdapter.ViewHolder> {
+public class BannerItemsAdapter extends RecyclerView.Adapter<BannerItemsAdapter.ViewHolder> {
 
     private static final int HALF_MAX_VALUE = Integer.MAX_VALUE / 2;
     public final int MIDDLE;
@@ -39,7 +39,7 @@ public class BanerItemsAdapter extends RecyclerView.Adapter<BanerItemsAdapter.Vi
         }
     }
 
-    public BanerItemsAdapter(Context mContext, int itemLayout, ArrayList<BanerItem> items) {
+    public BannerItemsAdapter(Context mContext, int itemLayout, ArrayList<BanerItem> items) {
         super();
         this.items = items;
         this.itemLayout = itemLayout;
@@ -60,7 +60,7 @@ public class BanerItemsAdapter extends RecyclerView.Adapter<BanerItemsAdapter.Vi
     }
 
     @Override
-    public void onBindViewHolder(BanerItemsAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(BannerItemsAdapter.ViewHolder holder, int position) {
         BanerItem currentItem = getItem(position);
         LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) holder.imgBaner.getLayoutParams();
         params.width = displaymetrics.widthPixels;
