@@ -5,6 +5,5 @@
     android:layout_height="@dimen/rv_banners_height"
     android:background="@drawable/banner_shadow"
     android:clipToPadding="false"
-    android:layout_marginBottom="10dp"
     android:elevation="@dimen/banner_elevation" />
 

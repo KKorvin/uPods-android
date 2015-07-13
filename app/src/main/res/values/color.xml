@@ -9,5 +9,5 @@
     <color name="starFullySelected">#646464</color>
     <color name="starPartiallySelected">#afafaf</color>
     <color name="starNotSelected">#ababab</color>
-
+    <color name="media_card_subheader">#616161</color>
 </resources>

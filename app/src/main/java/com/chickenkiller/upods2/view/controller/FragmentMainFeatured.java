@@ -26,6 +26,11 @@ import java.util.ArrayList;
  */
 public class FragmentMainFeatured extends Fragment {
 
+    public final int MEDIA_ITEMS_CARDS_MARGIN = 25;
+    public final int MEDIA_ITEMS_COLUMNS = 3;
+    public static final int MEDIA_ITEMS_TYPES_COUNT = 3;
+
+
     private AutofitRecyclerView rvMain;
     private MediaItemsAdapter mediaItemsAdapter;
 
@@ -36,8 +41,10 @@ public class FragmentMainFeatured extends Fragment {
 
         rvMain = (AutofitRecyclerView) view.findViewById(R.id.rvMain);
         rvMain.setHasFixedSize(true);
-        rvMain.addItemDecoration(new GridSpacingItemDecoration(3, 25, true));
-
+        GridSpacingItemDecoration gridSpacingItemDecoration = new GridSpacingItemDecoration(MEDIA_ITEMS_COLUMNS, MEDIA_ITEMS_CARDS_MARGIN, true);
+        gridSpacingItemDecoration.setGridItemType(MediaItemsAdapter.ITEM);
+        gridSpacingItemDecoration.setItemsTypesCount(MEDIA_ITEMS_TYPES_COUNT);
+        rvMain.addItemDecoration(gridSpacingItemDecoration);
         showTops();
 
         return view;

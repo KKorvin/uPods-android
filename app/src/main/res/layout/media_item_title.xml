@@ -1,12 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/tvMediaCardTitle"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginLeft="5dp"
-    android:layout_marginTop="10dp"
-    android:layout_marginBottom="10dp"
-    android:text="@string/top40_chanels"
-    android:textColor="@color/black"
-    android:textSize="@dimen/default_text_size_20"
-    android:textStyle="bold" />
+    android:layout_height="fill_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tvMediaCardTitle"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="15dp"
+        android:text="@string/top40_chanels"
+        android:textColor="@color/black"
+        android:textSize="@dimen/default_text_size_20"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/tvMediaCardSubTitle"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="7dp"
+        android:layout_marginLeft="6dp"
+        android:text="@string/top40_chanels_subheader"
+        android:textColor="@color/media_card_subheader"
+        android:textSize="@dimen/default_text_size_16" />
+</LinearLayout>

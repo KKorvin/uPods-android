@@ -13,19 +13,29 @@ public class GridSpacingItemDecoration extends RecyclerView.ItemDecoration {
     private int spacing;
     private boolean includeEdge;
     private int cardItemType;
+    private int itemsTypesCount;
 
     public GridSpacingItemDecoration(int spanCount, int spacing, boolean includeEdge) {
         this.spanCount = spanCount;
         this.spacing = spacing;
         this.includeEdge = includeEdge;
+        this.cardItemType = -1;
+        this.itemsTypesCount = 1;
     }
 
+    public void setGridItemType(int cardItemType) {
+        this.cardItemType = cardItemType;
+    }
+
+    public void setItemsTypesCount(int itemsTypesCount) {
+        this.itemsTypesCount = itemsTypesCount;
+    }
 
     @Override
     public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
         int position = parent.getChildAdapterPosition(view); // item position
-        if (parent.getAdapter().getItemViewType(position) == MediaItemsAdapter.ITEM) {
-            position-=2;
+        if (cardItemType == -1 || parent.getAdapter().getItemViewType(position) == cardItemType) {
+            position -= (itemsTypesCount - 1);
             int column = position % spanCount; // item column
 
             if (includeEdge) {

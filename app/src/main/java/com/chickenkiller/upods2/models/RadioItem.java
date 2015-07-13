@@ -51,7 +51,7 @@ public class RadioItem extends MediaItem {
     public static ArrayList<MediaItem> withJsonArray(JSONArray jsonRadioItems, Context mContext) {
         ArrayList<MediaItem> items = new ArrayList<MediaItem>();
         items.add(new BannersLayoutItem());
-        items.add(new MediaItemTitle(mContext.getString(R.string.top40_chanels)));
+        items.add(new MediaItemTitle(mContext.getString(R.string.top40_chanels), mContext.getString(R.string.top40_chanels_subheader)));
 
         try {
             for (int i = 0; i < jsonRadioItems.length(); i++) {
@@ -62,16 +62,6 @@ public class RadioItem extends MediaItem {
             e.printStackTrace();
         }
         return items;
-    }
-
-    public static ArrayList<MediaItem> generateDebugList(int count, Context mContext) {
-        ArrayList<MediaItem> debugList = new ArrayList<MediaItem>();
-        debugList.add(new MediaItemTitle(mContext.getString(R.string.top40_chanels)));
-        for (int i = 0; i < count; i++) {
-            debugList.add(new RadioItem("Test" + String.valueOf(i),
-                    "", "https://igcdn-photos-g-a.akamaihd.net/hphotos-ak-xaf1/t51.2885-15/11356537_1775007156059126_1886851436_n.jpg"));
-        }
-        return debugList;
     }
 
     public String getStreamUrl() {

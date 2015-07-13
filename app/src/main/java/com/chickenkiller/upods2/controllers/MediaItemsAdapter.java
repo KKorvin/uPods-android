@@ -77,10 +77,12 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     public static class ViewHolderMediaItemTitle extends RecyclerView.ViewHolder {
         public TextView tvMediaCardTitle;
+        public TextView tvMediaCardSubTitle;
 
         public ViewHolderMediaItemTitle(View view) {
             super(view);
             this.tvMediaCardTitle = (TextView) view.findViewById(R.id.tvMediaCardTitle);
+            this.tvMediaCardSubTitle = (TextView) view.findViewById(R.id.tvMediaCardSubTitle);
         }
     }
 
@@ -124,6 +126,7 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         } else if (holder instanceof ViewHolderMediaItemTitle) {
             MediaItemTitle currentItem = (MediaItemTitle) items.get(position);
             ((ViewHolderMediaItemTitle) holder).tvMediaCardTitle.setText(currentItem.getTitle());
+            ((ViewHolderMediaItemTitle) holder).tvMediaCardSubTitle.setText(currentItem.getSubTitle());
             holder.itemView.setTag(currentItem);
         }
     }
