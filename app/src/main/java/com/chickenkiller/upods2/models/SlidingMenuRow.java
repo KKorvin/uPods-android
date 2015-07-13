@@ -44,14 +44,14 @@ public class SlidingMenuRow extends SlidingMenuItem {
 
     public static List<SlidingMenuItem> fromDefaultSlidingMenuSet(Context mContext) {
         ArrayList<SlidingMenuItem> allItems = new ArrayList<SlidingMenuItem>();
-        allItems.add(new SlidingMenuRow(mContext.getString(R.string.profile_my_profile), R.drawable.ic_account_circle_black_36dp));
-        allItems.add(new SlidingMenuRow(mContext.getString(R.string.radio_main), R.drawable.ic_radio_black_36dp));
-        allItems.add(new SlidingMenuRow(mContext.getString(R.string.podcasts_main), R.drawable.ic_speaker_black_36dp));
-        allItems.add(new SlidingMenuRow(mContext.getString(R.string.cloud_sync), R.drawable.ic_cloud_upload_black_36dp, true));
-        allItems.add(new SlidingMenuRow(mContext.getString(R.string.main_rate_app), R.drawable.ic_favorite_black_36dp));
-        allItems.add(new SlidingMenuRow(mContext.getString(R.string.main_about), R.drawable.ic_android_black_36dp));
-        allItems.add(new SlidingMenuRow(mContext.getString(R.string.main_help), R.drawable.ic_help_black_36dp, true));
-        allItems.add(new SlidingMenuRow(mContext.getString(R.string.main_settings), R.drawable.ic_settings_black_36dp));
+        allItems.add(new SlidingMenuRow(mContext.getString(R.string.profile_my_profile), R.drawable.ic_account_circle_black_24dp));
+        allItems.add(new SlidingMenuRow(mContext.getString(R.string.radio_main), R.drawable.ic_radio_black_24dp));
+        allItems.add(new SlidingMenuRow(mContext.getString(R.string.podcasts_main), R.drawable.ic_speaker_black_24dp));
+        allItems.add(new SlidingMenuRow(mContext.getString(R.string.cloud_sync), R.drawable.ic_cloud_upload_black_24dp, true));
+        allItems.add(new SlidingMenuRow(mContext.getString(R.string.main_rate_app), R.drawable.ic_favorite_black_24dp));
+        allItems.add(new SlidingMenuRow(mContext.getString(R.string.main_about), R.drawable.ic_android_black_24dp));
+        allItems.add(new SlidingMenuRow(mContext.getString(R.string.main_help), R.drawable.ic_help_black_24dp, true));
+        allItems.add(new SlidingMenuRow(mContext.getString(R.string.main_settings), R.drawable.ic_settings_black_24dp));
         return allItems;
     }
 
