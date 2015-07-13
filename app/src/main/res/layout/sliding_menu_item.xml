@@ -23,5 +23,7 @@
         android:layout_gravity="center"
         android:layout_marginLeft="32dp"
         android:text="test"
+        android:textStyle="bold"
+        android:textColor="@color/black"
         android:textSize="@dimen/default_text_size_14" />
 </LinearLayout>
