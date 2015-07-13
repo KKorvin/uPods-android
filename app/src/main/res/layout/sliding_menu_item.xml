@@ -2,24 +2,26 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_margin="@dimen/drawer_item_ln_m"
-    android:clickable="true"
     android:background="?android:attr/selectableItemBackground"
+    android:clickable="true"
     android:focusable="true"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+    android:padding="16dp"
+    android:paddingTop="25dp">
 
     <ImageView
-        android:layout_gravity="center"
         android:id="@+id/imgSMenutIcon"
-        android:src="@drawable/ic_favorite_black_36dp"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:src="@drawable/ic_favorite_black_36dp" />
 
     <TextView
-        android:layout_gravity="center"
-        android:text="test"
-        android:layout_marginLeft="@dimen/drawer_item_t_m_l"
         android:id="@+id/tvSMenuTitle"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginLeft="32dp"
+        android:text="test"
+        android:textSize="@dimen/default_text_size_14" />
 </LinearLayout>

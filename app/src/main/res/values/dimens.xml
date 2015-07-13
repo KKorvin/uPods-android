@@ -19,8 +19,7 @@
     <dimen name="user_name_mr_top">5dp</dimen>
     <dimen name="img_user_m_left">16dp</dimen>
     <dimen name="img_user_m_top">38dp</dimen>
-    <dimen name="drawer_item_ln_m">10dp</dimen>
-    <dimen name="drawer_item_t_m_l">10dp</dimen>
+
 
     <!-- Cards grid -->
     <dimen name="rv_cards_column_width">120dp</dimen>
