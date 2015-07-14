@@ -14,11 +14,13 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.chickenkiller.upods2.R;
+import com.chickenkiller.upods2.interfaces.IFragmentsManager;
 import com.chickenkiller.upods2.models.BanerItem;
 import com.chickenkiller.upods2.models.BannersLayoutItem;
 import com.chickenkiller.upods2.models.MediaItem;
 import com.chickenkiller.upods2.models.MediaItemTitle;
 import com.chickenkiller.upods2.models.RadioItem;
+import com.chickenkiller.upods2.view.controller.FragmentMediaDetails;
 import com.chickenkiller.upods2.views.ImageViewSquare;
 
 import java.util.ArrayList;
@@ -38,8 +40,9 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     private List<MediaItem> items;
     private Context mContext;
+    private IFragmentsManager fragmentsManager;
 
-    public static class ViewHolderBannersLayout extends RecyclerView.ViewHolder {
+    private class ViewHolderBannersLayout extends RecyclerView.ViewHolder {
         private RecyclerView rvBanners;
         private BannerItemsAdapter bannerItemsAdapter;
 
@@ -55,7 +58,7 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         }
     }
 
-    public static class ViewHolderCardItem extends RecyclerView.ViewHolder {
+    private class ViewHolderCardItem extends RecyclerView.ViewHolder implements View.OnClickListener {
         public ImageViewSquare imgSquare;
         public TextView tvSquareTitle;
         public RatingBar rbMediaItem;
@@ -67,15 +70,24 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             this.tvSquareTitle = (TextView) view.findViewById(R.id.tvSquareTitle);
             this.rbMediaItem = (RatingBar) view.findViewById(R.id.rbMediaItem);
             this.cvSquare = (CardView) view;
+            view.setOnClickListener(this);
             Context context = view.getContext();
             LayerDrawable stars = (LayerDrawable) rbMediaItem.getProgressDrawable();
             stars.getDrawable(2).setColorFilter(context.getResources().getColor(R.color.starFullySelected), PorterDuff.Mode.SRC_ATOP);
             stars.getDrawable(1).setColorFilter(context.getResources().getColor(R.color.starPartiallySelected), PorterDuff.Mode.SRC_ATOP);
             stars.getDrawable(0).setColorFilter(context.getResources().getColor(R.color.starNotSelected), PorterDuff.Mode.SRC_ATOP);
         }
+
+        @Override
+        public void onClick(View view) {
+            FragmentMediaDetails fragmentMediaDetails = new FragmentMediaDetails();
+            fragmentsManager.showFragment(fragmentsManager.getCurrentMainFragmentId(), fragmentMediaDetails, FragmentMediaDetails.TAG,
+                    IFragmentsManager.FragmentOpenType.OVERLAY, IFragmentsManager.FragmentAnimationType.BOTTOM_TOP);
+        }
+
     }
 
-    public static class ViewHolderMediaItemTitle extends RecyclerView.ViewHolder {
+    private class ViewHolderMediaItemTitle extends RecyclerView.ViewHolder {
         public TextView tvMediaCardTitle;
         public TextView tvMediaCardSubTitle;
 
@@ -96,6 +108,10 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     public MediaItemsAdapter(Context mContext, int itemLayout, int titleLayout, ArrayList<MediaItem> items) {
         this(mContext, itemLayout, items);
         this.titleLayout = titleLayout;
+    }
+
+    public void setFragmentsManager(IFragmentsManager fragmentsManager) {
+        this.fragmentsManager = fragmentsManager;
     }
 
     @Override

@@ -7,7 +7,7 @@
     tools:context=".ActivityMain"
     tools:ignore="MissingPrefix">
 
-    <LinearLayout
+    <FrameLayout
         android:id="@+id/ln_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -16,7 +16,7 @@
         <include layout="@layout/toolbar_main"></include>
 
 
-    </LinearLayout>
+    </FrameLayout>
 
     <include layout="@layout/slidng_menu"></include>
 </android.support.v4.widget.DrawerLayout>

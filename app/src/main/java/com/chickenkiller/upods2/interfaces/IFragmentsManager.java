@@ -7,7 +7,14 @@ import android.app.Fragment;
  */
 public interface IFragmentsManager {
 
-    void showFragment(int id, Fragment fragment);
+    public static enum FragmentOpenType {REPLACE, OVERLAY}
+
+    public static enum FragmentAnimationType {DEFAULT, BOTTOM_TOP}
+
+
+    void showFragment(int id, Fragment fragment, String tag, FragmentOpenType openType, FragmentAnimationType animationType);
+
+    void showFragment(int id, Fragment fragment, String tag);
 
     int getCurrentMainFragmentId();
 }

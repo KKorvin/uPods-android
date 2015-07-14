@@ -11,6 +11,7 @@ import com.chickenkiller.upods2.R;
 import com.chickenkiller.upods2.controllers.GridSpacingItemDecoration;
 import com.chickenkiller.upods2.controllers.MediaItemsAdapter;
 import com.chickenkiller.upods2.controllers.RadioTopManager;
+import com.chickenkiller.upods2.interfaces.IFragmentsManager;
 import com.chickenkiller.upods2.interfaces.INetworkUIupdater;
 import com.chickenkiller.upods2.models.MediaItem;
 import com.chickenkiller.upods2.models.RadioItem;
@@ -26,6 +27,7 @@ import java.util.ArrayList;
  */
 public class FragmentMainFeatured extends Fragment {
 
+    public static final String TAG = "main_featured";
     public final int MEDIA_ITEMS_CARDS_MARGIN = 25;
     public final int MEDIA_ITEMS_COLUMNS = 3;
     public static final int MEDIA_ITEMS_TYPES_COUNT = 3;
@@ -62,6 +64,9 @@ public class FragmentMainFeatured extends Fragment {
                             ArrayList<MediaItem> topRadioStations = RadioItem.withJsonArray(jResponse.getJSONArray("result"), getActivity());
                             mediaItemsAdapter = new MediaItemsAdapter(getActivity(), R.layout.card_media_item,
                                     R.layout.media_item_title, topRadioStations);
+                            if (getActivity() instanceof IFragmentsManager) {
+                                mediaItemsAdapter.setFragmentsManager((IFragmentsManager) getActivity());
+                            }
                             rvMain.setAdapter(mediaItemsAdapter);
                             rvMain.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
                                 @Override

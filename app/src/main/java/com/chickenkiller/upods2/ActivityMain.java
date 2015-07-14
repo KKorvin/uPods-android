@@ -26,7 +26,7 @@ public class ActivityMain extends Activity implements IFragmentsManager {
         toolbar = (Toolbar) findViewById(R.id.toolbar_main);
         toolbar.inflateMenu(R.menu.menu_activity_main);
         slidingMenu = new SlidingMenu(this, toolbar);
-        showFragment(R.id.ln_content, new FragmentMainFeatured());
+        showFragment(R.id.ln_content, new FragmentMainFeatured(), FragmentMainFeatured.TAG);
 
     }
 
@@ -45,14 +45,23 @@ public class ActivityMain extends Activity implements IFragmentsManager {
     }
 
     @Override
-    public void showFragment(int id, Fragment fragment) {
+    public void showFragment(int id, Fragment fragment, String tag, FragmentOpenType openType, FragmentAnimationType animationType) {
         FragmentManager fm = getFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
-        ft.replace(id, fragment);
+        if (openType == FragmentOpenType.OVERLAY) {
+            ft.add(id, fragment, tag);
+        } else {
+            ft.replace(id, fragment);
+        }
         ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
         ft.addToBackStack(null);
         ft.commit();
         currentMainFragmentId = id;
+    }
+
+    @Override
+    public void showFragment(int id, Fragment fragment, String tag) {
+        showFragment(id, fragment, tag, FragmentOpenType.REPLACE, FragmentAnimationType.DEFAULT);
     }
 
     @Override

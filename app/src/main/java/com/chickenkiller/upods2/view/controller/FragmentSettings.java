@@ -11,6 +11,7 @@ import com.chickenkiller.upods2.R;
  */
 public class FragmentSettings extends PreferenceFragment {
 
+    public static String TAG = "preference";
     private ListPreference mListPreference;
 
 
