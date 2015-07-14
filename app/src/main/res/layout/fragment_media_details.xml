@@ -2,16 +2,16 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical"
     android:clickable="true"
     android:focusable="true"
+    android:orientation="vertical"
     android:weightSum="100">
 
     <LinearLayout
         android:id="@+id/lnDetailedTransparentHeader"
         android:layout_width="fill_parent"
         android:layout_height="0dp"
-        android:layout_weight="30"
+        android:layout_weight="20"
         android:background="@color/fragment_deatils_opacity_bckg"
         android:orientation="vertical"></LinearLayout>
 
@@ -19,7 +19,40 @@
         android:id="@+id/lnDetailedContent"
         android:layout_width="fill_parent"
         android:layout_height="0dp"
-        android:layout_weight="70"
-        android:background="@color/black"
-        android:orientation="vertical"></LinearLayout>
+        android:layout_weight="80"
+        android:background="@color/white"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="@dimen/rv_banners_height">
+
+            <ImageView
+                android:id="@+id/imgDetailedTopCover"
+                android:layout_width="fill_parent"
+                android:layout_height="@dimen/rv_banners_height"
+                android:scaleType="fitXY" />
+
+            <TextView
+                android:id="@+id/tvDetailedHeader"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:textSize="@dimen/default_text_size_20" />
+        </RelativeLayout>
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Description"
+            android:textColor="@color/black"
+            android:textSize="@dimen/default_text_size_20" />
+
+        <TextView
+            android:id="@+id/tvDetailedDescription"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:textSize="@dimen/default_text_size_20" />
+    </LinearLayout>
 </LinearLayout>

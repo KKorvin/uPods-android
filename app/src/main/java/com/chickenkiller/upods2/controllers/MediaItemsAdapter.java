@@ -20,7 +20,7 @@ import com.chickenkiller.upods2.models.BannersLayoutItem;
 import com.chickenkiller.upods2.models.MediaItem;
 import com.chickenkiller.upods2.models.MediaItemTitle;
 import com.chickenkiller.upods2.models.RadioItem;
-import com.chickenkiller.upods2.view.controller.FragmentMediaDetails;
+import com.chickenkiller.upods2.view.controller.FragmentRadioItemDetails;
 import com.chickenkiller.upods2.views.ImageViewSquare;
 
 import java.util.ArrayList;
@@ -80,8 +80,11 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
         @Override
         public void onClick(View view) {
-            FragmentMediaDetails fragmentMediaDetails = new FragmentMediaDetails();
-            fragmentsManager.showFragment(fragmentsManager.getCurrentMainFragmentId(), fragmentMediaDetails, FragmentMediaDetails.TAG,
+            FragmentRadioItemDetails fragmentRadioItemDetails = new FragmentRadioItemDetails();
+            if (items.get(getAdapterPosition()) instanceof RadioItem) {
+                fragmentRadioItemDetails.setRadioItem((RadioItem) items.get(getAdapterPosition()));
+            }
+            fragmentsManager.showFragment(fragmentsManager.getCurrentMainFragmentId(), fragmentRadioItemDetails, FragmentRadioItemDetails.TAG,
                     IFragmentsManager.FragmentOpenType.OVERLAY, IFragmentsManager.FragmentAnimationType.BOTTOM_TOP);
         }
 
