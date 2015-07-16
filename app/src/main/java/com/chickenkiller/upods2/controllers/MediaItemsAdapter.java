@@ -22,6 +22,7 @@ import com.chickenkiller.upods2.models.MediaItemTitle;
 import com.chickenkiller.upods2.models.RadioItem;
 import com.chickenkiller.upods2.view.controller.FragmentRadioItemDetails;
 import com.chickenkiller.upods2.views.ImageViewSquare;
+import com.lsjwzh.widget.recyclerviewpager.RecyclerViewPager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,12 +44,13 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     private IFragmentsManager fragmentsManager;
 
     private class ViewHolderBannersLayout extends RecyclerView.ViewHolder {
-        private RecyclerView rvBanners;
+        private RecyclerViewPager rvBanners;
         private BannerItemsAdapter bannerItemsAdapter;
+
 
         public ViewHolderBannersLayout(View view) {
             super(view);
-            rvBanners = (RecyclerView) view.findViewById(R.id.rvBanners);
+            rvBanners = (RecyclerViewPager) view.findViewById(R.id.rvBanners);
             bannerItemsAdapter = new BannerItemsAdapter(view.getContext(), R.layout.baner_item, BanerItem.generateDebugList(1));
             LinearLayoutManager layoutManager = new LinearLayoutManager(view.getContext(), LinearLayoutManager.HORIZONTAL, false);
             rvBanners.setLayoutManager(layoutManager);
@@ -99,6 +101,7 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             this.tvMediaCardTitle = (TextView) view.findViewById(R.id.tvMediaCardTitle);
             this.tvMediaCardSubTitle = (TextView) view.findViewById(R.id.tvMediaCardSubTitle);
         }
+
     }
 
     public MediaItemsAdapter(Context mContext, int itemLayout, List<MediaItem> items) {
