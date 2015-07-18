@@ -142,7 +142,7 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof ViewHolderCardItem) {
             RadioItem currentItem = (RadioItem) items.get(position);
-            Glide.with(mContext).load(currentItem.getImageUrl()).centerCrop().crossFade().into(((ViewHolderCardItem) holder).imgSquare);
+            Glide.with(mContext).load(currentItem.getCoverImageUrl()).centerCrop().crossFade().into(((ViewHolderCardItem) holder).imgSquare);
             ((ViewHolderCardItem) holder).tvSquareTitle.setText(currentItem.getName());
             holder.itemView.setTag(currentItem);
         } else if (holder instanceof ViewHolderMediaItemTitle) {

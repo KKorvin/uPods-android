@@ -15,17 +15,18 @@ import java.util.ArrayList;
 public class RadioItem extends MediaItem {
     protected String name;
     protected String streamUrl;
-    protected String imageUrl;
+    protected String coverImageUrl;
+    protected String bannerImageUrl;
     protected String description;
     protected String website;
     protected String facebook;
     protected String twitter;
     protected String country;
 
-    public RadioItem(String name, String url, String imageUrl) {
+    public RadioItem(String name, String url, String coverImageUrl) {
         this.name = name;
         this.streamUrl = url;
-        this.imageUrl = imageUrl;
+        this.coverImageUrl = coverImageUrl;
     }
 
     public RadioItem(JSONObject jsonItem) {
@@ -37,8 +38,11 @@ public class RadioItem extends MediaItem {
             this.facebook = jsonItem.has("facebook") ? jsonItem.getString("facebook") : "";
             this.twitter = jsonItem.has("twitter") ? jsonItem.getString("twitter") : "";
             this.country = jsonItem.has("country") ? jsonItem.getString("country") : "";
-            if (jsonItem.has("images")) {
-                this.imageUrl = jsonItem.getJSONArray("images").getString(0);
+            if (jsonItem.has("covers")) {
+                this.coverImageUrl = jsonItem.getJSONArray("covers").getString(0);
+            }
+            if (jsonItem.has("banners")) {
+                this.bannerImageUrl = jsonItem.getJSONArray("banners").getString(0);
             }
             if (jsonItem.has("streamUrls")) {
                 this.streamUrl = jsonItem.getJSONArray("streamUrls").getString(0);
@@ -80,12 +84,12 @@ public class RadioItem extends MediaItem {
         this.name = name;
     }
 
-    public String getImageUrl() {
-        return imageUrl;
+    public String getCoverImageUrl() {
+        return coverImageUrl;
     }
 
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
+    public void setCoverImageUrl(String coverImageUrl) {
+        this.coverImageUrl = coverImageUrl;
     }
 
     public String getDescription() {
@@ -126,5 +130,13 @@ public class RadioItem extends MediaItem {
 
     public void setCountry(String country) {
         this.country = country;
+    }
+
+    public String getBannerImageUrl() {
+        return bannerImageUrl;
+    }
+
+    public void setBannerImageUrl(String bannerImageUrl) {
+        this.bannerImageUrl = bannerImageUrl;
     }
 }
