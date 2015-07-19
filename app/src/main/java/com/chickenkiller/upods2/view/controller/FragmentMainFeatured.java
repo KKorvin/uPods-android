@@ -76,8 +76,8 @@ public class FragmentMainFeatured extends Fragment {
                         try {
                             JSONObject jResponse = new JSONObject(response.body().string());
                             ArrayList<MediaItem> topRadioStations = new ArrayList<MediaItem>();
-                            topRadioStations.addAll(RadioItem.withJsonArray(jResponse.getJSONArray("result"), getActivity()));
                             topRadioStations.add(new MediaItemTitle(getString(R.string.top40_chanels), getString(R.string.top40_chanels_subheader)));
+                            topRadioStations.addAll(RadioItem.withJsonArray(jResponse.getJSONArray("result"), getActivity()));
                             mediaItemsAdapter.addItems(topRadioStations);
                         } catch (Exception e) {
                             e.printStackTrace();
