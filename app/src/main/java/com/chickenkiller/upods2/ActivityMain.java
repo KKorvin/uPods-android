@@ -48,6 +48,10 @@ public class ActivityMain extends Activity implements IFragmentsManager {
     public void showFragment(int id, Fragment fragment, String tag, FragmentOpenType openType, FragmentAnimationType animationType) {
         FragmentManager fm = getFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
+        if (animationType == FragmentAnimationType.BOTTOM_TOP) {
+            ft.setCustomAnimations(R.animator.animation_fragment_bototm_top, R.animator.animation_fragment_top_bototm,
+                    R.animator.animation_fragment_bototm_top, R.animator.animation_fragment_top_bototm);
+        }
         if (openType == FragmentOpenType.OVERLAY) {
             ft.add(id, fragment, tag);
         } else {

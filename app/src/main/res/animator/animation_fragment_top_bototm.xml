@@ -1,0 +1,9 @@
+<set xmlns:android="http://schemas.android.com/apk/res/android">
+    <objectAnimator xmlns:android="http://schemas.android.com/apk/res/android"
+        android:duration="500"
+        android:propertyName="y"
+        android:valueFrom="0"
+        android:valueTo="1280f"
+        android:valueType="floatType" />
+
+</set>
