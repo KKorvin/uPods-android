@@ -12,7 +12,9 @@ import android.widget.LinearLayout;
 
 import com.bumptech.glide.Glide;
 import com.chickenkiller.upods2.R;
-import com.chickenkiller.upods2.models.BanerItem;
+import com.chickenkiller.upods2.interfaces.IFragmentsManager;
+import com.chickenkiller.upods2.models.RadioItem;
+import com.chickenkiller.upods2.view.controller.FragmentRadioItemDetails;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,26 +22,39 @@ import java.util.List;
 /**
  * Created by alonzilberman on 7/5/15.
  */
-public class BannerItemsAdapter extends RecyclerView.Adapter<BannerItemsAdapter.ViewHolder> {
+public class BannerItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private static final int HALF_MAX_VALUE = Integer.MAX_VALUE / 2;
     public final int MIDDLE;
 
     private int itemLayout;
-    private List<BanerItem> items;
+    private List<RadioItem> items;
     private Context mContext;
     private DisplayMetrics displaymetrics;
+    private IFragmentsManager fragmentsManager;
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+
+    private class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public ImageView imgBaner;
 
         public ViewHolder(View view) {
             super(view);
             this.imgBaner = (ImageView) view.findViewById(R.id.imgBaner);
+            this.imgBaner.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View view) {
+            if(fragmentsManager!=null) {
+                FragmentRadioItemDetails fragmentRadioItemDetails = new FragmentRadioItemDetails();
+                fragmentRadioItemDetails.setRadioItem(getItem(getAdapterPosition()));
+                fragmentsManager.showFragment(fragmentsManager.getCurrentMainFragmentId(), fragmentRadioItemDetails, FragmentRadioItemDetails.TAG,
+                        IFragmentsManager.FragmentOpenType.OVERLAY, IFragmentsManager.FragmentAnimationType.BOTTOM_TOP);
+            }
         }
     }
 
-    public BannerItemsAdapter(Context mContext, int itemLayout, ArrayList<BanerItem> items) {
+    public BannerItemsAdapter(Context mContext, int itemLayout, ArrayList<RadioItem> items) {
         super();
         this.items = items;
         this.itemLayout = itemLayout;
@@ -60,11 +75,11 @@ public class BannerItemsAdapter extends RecyclerView.Adapter<BannerItemsAdapter.
     }
 
     @Override
-    public void onBindViewHolder(BannerItemsAdapter.ViewHolder holder, int position) {
-        BanerItem currentItem = getItem(position);
-        LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) holder.imgBaner.getLayoutParams();
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+        RadioItem currentItem = getItem(position);
+        LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) ((ViewHolder) holder).imgBaner.getLayoutParams();
         params.width = displaymetrics.widthPixels;
-        Glide.with(mContext).load(currentItem.getImageUrl()).into(holder.imgBaner);
+        Glide.with(mContext).load(currentItem.getBannerImageUrl()).into(((ViewHolder) holder).imgBaner);
         holder.itemView.setTag(currentItem);
     }
 
@@ -73,7 +88,11 @@ public class BannerItemsAdapter extends RecyclerView.Adapter<BannerItemsAdapter.
         return Integer.MAX_VALUE;
     }
 
-    public BanerItem getItem(int position) {
+    public RadioItem getItem(int position) {
         return items.get(position % items.size());
+    }
+
+    public void setFragmentsManager(IFragmentsManager fragmentsManager) {
+        this.fragmentsManager = fragmentsManager;
     }
 }

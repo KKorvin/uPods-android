@@ -8,9 +8,11 @@
 
     <ImageView
         android:id="@+id/imgBaner"
-        android:scaleType="fitXY"
         android:layout_width="fill_parent"
         android:layout_height="@dimen/rv_banners_height"
+        android:clickable="true"
+        android:focusable="true"
+        android:scaleType="fitXY"
         android:src="@drawable/ic_temp" />
 </LinearLayout>
 

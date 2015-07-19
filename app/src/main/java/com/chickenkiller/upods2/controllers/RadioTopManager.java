@@ -1,8 +1,5 @@
 package com.chickenkiller.upods2.controllers;
 
-import android.content.Context;
-import android.os.Handler;
-
 import com.chickenkiller.upods2.interfaces.INetworkUIupdater;
 import com.chickenkiller.upods2.utils.ServerApi;
 import com.squareup.okhttp.Callback;
@@ -19,7 +16,7 @@ public class RadioTopManager {
 
     public enum TopType {
 
-        MAIN_FEATURED("main_featured");
+        MAIN_FEATURED("main_featured"), MAIN_BANNER("main_banner");
 
         private String value;
 

@@ -2,8 +2,6 @@ package com.chickenkiller.upods2.models;
 
 import android.content.Context;
 
-import com.chickenkiller.upods2.R;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -38,13 +36,13 @@ public class RadioItem extends MediaItem {
             this.facebook = jsonItem.has("facebook") ? jsonItem.getString("facebook") : "";
             this.twitter = jsonItem.has("twitter") ? jsonItem.getString("twitter") : "";
             this.country = jsonItem.has("country") ? jsonItem.getString("country") : "";
-            if (jsonItem.has("covers")) {
+            if (jsonItem.has("covers") && jsonItem.getJSONArray("covers").length() > 0) {
                 this.coverImageUrl = jsonItem.getJSONArray("covers").getString(0);
             }
-            if (jsonItem.has("banners")) {
+            if (jsonItem.has("banners") && jsonItem.getJSONArray("banners").length() > 0) {
                 this.bannerImageUrl = jsonItem.getJSONArray("banners").getString(0);
             }
-            if (jsonItem.has("streamUrls")) {
+            if (jsonItem.has("streamUrls") && jsonItem.getJSONArray("streamUrls").length() > 0) {
                 this.streamUrl = jsonItem.getJSONArray("streamUrls").getString(0);
             }
         } catch (Exception e) {
@@ -52,11 +50,14 @@ public class RadioItem extends MediaItem {
         }
     }
 
-    public static ArrayList<MediaItem> withJsonArray(JSONArray jsonRadioItems, Context mContext) {
+    public static ArrayList<MediaItem> withOnlyBannersHeader() {
         ArrayList<MediaItem> items = new ArrayList<MediaItem>();
         items.add(new BannersLayoutItem());
-        items.add(new MediaItemTitle(mContext.getString(R.string.top40_chanels), mContext.getString(R.string.top40_chanels_subheader)));
+        return items;
+    }
 
+    public static ArrayList<RadioItem> withJsonArray(JSONArray jsonRadioItems, Context mContext) {
+        ArrayList<RadioItem> items = new ArrayList<RadioItem>();
         try {
             for (int i = 0; i < jsonRadioItems.length(); i++) {
                 JSONObject jsonRadionItem = (JSONObject) jsonRadioItems.get(i);

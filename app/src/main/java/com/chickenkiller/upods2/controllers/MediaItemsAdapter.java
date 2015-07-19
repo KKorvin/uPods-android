@@ -1,5 +1,6 @@
 package com.chickenkiller.upods2.controllers;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.LayerDrawable;
@@ -15,7 +16,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.chickenkiller.upods2.R;
 import com.chickenkiller.upods2.interfaces.IFragmentsManager;
-import com.chickenkiller.upods2.models.BanerItem;
+import com.chickenkiller.upods2.interfaces.INetworkUIupdater;
 import com.chickenkiller.upods2.models.BannersLayoutItem;
 import com.chickenkiller.upods2.models.MediaItem;
 import com.chickenkiller.upods2.models.MediaItemTitle;
@@ -23,6 +24,9 @@ import com.chickenkiller.upods2.models.RadioItem;
 import com.chickenkiller.upods2.view.controller.FragmentRadioItemDetails;
 import com.chickenkiller.upods2.views.ImageViewSquare;
 import com.lsjwzh.widget.recyclerviewpager.RecyclerViewPager;
+import com.squareup.okhttp.Response;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,17 +50,46 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     private class ViewHolderBannersLayout extends RecyclerView.ViewHolder {
         private RecyclerViewPager rvBanners;
         private BannerItemsAdapter bannerItemsAdapter;
-
+        private LinearLayoutManager layoutManager;
 
         public ViewHolderBannersLayout(View view) {
             super(view);
             rvBanners = (RecyclerViewPager) view.findViewById(R.id.rvBanners);
-            bannerItemsAdapter = new BannerItemsAdapter(view.getContext(), R.layout.baner_item, BanerItem.generateDebugList(1));
-            LinearLayoutManager layoutManager = new LinearLayoutManager(view.getContext(), LinearLayoutManager.HORIZONTAL, false);
+            layoutManager = new LinearLayoutManager(view.getContext(), LinearLayoutManager.HORIZONTAL, false);
             rvBanners.setLayoutManager(layoutManager);
             rvBanners.setHasFixedSize(true);
-            rvBanners.setAdapter(bannerItemsAdapter);
-            layoutManager.scrollToPosition(bannerItemsAdapter.MIDDLE);
+            loadBanners(view.getContext());
+        }
+
+        private void loadBanners(final Context mContext) {
+            RadioTopManager.getInstance().loadTops(RadioTopManager.TopType.MAIN_BANNER, new INetworkUIupdater() {
+                @Override
+                public void updateUISuccess(final Response response) {
+                    ((Activity)mContext).runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                JSONObject jResponse = new JSONObject(response.body().string());
+                                ArrayList<RadioItem> topRadioStations = RadioItem.withJsonArray(jResponse.getJSONArray("result"), mContext);
+                                bannerItemsAdapter = new BannerItemsAdapter(mContext, R.layout.baner_item, topRadioStations);
+                                if (fragmentsManager!=null) {
+                                    bannerItemsAdapter.setFragmentsManager(fragmentsManager);
+                                }
+                                rvBanners.setAdapter(bannerItemsAdapter);
+                                layoutManager.scrollToPosition(bannerItemsAdapter.MIDDLE);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    });
+                }
+
+                @Override
+                public void updateUIFailed() {
+
+                }
+
+            });
         }
     }
 
@@ -168,14 +201,9 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         return items.size();
     }
 
-    public int getOneColumnItemsCount() {
-        int count = 0;
-        for (MediaItem item : items) {
-            if (!(item instanceof RadioItem)) {
-                count++;
-            }
-        }
-        return count;
+    public void addItems(ArrayList<MediaItem> items){
+        this.items.addAll(items);
+        this.notifyDataSetChanged();
     }
 
 }

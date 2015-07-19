@@ -14,6 +14,7 @@ import com.chickenkiller.upods2.controllers.RadioTopManager;
 import com.chickenkiller.upods2.interfaces.IFragmentsManager;
 import com.chickenkiller.upods2.interfaces.INetworkUIupdater;
 import com.chickenkiller.upods2.models.MediaItem;
+import com.chickenkiller.upods2.models.MediaItemTitle;
 import com.chickenkiller.upods2.models.RadioItem;
 import com.chickenkiller.upods2.views.AutofitRecyclerView;
 import com.squareup.okhttp.Response;
@@ -47,8 +48,21 @@ public class FragmentMainFeatured extends Fragment {
         gridSpacingItemDecoration.setGridItemType(MediaItemsAdapter.ITEM);
         gridSpacingItemDecoration.setItemsTypesCount(MEDIA_ITEMS_TYPES_COUNT);
         rvMain.addItemDecoration(gridSpacingItemDecoration);
+        mediaItemsAdapter = new MediaItemsAdapter(getActivity(), R.layout.card_media_item,
+                R.layout.media_item_title, RadioItem.withOnlyBannersHeader() );
+        if (getActivity() instanceof IFragmentsManager) {
+            mediaItemsAdapter.setFragmentsManager((IFragmentsManager) getActivity());
+        }
+        rvMain.setAdapter(mediaItemsAdapter);
+        rvMain.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+            @Override
+            public int getSpanSize(int position) {
+                int viewType = mediaItemsAdapter.getItemViewType(position);
+                return (viewType != MediaItemsAdapter.HEADER && viewType != MediaItemsAdapter.BANNERS_LAYOUT) ?
+                        1 : rvMain.getSpanCount();
+            }
+        });
         showTops();
-
         return view;
     }
 
@@ -61,21 +75,10 @@ public class FragmentMainFeatured extends Fragment {
                     public void run() {
                         try {
                             JSONObject jResponse = new JSONObject(response.body().string());
-                            ArrayList<MediaItem> topRadioStations = RadioItem.withJsonArray(jResponse.getJSONArray("result"), getActivity());
-                            mediaItemsAdapter = new MediaItemsAdapter(getActivity(), R.layout.card_media_item,
-                                    R.layout.media_item_title, topRadioStations);
-                            if (getActivity() instanceof IFragmentsManager) {
-                                mediaItemsAdapter.setFragmentsManager((IFragmentsManager) getActivity());
-                            }
-                            rvMain.setAdapter(mediaItemsAdapter);
-                            rvMain.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
-                                @Override
-                                public int getSpanSize(int position) {
-                                    int viewType = mediaItemsAdapter.getItemViewType(position);
-                                    return (viewType != MediaItemsAdapter.HEADER && viewType != MediaItemsAdapter.BANNERS_LAYOUT) ?
-                                            1 : rvMain.getSpanCount();
-                                }
-                            });
+                            ArrayList<MediaItem> topRadioStations = new ArrayList<MediaItem>();
+                            topRadioStations.addAll(RadioItem.withJsonArray(jResponse.getJSONArray("result"), getActivity()));
+                            topRadioStations.add(new MediaItemTitle(getString(R.string.top40_chanels), getString(R.string.top40_chanels_subheader)));
+                            mediaItemsAdapter.addItems(topRadioStations);
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
