@@ -12,7 +12,7 @@
         android:layout_width="fill_parent"
         android:layout_height="0dp"
         android:layout_weight="20"
-        android:background="@color/fragment_deatils_opacity_bckg"
+        android:background="@android:color/transparent"
         android:orientation="vertical"></LinearLayout>
 
     <LinearLayout
