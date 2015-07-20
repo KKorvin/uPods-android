@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+    <!-- Some Basic Colors -->
+
     <color name="color_primary">#3F51B5</color>
     <color name="color_primary_dark">#1A237E</color>
     <color name="sliding_menu_background">#FAFAFA</color>
@@ -11,4 +14,32 @@
     <color name="starNotSelected">#ababab</color>
     <color name="fragment_deatils_opacity_bckg">#99ababab</color>
     <color name="media_card_subheader">#616161</color>
+
+    <!-- Material Colors from Google -->
+
+    <!-- Red Material -->
+    <color name="red_500">#F44336</color>
+    <color name="red_600">#E53935</color>
+    <color name="red_700">#D32F2F</color>
+    <color name="red_800">#C62828</color>
+    <color name="red_900">#B71C1C</color>
+
+    <!-- Indigo Material -->
+    <color name="indigo_500">#3F51B5</color>
+    <color name="indigo_600">#3949AB</color>
+    <color name="indigo_700">#303F9F</color>
+    <color name="indigo_800">#283593</color>
+    <color name="indigo_900">#1A237E</color>
+
+    <!-- Light Blue Material -->
+    <color name="light_blue_500">#03A9F4</color>
+    <color name="light_blue_600">#039BE5</color>
+    <color name="light_blue_700">#0288D1</color>
+    <color name="light_blue_800">#0277BD</color>
+    <color name="light_blue_900">#01579B</color>
+
+    <!-- Black and White Material -->
+    <color name="black_material">#000000</color>
+    <color name="white_material">#FFFFFF</color>
+
 </resources>
