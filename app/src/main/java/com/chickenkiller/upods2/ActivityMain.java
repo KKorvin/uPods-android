@@ -45,10 +45,11 @@ public class ActivityMain extends Activity implements IFragmentsManager {
     @Override
     public void onBackPressed() {
         if (getFragmentManager().getBackStackEntryCount() > 0) {
+            if (isOverlayShown()) {
+                toggleOverlay();
+            }
             getFragmentManager().popBackStack();
-            toggleOverlay();
-        }
-        else
+        } else
             super.onBackPressed();
     }
 
@@ -84,12 +85,16 @@ public class ActivityMain extends Activity implements IFragmentsManager {
 
     private void toggleOverlay() {
         ObjectAnimator alphaAnimation;
-        if (vOverlay.getAlpha() == 0) {
-            alphaAnimation = ObjectAnimator.ofFloat(vOverlay, View.ALPHA, 0, MAX_OVERLAY_LEVEL);
-        } else {
+        if (isOverlayShown()) {
             alphaAnimation = ObjectAnimator.ofFloat(vOverlay, View.ALPHA, MAX_OVERLAY_LEVEL, 0);
+        } else {
+            alphaAnimation = ObjectAnimator.ofFloat(vOverlay, View.ALPHA, 0, MAX_OVERLAY_LEVEL);
         }
         alphaAnimation.setDuration(FRAGMENT_TRANSACTION_TIME);
         alphaAnimation.start();
+    }
+
+    private boolean isOverlayShown() {
+        return vOverlay.getAlpha() != 0;
     }
 }
