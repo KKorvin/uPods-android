@@ -24,6 +24,7 @@ public class FragmentRadioItemDetails extends Fragment {
     private LinearLayout lnDetailedTransparentHeader;
     private TextView tvDetailedDescription;
     private TextView tvDetailedHeader;
+    private ImageView imgDetailedHeader;
     private ImageView imgDetailedTopCover;
 
     @Override
@@ -33,10 +34,13 @@ public class FragmentRadioItemDetails extends Fragment {
         lnDetailedTransparentHeader = (LinearLayout) view.findViewById(R.id.lnDetailedTransparentHeader);
         tvDetailedDescription = (TextView) view.findViewById(R.id.tvDetailedDescription);
         tvDetailedHeader = (TextView) view.findViewById(R.id.tvDetailedHeader);
-        imgDetailedTopCover = (ImageView) view.findViewById(R.id.imgDetailedTopCover);
+        imgDetailedHeader = (ImageView) view.findViewById(R.id.imgDetailedHeader);
+        imgDetailedTopCover = (ImageView) view.findViewById(R.id.imgDetailedCover);
+
 
         if (radioItem != null) {
-            Glide.with(getActivity()).load("http://www.linuxspace.org/wp-content/uploads/2015/examples/example_4.png").centerCrop().crossFade().into(imgDetailedTopCover);
+            Glide.with(getActivity()).load("http://www.linuxspace.org/wp-content/uploads/2015/examples/example_4.png").centerCrop().crossFade().into(imgDetailedHeader);
+            Glide.with(getActivity()).load(radioItem.getCoverImageUrl()).centerCrop().crossFade().into(imgDetailedTopCover);
             tvDetailedHeader.setText(radioItem.getName());
             tvDetailedDescription.setText(radioItem.getDescription());
         }

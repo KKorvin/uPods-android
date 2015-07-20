@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:clickable="true"
@@ -15,7 +16,7 @@
         android:background="@android:color/transparent"
         android:orientation="vertical"></LinearLayout>
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/lnDetailedContent"
         android:layout_width="fill_parent"
         android:layout_height="0dp"
@@ -24,35 +25,118 @@
         android:orientation="vertical">
 
         <RelativeLayout
+            android:id="@+id/rlDetailsHeaderContainer"
             android:layout_width="fill_parent"
             android:layout_height="@dimen/rv_banners_height">
 
             <ImageView
-                android:id="@+id/imgDetailedTopCover"
+                android:id="@+id/imgDetailedHeader"
                 android:layout_width="fill_parent"
                 android:layout_height="@dimen/rv_banners_height"
-                android:scaleType="fitXY" />
+                android:scaleType="fitXY"
+                android:src="@drawable/header_image_640x400" />
+
+            <ImageView
+                android:id="@+id/imgDetailedCover"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="20dp"
+                android:scaleType="fitXY"
+                android:src="@drawable/ic_temp" />
 
             <TextView
                 android:id="@+id/tvDetailedHeader"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="20dp"
+                android:layout_toLeftOf="@+id/imgDetailedFavorites"
+                android:layout_toRightOf="@+id/imgDetailedCover"
+                android:text="acascdas"
                 android:textColor="@color/white"
                 android:textSize="@dimen/default_text_size_20" />
+
+            <ImageView
+                android:id="@+id/imgDetailedFavorites"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_toLeftOf="@+id/imgDetailedMenu"
+                android:src="@drawable/ic_star_border_white_24dp" />
+
+            <ImageView
+                android:id="@+id/imgDetailedMenu"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="10dp"
+                android:src="@drawable/ic_more_vert_white_24dp" />
+
+            <TextView
+                android:id="@+id/tvDetailedSubHeader"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tvDetailedHeader"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="20dp"
+                android:layout_toRightOf="@+id/imgDetailedCover"
+                android:text="acascdas"
+                android:textColor="@color/white"
+                android:textSize="@dimen/default_text_size_20" />
+
         </RelativeLayout>
 
-        <TextView
-            android:layout_width="fill_parent"
+        <android.support.design.widget.FloatingActionButton
+            android:layout_marginRight="20dp"
+            android:layout_marginBottom="20dp"
+            android:id="@+id/fbDetailsPlay"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Description"
-            android:textColor="@color/black"
-            android:textSize="@dimen/default_text_size_20" />
+            android:src="@drawable/ic_more_vert_white_24dp"
+            android:layout_below="@+id/rlDetailsHeaderContainer"
+            android:layout_alignParentRight="true"
+            app:elevation="4dp" />
 
-        <TextView
-            android:id="@+id/tvDetailedDescription"
+        <View
+            android:layout_below="@+id/rlDetailsHeaderContainer"
+            android:id="@+id/vDetailsDevider"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:background="@color/indigo_800"></View>
+
+        <ScrollView
+            android:layout_below="@+id/vDetailsDevider"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@color/black"
-            android:textSize="@dimen/default_text_size_20" />
-    </LinearLayout>
+            android:layout_height="fill_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="30dp"
+                    android:text="@string/description"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/default_text_size_20"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvDetailedDescription"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="20dp"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/default_text_size_20" />
+            </LinearLayout>
+        </ScrollView>
+    </RelativeLayout>
 </LinearLayout>
