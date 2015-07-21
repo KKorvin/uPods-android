@@ -90,6 +90,8 @@ public class FragmentRadioItemDetails extends Fragment implements View.OnTouchLi
                     lParams.topMargin = 0;
                     lParams.bottomMargin = 0;
                     view.setLayoutParams(lParams);
+                    svDetails.setEnabled(true);
+                    rlDetailedContent.setOnTouchListener(null);
                 }
                 break;
             }
