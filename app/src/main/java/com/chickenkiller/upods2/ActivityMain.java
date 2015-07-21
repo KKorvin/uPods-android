@@ -11,10 +11,11 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.chickenkiller.upods2.interfaces.IFragmentsManager;
+import com.chickenkiller.upods2.interfaces.IOverlayable;
 import com.chickenkiller.upods2.view.controller.FragmentMainFeatured;
 import com.chickenkiller.upods2.view.controller.SlidingMenu;
 
-public class ActivityMain extends Activity implements IFragmentsManager {
+public class ActivityMain extends Activity implements IFragmentsManager, IOverlayable {
 
 
     private static final float MAX_OVERLAY_LEVEL = 0.8f;
@@ -83,7 +84,8 @@ public class ActivityMain extends Activity implements IFragmentsManager {
         return currentMainFragmentId;
     }
 
-    private void toggleOverlay() {
+    @Override
+    public void toggleOverlay() {
         ObjectAnimator alphaAnimation;
         if (isOverlayShown()) {
             alphaAnimation = ObjectAnimator.ofFloat(vOverlay, View.ALPHA, MAX_OVERLAY_LEVEL, 0);
@@ -94,7 +96,13 @@ public class ActivityMain extends Activity implements IFragmentsManager {
         alphaAnimation.start();
     }
 
-    private boolean isOverlayShown() {
+    @Override
+    public boolean isOverlayShown() {
         return vOverlay.getAlpha() != 0;
+    }
+
+    @Override
+    public void setOverlayAlpha(int alphaPercent){
+        vOverlay.getBackground().setAlpha(alphaPercent);
     }
 }
