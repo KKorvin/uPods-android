@@ -23,7 +23,7 @@ import com.chickenkiller.upods2.views.ControllableScrollView;
 public class FragmentRadioItemDetails extends Fragment implements View.OnTouchListener {
     private static final int MAGIC_NUMBER = -250; //Don't know what it does
     private static final float BOTTOM_SCROLL_BRODER_PERENT = 0.35f;
-    private static final float TOP_SCROLL_BRODER_PERENT = 0.85f;
+    private static final float TOP_SCROLL_BRODER_PERENT = 1f;
     private static int bottomScrollBorder;
     private static int topScrollBorder;
     public static String TAG = "media_details";
@@ -91,7 +91,8 @@ public class FragmentRadioItemDetails extends Fragment implements View.OnTouchLi
                     lParams.bottomMargin = 0;
                     view.setLayoutParams(lParams);
                     svDetails.setEnabled(true);
-                    rlDetailedContent.setOnTouchListener(null);
+                } else {
+                    svDetails.setEnabled(false);
                 }
                 break;
             }
