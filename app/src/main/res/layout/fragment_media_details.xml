@@ -100,7 +100,8 @@
             android:layout_below="@+id/rlDetailsHeaderContainer"
             android:background="@color/indigo_800"></View>
 
-        <ScrollView
+        <com.chickenkiller.upods2.views.ControllableScrollView
+            android:id="@+id/svDetails"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:layout_below="@+id/vDetailsDevider">
@@ -129,6 +130,6 @@
                     android:textColor="@color/black"
                     android:textSize="@dimen/default_text_size_20" />
             </LinearLayout>
-        </ScrollView>
+        </com.chickenkiller.upods2.views.ControllableScrollView>
     </RelativeLayout>
 </LinearLayout>
