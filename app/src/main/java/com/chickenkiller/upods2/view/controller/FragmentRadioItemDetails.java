@@ -121,7 +121,6 @@ public class FragmentRadioItemDetails extends Fragment implements View.OnTouchLi
             // 100 - percent
             // 255 - max alpha
             int alpha = margin * 100 / screenHeight;
-            Log.i("alpha",String.valueOf(alpha));
             alpha = 255 * alpha / 100;
             alpha = 255 - alpha;
             ((IOverlayable) getActivity()).setOverlayAlpha(alpha);
