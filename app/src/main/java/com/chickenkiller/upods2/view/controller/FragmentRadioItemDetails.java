@@ -83,7 +83,8 @@ public class FragmentRadioItemDetails extends Fragment implements View.OnTouchLi
             public void onResourceReady(GlideDrawable drawable, GlideAnimation anim) {
                 super.onResourceReady(drawable, anim);
                 Bitmap bitmap = ((GlideBitmapDrawable) drawable).getBitmap();
-                int dominantColor = Palette.from(bitmap).generate().getVibrantColor(R.color.red_900);
+                //getDarkVibrantColor
+                int dominantColor = Palette.from(bitmap).generate().getDarkVibrantColor(R.color.red_900);
                 viewDetailedHeader.setBackgroundColor(dominantColor);
             }
         });
