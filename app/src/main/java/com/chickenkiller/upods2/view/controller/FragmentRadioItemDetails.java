@@ -124,6 +124,7 @@ public class FragmentRadioItemDetails extends Fragment implements View.OnTouchLi
             alpha = 255 * alpha / 100;
             alpha = 255 - alpha;
             ((IOverlayable) getActivity()).setOverlayAlpha(alpha);
+            Log.i("alpha",String.valueOf(alpha));
         }
     }
 

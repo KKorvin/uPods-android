@@ -1,4 +1,4 @@
-package com.chickenkiller.upods2;
+package com.chickenkiller.upods2.activity;
 
 import android.animation.ObjectAnimator;
 import android.app.Activity;
@@ -10,6 +10,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.chickenkiller.upods2.R;
 import com.chickenkiller.upods2.interfaces.IFragmentsManager;
 import com.chickenkiller.upods2.interfaces.IOverlayable;
 import com.chickenkiller.upods2.view.controller.FragmentMainFeatured;
@@ -18,7 +19,7 @@ import com.chickenkiller.upods2.view.controller.SlidingMenu;
 public class ActivityMain extends Activity implements IFragmentsManager, IOverlayable {
 
 
-    private static final float MAX_OVERLAY_LEVEL = 0.8f;
+    private static final float MAX_OVERLAY_LEVEL = 0.7529f;
     private static final int FRAGMENT_TRANSACTION_TIME = 500;
     private Toolbar toolbar;
     private SlidingMenu slidingMenu;
