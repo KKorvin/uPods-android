@@ -84,6 +84,11 @@ public class ActivityMain extends Activity implements IFragmentsManager, IOverla
     }
 
     @Override
+    public boolean hasFragment(String tag) {
+        return getFragmentManager().findFragmentByTag(tag) != null;
+    }
+
+    @Override
     public String getLatestFragmentTag() {
         String tag = "";
         if (getFragmentManager().getBackStackEntryCount() > 0) {
