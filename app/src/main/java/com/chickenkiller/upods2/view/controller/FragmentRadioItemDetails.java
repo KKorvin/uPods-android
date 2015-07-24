@@ -24,6 +24,11 @@ import com.chickenkiller.upods2.interfaces.IOverlayable;
 import com.chickenkiller.upods2.models.RadioItem;
 import com.chickenkiller.upods2.views.ControllableScrollView;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
 /**
  * Created by alonzilberman on 7/8/15.
  */
@@ -83,9 +88,15 @@ public class FragmentRadioItemDetails extends Fragment implements View.OnTouchLi
             public void onResourceReady(GlideDrawable drawable, GlideAnimation anim) {
                 super.onResourceReady(drawable, anim);
                 Bitmap bitmap = ((GlideBitmapDrawable) drawable).getBitmap();
-                //getDarkVibrantColor
-                int dominantColor = Palette.from(bitmap).generate().getDarkVibrantColor(R.color.red_900);
-                viewDetailedHeader.setBackgroundColor(dominantColor);
+                List<Palette.Swatch> swatchesTemp = Palette.from(bitmap).generate().getSwatches();
+                List<Palette.Swatch> swatches = new ArrayList<Palette.Swatch>(swatchesTemp);
+                Collections.sort(swatches, new Comparator<Palette.Swatch>() {
+                    @Override
+                    public int compare(Palette.Swatch swatch, Palette.Swatch t1) {
+                        return t1.getPopulation() - swatch.getPopulation();
+                    }
+                });
+                viewDetailedHeader.setBackgroundColor(swatches.get(0).getRgb());
             }
         });
     }
