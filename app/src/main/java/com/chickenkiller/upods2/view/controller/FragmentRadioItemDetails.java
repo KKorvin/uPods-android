@@ -1,9 +1,10 @@
 package com.chickenkiller.upods2.view.controller;
 
 import android.app.Fragment;
+import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.support.v7.graphics.Palette;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -14,6 +15,10 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.GlideBitmapDrawable;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
 import com.chickenkiller.upods2.R;
 import com.chickenkiller.upods2.interfaces.IOverlayable;
 import com.chickenkiller.upods2.models.RadioItem;
@@ -36,7 +41,7 @@ public class FragmentRadioItemDetails extends Fragment implements View.OnTouchLi
     private ControllableScrollView svDetails;
     private TextView tvDetailedDescription;
     private TextView tvDetailedHeader;
-    private ImageView imgDetailedHeader;
+    private View viewDetailedHeader;
     private ImageView imgDetailedTopCover;
     private int moveDeltaY;
     private int screenHeight;
@@ -55,15 +60,14 @@ public class FragmentRadioItemDetails extends Fragment implements View.OnTouchLi
         rlDetailedContent = (RelativeLayout) view.findViewById(R.id.rlDetailedContent);
         tvDetailedDescription = (TextView) view.findViewById(R.id.tvDetailedDescription);
         tvDetailedHeader = (TextView) view.findViewById(R.id.tvDetailedHeader);
-        imgDetailedHeader = (ImageView) view.findViewById(R.id.imgDetailedHeader);
+        viewDetailedHeader = view.findViewById(R.id.viewDetailedHeader);
         imgDetailedTopCover = (ImageView) view.findViewById(R.id.imgDetailedCover);
         svDetails = (ControllableScrollView) view.findViewById(R.id.svDetails);
         svDetails.setEnabled(false);
         moveDeltaY = 0;
 
         if (radioItem != null) {
-            Glide.with(getActivity()).load("http://www.linuxspace.org/wp-content/uploads/2015/examples/example_4.png").centerCrop().crossFade().into(imgDetailedHeader);
-            Glide.with(getActivity()).load(radioItem.getCoverImageUrl()).centerCrop().crossFade().into(imgDetailedTopCover);
+            setImages();
             tvDetailedHeader.setText(radioItem.getName());
             tvDetailedDescription.setText(radioItem.getDescription());
         }
@@ -71,6 +75,18 @@ public class FragmentRadioItemDetails extends Fragment implements View.OnTouchLi
         view.setOnClickListener(frgamentCloseClickListener);
         initFragmentScrollConstants();
         return view;
+    }
+
+    private void setImages() {
+        Glide.with(getActivity()).load(radioItem.getCoverImageUrl()).centerCrop().crossFade().into(new GlideDrawableImageViewTarget(imgDetailedTopCover) {
+            @Override
+            public void onResourceReady(GlideDrawable drawable, GlideAnimation anim) {
+                super.onResourceReady(drawable, anim);
+                Bitmap bitmap = ((GlideBitmapDrawable) drawable).getBitmap();
+                int dominantColor = Palette.from(bitmap).generate().getVibrantColor(R.color.red_900);
+                viewDetailedHeader.setBackgroundColor(dominantColor);
+            }
+        });
     }
 
     private void initFragmentScrollConstants() {
@@ -132,7 +148,6 @@ public class FragmentRadioItemDetails extends Fragment implements View.OnTouchLi
             alpha = 255 * alpha / 100;
             alpha = 255 - alpha;
             ((IOverlayable) getActivity()).setOverlayAlpha(alpha);
-            Log.i("alpha",String.valueOf(alpha));
         }
     }
 
