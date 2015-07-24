@@ -19,12 +19,12 @@
         <RelativeLayout
             android:id="@+id/rlDetailsHeaderContainer"
             android:layout_width="fill_parent"
-            android:layout_height="@dimen/rv_banners_height">
+            android:layout_height="wrap_content">
 
             <View
                 android:id="@+id/viewDetailedHeader"
                 android:layout_width="fill_parent"
-                android:layout_height="@dimen/rv_banners_height" />
+                android:layout_height="155dp" />
 
             <ImageView
                 android:id="@+id/imgDetailedCover"
@@ -94,7 +94,7 @@
         <View
             android:id="@+id/vDetailsDevider"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
+            android:layout_height="50dp"
             android:layout_below="@+id/rlDetailsHeaderContainer"
             android:background="@color/indigo_800"></View>
 
