@@ -19,8 +19,8 @@ import com.chickenkiller.upods2.view.controller.SlidingMenu;
 public class ActivityMain extends Activity implements IFragmentsManager, IOverlayable {
 
 
-    private static final float MAX_OVERLAY_LEVEL = 0.7529f;
-    private static final int FRAGMENT_TRANSACTION_TIME = 500;
+    private static final float MAX_OVERLAY_LEVEL = 0.8f;
+    private static final int FRAGMENT_TRANSACTION_TIME = 300;
     private Toolbar toolbar;
     private SlidingMenu slidingMenu;
     private View vOverlay;
