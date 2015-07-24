@@ -52,7 +52,7 @@ public class SlidingMenuAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 Context context = view.getContext();
                 if (clickedMenuItem.getTitle().equals(context.getString(R.string.main_settings))) {
                     FragmentSettings settingsFragment = new FragmentSettings();
-                    fragmentsManager.showFragment(fragmentsManager.getCurrentMainFragmentId(), settingsFragment, FragmentSettings.TAG);
+                    fragmentsManager.showFragment(R.id.fl_content, settingsFragment, FragmentSettings.TAG);
                 } else {
                     Toast.makeText(context, "TEST" + clickedMenuItem.getTitle(), Toast.LENGTH_SHORT).show();
                 }

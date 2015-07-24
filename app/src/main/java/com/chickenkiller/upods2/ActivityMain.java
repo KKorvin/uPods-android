@@ -23,7 +23,6 @@ public class ActivityMain extends Activity implements IFragmentsManager, IOverla
     private Toolbar toolbar;
     private SlidingMenu slidingMenu;
     private View vOverlay;
-    private int currentMainFragmentId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,7 +32,7 @@ public class ActivityMain extends Activity implements IFragmentsManager, IOverla
         toolbar = (Toolbar) findViewById(R.id.toolbar_main);
         toolbar.inflateMenu(R.menu.menu_activity_main);
         slidingMenu = new SlidingMenu(this, toolbar);
-        showFragment(R.id.ln_content, new FragmentMainFeatured(), FragmentMainFeatured.TAG);
+        showFragment(R.id.fl_content, new FragmentMainFeatured(), FragmentMainFeatured.TAG);
 
     }
 
@@ -46,12 +45,17 @@ public class ActivityMain extends Activity implements IFragmentsManager, IOverla
     @Override
     public void onBackPressed() {
         if (getFragmentManager().getBackStackEntryCount() > 0) {
-            if (isOverlayShown()) {
-                toggleOverlay();
+            if (getLatestFragmentTag().equals(FragmentMainFeatured.TAG)) {
+                finish();
+            } else {
+                if (isOverlayShown()) {
+                    toggleOverlay();
+                }
+                getFragmentManager().popBackStack();
             }
-            getFragmentManager().popBackStack();
-        } else
+        } else {
             super.onBackPressed();
+        }
     }
 
     @Override
@@ -66,12 +70,11 @@ public class ActivityMain extends Activity implements IFragmentsManager, IOverla
             ft.add(id, fragment, tag);
             toggleOverlay();
         } else {
-            ft.replace(id, fragment);
+            ft.replace(id, fragment, tag);
         }
         ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-        ft.addToBackStack(null);
+        ft.addToBackStack(tag);
         ft.commit();
-        currentMainFragmentId = id;
     }
 
     @Override
@@ -80,8 +83,13 @@ public class ActivityMain extends Activity implements IFragmentsManager, IOverla
     }
 
     @Override
-    public int getCurrentMainFragmentId() {
-        return currentMainFragmentId;
+    public String getLatestFragmentTag() {
+        String tag = "";
+        if (getFragmentManager().getBackStackEntryCount() > 0) {
+            FragmentManager.BackStackEntry backEntry = getFragmentManager().getBackStackEntryAt(getFragmentManager().getBackStackEntryCount() - 1);
+            tag = backEntry.getName();
+        }
+        return tag;
     }
 
     @Override
@@ -102,7 +110,7 @@ public class ActivityMain extends Activity implements IFragmentsManager, IOverla
     }
 
     @Override
-    public void setOverlayAlpha(int alphaPercent){
+    public void setOverlayAlpha(int alphaPercent) {
         vOverlay.getBackground().setAlpha(alphaPercent);
     }
 }

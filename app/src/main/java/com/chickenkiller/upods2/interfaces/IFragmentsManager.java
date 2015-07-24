@@ -17,5 +17,5 @@ public interface IFragmentsManager {
 
     void showFragment(int id, Fragment fragment, String tag);
 
-    int getCurrentMainFragmentId();
+    String getLatestFragmentTag();
 }
