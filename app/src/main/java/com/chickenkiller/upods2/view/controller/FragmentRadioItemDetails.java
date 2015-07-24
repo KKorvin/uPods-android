@@ -41,6 +41,13 @@ public class FragmentRadioItemDetails extends Fragment implements View.OnTouchLi
     private int moveDeltaY;
     private int screenHeight;
 
+    private View.OnClickListener frgamentCloseClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            getActivity().onBackPressed();
+        }
+    };
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,6 +68,7 @@ public class FragmentRadioItemDetails extends Fragment implements View.OnTouchLi
             tvDetailedDescription.setText(radioItem.getDescription());
         }
         rlDetailedContent.setOnTouchListener(this);
+        view.setOnClickListener(frgamentCloseClickListener);
         initFragmentScrollConstants();
         return view;
     }
