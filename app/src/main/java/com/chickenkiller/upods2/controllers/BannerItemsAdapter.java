@@ -48,8 +48,10 @@ public class BannerItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             if(fragmentsManager!=null) {
                 FragmentRadioItemDetails fragmentRadioItemDetails = new FragmentRadioItemDetails();
                 fragmentRadioItemDetails.setRadioItem(getItem(getAdapterPosition()));
-                fragmentsManager.showFragment(R.id.fl_window, fragmentRadioItemDetails, FragmentRadioItemDetails.TAG,
-                        IFragmentsManager.FragmentOpenType.OVERLAY, IFragmentsManager.FragmentAnimationType.BOTTOM_TOP);
+                if(!fragmentsManager.hasFragment(FragmentRadioItemDetails.TAG)) {
+                    fragmentsManager.showFragment(R.id.fl_window, fragmentRadioItemDetails, FragmentRadioItemDetails.TAG,
+                            IFragmentsManager.FragmentOpenType.OVERLAY, IFragmentsManager.FragmentAnimationType.BOTTOM_TOP);
+                }
             }
         }
     }

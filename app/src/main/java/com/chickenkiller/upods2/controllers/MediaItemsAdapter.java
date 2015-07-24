@@ -119,8 +119,10 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             if (items.get(getAdapterPosition()) instanceof RadioItem) {
                 fragmentRadioItemDetails.setRadioItem((RadioItem) items.get(getAdapterPosition()));
             }
-            fragmentsManager.showFragment(R.id.fl_window, fragmentRadioItemDetails, FragmentRadioItemDetails.TAG,
-                    IFragmentsManager.FragmentOpenType.OVERLAY, IFragmentsManager.FragmentAnimationType.BOTTOM_TOP);
+            if(!fragmentsManager.hasFragment(FragmentRadioItemDetails.TAG)) {
+                fragmentsManager.showFragment(R.id.fl_window, fragmentRadioItemDetails, FragmentRadioItemDetails.TAG,
+                        IFragmentsManager.FragmentOpenType.OVERLAY, IFragmentsManager.FragmentAnimationType.BOTTOM_TOP);
+            }
         }
 
     }
