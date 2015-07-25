@@ -47,6 +47,7 @@ public class FragmentRadioItemDetails extends Fragment implements View.OnTouchLi
     private TextView tvDetailedDescription;
     private TextView tvDetailedHeader;
     private View viewDetailedHeader;
+    private View viewDetailsDevider;
     private ImageView imgDetailedTopCover;
     private int moveDeltaY;
     private int screenHeight;
@@ -66,13 +67,14 @@ public class FragmentRadioItemDetails extends Fragment implements View.OnTouchLi
         tvDetailedDescription = (TextView) view.findViewById(R.id.tvDetailedDescription);
         tvDetailedHeader = (TextView) view.findViewById(R.id.tvDetailedHeader);
         viewDetailedHeader = view.findViewById(R.id.viewDetailedHeader);
+        viewDetailsDevider = view.findViewById(R.id.vDetailsDevider);
         imgDetailedTopCover = (ImageView) view.findViewById(R.id.imgDetailedCover);
         svDetails = (ControllableScrollView) view.findViewById(R.id.svDetails);
         svDetails.setEnabled(false);
         moveDeltaY = 0;
 
         if (radioItem != null) {
-            setImages();
+            initImagesColors();
             tvDetailedHeader.setText(radioItem.getName());
             tvDetailedDescription.setText(radioItem.getDescription());
         }
@@ -82,7 +84,7 @@ public class FragmentRadioItemDetails extends Fragment implements View.OnTouchLi
         return view;
     }
 
-    private void setImages() {
+    private void initImagesColors() {
         Glide.with(getActivity()).load(radioItem.getCoverImageUrl()).centerCrop().crossFade().into(new GlideDrawableImageViewTarget(imgDetailedTopCover) {
             @Override
             public void onResourceReady(GlideDrawable drawable, GlideAnimation anim) {
@@ -92,11 +94,12 @@ public class FragmentRadioItemDetails extends Fragment implements View.OnTouchLi
                 List<Palette.Swatch> swatches = new ArrayList<Palette.Swatch>(swatchesTemp);
                 Collections.sort(swatches, new Comparator<Palette.Swatch>() {
                     @Override
-                    public int compare(Palette.Swatch swatch, Palette.Swatch t1) {
-                        return t1.getPopulation() - swatch.getPopulation();
+                    public int compare(Palette.Swatch swatch1, Palette.Swatch swatch2) {
+                        return swatch2.getPopulation() - swatch1.getPopulation();
                     }
                 });
                 viewDetailedHeader.setBackgroundColor(swatches.get(0).getRgb());
+                viewDetailsDevider.setBackgroundColor(swatches.get(0).getRgb());
             }
         });
     }

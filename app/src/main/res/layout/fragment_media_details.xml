@@ -22,6 +22,7 @@
             android:layout_height="wrap_content">
 
             <View
+                android:alpha="0.9"
                 android:id="@+id/viewDetailedHeader"
                 android:layout_width="fill_parent"
                 android:layout_height="155dp" />
@@ -80,23 +81,22 @@
 
         </RelativeLayout>
 
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fbDetailsPlay"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_below="@+id/rlDetailsHeaderContainer"
-            android:layout_marginBottom="20dp"
-            android:layout_marginRight="20dp"
-            android:src="@drawable/ic_more_vert_white_24dp"
-            app:elevation="4dp" />
-
         <View
             android:id="@+id/vDetailsDevider"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_below="@+id/rlDetailsHeaderContainer"
             android:background="@color/indigo_800"></View>
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fbDetailsPlay"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="125dp"
+            android:src="@drawable/ic_star_white_24dp"
+            app:elevation="4dp" />
 
         <com.chickenkiller.upods2.views.ControllableScrollView
             android:id="@+id/svDetails"
