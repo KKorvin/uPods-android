@@ -94,7 +94,8 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_marginRight="20dp"
-            android:layout_marginTop="125dp"
+            android:layout_marginTop="175dp"
+            app:backgroundTint="@color/pink_A400"
             android:src="@drawable/ic_star_white_24dp"
             app:elevation="4dp" />
 
