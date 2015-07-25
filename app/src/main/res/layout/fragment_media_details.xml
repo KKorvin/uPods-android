@@ -96,7 +96,7 @@
             android:layout_marginRight="20dp"
             android:layout_marginTop="175dp"
             app:backgroundTint="@color/pink_A400"
-            android:src="@drawable/ic_star_white_24dp"
+            android:src="@drawable/ic_play_arrow_white_24dp"
             app:elevation="4dp" />
 
         <com.chickenkiller.upods2.views.ControllableScrollView
