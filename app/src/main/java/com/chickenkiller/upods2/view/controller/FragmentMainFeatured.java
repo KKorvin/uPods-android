@@ -12,6 +12,7 @@ import com.chickenkiller.upods2.controllers.GridSpacingItemDecoration;
 import com.chickenkiller.upods2.controllers.MediaItemsAdapter;
 import com.chickenkiller.upods2.controllers.RadioTopManager;
 import com.chickenkiller.upods2.interfaces.IFragmentsManager;
+import com.chickenkiller.upods2.interfaces.IJResponseHandler;
 import com.chickenkiller.upods2.interfaces.INetworkUIupdater;
 import com.chickenkiller.upods2.models.MediaItem;
 import com.chickenkiller.upods2.models.MediaItemTitle;
@@ -19,6 +20,7 @@ import com.chickenkiller.upods2.models.RadioItem;
 import com.chickenkiller.upods2.views.AutofitRecyclerView;
 import com.squareup.okhttp.Response;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -49,7 +51,7 @@ public class FragmentMainFeatured extends Fragment {
         gridSpacingItemDecoration.setItemsTypesCount(MEDIA_ITEMS_TYPES_COUNT);
         rvMain.addItemDecoration(gridSpacingItemDecoration);
         mediaItemsAdapter = new MediaItemsAdapter(getActivity(), R.layout.card_media_item,
-                R.layout.media_item_title, RadioItem.withOnlyBannersHeader() );
+                R.layout.media_item_title, RadioItem.withOnlyBannersHeader());
         if (getActivity() instanceof IFragmentsManager) {
             mediaItemsAdapter.setFragmentsManager((IFragmentsManager) getActivity());
         }
@@ -68,30 +70,31 @@ public class FragmentMainFeatured extends Fragment {
 
     private void showTops() {
         RadioTopManager.getInstance().loadTops(RadioTopManager.TopType.MAIN_FEATURED, new INetworkUIupdater() {
-            @Override
-            public void updateUISuccess(final Response response) {
-                getActivity().runOnUiThread(new Runnable() {
                     @Override
-                    public void run() {
-                        try {
-                            JSONObject jResponse = new JSONObject(response.body().string());
-                            ArrayList<MediaItem> topRadioStations = new ArrayList<MediaItem>();
-                            topRadioStations.add(new MediaItemTitle(getString(R.string.top40_chanels), getString(R.string.top40_chanels_subheader)));
-                            topRadioStations.addAll(RadioItem.withJsonArray(jResponse.getJSONArray("result"), getActivity()));
-                            mediaItemsAdapter.addItems(topRadioStations);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
+                    public void updateUISuccess(final Response response) {
+                        RadioTopManager.executeResponseHandler(getActivity(), response, new IJResponseHandler() {
+                            @Override
+                            public void updateUI(JSONObject jResponse) {
+                                try {
+                                    ArrayList<MediaItem> topRadioStations = new ArrayList<MediaItem>();
+                                    topRadioStations.add(new MediaItemTitle(getString(R.string.top40_chanels), getString(R.string.top40_chanels_subheader)));
+                                    topRadioStations.addAll(RadioItem.withJsonArray(jResponse.getJSONArray("result"), getActivity()));
+                                    mediaItemsAdapter.addItems(topRadioStations);
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        });
                     }
-                });
-            }
 
-            @Override
-            public void updateUIFailed() {
+                    @Override
+                    public void updateUIFailed() {
 
-            }
+                    }
 
-        });
+                }
+
+        );
     }
 
 }

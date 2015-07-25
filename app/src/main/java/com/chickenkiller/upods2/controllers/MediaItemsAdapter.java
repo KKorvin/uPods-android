@@ -16,6 +16,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.chickenkiller.upods2.R;
 import com.chickenkiller.upods2.interfaces.IFragmentsManager;
+import com.chickenkiller.upods2.interfaces.IJResponseHandler;
 import com.chickenkiller.upods2.interfaces.INetworkUIupdater;
 import com.chickenkiller.upods2.models.BannersLayoutItem;
 import com.chickenkiller.upods2.models.MediaItem;
@@ -26,6 +27,7 @@ import com.chickenkiller.upods2.views.ImageViewSquare;
 import com.lsjwzh.widget.recyclerviewpager.RecyclerViewPager;
 import com.squareup.okhttp.Response;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -65,19 +67,18 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             RadioTopManager.getInstance().loadTops(RadioTopManager.TopType.MAIN_BANNER, new INetworkUIupdater() {
                 @Override
                 public void updateUISuccess(final Response response) {
-                    ((Activity)mContext).runOnUiThread(new Runnable() {
+                    RadioTopManager.executeResponseHandler(((Activity) mContext), response, new IJResponseHandler() {
                         @Override
-                        public void run() {
+                        public void updateUI(JSONObject jResponse) {
                             try {
-                                JSONObject jResponse = new JSONObject(response.body().string());
                                 ArrayList<RadioItem> topRadioStations = RadioItem.withJsonArray(jResponse.getJSONArray("result"), mContext);
                                 bannerItemsAdapter = new BannerItemsAdapter(mContext, R.layout.baner_item, topRadioStations);
-                                if (fragmentsManager!=null) {
+                                if (fragmentsManager != null) {
                                     bannerItemsAdapter.setFragmentsManager(fragmentsManager);
                                 }
                                 rvBanners.setAdapter(bannerItemsAdapter);
                                 layoutManager.scrollToPosition(bannerItemsAdapter.MIDDLE);
-                            } catch (Exception e) {
+                            } catch (JSONException e) {
                                 e.printStackTrace();
                             }
                         }
@@ -119,7 +120,7 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             if (items.get(getAdapterPosition()) instanceof RadioItem) {
                 fragmentRadioItemDetails.setRadioItem((RadioItem) items.get(getAdapterPosition()));
             }
-            if(!fragmentsManager.hasFragment(FragmentRadioItemDetails.TAG)) {
+            if (!fragmentsManager.hasFragment(FragmentRadioItemDetails.TAG)) {
                 fragmentsManager.showFragment(R.id.fl_window, fragmentRadioItemDetails, FragmentRadioItemDetails.TAG,
                         IFragmentsManager.FragmentOpenType.OVERLAY, IFragmentsManager.FragmentAnimationType.BOTTOM_TOP);
             }
@@ -203,7 +204,7 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         return items.size();
     }
 
-    public void addItems(ArrayList<MediaItem> items){
+    public void addItems(ArrayList<MediaItem> items) {
         this.items.addAll(items);
         this.notifyDataSetChanged();
     }
