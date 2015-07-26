@@ -115,10 +115,11 @@
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="20dp"
-                    android:layout_marginTop="30dp"
+                    android:layout_marginTop="22dp"
                     android:text="@string/description"
                     android:textColor="@color/black"
-                    android:textSize="@dimen/default_text_size_20"
+                    android:textSize="@dimen/default_text_size_18"
+                    android:fontFamily="sans-serif"
                     android:textStyle="bold" />
 
                 <TextView
@@ -127,8 +128,10 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="20dp"
                     android:layout_marginTop="20dp"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/default_text_size_20" />
+                    android:fontFamily="sans-serif-light"
+                    android:textStyle="normal"
+                    android:textColor="@color/gray_202020"
+                    android:textSize="@dimen/default_text_size_16" />
             </LinearLayout>
         </com.chickenkiller.upods2.views.ControllableScrollView>
     </RelativeLayout>

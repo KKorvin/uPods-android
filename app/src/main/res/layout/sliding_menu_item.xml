@@ -7,8 +7,7 @@
     android:clickable="true"
     android:focusable="true"
     android:orientation="horizontal"
-    android:padding="16dp"
-    android:paddingTop="25dp">
+    android:padding="16dp">
 
     <ImageView
         android:id="@+id/imgSMenutIcon"
@@ -24,7 +23,8 @@
         android:layout_gravity="center"
         android:layout_marginLeft="32dp"
         android:text="test"
-        android:textColor="@color/black"
+        android:textColor="@color/gray_202020"
         android:textSize="@dimen/default_text_size_14"
-        android:textStyle="bold" />
+        android:fontFamily="sans-serif-medium"
+        android:textStyle="normal" />
 </LinearLayout>

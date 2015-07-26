@@ -38,9 +38,12 @@
     <color name="light_blue_800">#0277BD</color>
     <color name="light_blue_900">#01579B</color>
 
-
+    <!-- Color for Button -->
     <color name="pink_A400">#F50057</color>
 
+    <!-- Color for text in TextView Middle Screen -->
+    <!-- Color for Menu -->
+    <color name="gray_202020">#212121</color>
 
     <!-- Black and White Material -->
     <color name="black_material">#000000</color>
