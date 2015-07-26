@@ -16,7 +16,6 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.chickenkiller.upods2.R;
 import com.chickenkiller.upods2.interfaces.IFragmentsManager;
-import com.chickenkiller.upods2.interfaces.IJResponseHandler;
 import com.chickenkiller.upods2.interfaces.INetworkUIupdater;
 import com.chickenkiller.upods2.models.BannersLayoutItem;
 import com.chickenkiller.upods2.models.MediaItem;
@@ -25,7 +24,6 @@ import com.chickenkiller.upods2.models.RadioItem;
 import com.chickenkiller.upods2.view.controller.FragmentRadioItemDetails;
 import com.chickenkiller.upods2.views.ImageViewSquare;
 import com.lsjwzh.widget.recyclerviewpager.RecyclerViewPager;
-import com.squareup.okhttp.Response;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -65,32 +63,32 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
         private void loadBanners(final Context mContext) {
             RadioTopManager.getInstance().loadTops(RadioTopManager.TopType.MAIN_BANNER, new INetworkUIupdater() {
-                @Override
-                public void updateUISuccess(final Response response) {
-                    RadioTopManager.executeResponseHandler(((Activity) mContext), response, new IJResponseHandler() {
                         @Override
-                        public void updateUI(JSONObject jResponse) {
-                            try {
-                                ArrayList<RadioItem> topRadioStations = RadioItem.withJsonArray(jResponse.getJSONArray("result"), mContext);
-                                bannerItemsAdapter = new BannerItemsAdapter(mContext, R.layout.baner_item, topRadioStations);
-                                if (fragmentsManager != null) {
-                                    bannerItemsAdapter.setFragmentsManager(fragmentsManager);
+                        public void updateUISuccess(final JSONObject jResponse) {
+                            ((Activity) mContext).runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    try {
+                                        ArrayList<RadioItem> topRadioStations = RadioItem.withJsonArray(jResponse.getJSONArray("result"), mContext);
+                                        bannerItemsAdapter = new BannerItemsAdapter(mContext, R.layout.baner_item, topRadioStations);
+                                        if (fragmentsManager != null) {
+                                            bannerItemsAdapter.setFragmentsManager(fragmentsManager);
+                                        }
+                                        rvBanners.setAdapter(bannerItemsAdapter);
+                                        layoutManager.scrollToPosition(bannerItemsAdapter.MIDDLE);
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
                                 }
-                                rvBanners.setAdapter(bannerItemsAdapter);
-                                layoutManager.scrollToPosition(bannerItemsAdapter.MIDDLE);
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
+                            });
                         }
-                    });
-                }
 
-                @Override
-                public void updateUIFailed() {
+                        @Override
+                        public void updateUIFailed() {
 
-                }
-
-            });
+                        }
+                    }
+            );
         }
     }
 
