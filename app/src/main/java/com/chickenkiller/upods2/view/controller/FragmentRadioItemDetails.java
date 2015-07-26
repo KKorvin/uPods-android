@@ -46,6 +46,7 @@ public class FragmentRadioItemDetails extends Fragment implements View.OnTouchLi
     private ControllableScrollView svDetails;
     private TextView tvDetailedDescription;
     private TextView tvDetailedHeader;
+    private TextView tvDetailedDesHeader;
     private View viewDetailedHeader;
     private View viewDetailsDevider;
     private ImageView imgDetailedTopCover;
@@ -66,6 +67,7 @@ public class FragmentRadioItemDetails extends Fragment implements View.OnTouchLi
         rlDetailedContent = (RelativeLayout) view.findViewById(R.id.rlDetailedContent);
         tvDetailedDescription = (TextView) view.findViewById(R.id.tvDetailedDescription);
         tvDetailedHeader = (TextView) view.findViewById(R.id.tvDetailedHeader);
+        tvDetailedDesHeader = (TextView)view.findViewById(R.id.tvDetailedDesHeader);
         viewDetailedHeader = view.findViewById(R.id.viewDetailedHeader);
         viewDetailsDevider = view.findViewById(R.id.vDetailsDevider);
         imgDetailedTopCover = (ImageView) view.findViewById(R.id.imgDetailedCover);
@@ -100,6 +102,7 @@ public class FragmentRadioItemDetails extends Fragment implements View.OnTouchLi
                 });
                 viewDetailedHeader.setBackgroundColor(swatches.get(0).getRgb());
                 viewDetailsDevider.setBackgroundColor(swatches.get(0).getRgb());
+                tvDetailedDesHeader.setTextColor(swatches.get(0).getRgb());
             }
         });
     }
