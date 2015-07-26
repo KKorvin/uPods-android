@@ -30,7 +30,6 @@ public class FragmentMainFeatured extends Fragment {
 
     public static final String TAG = "main_featured";
     public final int MEDIA_ITEMS_CARDS_MARGIN = 25;
-    public final int MEDIA_ITEMS_COLUMNS = 3;
     public static final int MEDIA_ITEMS_TYPES_COUNT = 3;
 
 
@@ -44,10 +43,6 @@ public class FragmentMainFeatured extends Fragment {
 
         rvMain = (AutofitRecyclerView) view.findViewById(R.id.rvMain);
         rvMain.setHasFixedSize(true);
-        GridSpacingItemDecoration gridSpacingItemDecoration = new GridSpacingItemDecoration(MEDIA_ITEMS_COLUMNS, MEDIA_ITEMS_CARDS_MARGIN, true);
-        gridSpacingItemDecoration.setGridItemType(MediaItemsAdapter.ITEM);
-        gridSpacingItemDecoration.setItemsTypesCount(MEDIA_ITEMS_TYPES_COUNT);
-        rvMain.addItemDecoration(gridSpacingItemDecoration);
         mediaItemsAdapter = new MediaItemsAdapter(getActivity(), R.layout.card_media_item,
                 R.layout.media_item_title, RadioItem.withOnlyBannersHeader());
         if (getActivity() instanceof IFragmentsManager) {
@@ -78,6 +73,10 @@ public class FragmentMainFeatured extends Fragment {
                                     topRadioStations.add(new MediaItemTitle(getString(R.string.top40_chanels), getString(R.string.top40_chanels_subheader)));
                                     topRadioStations.addAll(RadioItem.withJsonArray(jResponse.getJSONArray("result"), getActivity()));
                                     mediaItemsAdapter.addItems(topRadioStations);
+                                    GridSpacingItemDecoration gridSpacingItemDecoration = new GridSpacingItemDecoration(rvMain.getSpanCount(), MEDIA_ITEMS_CARDS_MARGIN, true);
+                                    gridSpacingItemDecoration.setGridItemType(MediaItemsAdapter.ITEM);
+                                    gridSpacingItemDecoration.setItemsTypesCount(MEDIA_ITEMS_TYPES_COUNT);
+                                    rvMain.addItemDecoration(gridSpacingItemDecoration);
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
