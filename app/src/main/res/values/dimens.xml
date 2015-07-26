@@ -12,7 +12,7 @@
     <dimen name="banner_elevation">7dp</dimen>
 
     <!-- Sliding menu -->
-    <dimen name="drawer_rv_header_height">178dp</dimen>
+    <dimen name="drawer_rv_header_height">168dp</dimen>
     <dimen name="drawer_rv_user_ln_width">56dp</dimen>
     <dimen name="drawer_rv_user_ln_margin_left">16dp</dimen>
     <dimen name="img_user_avatar_size">70dp</dimen>
