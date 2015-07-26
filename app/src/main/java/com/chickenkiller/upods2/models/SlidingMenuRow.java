@@ -14,6 +14,7 @@ public class SlidingMenuRow extends SlidingMenuItem {
 
     private String title;
     private int iconId;
+    public boolean isSelected;
 
     public SlidingMenuRow(String title, int iconId) {
         super();

@@ -89,6 +89,10 @@ public class SlidingMenu implements ISlidingMenuManager {
         mDrawerToggle.syncState();
     }
 
+    public SlidingMenuAdapter getAdapter(){
+        return slidingMenuAdapter;
+    }
+
     @Override
     public void toggle() {
         if (!mDrawerLayout.isDrawerOpen(Gravity.LEFT)) {

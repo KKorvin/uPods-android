@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/lnSlidingMenuItem"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?android:attr/selectableItemBackground"
@@ -23,7 +24,7 @@
         android:layout_gravity="center"
         android:layout_marginLeft="32dp"
         android:text="test"
-        android:textStyle="bold"
         android:textColor="@color/black"
-        android:textSize="@dimen/default_text_size_14" />
+        android:textSize="@dimen/default_text_size_14"
+        android:textStyle="bold" />
 </LinearLayout>

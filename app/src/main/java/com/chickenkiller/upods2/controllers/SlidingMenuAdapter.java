@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,18 +38,22 @@ public class SlidingMenuAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     private class ViewHolderItem extends RecyclerView.ViewHolder implements View.OnClickListener {
         public ImageView image;
         public TextView text;
+        public LinearLayout lnSlidingMenuItem;
 
         public ViewHolderItem(View itemView) {
             super(itemView);
             this.image = (ImageView) itemView.findViewById(R.id.imgSMenutIcon);
             this.text = (TextView) itemView.findViewById(R.id.tvSMenuTitle);
+            this.lnSlidingMenuItem = (LinearLayout)itemView.findViewById(R.id.lnSlidingMenuItem);
             itemView.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View view) {
             if (items.get(getAdapterPosition()) instanceof SlidingMenuRow) {
+                clearRowSelections();
                 SlidingMenuRow clickedMenuItem = (SlidingMenuRow) items.get(getAdapterPosition());
+                clickedMenuItem.isSelected = true;
                 Context context = view.getContext();
                 if (clickedMenuItem.getTitle().equals(context.getString(R.string.main_settings))) {
                     FragmentSettings settingsFragment = new FragmentSettings();
@@ -57,6 +62,7 @@ public class SlidingMenuAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                     Toast.makeText(context, "TEST" + clickedMenuItem.getTitle(), Toast.LENGTH_SHORT).show();
                 }
                 slidingMenuManager.toggle();
+                notifyDataSetChanged();
             }
         }
     }
@@ -105,8 +111,16 @@ public class SlidingMenuAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         SlidingMenuItem item = items.get(position);
         if (holder instanceof ViewHolderItem) {
-            ((ViewHolderItem) holder).text.setText(((SlidingMenuRow) item).getTitle());
+            Context mContext = ((ViewHolderItem) holder).text.getContext();
+                    ((ViewHolderItem) holder).text.setText(((SlidingMenuRow) item).getTitle());
             ((ViewHolderItem) holder).image.setImageResource(((SlidingMenuRow) item).getIconId());
+            if(((SlidingMenuRow) item).isSelected){
+                ((ViewHolderItem) holder).text.setTextColor(mContext.getResources().getColor(R.color.pink_A400));
+                ((ViewHolderItem) holder).lnSlidingMenuItem.setBackgroundColor(mContext.getResources().getColor(R.color.fragment_deatils_opacity_bckg));
+            }else{
+                ((ViewHolderItem) holder).text.setTextColor(mContext.getResources().getColor(R.color.black));
+                ((ViewHolderItem) holder).lnSlidingMenuItem.setBackgroundColor(mContext.getResources().getColor(R.color.white));
+            }
         }
         holder.itemView.setTag(item);
     }
@@ -127,5 +141,13 @@ public class SlidingMenuAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     @Override
     public boolean shouldHideDivider(int i, RecyclerView recyclerView) {
         return !items.get(i).hasDevider;
+    }
+
+    public void clearRowSelections(){
+        for (SlidingMenuItem row : items) {
+            if (row instanceof SlidingMenuRow) {
+                ((SlidingMenuRow) row).isSelected = false;
+            }
+        }
     }
 }

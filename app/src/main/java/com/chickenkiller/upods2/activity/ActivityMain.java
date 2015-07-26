@@ -45,6 +45,9 @@ public class ActivityMain extends Activity implements IFragmentsManager, IOverla
 
     @Override
     public void onBackPressed() {
+        //TODO change
+        slidingMenu.getAdapter().clearRowSelections();
+        slidingMenu.getAdapter().notifyDataSetChanged();
         if (getFragmentManager().getBackStackEntryCount() > 0) {
             if (getLatestFragmentTag().equals(FragmentMainFeatured.TAG)) {
                 finish();
