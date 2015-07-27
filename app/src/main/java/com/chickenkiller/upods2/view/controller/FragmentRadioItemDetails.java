@@ -50,6 +50,7 @@ public class FragmentRadioItemDetails extends Fragment implements View.OnTouchLi
     private View viewDetailedHeader;
     private View viewDetailsDevider;
     private ImageView imgDetailedTopCover;
+    private ImageView imgBluredCover;
     private int moveDeltaY;
     private int screenHeight;
 
@@ -71,6 +72,7 @@ public class FragmentRadioItemDetails extends Fragment implements View.OnTouchLi
         viewDetailedHeader = view.findViewById(R.id.viewDetailedHeader);
         viewDetailsDevider = view.findViewById(R.id.vDetailsDevider);
         imgDetailedTopCover = (ImageView) view.findViewById(R.id.imgDetailedCover);
+        imgBluredCover = (ImageView)view.findViewById(R.id.imgBluredCover);
         svDetails = (ControllableScrollView) view.findViewById(R.id.svDetails);
         svDetails.setEnabled(false);
         moveDeltaY = 0;
@@ -103,6 +105,7 @@ public class FragmentRadioItemDetails extends Fragment implements View.OnTouchLi
                 viewDetailedHeader.setBackgroundColor(swatches.get(0).getRgb());
                 viewDetailsDevider.setBackgroundColor(swatches.get(0).getRgb());
                 tvDetailedDesHeader.setTextColor(swatches.get(0).getRgb());
+                imgBluredCover.setImageBitmap(bitmap);
             }
         });
     }

@@ -21,11 +21,16 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content">
 
-            <View
-                android:alpha="0.9"
-                android:id="@+id/viewDetailedHeader"
+            <ImageView
+                android:id="@+id/imgBluredCover"
                 android:layout_width="fill_parent"
                 android:layout_height="155dp" />
+
+            <View
+                android:id="@+id/viewDetailedHeader"
+                android:layout_width="fill_parent"
+                android:layout_height="155dp"
+                android:alpha="0.9" />
 
             <ImageView
                 android:id="@+id/imgDetailedCover"
@@ -95,8 +100,8 @@
             android:layout_alignParentRight="true"
             android:layout_marginRight="20dp"
             android:layout_marginTop="175dp"
-            app:backgroundTint="@color/pink_A400"
             android:src="@drawable/ic_play_arrow_white_24dp"
+            app:backgroundTint="@color/pink_A400"
             app:elevation="4dp" />
 
         <com.chickenkiller.upods2.views.ControllableScrollView
@@ -116,10 +121,10 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="20dp"
                     android:layout_marginTop="22dp"
+                    android:fontFamily="sans-serif"
                     android:text="@string/description"
                     android:textColor="@color/black"
                     android:textSize="@dimen/default_text_size_18"
-                    android:fontFamily="sans-serif"
                     android:textStyle="bold" />
 
                 <TextView
@@ -130,9 +135,9 @@
                     android:layout_marginRight="20dp"
                     android:layout_marginTop="20dp"
                     android:fontFamily="sans-serif-light"
-                    android:textStyle="normal"
                     android:textColor="@color/gray_202020"
-                    android:textSize="@dimen/default_text_size_16" />
+                    android:textSize="@dimen/default_text_size_16"
+                    android:textStyle="normal" />
             </LinearLayout>
         </com.chickenkiller.upods2.views.ControllableScrollView>
     </RelativeLayout>
