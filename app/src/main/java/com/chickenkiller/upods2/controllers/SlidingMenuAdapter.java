@@ -17,14 +17,13 @@ import com.chickenkiller.upods2.models.SlidingMenuHeader;
 import com.chickenkiller.upods2.models.SlidingMenuItem;
 import com.chickenkiller.upods2.models.SlidingMenuRow;
 import com.chickenkiller.upods2.view.controller.FragmentSettings;
-import com.yqritc.recyclerviewflexibledivider.FlexibleDividerDecoration;
 
 import java.util.List;
 
 /**
  * Created by alonzilberman on 7/4/15.
  */
-public class SlidingMenuAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements FlexibleDividerDecoration.VisibilityProvider {
+public class SlidingMenuAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
 
     private static final int HEADER = 1;
     private static final int ITEM = 2;
@@ -138,8 +137,7 @@ public class SlidingMenuAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         return ITEM;
     }
 
-    @Override
-    public boolean shouldHideDivider(int i, RecyclerView recyclerView) {
+    public boolean shouldHideDivider(int i) {
         return !items.get(i).hasDevider;
     }
 

@@ -12,12 +12,12 @@ import android.view.View;
 
 import com.chickenkiller.upods2.R;
 import com.chickenkiller.upods2.controllers.SlidingMenuAdapter;
+import com.chickenkiller.upods2.controllers.SlidingMenuDivider;
 import com.chickenkiller.upods2.interfaces.IFragmentsManager;
 import com.chickenkiller.upods2.interfaces.ISlidingMenuManager;
 import com.chickenkiller.upods2.models.SlidingMenuHeader;
 import com.chickenkiller.upods2.models.SlidingMenuItem;
 import com.chickenkiller.upods2.models.SlidingMenuRow;
-import com.yqritc.recyclerviewflexibledivider.HorizontalDividerItemDecoration;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,14 +28,13 @@ import java.util.List;
 public class SlidingMenu implements ISlidingMenuManager {
 
     private final int DEVIDER_SIZE = 2;
-    private final int DEVIDER_MARGIN = 10;
+    private final int DEVIDER_MARGIN = 0;
 
     private Activity activity;
     private DrawerLayout mDrawerLayout;
     private RecyclerView rvDrawerList;
     private ActionBarDrawerToggle mDrawerToggle;
     private SlidingMenuAdapter slidingMenuAdapter;
-    private HorizontalDividerItemDecoration devider;
 
     private final LinearLayoutManager layoutManager;
 
@@ -57,18 +56,13 @@ public class SlidingMenu implements ISlidingMenuManager {
                     R.layout.sliding_menu_item, this);
         }
 
-        this.devider = new HorizontalDividerItemDecoration.Builder(mActivity)
-                .color(R.color.sliding_menu_devider_color)
-                .visibilityProvider(slidingMenuAdapter)
-                .size(DEVIDER_SIZE)
-                .margin(DEVIDER_MARGIN)
-                .build();
+        SlidingMenuDivider divider = new SlidingMenuDivider(activity, R.drawable.sliding_menu_divider);
 
         this.rvDrawerList = (RecyclerView) activity.findViewById(R.id.left_drawer);
         this.rvDrawerList.setHasFixedSize(true);
         this.rvDrawerList.setAdapter(slidingMenuAdapter);
         this.rvDrawerList.setLayoutManager(this.layoutManager);
-        this.rvDrawerList.addItemDecoration(devider);
+        this.rvDrawerList.addItemDecoration(divider);
 
         this.mDrawerToggle = new ActionBarDrawerToggle(activity, mDrawerLayout,
                 mToolbar,
