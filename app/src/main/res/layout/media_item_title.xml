@@ -10,9 +10,10 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
+        android:layout_marginLeft="15dp"
         android:text="@string/top40_chanels"
-        android:textColor="@color/black"
-        android:textSize="@dimen/default_text_size_20"
+        android:textColor="@color/gray_202020"
+        android:textSize="@dimen/default_text_size_18"
         android:textStyle="bold" />
 
     <TextView
@@ -20,7 +21,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="7dp"
-        android:layout_marginLeft="2dp"
+        android:layout_marginLeft="15dp"
         android:text="@string/top40_chanels_subheader"
         android:textColor="@color/media_card_subheader"
         android:textSize="@dimen/default_text_size_16" />
