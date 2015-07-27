@@ -14,7 +14,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:src="@drawable/ic_favorite_black_36dp" />
+        android:src="@drawable/ic_account_circle_black_24dp" />
 
     <TextView
         android:id="@+id/tvSMenuTitle"

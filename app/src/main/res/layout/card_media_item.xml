@@ -42,7 +42,7 @@
             android:layout_alignParentRight="true"
             android:layout_below="@+id/imgSquare"
             android:layout_marginTop="10dp"
-            android:src="@drawable/ic_more_vert_black_18dp" />
+            android:src="@drawable/ic_dots_vertical_black_18dp" />
 
         <RatingBar
             android:id="@+id/rbMediaItem"
