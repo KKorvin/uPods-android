@@ -2,6 +2,8 @@ package com.chickenkiller.upods2.view.controller;
 
 import android.app.Fragment;
 import android.graphics.Bitmap;
+import android.graphics.Matrix;
+import android.graphics.RectF;
 import android.os.Bundle;
 import android.support.v7.graphics.Palette;
 import android.util.DisplayMetrics;
@@ -36,6 +38,7 @@ public class FragmentRadioItemDetails extends Fragment implements View.OnTouchLi
     private static final int MAGIC_NUMBER = -250; //Don't know what it does
     private static final float BOTTOM_SCROLL_BORDER_PERCENT = 0.35f;
     private static final float TOP_SCROLL_BORDER_PERCENT = 1f;
+    private static final float COVER_SCALE_FACTOR = 2f;
     private static int bottomScrollBorder;
     private static int topScrollBorder;
     public static String TAG = "media_details";
@@ -68,11 +71,11 @@ public class FragmentRadioItemDetails extends Fragment implements View.OnTouchLi
         rlDetailedContent = (RelativeLayout) view.findViewById(R.id.rlDetailedContent);
         tvDetailedDescription = (TextView) view.findViewById(R.id.tvDetailedDescription);
         tvDetailedHeader = (TextView) view.findViewById(R.id.tvDetailedHeader);
-        tvDetailedDesHeader = (TextView)view.findViewById(R.id.tvDetailedDesHeader);
+        tvDetailedDesHeader = (TextView) view.findViewById(R.id.tvDetailedDesHeader);
         viewDetailedHeader = view.findViewById(R.id.viewDetailedHeader);
         viewDetailsDevider = view.findViewById(R.id.vDetailsDevider);
         imgDetailedTopCover = (ImageView) view.findViewById(R.id.imgDetailedCover);
-        imgBluredCover = (ImageView)view.findViewById(R.id.imgBluredCover);
+        imgBluredCover = (ImageView) view.findViewById(R.id.imgBluredCover);
         svDetails = (ControllableScrollView) view.findViewById(R.id.svDetails);
         svDetails.setEnabled(false);
         moveDeltaY = 0;
@@ -105,7 +108,10 @@ public class FragmentRadioItemDetails extends Fragment implements View.OnTouchLi
                 viewDetailedHeader.setBackgroundColor(swatches.get(0).getRgb());
                 viewDetailsDevider.setBackgroundColor(swatches.get(0).getRgb());
                 tvDetailedDesHeader.setTextColor(swatches.get(0).getRgb());
-                imgBluredCover.setImageBitmap(bitmap);
+                Matrix m = new Matrix();
+                m.setRectToRect(new RectF(0, 0, bitmap.getWidth(), bitmap.getHeight()),
+                        new RectF(0, 0, bitmap.getWidth() * COVER_SCALE_FACTOR, bitmap.getHeight() * COVER_SCALE_FACTOR), Matrix.ScaleToFit.CENTER);
+                imgBluredCover.setImageBitmap(Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), m, true));
             }
         });
     }
