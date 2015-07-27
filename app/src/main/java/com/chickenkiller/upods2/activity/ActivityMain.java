@@ -122,4 +122,10 @@ public class ActivityMain extends Activity implements IFragmentsManager, IOverla
     public void setOverlayAlpha(int alphaPercent) {
         vOverlay.getBackground().setAlpha(alphaPercent);
     }
+
+    @Override
+    protected void onStop() {
+        getFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        super.onStop();
+    }
 }

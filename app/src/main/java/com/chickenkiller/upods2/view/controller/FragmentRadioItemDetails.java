@@ -1,10 +1,12 @@
 package com.chickenkiller.upods2.view.controller;
 
 import android.app.Fragment;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.graphics.RectF;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.graphics.Palette;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
@@ -22,6 +24,7 @@ import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
 import com.chickenkiller.upods2.R;
+import com.chickenkiller.upods2.activity.ActivityPlayer;
 import com.chickenkiller.upods2.interfaces.IOverlayable;
 import com.chickenkiller.upods2.models.RadioItem;
 import com.chickenkiller.upods2.views.ControllableScrollView;
@@ -54,6 +57,7 @@ public class FragmentRadioItemDetails extends Fragment implements View.OnTouchLi
     private View viewDetailsDevider;
     private ImageView imgDetailedTopCover;
     private ImageView imgBluredCover;
+    private FloatingActionButton fbDetailsPlay;
     private int moveDeltaY;
     private int screenHeight;
 
@@ -76,6 +80,7 @@ public class FragmentRadioItemDetails extends Fragment implements View.OnTouchLi
         viewDetailsDevider = view.findViewById(R.id.vDetailsDevider);
         imgDetailedTopCover = (ImageView) view.findViewById(R.id.imgDetailedCover);
         imgBluredCover = (ImageView) view.findViewById(R.id.imgBluredCover);
+        fbDetailsPlay = (FloatingActionButton) view.findViewById(R.id.fbDetailsPlay);
         svDetails = (ControllableScrollView) view.findViewById(R.id.svDetails);
         svDetails.setEnabled(false);
         moveDeltaY = 0;
@@ -88,6 +93,16 @@ public class FragmentRadioItemDetails extends Fragment implements View.OnTouchLi
         rlDetailedContent.setOnTouchListener(this);
         view.setOnClickListener(frgamentCloseClickListener);
         initFragmentScrollConstants();
+
+        fbDetailsPlay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent myIntent = new Intent(getActivity(), ActivityPlayer.class);
+                getActivity().startActivity(myIntent);
+                getActivity().finish();
+            }
+        });
+
         return view;
     }
 

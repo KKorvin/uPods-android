@@ -36,5 +36,8 @@
     <string name="top40_chanels">Top 40 Radio Stations</string>
     <string name="top40_chanels_subheader">The top internet radio stations</string>
     <string name="description">Description</string>
+    <string name="title_activity_activity_player">ActivityPlayer</string>
+
+    <string name="hello_world">Hello world!</string>
 
 </resources>
