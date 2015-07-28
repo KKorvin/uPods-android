@@ -2,10 +2,38 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:weightSum="100">
 
-    <TextView
+    <RelativeLayout
+        android:id="@+id/rlTopSectionBckg"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="HELLO BRO!" />
+        android:layout_height="0dp"
+        android:layout_weight="80"
+
+        android:background="@color/red_500">
+
+        <ImageView
+            android:id="@+id/imgPlayerCover"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:src="@drawable/ic_temp" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="20"
+        android:background="@color/material_blue_grey_900">
+
+        <Button
+            android:id="@+id/btnPlay"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="Play" />
+
+    </RelativeLayout>
 </LinearLayout>

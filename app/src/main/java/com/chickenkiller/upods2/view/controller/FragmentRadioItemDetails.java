@@ -3,11 +3,8 @@ package com.chickenkiller.upods2.view.controller;
 import android.app.Fragment;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Matrix;
-import android.graphics.RectF;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v7.graphics.Palette;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -27,12 +24,8 @@ import com.chickenkiller.upods2.R;
 import com.chickenkiller.upods2.activity.ActivityPlayer;
 import com.chickenkiller.upods2.interfaces.IOverlayable;
 import com.chickenkiller.upods2.models.RadioItem;
+import com.chickenkiller.upods2.utils.UIHelper;
 import com.chickenkiller.upods2.views.ControllableScrollView;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
 
 /**
  * Created by alonzilberman on 7/8/15.
@@ -98,6 +91,7 @@ public class FragmentRadioItemDetails extends Fragment implements View.OnTouchLi
             @Override
             public void onClick(View view) {
                 Intent myIntent = new Intent(getActivity(), ActivityPlayer.class);
+                myIntent.putExtra(ActivityPlayer.RADIO_ITEM_EXTRA, radioItem);
                 getActivity().startActivity(myIntent);
                 getActivity().finish();
             }
@@ -112,21 +106,11 @@ public class FragmentRadioItemDetails extends Fragment implements View.OnTouchLi
             public void onResourceReady(GlideDrawable drawable, GlideAnimation anim) {
                 super.onResourceReady(drawable, anim);
                 Bitmap bitmap = ((GlideBitmapDrawable) drawable).getBitmap();
-                List<Palette.Swatch> swatchesTemp = Palette.from(bitmap).generate().getSwatches();
-                List<Palette.Swatch> swatches = new ArrayList<Palette.Swatch>(swatchesTemp);
-                Collections.sort(swatches, new Comparator<Palette.Swatch>() {
-                    @Override
-                    public int compare(Palette.Swatch swatch1, Palette.Swatch swatch2) {
-                        return swatch2.getPopulation() - swatch1.getPopulation();
-                    }
-                });
-                viewDetailedHeader.setBackgroundColor(swatches.get(0).getRgb());
-                viewDetailsDevider.setBackgroundColor(swatches.get(0).getRgb());
-                tvDetailedDesHeader.setTextColor(swatches.get(0).getRgb());
-                Matrix m = new Matrix();
-                m.setRectToRect(new RectF(0, 0, bitmap.getWidth(), bitmap.getHeight()),
-                        new RectF(0, 0, bitmap.getWidth() * COVER_SCALE_FACTOR, bitmap.getHeight() * COVER_SCALE_FACTOR), Matrix.ScaleToFit.CENTER);
-                imgBluredCover.setImageBitmap(Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), m, true));
+                int dominantColor = UIHelper.getDominantColor(bitmap);
+                viewDetailedHeader.setBackgroundColor(dominantColor);
+                viewDetailsDevider.setBackgroundColor(dominantColor);
+                tvDetailedDesHeader.setTextColor(dominantColor);
+                imgBluredCover.setImageBitmap(UIHelper.createScaledBitmap(bitmap, COVER_SCALE_FACTOR));
             }
         });
     }
