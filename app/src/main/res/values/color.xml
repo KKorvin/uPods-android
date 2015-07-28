@@ -41,6 +41,9 @@
     <!-- Color for Button -->
     <color name="pink_A400">#F50057</color>
 
+    <!-- Color for Icons in Sliding Menu -->
+    <color name="pink_A200">#FF4081</color>
+
     <!-- Color for text in TextView Middle Screen -->
     <!-- Color for Menu -->
     <color name="gray_202020">#212121</color>
