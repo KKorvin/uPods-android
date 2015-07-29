@@ -40,6 +40,7 @@ public class FragmentPlayer extends Fragment implements MediaPlayer.OnPreparedLi
         public void onClick(View view) {
             if (universalPlayer.isPrepaired) {
                 universalPlayer.toggle();
+                btnPlay.setText(universalPlayer.isPlaying() ? "Stop" : "Play");
             } else {
                 universalPlayer.setPreparedListener(FragmentPlayer.this);
                 universalPlayer.prepare(getActivity(), radioItem.getStreamUrl());

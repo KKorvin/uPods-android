@@ -59,6 +59,13 @@ public class UniversalPlayer implements MediaPlayer.OnPreparedListener {
         }
     }
 
+    public boolean isPlaying() {
+        if (mediaPlayer != null && isPrepaired) {
+            return mediaPlayer.isPlaying();
+        }
+        return false;
+    }
+
     public void pause() {
         if (mediaPlayer != null && isPrepaired && mediaPlayer.isPlaying()) {
             mediaPlayer.pause();
