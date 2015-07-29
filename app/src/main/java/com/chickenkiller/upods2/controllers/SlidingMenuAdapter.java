@@ -23,7 +23,7 @@ import java.util.List;
 /**
  * Created by alonzilberman on 7/4/15.
  */
-public class SlidingMenuAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
+public class SlidingMenuAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private static final int HEADER = 1;
     private static final int ITEM = 2;
@@ -43,7 +43,7 @@ public class SlidingMenuAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             super(itemView);
             this.image = (ImageView) itemView.findViewById(R.id.imgSMenutIcon);
             this.text = (TextView) itemView.findViewById(R.id.tvSMenuTitle);
-            this.lnSlidingMenuItem = (LinearLayout)itemView.findViewById(R.id.lnSlidingMenuItem);
+            this.lnSlidingMenuItem = (LinearLayout) itemView.findViewById(R.id.lnSlidingMenuItem);
             itemView.setOnClickListener(this);
         }
 
@@ -111,14 +111,15 @@ public class SlidingMenuAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         SlidingMenuItem item = items.get(position);
         if (holder instanceof ViewHolderItem) {
             Context mContext = ((ViewHolderItem) holder).text.getContext();
-                    ((ViewHolderItem) holder).text.setText(((SlidingMenuRow) item).getTitle());
-            ((ViewHolderItem) holder).image.setImageResource(((SlidingMenuRow) item).getIconId());
-            if(((SlidingMenuRow) item).isSelected){
+            ((ViewHolderItem) holder).text.setText(((SlidingMenuRow) item).getTitle());
+            if (((SlidingMenuRow) item).isSelected) {
                 ((ViewHolderItem) holder).text.setTextColor(mContext.getResources().getColor(R.color.pink_A400));
                 ((ViewHolderItem) holder).lnSlidingMenuItem.setBackgroundColor(mContext.getResources().getColor(R.color.fragment_deatils_opacity_bckg));
-            }else{
+                ((ViewHolderItem) holder).image.setImageResource(((SlidingMenuRow) item).getPressedIconId());
+            } else {
                 ((ViewHolderItem) holder).text.setTextColor(mContext.getResources().getColor(R.color.gray_202020));
                 ((ViewHolderItem) holder).lnSlidingMenuItem.setBackgroundColor(mContext.getResources().getColor(R.color.white));
+                ((ViewHolderItem) holder).image.setImageResource(((SlidingMenuRow) item).getMainIconId());
             }
         }
         holder.itemView.setTag(item);
@@ -141,7 +142,7 @@ public class SlidingMenuAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         return !items.get(i).hasDevider;
     }
 
-    public void clearRowSelections(){
+    public void clearRowSelections() {
         for (SlidingMenuItem row : items) {
             if (row instanceof SlidingMenuRow) {
                 ((SlidingMenuRow) row).isSelected = false;
