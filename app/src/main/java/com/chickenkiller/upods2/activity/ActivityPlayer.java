@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.chickenkiller.upods2.R;
+import com.chickenkiller.upods2.controllers.UniversalPlayer;
 import com.chickenkiller.upods2.models.MediaItem;
 import com.chickenkiller.upods2.models.RadioItem;
 import com.chickenkiller.upods2.view.controller.FragmentMainFeatured;
@@ -21,8 +22,10 @@ public class ActivityPlayer extends FragmentsActivity {
         setContentView(R.layout.activity_player);
         if (getIntent().hasExtra(RADIO_ITEM_EXTRA)) {
             currentMediaItem = (RadioItem) getIntent().getExtras().get(RADIO_ITEM_EXTRA);
-        } else {
+        } else if (savedInstanceState.getParcelable(RADIO_ITEM_EXTRA) != null) {
             currentMediaItem = (RadioItem) savedInstanceState.getSerializable(RADIO_ITEM_EXTRA);
+        } else if (UniversalPlayer.getInstance().isPlaying()) {
+            currentMediaItem = UniversalPlayer.getInstance().getPlayingMediaItem();
         }
         if (currentMediaItem == null) {
             throw new RuntimeException("Can't run activity player, MediaItem for play not set.");

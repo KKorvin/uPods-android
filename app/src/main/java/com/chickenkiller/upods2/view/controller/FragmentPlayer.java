@@ -20,6 +20,7 @@ import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
 import com.chickenkiller.upods2.R;
 import com.chickenkiller.upods2.activity.ActivityPlayer;
 import com.chickenkiller.upods2.controllers.UniversalPlayer;
+import com.chickenkiller.upods2.interfaces.IPlayerStateListener;
 import com.chickenkiller.upods2.models.RadioItem;
 import com.chickenkiller.upods2.utils.UIHelper;
 
@@ -27,7 +28,7 @@ import com.chickenkiller.upods2.utils.UIHelper;
 /**
  * Created by alonzilberman on 7/27/15.
  */
-public class FragmentPlayer extends Fragment implements MediaPlayer.OnPreparedListener {
+public class FragmentPlayer extends Fragment implements MediaPlayer.OnPreparedListener, IPlayerStateListener {
     public static String TAG = "fragmentPlayer";
 
     private Button btnPlay;
@@ -96,7 +97,8 @@ public class FragmentPlayer extends Fragment implements MediaPlayer.OnPreparedLi
     }
 
     private void runPlayer() {
-        universalPlayer.setPreparedListener(FragmentPlayer.this);
+        universalPlayer.setPreparedListener(this);
+        universalPlayer.setPlayerStateListener(this);
         if (universalPlayer.isPlaying() && universalPlayer.isCurrentMediaItem(radioItem)) {
             btnPlay.setText("Stop");
             return;
@@ -116,7 +118,7 @@ public class FragmentPlayer extends Fragment implements MediaPlayer.OnPreparedLi
     @Override
     public void onDestroy() {
         if (universalPlayer != null) {
-            universalPlayer.setPreparedListener(null);
+            universalPlayer.removeListeners();
         }
         super.onDestroy();
     }
@@ -125,5 +127,10 @@ public class FragmentPlayer extends Fragment implements MediaPlayer.OnPreparedLi
     public void onSaveInstanceState(Bundle outState) {
         outState.putSerializable(ActivityPlayer.RADIO_ITEM_EXTRA, radioItem);
         super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public void onStateChanged(UniversalPlayer.State state) {
+        btnPlay.setText(state == UniversalPlayer.State.PLAYING ? "Stop" : "Play");
     }
 }
