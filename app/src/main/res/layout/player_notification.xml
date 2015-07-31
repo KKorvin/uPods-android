@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rlNotification"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -13,9 +14,9 @@
 
     <TextView
         android:id="@+id/tvPlayerTitleNtBar"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
+        android:layout_alignParentTop="true"
         android:layout_toRightOf="@+id/imgPlayerNtBar"
         android:text="Textc"
         android:textColor="@color/gray_202020" />
@@ -24,8 +25,8 @@
         android:id="@+id/btnPlayNtBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/tvPlayerTitleNtBar"
-        android:layout_toRightOf="@id/imgPlayerNtBar"
-        android:text="Play" />
+        android:layout_marginLeft="20dp"
+        android:layout_toRightOf="@id/tvPlayerTitleNtBar"
+        android:text="Stop" />
 
 </RelativeLayout>

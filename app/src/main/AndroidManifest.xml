@@ -23,7 +23,8 @@
         </activity>
         <activity
             android:name=".activity.ActivityPlayer"
-            android:label="@string/title_activity_activity_player"></activity>
+            android:label="@string/title_activity_activity_player"
+            android:launchMode="singleInstance"></activity>
     </application>
 
 </manifest>

@@ -75,17 +75,24 @@ public class UniversalPlayer implements MediaPlayer.OnPreparedListener {
     public void start() {
         if (mediaPlayer != null && isPrepaired) {
             mediaPlayer.start();
+            notificationPanel.updateNotificationStatus(PlayerNotificationPanel.Status.PLAYING);
+        }
+    }
+
+    public void pause() {
+        if (mediaPlayer != null && isPrepaired && mediaPlayer.isPlaying()) {
+            mediaPlayer.pause();
+            notificationPanel.updateNotificationStatus(PlayerNotificationPanel.Status.PAUSED);
         }
     }
 
     public void toggle() {
-        if (mediaPlayer != null && isPrepaired) {
-            if (mediaPlayer.isPlaying()) {
-                mediaPlayer.pause();
-            } else {
-                mediaPlayer.start();
-            }
+        if (mediaPlayer.isPlaying()) {
+            pause();
+        } else {
+            start();
         }
+
     }
 
     public boolean isPlaying() {
@@ -95,11 +102,6 @@ public class UniversalPlayer implements MediaPlayer.OnPreparedListener {
         return false;
     }
 
-    public void pause() {
-        if (mediaPlayer != null && isPrepaired && mediaPlayer.isPlaying()) {
-            mediaPlayer.pause();
-        }
-    }
 
     public void releasePlayer() {
         if (mediaPlayer != null) {
@@ -138,9 +140,6 @@ public class UniversalPlayer implements MediaPlayer.OnPreparedListener {
         return false;
     }
 
-    private void createNotificationBar() {
-
-    }
 
     @Override
     public void onPrepared(MediaPlayer mediaPlayer) {

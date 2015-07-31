@@ -11,6 +11,9 @@ import com.chickenkiller.upods2.models.MediaItem;
  * Created by alonzilberman on 7/31/15.
  */
 public abstract class PlayerNotificationPanel {
+
+    public enum Status {PLAYING, PAUSED}
+
     protected static int NOTIFICATION_ID;
 
     protected Context mContext;
@@ -24,11 +27,16 @@ public abstract class PlayerNotificationPanel {
         this.mediaItem = mediaItem;
     }
 
-    protected void setListeners(RemoteViews view) {
+    protected void setListeners() {
 
     }
 
     public void notificationCancel() {
         nManager.cancel(NOTIFICATION_ID);
     }
+
+    public void updateNotificationStatus(Status status) {
+
+    }
+
 }
