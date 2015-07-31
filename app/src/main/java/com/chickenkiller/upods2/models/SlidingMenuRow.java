@@ -48,14 +48,14 @@ public class SlidingMenuRow extends SlidingMenuItem {
 
     public static List<SlidingMenuItem> fromDefaultSlidingMenuSet(Context mContext) {
         ArrayList<SlidingMenuItem> allItems = new ArrayList<SlidingMenuItem>();
-        allItems.add(new SlidingMenuRow(mContext.getString(R.string.profile_my_profile), R.drawable.ic_account_circle_grey600_24dp, R.drawable.pink_account_circle));
-        allItems.add(new SlidingMenuRow(mContext.getString(R.string.radio_main), R.drawable.ic_radio_grey600_24dp, R.drawable.pink_radio));
-        allItems.add(new SlidingMenuRow(mContext.getString(R.string.podcasts_main), R.drawable.ic_rss_grey600_24dp, R.drawable.pink_rss));
-        allItems.add(new SlidingMenuRow(mContext.getString(R.string.cloud_sync), R.drawable.ic_cloud_upload_grey600_24dp, R.drawable.pink_cloud_upload, true));
-        allItems.add(new SlidingMenuRow(mContext.getString(R.string.main_rate_app), R.drawable.ic_heart_grey600_24dp, R.drawable.pink_heart));
-        allItems.add(new SlidingMenuRow(mContext.getString(R.string.main_about), R.drawable.ic_android_grey600_24dp, R.drawable.pink_android));
-        allItems.add(new SlidingMenuRow(mContext.getString(R.string.main_help), R.drawable.ic_help_circle_grey600_24dp, R.drawable.pink_help_circle, true));
-        allItems.add(new SlidingMenuRow(mContext.getString(R.string.main_settings), R.drawable.ic_settings_grey600_24dp, R.drawable.pink_settings));
+        allItems.add(new SlidingMenuRow(mContext.getString(R.string.profile_my_profile), R.drawable.ic_account_circle_grey600_24dp, R.drawable.help_circle));
+        allItems.add(new SlidingMenuRow(mContext.getString(R.string.radio_main), R.drawable.ic_radio_grey600_24dp, R.drawable.radio));
+        allItems.add(new SlidingMenuRow(mContext.getString(R.string.podcasts_main), R.drawable.ic_rss_grey600_24dp, R.drawable.rss));
+        allItems.add(new SlidingMenuRow(mContext.getString(R.string.cloud_sync), R.drawable.ic_cloud_upload_grey600_24dp, R.drawable.cloud_upload, true));
+        allItems.add(new SlidingMenuRow(mContext.getString(R.string.main_rate_app), R.drawable.ic_heart_grey600_24dp, R.drawable.heart));
+        allItems.add(new SlidingMenuRow(mContext.getString(R.string.main_about), R.drawable.ic_android_grey600_24dp, R.drawable.android_pink));
+        allItems.add(new SlidingMenuRow(mContext.getString(R.string.main_help), R.drawable.ic_help_circle_grey600_24dp, R.drawable.help_circle, true));
+        allItems.add(new SlidingMenuRow(mContext.getString(R.string.main_settings), R.drawable.ic_settings_grey600_24dp, R.drawable.settings));
         return allItems;
     }
 
