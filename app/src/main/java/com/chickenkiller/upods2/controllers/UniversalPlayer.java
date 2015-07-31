@@ -4,6 +4,8 @@ import android.media.MediaPlayer;
 
 import com.chickenkiller.upods2.models.MediaItem;
 import com.chickenkiller.upods2.models.RadioItem;
+import com.chickenkiller.upods2.views.PlayerNotificationPanel;
+import com.chickenkiller.upods2.views.RadioNotificationPanel;
 
 /**
  * Created by alonzilberman on 7/29/15.
@@ -14,6 +16,7 @@ public class UniversalPlayer implements MediaPlayer.OnPreparedListener {
     private MediaPlayer mediaPlayer;
     private MediaPlayer.OnPreparedListener preparedListener;
     private MediaItem mediaItem;
+    private PlayerNotificationPanel notificationPanel;
 
     public boolean isPrepaired;
 
@@ -105,6 +108,9 @@ public class UniversalPlayer implements MediaPlayer.OnPreparedListener {
             mediaItem = null;
             isPrepaired = false;
         }
+        if (notificationPanel != null) {
+            notificationPanel.notificationCancel();
+        }
     }
 
     public void resetPlayer() {
@@ -112,20 +118,15 @@ public class UniversalPlayer implements MediaPlayer.OnPreparedListener {
             mediaPlayer.reset();
             isPrepaired = false;
         }
+        if (notificationPanel != null) {
+            notificationPanel.notificationCancel();
+        }
     }
 
     public MediaItem getPlayingMediaItem() {
         return mediaItem;
     }
 
-    @Override
-    public void onPrepared(MediaPlayer mediaPlayer) {
-        this.isPrepaired = true;
-        this.mediaPlayer.start();
-        if (this.preparedListener != null) {
-            this.preparedListener.onPrepared(mediaPlayer);
-        }
-    }
 
     public boolean isCurrentMediaItem(MediaItem mediaItem) {
         if (this.mediaItem == null) {
@@ -135,5 +136,24 @@ public class UniversalPlayer implements MediaPlayer.OnPreparedListener {
             return ((RadioItem) this.mediaItem).getStreamUrl().equals(((RadioItem) mediaItem).getStreamUrl());
         }
         return false;
+    }
+
+    private void createNotificationBar() {
+
+    }
+
+    @Override
+    public void onPrepared(MediaPlayer mediaPlayer) {
+        isPrepaired = true;
+        mediaPlayer.start();
+        if (mediaItem instanceof RadioItem) {
+            if (notificationPanel != null) {
+                notificationPanel.notificationCancel();
+            }
+            notificationPanel = new RadioNotificationPanel(UpodsApplication.getContext(), (RadioItem) mediaItem);
+        }
+        if (preparedListener != null) {
+            preparedListener.onPrepared(mediaPlayer);
+        }
     }
 }
