@@ -27,6 +27,18 @@ public class RadioItem extends MediaItem {
         this.coverImageUrl = coverImageUrl;
     }
 
+    public RadioItem(RadioItem item) {
+        this.name = item.name;
+        this.streamUrl = item.streamUrl;
+        this.coverImageUrl = item.coverImageUrl;
+        this.bannerImageUrl = item.bannerImageUrl;
+        this.description = item.description;
+        this.website = item.website;
+        this.facebook = item.facebook;
+        this.twitter = item.twitter;
+        this.country = item.country;
+    }
+
     public RadioItem(JSONObject jsonItem) {
         try {
             this.id = jsonItem.has("id") ? jsonItem.getInt("id") : 0;

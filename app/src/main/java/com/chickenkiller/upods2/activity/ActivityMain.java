@@ -54,6 +54,7 @@ public class ActivityMain extends FragmentsActivity implements IOverlayable {
                 getFragmentManager().popBackStack();
             }
         } else {
+            getFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
             super.onBackPressed();
         }
     }
@@ -78,11 +79,5 @@ public class ActivityMain extends FragmentsActivity implements IOverlayable {
     @Override
     public void setOverlayAlpha(int alphaPercent) {
         vOverlay.getBackground().setAlpha(alphaPercent);
-    }
-
-    @Override
-    protected void onStop() {
-        getFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-        super.onStop();
     }
 }

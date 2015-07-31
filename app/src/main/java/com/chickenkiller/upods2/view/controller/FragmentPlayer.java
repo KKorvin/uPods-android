@@ -18,6 +18,7 @@ import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
 import com.chickenkiller.upods2.R;
+import com.chickenkiller.upods2.activity.ActivityPlayer;
 import com.chickenkiller.upods2.controllers.UniversalPlayer;
 import com.chickenkiller.upods2.models.RadioItem;
 import com.chickenkiller.upods2.utils.UIHelper;
@@ -42,9 +43,7 @@ public class FragmentPlayer extends Fragment implements MediaPlayer.OnPreparedLi
                 universalPlayer.toggle();
                 btnPlay.setText(universalPlayer.isPlaying() ? "Stop" : "Play");
             } else {
-                universalPlayer.setPreparedListener(FragmentPlayer.this);
-                universalPlayer.prepare(getActivity(), radioItem.getStreamUrl());
-                btnPlay.setText("Fetching...");
+                runPlayer();
             }
         }
     };
@@ -57,10 +56,14 @@ public class FragmentPlayer extends Fragment implements MediaPlayer.OnPreparedLi
         btnPlay.setOnClickListener(btnPlayStopClickListener);
         rlTopSectionBckg = (RelativeLayout) view.findViewById(R.id.rlTopSectionBckg);
         imgPlayerCover = (ImageView) view.findViewById(R.id.imgPlayerCover);
+        if (radioItem == null) {
+            radioItem = (RadioItem) savedInstanceState.get(ActivityPlayer.RADIO_ITEM_EXTRA);
+        }
         if (radioItem != null) {
             initRadioUI(view);
+            universalPlayer = UniversalPlayer.getInstance();
+            runPlayer();
         }
-        universalPlayer = UniversalPlayer.getInstance();
         return view;
     }
 
@@ -81,16 +84,35 @@ public class FragmentPlayer extends Fragment implements MediaPlayer.OnPreparedLi
         this.radioItem = radioItem;
     }
 
+    private void runPlayer() {
+        universalPlayer.setPreparedListener(FragmentPlayer.this);
+        if (universalPlayer.isPlaying() && universalPlayer.isCurrentMediaItem(radioItem)) {
+            btnPlay.setText("Stop");
+            return;
+        } else if (universalPlayer.isPlaying()) {
+            universalPlayer.resetPlayer();
+        }
+        universalPlayer.setMediaItem(radioItem);
+        universalPlayer.prepare();
+        btnPlay.setText("Fetching...");
+    }
+
     @Override
     public void onPrepared(MediaPlayer mediaPlayer) {
-        universalPlayer.start();
         btnPlay.setText("Stop");
     }
 
     @Override
-    public void onStop() {
-        universalPlayer.release();
-        universalPlayer = null;
-        super.onStop();
+    public void onDestroy() {
+        if (universalPlayer != null) {
+            universalPlayer.setPreparedListener(null);
+        }
+        super.onDestroy();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putSerializable(ActivityPlayer.RADIO_ITEM_EXTRA, radioItem);
+        super.onSaveInstanceState(outState);
     }
 }
