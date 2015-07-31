@@ -33,6 +33,7 @@ public class FragmentPlayer extends Fragment implements MediaPlayer.OnPreparedLi
     private Button btnPlay;
     private RadioItem radioItem;
     private ImageView imgPlayerCover;
+    private ImageView imgClosePlayer;
     private RelativeLayout rlTopSectionBckg;
     private UniversalPlayer universalPlayer;
 
@@ -48,11 +49,21 @@ public class FragmentPlayer extends Fragment implements MediaPlayer.OnPreparedLi
         }
     };
 
+    private View.OnClickListener imgClosePlayerClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            universalPlayer.releasePlayer();
+            getActivity().onBackPressed();
+        }
+    };
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         View view = inflater.inflate(R.layout.fragment_player, container, false);
         btnPlay = (Button) view.findViewById(R.id.btnPlay);
+        imgClosePlayer = (ImageView) view.findViewById(R.id.imgClosePlayer);
+        imgClosePlayer.setOnClickListener(imgClosePlayerClickListener);
         btnPlay.setOnClickListener(btnPlayStopClickListener);
         rlTopSectionBckg = (RelativeLayout) view.findViewById(R.id.rlTopSectionBckg);
         imgPlayerCover = (ImageView) view.findViewById(R.id.imgPlayerCover);

@@ -19,6 +19,13 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:src="@drawable/ic_temp" />
+
+        <ImageView
+            android:id="@+id/imgClosePlayer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:src="@drawable/abc_ic_clear_mtrl_alpha" />
     </RelativeLayout>
 
     <RelativeLayout
