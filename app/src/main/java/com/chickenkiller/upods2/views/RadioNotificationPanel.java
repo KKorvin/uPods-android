@@ -12,6 +12,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.NotificationTarget;
 import com.chickenkiller.upods2.R;
 import com.chickenkiller.upods2.activity.ActivityPlayer;
+import com.chickenkiller.upods2.controllers.MainBroadcastRecivier;
 import com.chickenkiller.upods2.controllers.UniversalPlayer;
 import com.chickenkiller.upods2.models.RadioItem;
 
@@ -20,6 +21,8 @@ import com.chickenkiller.upods2.models.RadioItem;
  */
 public class RadioNotificationPanel extends PlayerNotificationPanel {
     private static int NOTIFICATION_ID = 12;
+    private PendingIntent playIntent;
+    private PendingIntent pauseIntent;
 
     public RadioNotificationPanel(Context mContext, RadioItem radioItem) {
         super(mContext, radioItem);
@@ -61,15 +64,24 @@ public class RadioNotificationPanel extends PlayerNotificationPanel {
 
     @Override
     protected void setListeners() {
-        //remoteView.setPendingIntentTemplate(R.id.rlNotification, piOpen);
+        Intent plIntent = new Intent(mContext, MainBroadcastRecivier.class);
+        plIntent.setAction(UniversalPlayer.INTENT_ACTION_PLAY);
+        playIntent = PendingIntent.getBroadcast(mContext, 0, plIntent, 0);
+
+        Intent pIntent = new Intent(mContext, MainBroadcastRecivier.class);
+        pIntent.setAction(UniversalPlayer.INTENT_ACTION_PAUSE);
+        pauseIntent = PendingIntent.getBroadcast(mContext, 0, pIntent, 0);
+
+        remoteView.setOnClickPendingIntent(R.id.btnPlayNtBar, pauseIntent);
         super.setListeners();
     }
 
     @Override
-    public void updateNotificationStatus(Status status) {
-        String text = status == Status.PLAYING ? "Stop" : "Play";
+    public void updateNotificationStatus(UniversalPlayer.State state) {
+        String text = (state == UniversalPlayer.State.PLAYING ? "Stop" : "Play");
         remoteView.setTextViewText(R.id.btnPlayNtBar, text);
+        remoteView.setOnClickPendingIntent(R.id.btnPlayNtBar, state == UniversalPlayer.State.PLAYING ? pauseIntent : playIntent);
         nManager.notify(NOTIFICATION_ID, nBuilder.build());
-        super.updateNotificationStatus(status);
+        super.updateNotificationStatus(state);
     }
 }

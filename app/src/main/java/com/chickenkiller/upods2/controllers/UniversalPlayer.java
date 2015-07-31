@@ -2,6 +2,7 @@ package com.chickenkiller.upods2.controllers;
 
 import android.media.MediaPlayer;
 
+import com.chickenkiller.upods2.interfaces.IPlayerStateListener;
 import com.chickenkiller.upods2.models.MediaItem;
 import com.chickenkiller.upods2.models.RadioItem;
 import com.chickenkiller.upods2.views.PlayerNotificationPanel;
@@ -12,9 +13,15 @@ import com.chickenkiller.upods2.views.RadioNotificationPanel;
  */
 public class UniversalPlayer implements MediaPlayer.OnPreparedListener {
 
+    public enum State {PLAYING, PAUSED}
+
+    public static final String INTENT_ACTION_PLAY = "com.chickenkiller.upods2.player.PLAY";
+    public static final String INTENT_ACTION_PAUSE = "com.chickenkiller.upods2.player.PAUSE";
+
     public static UniversalPlayer universalPlayer;
     private MediaPlayer mediaPlayer;
     private MediaPlayer.OnPreparedListener preparedListener;
+    private IPlayerStateListener playerStateListener;
     private MediaItem mediaItem;
     private PlayerNotificationPanel notificationPanel;
 
@@ -46,6 +53,10 @@ public class UniversalPlayer implements MediaPlayer.OnPreparedListener {
         this.preparedListener = preparedListener;
     }
 
+    public void setPlayerStateListener(IPlayerStateListener playerStateListener) {
+        this.playerStateListener = playerStateListener;
+    }
+
     public void prepare(MediaItem mediaItem, MediaPlayer.OnPreparedListener preparedListener) {
         setPreparedListener(preparedListener);
         setMediaItem(mediaItem);
@@ -75,14 +86,20 @@ public class UniversalPlayer implements MediaPlayer.OnPreparedListener {
     public void start() {
         if (mediaPlayer != null && isPrepaired) {
             mediaPlayer.start();
-            notificationPanel.updateNotificationStatus(PlayerNotificationPanel.Status.PLAYING);
+            notificationPanel.updateNotificationStatus(State.PLAYING);
+            if (playerStateListener != null) {
+                playerStateListener.onStateChanged(State.PLAYING);
+            }
         }
     }
 
     public void pause() {
         if (mediaPlayer != null && isPrepaired && mediaPlayer.isPlaying()) {
             mediaPlayer.pause();
-            notificationPanel.updateNotificationStatus(PlayerNotificationPanel.Status.PAUSED);
+            notificationPanel.updateNotificationStatus(State.PAUSED);
+            if (playerStateListener != null) {
+                playerStateListener.onStateChanged(State.PAUSED);
+            }
         }
     }
 
@@ -108,6 +125,8 @@ public class UniversalPlayer implements MediaPlayer.OnPreparedListener {
             mediaPlayer.release();
             mediaPlayer = null;
             mediaItem = null;
+            preparedListener = null;
+            playerStateListener = null;
             isPrepaired = false;
         }
         if (notificationPanel != null) {
@@ -123,6 +142,11 @@ public class UniversalPlayer implements MediaPlayer.OnPreparedListener {
         if (notificationPanel != null) {
             notificationPanel.notificationCancel();
         }
+    }
+
+    public void removeListeners() {
+        preparedListener = null;
+        playerStateListener = null;
     }
 
     public MediaItem getPlayingMediaItem() {

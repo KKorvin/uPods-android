@@ -5,6 +5,7 @@ import android.content.Context;
 import android.support.v7.app.NotificationCompat;
 import android.widget.RemoteViews;
 
+import com.chickenkiller.upods2.controllers.UniversalPlayer;
 import com.chickenkiller.upods2.models.MediaItem;
 
 /**
@@ -12,7 +13,6 @@ import com.chickenkiller.upods2.models.MediaItem;
  */
 public abstract class PlayerNotificationPanel {
 
-    public enum Status {PLAYING, PAUSED}
 
     protected static int NOTIFICATION_ID;
 
@@ -35,7 +35,7 @@ public abstract class PlayerNotificationPanel {
         nManager.cancel(NOTIFICATION_ID);
     }
 
-    public void updateNotificationStatus(Status status) {
+    public void updateNotificationStatus(UniversalPlayer.State state) {
 
     }
 

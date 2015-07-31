@@ -30,7 +30,6 @@ public class ActivityMain extends FragmentsActivity implements IOverlayable {
         toolbar.inflateMenu(R.menu.menu_activity_main);
         slidingMenu = new SlidingMenu(this, toolbar);
         showFragment(R.id.fl_content, new FragmentMainFeatured(), FragmentMainFeatured.TAG);
-
     }
 
     @Override

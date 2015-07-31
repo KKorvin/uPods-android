@@ -25,6 +25,11 @@
             android:name=".activity.ActivityPlayer"
             android:label="@string/title_activity_activity_player"
             android:launchMode="singleInstance"></activity>
+
+        <receiver android:name=".controllers.MainBroadcastRecivier">
+            <action android:name="com.chickenkiller.upods2.player.PLAY" />
+            <action android:name="com.chickenkiller.upods2.player.PAUSE" />
+        </receiver>
     </application>
 
 </manifest>
