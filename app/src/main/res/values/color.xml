@@ -38,11 +38,22 @@
     <color name="light_blue_800">#0277BD</color>
     <color name="light_blue_900">#01579B</color>
 
+    <!-- Material Blue Gray -->
+    <color name="blue_grey_900">#263238</color>
+    <color name="blue_grey_800">#37474F</color>
+    <color name="blue_grey_700">#455A64</color>
+    <color name="blue_grey_600">#546E7A</color>
+    <color name="blue_grey_500">#607D8B</color>
+    <color name="blue_grey_400">#78909C</color>
+
     <!-- Color for Button -->
     <color name="pink_A400">#F50057</color>
 
     <!-- Color for Icons in Sliding Menu -->
     <color name="pink_A200">#FF4081</color>
+
+    <!-- Color for Vidileniya in SlidingMenu -->
+    <color name="grey_A200">#E0E0E0</color>
 
     <!-- Color for text in TextView Middle Screen -->
     <!-- Color for Menu -->

@@ -116,7 +116,7 @@ public class SlidingMenuAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             if (((SlidingMenuRow) item).isSelected) {
                 ((ViewHolderItem) holder).text.setTextColor(mContext.getResources().getColor(R.color.pink_A400));
                 ((ViewHolderItem) holder).rpSlidingMenuItem.setBackgroundColor(mContext.getResources().getColor(R.color.fragment_deatils_opacity_bckg));
-                //((ViewHolderItem) holder).rpSlidingMenuItem.setRippleColor(R.color.white);
+                ((ViewHolderItem) holder).rpSlidingMenuItem.setRippleColor(R.color.grey_A200);
                 ((ViewHolderItem) holder).image.setImageResource(((SlidingMenuRow) item).getPressedIconId());
             } else {
                 ((ViewHolderItem) holder).text.setTextColor(mContext.getResources().getColor(R.color.gray_202020));

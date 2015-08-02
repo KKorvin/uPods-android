@@ -1,9 +1,13 @@
 <resources>
+
     <!-- Global -->
     <dimen name="default_text_size_14">14sp</dimen>
     <dimen name="default_text_size_16">16sp</dimen>
     <dimen name="default_text_size_18">18sp</dimen>
     <dimen name="default_text_size_20">20sp</dimen>
+    <dimen name="default_text_size_22">22sp</dimen>
+    <dimen name="default_text_size_24">24sp</dimen>
+    <dimen name="default_text_size_26">26sp</dimen>
     <dimen name="default_card_corner_radius">2dp</dimen>
 
     <!-- Elevation -->
@@ -20,7 +24,6 @@
     <dimen name="img_user_m_left">16dp</dimen>
     <dimen name="img_user_m_top">38dp</dimen>
 
-
     <!-- Cards grid -->
     <dimen name="rv_cards_column_width">120dp</dimen>
     <dimen name="rv_banners_height">140dp</dimen>
@@ -30,6 +33,7 @@
     <!-- Banner -->
     <dimen name="banner_shadow_radius">2dp</dimen>
     <dimen name="banner_shadow_bottom">2dp</dimen>
+
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>

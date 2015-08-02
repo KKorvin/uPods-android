@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
@@ -31,7 +32,7 @@ import com.chickenkiller.upods2.utils.UIHelper;
 public class FragmentPlayer extends Fragment implements MediaPlayer.OnPreparedListener, IPlayerStateListener {
     public static String TAG = "fragmentPlayer";
 
-    private Button btnPlay;
+    private ImageButton btnPlay;
     private RadioItem radioItem;
     private ImageView imgPlayerCover;
     private ImageView imgClosePlayer;
@@ -43,7 +44,7 @@ public class FragmentPlayer extends Fragment implements MediaPlayer.OnPreparedLi
         public void onClick(View view) {
             if (universalPlayer.isPrepaired) {
                 universalPlayer.toggle();
-                btnPlay.setText(universalPlayer.isPlaying() ? "Stop" : "Play");
+                //btnPlay.setText(universalPlayer.isPlaying() ? "Stop" : "Play");
             } else {
                 runPlayer();
             }
@@ -62,7 +63,7 @@ public class FragmentPlayer extends Fragment implements MediaPlayer.OnPreparedLi
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         View view = inflater.inflate(R.layout.fragment_player, container, false);
-        btnPlay = (Button) view.findViewById(R.id.btnPlay);
+        btnPlay = (ImageButton) view.findViewById(R.id.btnPlay);
         imgClosePlayer = (ImageView) view.findViewById(R.id.imgClosePlayer);
         imgClosePlayer.setOnClickListener(imgClosePlayerClickListener);
         btnPlay.setOnClickListener(btnPlayStopClickListener);
@@ -100,19 +101,19 @@ public class FragmentPlayer extends Fragment implements MediaPlayer.OnPreparedLi
         universalPlayer.setPreparedListener(this);
         universalPlayer.setPlayerStateListener(this);
         if (universalPlayer.isPlaying() && universalPlayer.isCurrentMediaItem(radioItem)) {
-            btnPlay.setText("Stop");
+           // btnPlay.setText("Stop");
             return;
         } else if (universalPlayer.isPlaying()) {
             universalPlayer.resetPlayer();
         }
         universalPlayer.setMediaItem(radioItem);
         universalPlayer.prepare();
-        btnPlay.setText("Fetching...");
+        //btnPlay.setText("Fetching...");
     }
 
     @Override
     public void onPrepared(MediaPlayer mediaPlayer) {
-        btnPlay.setText("Stop");
+        //btnPlay.setText("Stop");
     }
 
     @Override
@@ -131,6 +132,6 @@ public class FragmentPlayer extends Fragment implements MediaPlayer.OnPreparedLi
 
     @Override
     public void onStateChanged(UniversalPlayer.State state) {
-        btnPlay.setText(state == UniversalPlayer.State.PLAYING ? "Stop" : "Play");
+        //btnPlay.setText(state == UniversalPlayer.State.PLAYING ? "Stop" : "Play");
     }
 }
