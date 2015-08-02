@@ -46,6 +46,9 @@
     <color name="blue_grey_500">#607D8B</color>
     <color name="blue_grey_400">#78909C</color>
 
+    <color name="blue_grey_fromScreenshot_verh">#35454D</color>
+    <color name="blue_grey_fromScreenshot_niz">#516A75</color>
+
     <!-- Color for Button -->
     <color name="pink_A400">#F50057</color>
 
