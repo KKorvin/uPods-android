@@ -9,7 +9,6 @@
         android:id="@+id/rlTopSectionBckg"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-
         android:layout_weight="68"
         android:background="@color/red_500">
 
@@ -51,7 +50,6 @@
             android:textSize="@dimen/default_text_size_18"
             android:text="Most popular Internet radio"
             android:layout_height="wrap_content" />
-
     </LinearLayout>
 
     <LinearLayout
@@ -66,7 +64,7 @@
             android:id="@+id/BtnRewindLeft"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/ic_rewind_white_24dp"
+            android:background="@drawable/ic_rewind_white_left"
             android:layout_centerInParent="true" />
 
         <ImageButton
@@ -74,15 +72,16 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:background="@drawable/ic_play_white_48dp_96dp"
+            android:layout_marginLeft="60dp"
+            android:layout_marginRight="60dp"
+            android:background="@drawable/ic_play_white"
             android:text="Play" />
 
         <ImageButton
             android:id="@+id/BtnRewindRight"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/ic_rewind_white_24dp_right"
+            android:background="@drawable/ic_rewind_white_right"
             android:layout_centerInParent="true" />
-
     </LinearLayout>
 </LinearLayout>
