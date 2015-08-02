@@ -6,10 +6,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.andexert.library.RippleView;
 import com.chickenkiller.upods2.R;
 import com.chickenkiller.upods2.interfaces.IFragmentsManager;
 import com.chickenkiller.upods2.interfaces.ISlidingMenuManager;
@@ -37,13 +37,13 @@ public class SlidingMenuAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     private class ViewHolderItem extends RecyclerView.ViewHolder implements View.OnClickListener {
         public ImageView image;
         public TextView text;
-        public LinearLayout lnSlidingMenuItem;
+        public RippleView rpSlidingMenuItem;
 
         public ViewHolderItem(View itemView) {
             super(itemView);
             this.image = (ImageView) itemView.findViewById(R.id.imgSMenutIcon);
             this.text = (TextView) itemView.findViewById(R.id.tvSMenuTitle);
-            this.lnSlidingMenuItem = (LinearLayout) itemView.findViewById(R.id.lnSlidingMenuItem);
+            this.rpSlidingMenuItem = (RippleView) itemView.findViewById(R.id.rpSlidingMenuItem);
             itemView.setOnClickListener(this);
         }
 
@@ -54,14 +54,14 @@ public class SlidingMenuAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 SlidingMenuRow clickedMenuItem = (SlidingMenuRow) items.get(getAdapterPosition());
                 clickedMenuItem.isSelected = true;
                 Context context = view.getContext();
+                slidingMenuManager.toggle();
+                notifyDataSetChanged();
                 if (clickedMenuItem.getTitle().equals(context.getString(R.string.main_settings))) {
                     FragmentSettings settingsFragment = new FragmentSettings();
                     fragmentsManager.showFragment(R.id.fl_content, settingsFragment, FragmentSettings.TAG);
                 } else {
                     Toast.makeText(context, "TEST" + clickedMenuItem.getTitle(), Toast.LENGTH_SHORT).show();
                 }
-                slidingMenuManager.toggle();
-                notifyDataSetChanged();
             }
         }
     }
@@ -112,13 +112,16 @@ public class SlidingMenuAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         if (holder instanceof ViewHolderItem) {
             Context mContext = ((ViewHolderItem) holder).text.getContext();
             ((ViewHolderItem) holder).text.setText(((SlidingMenuRow) item).getTitle());
+            ((ViewHolderItem) holder).rpSlidingMenuItem.setRippleDuration(200);
             if (((SlidingMenuRow) item).isSelected) {
                 ((ViewHolderItem) holder).text.setTextColor(mContext.getResources().getColor(R.color.pink_A400));
-                ((ViewHolderItem) holder).lnSlidingMenuItem.setBackgroundColor(mContext.getResources().getColor(R.color.fragment_deatils_opacity_bckg));
+                ((ViewHolderItem) holder).rpSlidingMenuItem.setBackgroundColor(mContext.getResources().getColor(R.color.fragment_deatils_opacity_bckg));
+                //((ViewHolderItem) holder).rpSlidingMenuItem.setRippleColor(R.color.white);
                 ((ViewHolderItem) holder).image.setImageResource(((SlidingMenuRow) item).getPressedIconId());
             } else {
                 ((ViewHolderItem) holder).text.setTextColor(mContext.getResources().getColor(R.color.gray_202020));
-                ((ViewHolderItem) holder).lnSlidingMenuItem.setBackgroundColor(mContext.getResources().getColor(R.color.white));
+                ((ViewHolderItem) holder).rpSlidingMenuItem.setBackgroundColor(mContext.getResources().getColor(R.color.white));
+                //((ViewHolderItem) holder).rpSlidingMenuItem.setRippleColor(R.color.pink_A400);
                 ((ViewHolderItem) holder).image.setImageResource(((SlidingMenuRow) item).getMainIconId());
             }
         }
