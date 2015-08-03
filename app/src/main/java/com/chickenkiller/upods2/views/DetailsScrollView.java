@@ -8,6 +8,8 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ScrollView;
 
+import com.chickenkiller.upods2.interfaces.IMovable;
+
 /**
  * Created by alonzilberman on 7/21/15.
  */
@@ -17,6 +19,7 @@ public class DetailsScrollView extends ScrollView {
     private boolean enabled;
     private boolean isInTheTop;
     private boolean isScrollDown;
+    private IMovable iMovable;
 
     public DetailsScrollView(Context context) {
         super(context);
@@ -59,10 +62,14 @@ public class DetailsScrollView extends ScrollView {
     private float touchY;
 
 
+    public void setIMovable(IMovable iMovable) {
+        this.iMovable = iMovable;
+    }
+
     @Override
     public boolean onTouchEvent(MotionEvent motionEvent) {
         if (enabled) {
-            /*if (isScrollable != 2) {
+            if (isScrollable != 2) {
                 isInTheTop = getScrollY() == 0;
                 switch (motionEvent.getAction()) {
                     case MotionEvent.ACTION_DOWN:
@@ -72,21 +79,24 @@ public class DetailsScrollView extends ScrollView {
                         isScrollDown = touchY < motionEvent.getY();
                     }
                 }
-            }*/
+            }
 
             if (isScrollable == 0) {
                 View child = getChildAt(getChildCount() - 1);
                 int childHeight = child.getHeight();
                 isScrollable = getHeight() < childHeight + getPaddingTop() + getPaddingBottom() ? 1 : 2;
             }
-            //(isScrollDown && isInTheTop) || 
             if (isScrollable == 2) {
                 return false;
+            } else if (isScrollDown && isInTheTop) {
+                setEnabled(false);
+                return false;
             }
+
             super.onTouchEvent(motionEvent);
             return true;
         }
-
+        iMovable.onMove(motionEvent);
         return false;
     }
 }

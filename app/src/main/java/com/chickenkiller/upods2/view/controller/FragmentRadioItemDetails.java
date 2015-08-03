@@ -22,6 +22,7 @@ import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
 import com.chickenkiller.upods2.R;
 import com.chickenkiller.upods2.activity.ActivityPlayer;
+import com.chickenkiller.upods2.interfaces.IMovable;
 import com.chickenkiller.upods2.interfaces.IOverlayable;
 import com.chickenkiller.upods2.models.RadioItem;
 import com.chickenkiller.upods2.utils.UIHelper;
@@ -30,7 +31,7 @@ import com.chickenkiller.upods2.views.DetailsScrollView;
 /**
  * Created by alonzilberman on 7/8/15.
  */
-public class FragmentRadioItemDetails extends Fragment implements View.OnTouchListener {
+public class FragmentRadioItemDetails extends Fragment implements View.OnTouchListener, IMovable {
     private static final int MAGIC_NUMBER = -250; //Don't know what it does
     private static final float BOTTOM_SCROLL_BORDER_PERCENT = 0.35f;
     private static final float TOP_SCROLL_BORDER_PERCENT = 1f;
@@ -76,6 +77,7 @@ public class FragmentRadioItemDetails extends Fragment implements View.OnTouchLi
         fbDetailsPlay = (FloatingActionButton) view.findViewById(R.id.fbDetailsPlay);
         svDetails = (DetailsScrollView) view.findViewById(R.id.svDetails);
         svDetails.setEnabled(false);
+        svDetails.setIMovable(this);
         moveDeltaY = 0;
 
         if (radioItem != null) {
@@ -129,39 +131,7 @@ public class FragmentRadioItemDetails extends Fragment implements View.OnTouchLi
 
     @Override
     public boolean onTouch(View view, MotionEvent event) {
-        final int Y = (int) event.getRawY();
-        LinearLayout.LayoutParams lParams = (LinearLayout.LayoutParams) rlDetailedContent.getLayoutParams();
-
-        switch (event.getAction() & MotionEvent.ACTION_MASK) {
-            case MotionEvent.ACTION_DOWN:
-                moveDeltaY = Y - lParams.topMargin;
-                break;
-            case MotionEvent.ACTION_UP: {
-                if (lParams.topMargin >= bottomScrollBorder) {
-                    getActivity().onBackPressed();
-                } else if (lParams.topMargin <= topScrollBorder) {
-                    lParams.topMargin = 0;
-                    lParams.bottomMargin = 0;
-                    view.setLayoutParams(lParams);
-                    svDetails.setEnabled(true);
-                } else {
-                    svDetails.setEnabled(false);
-                }
-                break;
-            }
-            case MotionEvent.ACTION_POINTER_DOWN:
-                break;
-            case MotionEvent.ACTION_POINTER_UP:
-                break;
-            case MotionEvent.ACTION_MOVE:
-                int newMargin = Y - moveDeltaY < 0 ? 0 : Y - moveDeltaY;
-                lParams.topMargin = newMargin;
-                lParams.bottomMargin = MAGIC_NUMBER;
-                view.setLayoutParams(lParams);
-                correctOverlayLevel(newMargin);
-                break;
-        }
-
+        onMove(event);
         return true;
     }
 
@@ -177,4 +147,39 @@ public class FragmentRadioItemDetails extends Fragment implements View.OnTouchLi
         }
     }
 
+    @Override
+    public void onMove(MotionEvent event) {
+        final int Y = (int) event.getRawY();
+        LinearLayout.LayoutParams lParams = (LinearLayout.LayoutParams) rlDetailedContent.getLayoutParams();
+
+        switch (event.getAction() & MotionEvent.ACTION_MASK) {
+            case MotionEvent.ACTION_DOWN:
+                moveDeltaY = Y - lParams.topMargin;
+                break;
+            case MotionEvent.ACTION_UP: {
+                if (lParams.topMargin >= bottomScrollBorder) {
+                    getActivity().onBackPressed();
+                } else if (lParams.topMargin <= topScrollBorder) {
+                    lParams.topMargin = 0;
+                    lParams.bottomMargin = 0;
+                    rlDetailedContent.setLayoutParams(lParams);
+                    svDetails.setEnabled(true);
+                } else {
+                    svDetails.setEnabled(false);
+                }
+                break;
+            }
+            case MotionEvent.ACTION_POINTER_DOWN:
+                break;
+            case MotionEvent.ACTION_POINTER_UP:
+                break;
+            case MotionEvent.ACTION_MOVE:
+                int newMargin = Y - moveDeltaY < 0 ? 0 : Y - moveDeltaY;
+                lParams.topMargin = newMargin;
+                lParams.bottomMargin = MAGIC_NUMBER;
+                rlDetailedContent.setLayoutParams(lParams);
+                correctOverlayLevel(newMargin);
+                break;
+        }
+    }
 }
