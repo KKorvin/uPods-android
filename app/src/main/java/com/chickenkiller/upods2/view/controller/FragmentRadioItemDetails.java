@@ -6,7 +6,6 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -149,7 +148,7 @@ public class FragmentRadioItemDetails extends Fragment implements View.OnTouchLi
     }
 
     @Override
-    public void onMove(MotionEvent event, boolean needApply) {
+    public void onMove(MotionEvent event, boolean applyMovement) {
         final int Y = (int) event.getRawY();
         LinearLayout.LayoutParams lParams = (LinearLayout.LayoutParams) rlDetailedContent.getLayoutParams();
 
@@ -175,7 +174,7 @@ public class FragmentRadioItemDetails extends Fragment implements View.OnTouchLi
             case MotionEvent.ACTION_POINTER_UP:
                 break;
             case MotionEvent.ACTION_MOVE:
-                if(needApply) {
+                if (applyMovement) {
                     int newMargin = Y - moveDeltaY < 0 ? 0 : Y - moveDeltaY;
                     lParams.topMargin = newMargin;
                     lParams.bottomMargin = MAGIC_NUMBER;

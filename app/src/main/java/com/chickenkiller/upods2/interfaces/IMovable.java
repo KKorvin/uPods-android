@@ -8,5 +8,5 @@ import android.view.MotionEvent;
  */
 public interface IMovable {
 
-    void onMove(MotionEvent event, boolean needApply);
+    void onMove(MotionEvent event, boolean applyMovement);
 }
