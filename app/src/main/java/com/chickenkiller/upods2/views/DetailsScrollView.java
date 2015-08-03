@@ -62,7 +62,7 @@ public class DetailsScrollView extends ScrollView {
     @Override
     public boolean onTouchEvent(MotionEvent motionEvent) {
         if (enabled) {
-            if (isScrollable != 2) {
+            /*if (isScrollable != 2) {
                 isInTheTop = getScrollY() == 0;
                 switch (motionEvent.getAction()) {
                     case MotionEvent.ACTION_DOWN:
@@ -72,14 +72,15 @@ public class DetailsScrollView extends ScrollView {
                         isScrollDown = touchY < motionEvent.getY();
                     }
                 }
-            }
+            }*/
 
             if (isScrollable == 0) {
                 View child = getChildAt(getChildCount() - 1);
                 int childHeight = child.getHeight();
                 isScrollable = getHeight() < childHeight + getPaddingTop() + getPaddingBottom() ? 1 : 2;
             }
-            if ((isScrollDown && isInTheTop) || isScrollable == 2) {
+            //(isScrollDown && isInTheTop) || 
+            if (isScrollable == 2) {
                 return false;
             }
             super.onTouchEvent(motionEvent);
