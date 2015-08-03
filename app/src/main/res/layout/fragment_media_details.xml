@@ -94,17 +94,22 @@
             android:layout_below="@+id/rlDetailsHeaderContainer"
             android:background="@color/indigo_800"></View>
 
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fbDetailsPlay"
+        <com.andexert.library.RippleView
+            android:id="@+id/rpSlidingMenuItem"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="20dp"
-            android:layout_marginTop="175dp"
-            android:src="@drawable/ic_play_white_24dp"
-            app:backgroundTint="@color/pink_A400"
-            app:elevation="4dp" />
+            android:layout_height="wrap_content">
 
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/fbDetailsPlay"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="175dp"
+                android:src="@drawable/ic_play_white_24dp"
+                app:backgroundTint="@color/pink_A400"
+                app:elevation="4dp" />
+        </com.andexert.library.RippleView>
         <com.chickenkiller.upods2.views.DetailsScrollView
             android:id="@+id/svDetails"
             android:layout_width="fill_parent"
