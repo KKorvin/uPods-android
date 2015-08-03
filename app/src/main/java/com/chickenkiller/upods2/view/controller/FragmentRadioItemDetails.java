@@ -25,7 +25,7 @@ import com.chickenkiller.upods2.activity.ActivityPlayer;
 import com.chickenkiller.upods2.interfaces.IOverlayable;
 import com.chickenkiller.upods2.models.RadioItem;
 import com.chickenkiller.upods2.utils.UIHelper;
-import com.chickenkiller.upods2.views.ControllableScrollView;
+import com.chickenkiller.upods2.views.DetailsScrollView;
 
 /**
  * Created by alonzilberman on 7/8/15.
@@ -42,7 +42,7 @@ public class FragmentRadioItemDetails extends Fragment implements View.OnTouchLi
     private RadioItem radioItem;
 
     private RelativeLayout rlDetailedContent;
-    private ControllableScrollView svDetails;
+    private DetailsScrollView svDetails;
     private TextView tvDetailedDescription;
     private TextView tvDetailedHeader;
     private TextView tvDetailedDesHeader;
@@ -74,7 +74,7 @@ public class FragmentRadioItemDetails extends Fragment implements View.OnTouchLi
         imgDetailedTopCover = (ImageView) view.findViewById(R.id.imgDetailedCover);
         imgBluredCover = (ImageView) view.findViewById(R.id.imgBluredCover);
         fbDetailsPlay = (FloatingActionButton) view.findViewById(R.id.fbDetailsPlay);
-        svDetails = (ControllableScrollView) view.findViewById(R.id.svDetails);
+        svDetails = (DetailsScrollView) view.findViewById(R.id.svDetails);
         svDetails.setEnabled(false);
         moveDeltaY = 0;
 

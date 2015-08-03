@@ -11,24 +11,24 @@ import android.widget.ScrollView;
 /**
  * Created by alonzilberman on 7/21/15.
  */
-public class ControllableScrollView extends ScrollView {
+public class DetailsScrollView extends ScrollView {
 
     private int isScrollable; //0 - unknown  1-yes 2-no
     private boolean enabled;
     private boolean isInTheTop;
-    private boolean isTouchDown;
+    private boolean isScrollDown;
 
-    public ControllableScrollView(Context context) {
+    public DetailsScrollView(Context context) {
         super(context);
         this.init();
     }
 
-    public ControllableScrollView(Context context, AttributeSet attrs) {
+    public DetailsScrollView(Context context, AttributeSet attrs) {
         super(context, attrs);
         this.init();
     }
 
-    public ControllableScrollView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public DetailsScrollView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         this.init();
     }
@@ -40,12 +40,12 @@ public class ControllableScrollView extends ScrollView {
 
     @Override
     public void setEnabled(boolean enabled) {
-        this.isTouchDown = false;
         this.enabled = enabled;
+        this.isScrollDown = false;
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    public ControllableScrollView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+    public DetailsScrollView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
         this.init();
     }
@@ -56,35 +56,36 @@ public class ControllableScrollView extends ScrollView {
         this.isScrollable = 0;
     }
 
+    private float touchY;
 
-    @Override
-    protected void onScrollChanged(int w, int h, int ow, int oh) {
-        View view = getChildAt(getChildCount() - 1);
-        isInTheTop = view.getTop() == h ? true : false;
-        if (h <= oh) {
-            isTouchDown = true;
-        } else {
-            isTouchDown = false;
-        }
-        super.onScrollChanged(w, h, ow, oh);
-    }
 
     @Override
     public boolean onTouchEvent(MotionEvent motionEvent) {
         if (enabled) {
+            if (isScrollable != 2) {
+                isInTheTop = getScrollY() == 0;
+                switch (motionEvent.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        touchY = motionEvent.getY();
+                        break;
+                    case MotionEvent.ACTION_MOVE: {
+                        isScrollDown = touchY < motionEvent.getY();
+                    }
+                }
+            }
+
             if (isScrollable == 0) {
                 View child = getChildAt(getChildCount() - 1);
                 int childHeight = child.getHeight();
                 isScrollable = getHeight() < childHeight + getPaddingTop() + getPaddingBottom() ? 1 : 2;
             }
-            if ((isTouchDown && isInTheTop) || isScrollable == 2) {
+            if ((isScrollDown && isInTheTop) || isScrollable == 2) {
                 return false;
             }
             super.onTouchEvent(motionEvent);
             return true;
         }
+
         return false;
     }
-
-
 }
