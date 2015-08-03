@@ -90,13 +90,14 @@ public class DetailsScrollView extends ScrollView {
                 return false;
             } else if (isScrollDown && isInTheTop) {
                 setEnabled(false);
+                iMovable.onMove(motionEvent, true);
                 return false;
             }
-
+            iMovable.onMove(motionEvent, false);
             super.onTouchEvent(motionEvent);
             return true;
         }
-        iMovable.onMove(motionEvent);
+        iMovable.onMove(motionEvent, true);
         return false;
     }
 }
