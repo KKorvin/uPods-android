@@ -81,6 +81,7 @@ public class RadioNotificationPanel extends PlayerNotificationPanel {
         String text = (state == UniversalPlayer.State.PLAYING ? "Stop" : "Play");
         remoteView.setTextViewText(R.id.btnPlayNtBar, text);
         remoteView.setOnClickPendingIntent(R.id.btnPlayNtBar, state == UniversalPlayer.State.PLAYING ? pauseIntent : playIntent);
+        nBuilder.setSmallIcon(state == UniversalPlayer.State.PLAYING ? R.drawable.ic_play_white_24dp : R.drawable.ic_pause_white);
         nManager.notify(NOTIFICATION_ID, nBuilder.build());
         super.updateNotificationStatus(state);
     }

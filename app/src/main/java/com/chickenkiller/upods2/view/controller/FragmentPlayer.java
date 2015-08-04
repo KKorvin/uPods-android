@@ -2,13 +2,11 @@ package com.chickenkiller.upods2.view.controller;
 
 import android.app.Fragment;
 import android.graphics.Bitmap;
-
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -44,7 +42,7 @@ public class FragmentPlayer extends Fragment implements MediaPlayer.OnPreparedLi
         public void onClick(View view) {
             if (universalPlayer.isPrepaired) {
                 universalPlayer.toggle();
-                //btnPlay.setText(universalPlayer.isPlaying() ? "Stop" : "Play");
+                btnPlay.setBackgroundResource(universalPlayer.isPlaying() ? R.drawable.ic_pause_white : R.drawable.ic_play_white);
             } else {
                 runPlayer();
             }
@@ -101,19 +99,20 @@ public class FragmentPlayer extends Fragment implements MediaPlayer.OnPreparedLi
         universalPlayer.setPreparedListener(this);
         universalPlayer.setPlayerStateListener(this);
         if (universalPlayer.isPlaying() && universalPlayer.isCurrentMediaItem(radioItem)) {
-           // btnPlay.setText("Stop");
+            btnPlay.setBackgroundResource(R.drawable.ic_pause_white);
             return;
         } else if (universalPlayer.isPlaying()) {
             universalPlayer.resetPlayer();
         }
         universalPlayer.setMediaItem(radioItem);
         universalPlayer.prepare();
+        btnPlay.setBackgroundResource(R.drawable.ic_play_white);
         //btnPlay.setText("Fetching...");
     }
 
     @Override
     public void onPrepared(MediaPlayer mediaPlayer) {
-        //btnPlay.setText("Stop");
+        btnPlay.setBackgroundResource(R.drawable.ic_pause_white);
     }
 
     @Override
@@ -132,6 +131,6 @@ public class FragmentPlayer extends Fragment implements MediaPlayer.OnPreparedLi
 
     @Override
     public void onStateChanged(UniversalPlayer.State state) {
-        //btnPlay.setText(state == UniversalPlayer.State.PLAYING ? "Stop" : "Play");
+        btnPlay.setBackgroundResource(state == UniversalPlayer.State.PLAYING ? R.drawable.ic_pause_white : R.drawable.ic_play_white);
     }
 }
