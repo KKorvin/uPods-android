@@ -93,4 +93,9 @@ public class FragmentMainFeatured extends Fragment {
         );
     }
 
+    @Override
+    public void onDestroy() {
+        mediaItemsAdapter.destroy();
+        super.onDestroy();
+    }
 }

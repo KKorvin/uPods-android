@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.LayerDrawable;
+import android.os.Handler;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -42,12 +43,15 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     private int itemLayout;
     private int titleLayout;
+    private boolean needDestroy;
 
     private List<MediaItem> items;
     private Context mContext;
     private IFragmentsManager fragmentsManager;
 
+
     private class ViewHolderBannersLayout extends RecyclerView.ViewHolder {
+        public static final int BANNER_SCROLL_TIME = 5000;//ms
         private RecyclerViewPager rvBanners;
         private BannerItemsAdapter bannerItemsAdapter;
         private LinearLayoutManager layoutManager;
@@ -76,6 +80,16 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                                         }
                                         rvBanners.setAdapter(bannerItemsAdapter);
                                         layoutManager.scrollToPosition(bannerItemsAdapter.MIDDLE);
+                                        final Handler handler = new Handler();
+                                        handler.postDelayed(new Runnable() {
+                                            public void run() {
+                                                if (needDestroy) {
+                                                    return;
+                                                }
+                                                rvBanners.smoothScrollToPosition(rvBanners.getCurrentPosition() + 1);
+                                                handler.postDelayed(this, BANNER_SCROLL_TIME);
+                                            }
+                                        }, BANNER_SCROLL_TIME);
                                     } catch (JSONException e) {
                                         e.printStackTrace();
                                     }
@@ -90,6 +104,8 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                     }
             );
         }
+
+
     }
 
     private class ViewHolderCardItem extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -205,6 +221,10 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     public void addItems(ArrayList<MediaItem> items) {
         this.items.addAll(items);
         this.notifyDataSetChanged();
+    }
+
+    public void destroy() {
+        this.needDestroy = true;
     }
 
 }
