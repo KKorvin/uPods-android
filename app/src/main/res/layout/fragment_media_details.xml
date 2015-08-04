@@ -10,10 +10,10 @@
         android:id="@+id/rlDetailedContent"
         android:layout_width="fill_parent"
         android:layout_height="match_parent"
-        android:clickable="true"
-        android:focusable="true"
         android:layout_marginTop="150dp"
         android:background="@color/white"
+        android:clickable="true"
+        android:focusable="true"
         android:orientation="vertical">
 
         <RelativeLayout
@@ -22,10 +22,10 @@
             android:layout_height="wrap_content">
 
             <ImageView
-                android:scaleType="centerCrop"
                 android:id="@+id/imgBluredCover"
                 android:layout_width="fill_parent"
-                android:layout_height="155dp" />
+                android:layout_height="155dp"
+                android:scaleType="centerCrop" />
 
             <View
                 android:id="@+id/viewDetailedHeader"
@@ -94,22 +94,18 @@
             android:layout_below="@+id/rlDetailsHeaderContainer"
             android:background="@color/indigo_800"></View>
 
-        <com.andexert.library.RippleView
-            android:id="@+id/rpSlidingMenuItem"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
 
-            <android.support.design.widget.FloatingActionButton
-                android:id="@+id/fbDetailsPlay"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_marginRight="20dp"
-                android:layout_marginTop="175dp"
-                android:src="@drawable/ic_play_white_24dp"
-                app:backgroundTint="@color/pink_A400"
-                app:elevation="4dp" />
-        </com.andexert.library.RippleView>
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fbDetailsPlay"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="175dp"
+            android:src="@drawable/ic_play_white_24dp"
+            app:backgroundTint="@color/pink_A400"
+            app:elevation="4dp" />
+
         <com.chickenkiller.upods2.views.DetailsScrollView
             android:id="@+id/svDetails"
             android:layout_width="fill_parent"
@@ -119,8 +115,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:paddingBottom="10dp"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:paddingBottom="10dp">
 
                 <TextView
                     android:id="@+id/tvDetailedDesHeader"
