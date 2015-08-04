@@ -79,7 +79,7 @@ public class FragmentPlayer extends Fragment implements MediaPlayer.OnPreparedLi
     }
 
     public void initRadioUI(View view) {
-        Glide.with(getActivity()).load(radioItem.getCoverImageUrl()).centerCrop().crossFade().into(new GlideDrawableImageViewTarget(imgPlayerCover) {
+        Glide.with(getActivity()).load(radioItem.getCoverImageUrl()).crossFade().into(new GlideDrawableImageViewTarget(imgPlayerCover) {
             @Override
             public void onResourceReady(GlideDrawable drawable, GlideAnimation anim) {
                 super.onResourceReady(drawable, anim);

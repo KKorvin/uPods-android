@@ -103,7 +103,7 @@ public class FragmentRadioItemDetails extends Fragment implements View.OnTouchLi
     }
 
     private void initImagesColors() {
-        Glide.with(getActivity()).load(radioItem.getCoverImageUrl()).centerCrop().crossFade().into(new GlideDrawableImageViewTarget(imgDetailedTopCover) {
+        Glide.with(getActivity()).load(radioItem.getCoverImageUrl()).crossFade().into(new GlideDrawableImageViewTarget(imgDetailedTopCover) {
             @Override
             public void onResourceReady(GlideDrawable drawable, GlideAnimation anim) {
                 super.onResourceReady(drawable, anim);
