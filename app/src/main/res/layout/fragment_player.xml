@@ -35,6 +35,7 @@
         android:gravity="bottom"
         android:paddingLeft="12dp"
         android:paddingBottom="12dp"
+        android:elevation="0dp"
         android:layout_weight="18">
 
         <TextView

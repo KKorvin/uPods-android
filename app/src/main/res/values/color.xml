@@ -2,7 +2,6 @@
 <resources>
 
     <!-- Some Basic Colors -->
-
     <color name="color_primary">#3F51B5</color>
     <color name="color_primary_dark">#1A237E</color>
     <color name="sliding_menu_background">#FAFAFA</color>
@@ -14,8 +13,6 @@
     <color name="starNotSelected">#ababab</color>
     <color name="fragment_deatils_opacity_bckg">#99ababab</color>
     <color name="media_card_subheader">#616161</color>
-
-    <!-- Material Colors from Google -->
 
     <!-- Red Material -->
     <color name="red_500">#F44336</color>
