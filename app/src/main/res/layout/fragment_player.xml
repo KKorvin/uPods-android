@@ -14,10 +14,12 @@
 
         <ImageView
             android:id="@+id/imgPlayerCover"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:src="@drawable/ic_temp" />
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:adjustViewBounds="true"
+            android:scaleType="centerCrop"
+            android:layout_alignParentTop="true"
+            android:src="@drawable/bedolaga" />
 
         <ImageView
             android:id="@+id/imgClosePlayer"
