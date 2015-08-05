@@ -11,6 +11,7 @@ import com.chickenkiller.upods2.R;
 import com.chickenkiller.upods2.controllers.GridSpacingItemDecoration;
 import com.chickenkiller.upods2.controllers.MediaItemsAdapter;
 import com.chickenkiller.upods2.controllers.RadioTopManager;
+import com.chickenkiller.upods2.controllers.SmallPlayer;
 import com.chickenkiller.upods2.interfaces.IFragmentsManager;
 import com.chickenkiller.upods2.interfaces.INetworkUIupdater;
 import com.chickenkiller.upods2.models.MediaItem;
@@ -34,6 +35,7 @@ public class FragmentMainFeatured extends Fragment {
 
 
     private AutofitRecyclerView rvMain;
+    private SmallPlayer smallPlayer;
     private MediaItemsAdapter mediaItemsAdapter;
 
     @Override
@@ -58,6 +60,7 @@ public class FragmentMainFeatured extends Fragment {
             }
         });
         showTops();
+        smallPlayer = new SmallPlayer(view);
         return view;
     }
 
@@ -96,6 +99,7 @@ public class FragmentMainFeatured extends Fragment {
     @Override
     public void onDestroy() {
         mediaItemsAdapter.destroy();
+        smallPlayer.destroy();
         super.onDestroy();
     }
 }
