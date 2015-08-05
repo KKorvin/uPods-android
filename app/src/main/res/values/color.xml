@@ -13,6 +13,8 @@
     <color name="starNotSelected">#ababab</color>
     <color name="fragment_deatils_opacity_bckg">#99ababab</color>
     <color name="media_card_subheader">#616161</color>
+    <color name="transparent">#00000000</color>
+
 
     <!-- Red Material -->
     <color name="red_500">#F44336</color>
