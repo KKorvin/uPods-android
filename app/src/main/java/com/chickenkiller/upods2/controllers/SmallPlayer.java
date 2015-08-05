@@ -41,7 +41,7 @@ public class SmallPlayer implements IPlayerStateListener {
             this.tvTitle = (TextView) parentView.findViewById(R.id.tvSmallPlayerTitle);
             this.btnPlay = (ImageButton) parentView.findViewById(R.id.btnSmallPlayerPlay);
             this.btnPlay.setOnClickListener(btnPlayOnClickListener);
-            this.btnPlay.setBackgroundResource(R.drawable.ic_pause_white);
+            this.btnPlay.setBackgroundResource(universalPlayer.isPlaying() ? R.drawable.ic_pause_white : R.drawable.ic_play_white);
             this.rlSmallPLayer.setVisibility(View.VISIBLE);
             if (UniversalPlayer.getInstance().getPlayingMediaItem() instanceof RadioItem) {
                 RadioItem radioItem = (RadioItem) UniversalPlayer.getInstance().getPlayingMediaItem();
