@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="70dp"
+    android:background="@color/blue_grey_800">
+
+    <ImageView
+        android:id="@+id/imgSmallPlayerCover"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:adjustViewBounds="true"
+        android:src="@drawable/bedolaga" />
+
+    <SeekBar
+        android:id="@+id/sbSmallPlayer"
+        android:layout_width="fill_parent"
+        android:layout_height="7dp"
+        android:layout_toRightOf="@+id/imgSmallPlayerCover"
+        android:max="100"
+        android:padding="0px"
+        android:progress="50"
+        android:progressDrawable="@drawable/seek_bar_bckg"
+        android:thumb="@drawable/seek_bar_thumb" />
+
+    <TextView
+        android:id="@+id/tvSmallPlayerTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/sbSmallPlayer"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="25dp"
+        android:layout_toLeftOf="@+id/btnSmallPlayerPlay"
+        android:layout_toRightOf="@+id/imgSmallPlayerCover"
+        android:maxLines="1"
+        android:text="Some text Some text Some text Some text"
+        android:textColor="@color/white"
+        android:textSize="@dimen/default_text_size_18" />
+
+    <ImageButton
+        android:id="@+id/btnSmallPlayerPlay"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="25dp"
+        android:background="@drawable/ic_play_white"
+        android:text="Play" />
+</RelativeLayout>
