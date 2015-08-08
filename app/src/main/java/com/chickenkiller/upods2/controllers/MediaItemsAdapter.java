@@ -239,7 +239,7 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
      */
     public void notifyContentLoadingStatus() {
         currentContentLevel++;
-        if (currentContentLevel == 2 && iContentLoadListener != null) {
+        if (currentContentLevel == MAX_CONTENT_LEVEL && iContentLoadListener != null) {
             iContentLoadListener.onContentLoaded();
         }
     }

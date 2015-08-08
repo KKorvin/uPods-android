@@ -3,6 +3,7 @@ package com.chickenkiller.upods2.activity;
 import android.animation.ObjectAnimator;
 import android.app.FragmentManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
@@ -10,6 +11,7 @@ import android.view.View;
 import com.chickenkiller.upods2.R;
 import com.chickenkiller.upods2.interfaces.IOverlayable;
 import com.chickenkiller.upods2.view.controller.FragmentMainFeatured;
+import com.chickenkiller.upods2.view.controller.FragmentWellcome;
 import com.chickenkiller.upods2.view.controller.SlidingMenu;
 
 public class ActivityMain extends FragmentsActivity implements IOverlayable {
@@ -17,6 +19,7 @@ public class ActivityMain extends FragmentsActivity implements IOverlayable {
 
     private static final float MAX_OVERLAY_LEVEL = 0.8f;
     private static final int FRAGMENT_TRANSACTION_TIME = 300;
+    private static final int WELLCOME_SCREEN_TIME = 2000;
     private Toolbar toolbar;
     private SlidingMenu slidingMenu;
     private View vOverlay;
@@ -28,8 +31,15 @@ public class ActivityMain extends FragmentsActivity implements IOverlayable {
         vOverlay = findViewById(R.id.vOverlay);
         toolbar = (Toolbar) findViewById(R.id.toolbar_main);
         toolbar.inflateMenu(R.menu.menu_activity_main);
+        toolbar.setVisibility(View.GONE);
         slidingMenu = new SlidingMenu(this, toolbar);
-        showFragment(R.id.fl_content, new FragmentMainFeatured(), FragmentMainFeatured.TAG);
+        showFragment(R.id.fl_content, new FragmentWellcome(), FragmentWellcome.TAG);
+        new Handler().postDelayed(new Runnable() {
+            public void run() {
+                toolbar.setVisibility(View.VISIBLE);
+                showFragment(R.id.fl_content, new FragmentMainFeatured(), FragmentMainFeatured.TAG);
+            }
+        }, WELLCOME_SCREEN_TIME);
     }
 
     @Override
