@@ -31,7 +31,7 @@ public class ActivityMain extends FragmentsActivity implements IOverlayable {
         vOverlay = findViewById(R.id.vOverlay);
         toolbar = (Toolbar) findViewById(R.id.toolbar_main);
         toolbar.inflateMenu(R.menu.menu_activity_main);
-        toolbar.setTitle(R.string.app_name);
+        toolbar.setTitle(R.string.radio_main);
         toolbar.setTitleTextColor(getResources().getColor(R.color.white));
         toolbar.setVisibility(View.GONE);
         slidingMenu = new SlidingMenu(this, toolbar);
