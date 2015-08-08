@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.chickenkiller.upods2.R;
+import com.chickenkiller.upods2.interfaces.IContentLoadListener;
 import com.chickenkiller.upods2.interfaces.IFragmentsManager;
 import com.chickenkiller.upods2.interfaces.INetworkUIupdater;
 import com.chickenkiller.upods2.models.BannersLayoutItem;
@@ -40,15 +41,17 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     public static final int HEADER = 1;
     public static final int ITEM = 2;
     public static final int BANNERS_LAYOUT = 3;
+    private static final int MAX_CONTENT_LEVEL = 2;
 
     private int itemLayout;
     private int titleLayout;
+    private int currentContentLevel;
     private boolean needDestroy;
 
     private List<MediaItem> items;
     private Context mContext;
     private IFragmentsManager fragmentsManager;
-
+    private IContentLoadListener iContentLoadListener;
 
     private class ViewHolderBannersLayout extends RecyclerView.ViewHolder {
         public static final int BANNER_SCROLL_TIME = 5000;//ms
@@ -58,6 +61,7 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
         public ViewHolderBannersLayout(View view) {
             super(view);
+            currentContentLevel = 0;
             rvBanners = (RecyclerViewPager) view.findViewById(R.id.rvBanners);
             layoutManager = new LinearLayoutManager(view.getContext(), LinearLayoutManager.HORIZONTAL, false);
             rvBanners.setLayoutManager(layoutManager);
@@ -80,6 +84,7 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                                         }
                                         rvBanners.setAdapter(bannerItemsAdapter);
                                         layoutManager.scrollToPosition(bannerItemsAdapter.MIDDLE);
+                                        notifyContentLoadingStatus();
                                         final Handler handler = new Handler();
                                         handler.postDelayed(new Runnable() {
                                             public void run() {
@@ -221,6 +226,22 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     public void addItems(ArrayList<MediaItem> items) {
         this.items.addAll(items);
         this.notifyDataSetChanged();
+    }
+
+    public void setContentLoadListener(IContentLoadListener contentLoadListener) {
+        this.iContentLoadListener = contentLoadListener;
+    }
+
+
+    /**
+     * Function to synchronize adapter content loading . Call it every time, when part of content was loaded.
+     * When all content will be loaded  IContentLoadListener callback will fire.
+     */
+    public void notifyContentLoadingStatus() {
+        currentContentLevel++;
+        if (currentContentLevel == 2 && iContentLoadListener != null) {
+            iContentLoadListener.onContentLoaded();
+        }
     }
 
     public void destroy() {

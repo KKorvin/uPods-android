@@ -6,12 +6,14 @@ import android.support.v7.widget.GridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import com.chickenkiller.upods2.R;
 import com.chickenkiller.upods2.controllers.GridSpacingItemDecoration;
 import com.chickenkiller.upods2.controllers.MediaItemsAdapter;
 import com.chickenkiller.upods2.controllers.RadioTopManager;
 import com.chickenkiller.upods2.controllers.SmallPlayer;
+import com.chickenkiller.upods2.interfaces.IContentLoadListener;
 import com.chickenkiller.upods2.interfaces.IFragmentsManager;
 import com.chickenkiller.upods2.interfaces.INetworkUIupdater;
 import com.chickenkiller.upods2.models.MediaItem;
@@ -27,7 +29,7 @@ import java.util.ArrayList;
 /**
  * Created by alonzilberman on 7/10/15.
  */
-public class FragmentMainFeatured extends Fragment {
+public class FragmentMainFeatured extends Fragment implements IContentLoadListener {
 
     public static final String TAG = "main_featured";
     public final int MEDIA_ITEMS_CARDS_MARGIN = 25;
@@ -37,19 +39,28 @@ public class FragmentMainFeatured extends Fragment {
     private AutofitRecyclerView rvMain;
     private SmallPlayer smallPlayer;
     private MediaItemsAdapter mediaItemsAdapter;
+    private ProgressBar pbLoadingFeatured;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        View view = inflater.inflate(R.layout.fragment_main_featured, container, false);
 
+        //Init fragments views
+        View view = inflater.inflate(R.layout.fragment_main_featured, container, false);
+        pbLoadingFeatured = (ProgressBar) view.findViewById(R.id.pbLoadingFeatured);
         rvMain = (AutofitRecyclerView) view.findViewById(R.id.rvMain);
-        rvMain.setHasFixedSize(true);
+        smallPlayer = new SmallPlayer(view);
+
+        //Featured adapter
         mediaItemsAdapter = new MediaItemsAdapter(getActivity(), R.layout.card_media_item,
                 R.layout.media_item_title, RadioItem.withOnlyBannersHeader());
         if (getActivity() instanceof IFragmentsManager) {
             mediaItemsAdapter.setFragmentsManager((IFragmentsManager) getActivity());
         }
+        mediaItemsAdapter.setContentLoadListener(this);
+
+        //Featured recycle view
+        rvMain.setHasFixedSize(true);
         rvMain.setAdapter(mediaItemsAdapter);
         rvMain.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
             @Override
@@ -59,8 +70,11 @@ public class FragmentMainFeatured extends Fragment {
                         1 : rvMain.getSpanCount();
             }
         });
+        rvMain.setVisibility(View.INVISIBLE);
+
+        //Load tops from remote server
         showTops();
-        smallPlayer = new SmallPlayer(view);
+
         return view;
     }
 
@@ -80,6 +94,7 @@ public class FragmentMainFeatured extends Fragment {
                                     gridSpacingItemDecoration.setGridItemType(MediaItemsAdapter.ITEM);
                                     gridSpacingItemDecoration.setItemsTypesCount(MEDIA_ITEMS_TYPES_COUNT);
                                     rvMain.addItemDecoration(gridSpacingItemDecoration);
+                                    mediaItemsAdapter.notifyContentLoadingStatus();
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
@@ -101,5 +116,11 @@ public class FragmentMainFeatured extends Fragment {
         mediaItemsAdapter.destroy();
         smallPlayer.destroy();
         super.onDestroy();
+    }
+
+    @Override
+    public void onContentLoaded() {
+        pbLoadingFeatured.setVisibility(View.GONE);
+        rvMain.setVisibility(View.VISIBLE);
     }
 }
