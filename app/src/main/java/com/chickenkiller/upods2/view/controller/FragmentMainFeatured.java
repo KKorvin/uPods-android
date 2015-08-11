@@ -49,7 +49,7 @@ public class FragmentMainFeatured extends Fragment implements IContentLoadListen
         View view = inflater.inflate(R.layout.fragment_main_featured, container, false);
         pbLoadingFeatured = (ProgressBar) view.findViewById(R.id.pbLoadingFeatured);
         rvMain = (AutofitRecyclerView) view.findViewById(R.id.rvMain);
-        smallPlayer = new SmallPlayer(view);
+        smallPlayer = new SmallPlayer(view, getActivity());
 
         //Featured adapter
         mediaItemsAdapter = new MediaItemsAdapter(getActivity(), R.layout.card_media_item,
