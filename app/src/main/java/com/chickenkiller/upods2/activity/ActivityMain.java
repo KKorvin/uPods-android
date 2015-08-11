@@ -34,12 +34,12 @@ public class ActivityMain extends FragmentsActivity implements IOverlayable {
         toolbar.inflateMenu(R.menu.menu_activity_main);
         toolbar.setTitle(R.string.radio_main);
         toolbar.setTitleTextColor(getResources().getColor(R.color.white));
-        toolbar.setVisibility(View.GONE);
         slidingMenu = new SlidingMenu(this, toolbar);
 
         showFragment(R.id.fl_content, new FragmentWellcome(), FragmentWellcome.TAG);
 
         if (isFirstRun) {
+            toolbar.setVisibility(View.GONE);
             new Handler().postDelayed(new Runnable() {
                 public void run() {
                     toolbar.setVisibility(View.VISIBLE);
@@ -47,6 +47,7 @@ public class ActivityMain extends FragmentsActivity implements IOverlayable {
                 }
             }, WELLCOME_SCREEN_TIME);
         } else {
+            toolbar.setVisibility(View.VISIBLE);
             showFragment(R.id.fl_content, new FragmentMainFeatured(), FragmentMainFeatured.TAG);
         }
 
