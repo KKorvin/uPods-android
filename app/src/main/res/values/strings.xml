@@ -1,7 +1,7 @@
 <resources>
 
     <!-- Name of App Block -->
-    <string name="app_name">Upods2</string>
+    <string name="app_name">AirTune</string>
 
     <!-- User Profile block -->
     <string name="profile_my_profile">My Profile</string>
