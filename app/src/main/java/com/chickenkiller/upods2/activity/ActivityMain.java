@@ -20,6 +20,7 @@ public class ActivityMain extends FragmentsActivity implements IOverlayable {
     private static final float MAX_OVERLAY_LEVEL = 0.8f;
     private static final int FRAGMENT_TRANSACTION_TIME = 300;
     private static final int WELLCOME_SCREEN_TIME = 2000;
+    private static boolean isFirstRun = true;
     private Toolbar toolbar;
     private SlidingMenu slidingMenu;
     private View vOverlay;
@@ -38,12 +39,18 @@ public class ActivityMain extends FragmentsActivity implements IOverlayable {
 
         showFragment(R.id.fl_content, new FragmentWellcome(), FragmentWellcome.TAG);
 
-        new Handler().postDelayed(new Runnable() {
-            public void run() {
-                toolbar.setVisibility(View.VISIBLE);
-                showFragment(R.id.fl_content, new FragmentMainFeatured(), FragmentMainFeatured.TAG);
-            }
-        }, WELLCOME_SCREEN_TIME);
+        if (isFirstRun) {
+            new Handler().postDelayed(new Runnable() {
+                public void run() {
+                    toolbar.setVisibility(View.VISIBLE);
+                    showFragment(R.id.fl_content, new FragmentMainFeatured(), FragmentMainFeatured.TAG);
+                }
+            }, WELLCOME_SCREEN_TIME);
+        } else {
+            showFragment(R.id.fl_content, new FragmentMainFeatured(), FragmentMainFeatured.TAG);
+        }
+
+        isFirstRun = false;
     }
 
     @Override
