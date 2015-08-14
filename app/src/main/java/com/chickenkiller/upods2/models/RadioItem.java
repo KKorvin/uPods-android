@@ -11,6 +11,9 @@ import java.util.ArrayList;
  * Created by alonzilberman on 7/3/15.
  */
 public class RadioItem extends MediaItem {
+
+    private final static String DEFAULT_IMAGE = "https://upods.io/static/radio_stations/default/no_image.png";
+
     protected String name;
     protected String streamUrl;
     protected String coverImageUrl;
@@ -98,6 +101,9 @@ public class RadioItem extends MediaItem {
     }
 
     public String getCoverImageUrl() {
+        if (coverImageUrl == null || coverImageUrl.isEmpty()) {
+            return DEFAULT_IMAGE;
+        }
         return coverImageUrl;
     }
 
