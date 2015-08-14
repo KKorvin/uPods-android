@@ -45,4 +45,10 @@
 
     <string name="hello_world">Hello world!</string>
 
+    <!-- Viewpager podcasts -->
+    <string name="page_featured">Featured</string>
+    <string name="page_categories">Categories</string>
+    <string name="page_favorites">Favorites</string>
+    <string name="page_downloaded">Downloaded</string>
+
 </resources>

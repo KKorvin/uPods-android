@@ -26,6 +26,7 @@ dependencies {
     compile 'com.android.support:recyclerview-v7:+'
     compile 'com.android.support:palette-v7:+'
     compile 'com.android.support:design:+'
+    compile 'com.android.support:support-v13:+'
     compile 'com.github.bumptech.glide:glide:+'
     compile 'com.squareup.okhttp:mockwebserver:+'
     compile 'com.lsjwzh:recyclerviewpager:+'
