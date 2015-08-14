@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.GlideBitmapDrawable;
@@ -36,6 +37,8 @@ public class FragmentPlayer extends Fragment implements MediaPlayer.OnPreparedLi
     private ImageView imgClosePlayer;
     private RelativeLayout rlTopSectionBckg;
     private UniversalPlayer universalPlayer;
+    private TextView tvPlayserSubtitle;
+    private TextView tvPlayerTitle;
 
     private View.OnClickListener btnPlayStopClickListener = new View.OnClickListener() {
         @Override
@@ -67,6 +70,9 @@ public class FragmentPlayer extends Fragment implements MediaPlayer.OnPreparedLi
         btnPlay.setOnClickListener(btnPlayStopClickListener);
         rlTopSectionBckg = (RelativeLayout) view.findViewById(R.id.rlTopSectionBckg);
         imgPlayerCover = (ImageView) view.findViewById(R.id.imgPlayerCover);
+        tvPlayerTitle = (TextView) view.findViewById(R.id.tvPlayerTitle);
+        tvPlayserSubtitle = (TextView) view.findViewById(R.id.tvPlayserSubtitle);
+
         if (radioItem == null) {
             radioItem = (RadioItem) savedInstanceState.get(ActivityPlayer.RADIO_ITEM_EXTRA);
         }
@@ -79,6 +85,8 @@ public class FragmentPlayer extends Fragment implements MediaPlayer.OnPreparedLi
     }
 
     public void initRadioUI(View view) {
+        tvPlayerTitle.setText(radioItem.getName());
+        tvPlayserSubtitle.setText(radioItem.getCountry());
         Glide.with(getActivity()).load(radioItem.getCoverImageUrl()).crossFade().into(new GlideDrawableImageViewTarget(imgPlayerCover) {
             @Override
             public void onResourceReady(GlideDrawable drawable, GlideAnimation anim) {

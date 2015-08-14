@@ -44,6 +44,7 @@
             android:orientation="vertical">
 
             <TextView
+                android:id="@+id/tvPlayerTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingLeft="12dp"
@@ -52,6 +53,7 @@
                 android:textSize="@dimen/default_text_size_26" />
 
             <TextView
+                android:id="@+id/tvPlayserSubtitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingBottom="12dp"
