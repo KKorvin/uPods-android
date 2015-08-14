@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:id="@+id/rlSmallPlayer"
-    android:layout_height="70dp"
+    android:layout_height="64dp"
     android:layout_alignParentBottom="true"
     android:background="@color/blue_grey_800">
 
@@ -17,7 +17,7 @@
     <SeekBar
         android:id="@+id/sbSmallPlayer"
         android:layout_width="fill_parent"
-        android:layout_height="7dp"
+        android:layout_height="6dp"
         android:layout_toRightOf="@+id/imgSmallPlayerCover"
         android:max="100"
         android:padding="0px"
@@ -31,12 +31,12 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/sbSmallPlayer"
         android:layout_marginLeft="10dp"
-        android:layout_marginTop="25dp"
+        android:layout_marginTop="13dp"
         android:layout_toLeftOf="@+id/btnSmallPlayerPlay"
         android:layout_toRightOf="@+id/imgSmallPlayerCover"
         android:maxLines="1"
         android:text="Some text Some text Some text Some text"
-        android:textColor="@color/white"
+        android:textColor="@color/white_material"
         android:textSize="@dimen/default_text_size_18" />
 
     <ImageButton
@@ -44,8 +44,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:layout_marginRight="20dp"
-        android:layout_marginTop="25dp"
+        android:layout_marginRight="17dp"
+        android:layout_marginTop="15dp"
         android:background="@drawable/ic_play_white"
         android:text="Play" />
 </RelativeLayout>

@@ -64,7 +64,7 @@
 
             <SeekBar
                 android:layout_width="fill_parent"
-                android:layout_height="7dp"
+                android:layout_height="6dp"
                 android:max="100"
                 android:padding="0px"
                 android:progress="50"

@@ -60,6 +60,9 @@
     <!-- Color for text in TextView Middle Screen -->
     <!-- Color for Menu -->
     <color name="gray_202020">#212121</color>
+    <color name="mini_player_blue">#0C424E</color>
+
+    0C424E
 
     <!-- Black and White Material -->
     <color name="black_material">#000000</color>
