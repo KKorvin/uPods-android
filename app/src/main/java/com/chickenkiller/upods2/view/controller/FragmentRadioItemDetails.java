@@ -45,6 +45,7 @@ public class FragmentRadioItemDetails extends Fragment implements View.OnTouchLi
     private RelativeLayout rlDetailedContent;
     private DetailsScrollView svDetails;
     private TextView tvDetailedDescription;
+    private TextView tvDetailedSubHeader;
     private TextView tvDetailedHeader;
     private TextView tvDetailedDesHeader;
     private View viewDetailedHeader;
@@ -69,6 +70,7 @@ public class FragmentRadioItemDetails extends Fragment implements View.OnTouchLi
         rlDetailedContent = (RelativeLayout) view.findViewById(R.id.rlDetailedContent);
         tvDetailedDescription = (TextView) view.findViewById(R.id.tvDetailedDescription);
         tvDetailedHeader = (TextView) view.findViewById(R.id.tvDetailedHeader);
+        tvDetailedSubHeader = (TextView) view.findViewById(R.id.tvDetailedSubHeader);
         tvDetailedDesHeader = (TextView) view.findViewById(R.id.tvDetailedDesHeader);
         viewDetailedHeader = view.findViewById(R.id.viewDetailedHeader);
         viewDetailsDevider = view.findViewById(R.id.vDetailsDevider);
@@ -83,6 +85,7 @@ public class FragmentRadioItemDetails extends Fragment implements View.OnTouchLi
         if (radioItem != null) {
             initImagesColors();
             tvDetailedHeader.setText(radioItem.getName());
+            tvDetailedSubHeader.setText(radioItem.getCountry());
             tvDetailedDescription.setText(radioItem.getDescription());
         }
         rlDetailedContent.setOnTouchListener(this);

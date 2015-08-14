@@ -2,6 +2,8 @@ package com.chickenkiller.upods2.models;
 
 import android.content.Context;
 
+import com.chickenkiller.upods2.utils.GlobalUtils;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -58,7 +60,7 @@ public class RadioItem extends MediaItem {
                 this.bannerImageUrl = jsonItem.getJSONArray("banners").getString(0);
             }
             if (jsonItem.has("streamUrls") && jsonItem.getJSONArray("streamUrls").length() > 0) {
-                this.streamUrl = jsonItem.getJSONArray("streamUrls").getString(0);
+                this.streamUrl = GlobalUtils.getBestStreamUrl(jsonItem.getJSONArray("streamUrls"));
             }
         } catch (Exception e) {
             e.printStackTrace();
