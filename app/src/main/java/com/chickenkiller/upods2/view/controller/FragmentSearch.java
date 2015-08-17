@@ -127,11 +127,11 @@ public class FragmentSearch extends Fragment implements SearchView.OnQueryTextLi
 
     @Override
     public boolean onQueryTextChange(String query) {
+        tvSearchNoResults.setVisibility(View.GONE);
+        tvStartTyping.setVisibility(View.GONE);
         if (query.equals(lastQuery) || query.isEmpty()) {
             return false;
         }
-        tvSearchNoResults.setVisibility(View.GONE);
-        tvStartTyping.setVisibility(View.GONE);
         loadSearchResults(query);
         return false;
     }
