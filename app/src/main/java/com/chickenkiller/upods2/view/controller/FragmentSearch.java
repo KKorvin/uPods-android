@@ -117,6 +117,7 @@ public class FragmentSearch extends Fragment implements SearchView.OnQueryTextLi
     @Override
     public void onDestroy() {
         smallPlayer.destroy();
+        RadioBackendManager.getInstance().clearSearchQueue();
         super.onDestroy();
     }
 

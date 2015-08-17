@@ -10,6 +10,7 @@ import com.squareup.okhttp.Response;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 /**
  * Created by alonzilberman on 7/11/15.
@@ -32,7 +33,19 @@ public class RadioBackendManager {
     }
 
     private final OkHttpClient client;
+    private final int MAX_RETRY = 5;
     private static RadioBackendManager radioBackendManager;
+    private ArrayList<QueueTask> searchQueue;
+
+    private class QueueTask {
+        public Request request;
+        public INetworkUIupdater iNetworkUIupdater;
+
+        public QueueTask(Request request, INetworkUIupdater uiUpdater) {
+            this.request = request;
+            this.iNetworkUIupdater = uiUpdater;
+        }
+    }
 
     private RadioBackendManager() {
         super();
@@ -42,6 +55,7 @@ public class RadioBackendManager {
     public static RadioBackendManager getInstance() {
         if (radioBackendManager == null) {
             radioBackendManager = new RadioBackendManager();
+            radioBackendManager.searchQueue = new ArrayList<>();
         }
         return radioBackendManager;
     }
@@ -49,16 +63,17 @@ public class RadioBackendManager {
     /**
      * Wrapper for simple backend queries
      *
-     * @param request - OKHttp request
+     * @param request   - OKHttp request
      * @param uiUpdater - INetworkUIupdater to update UI
      */
-    private void sendRequest(Request request, final INetworkUIupdater uiUpdater) {
+    private void sendRequest(final Request request, final INetworkUIupdater uiUpdater) {
         try {
             client.newCall(request).enqueue(new Callback() {
                 @Override
                 public void onFailure(Request request, IOException e) {
                     e.printStackTrace();
                     uiUpdater.updateUIFailed();
+                    searchQueueNextStep();
                 }
 
                 @Override
@@ -66,6 +81,7 @@ public class RadioBackendManager {
                     try {
                         final JSONObject jResponse = new JSONObject(response.body().string());
                         uiUpdater.updateUISuccess(jResponse);
+                        searchQueueNextStep();
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -74,6 +90,20 @@ public class RadioBackendManager {
         } catch (Exception e) {
             e.printStackTrace();
             uiUpdater.updateUIFailed();
+            searchQueueNextStep();
+        }
+    }
+
+    private void sendRequest(QueueTask queueTask) {
+        sendRequest(queueTask.request, queueTask.iNetworkUIupdater);
+    }
+
+    private void searchQueueNextStep() {
+        if (!searchQueue.isEmpty()) {
+            searchQueue.remove(searchQueue.get(0));
+            if (!searchQueue.isEmpty()) {
+                sendRequest(searchQueue.get(0));
+            }
         }
     }
 
@@ -88,6 +118,15 @@ public class RadioBackendManager {
         Request request = new Request.Builder()
                 .url(ServerApi.RADIO_SEARCH + query)
                 .build();
-        sendRequest(request, uiUpdater);
+        if (searchQueue.isEmpty()) {
+            searchQueue.add(new QueueTask(request, uiUpdater));
+            sendRequest(request, uiUpdater);
+        } else {
+            searchQueue.add(new QueueTask(request, uiUpdater));
+        }
+    }
+
+    public void clearSearchQueue() {
+        searchQueue.clear();
     }
 }
