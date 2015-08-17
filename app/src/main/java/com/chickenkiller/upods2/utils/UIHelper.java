@@ -4,6 +4,9 @@ import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.graphics.RectF;
 import android.support.v7.graphics.Palette;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -40,5 +43,20 @@ public class UIHelper {
         m.setRectToRect(new RectF(0, 0, bitmap.getWidth(), bitmap.getHeight()),
                 new RectF(0, 0, bitmap.getWidth() * scaleFactor, bitmap.getHeight() * scaleFactor), Matrix.ScaleToFit.CENTER);
         return Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), m, true);
+    }
+
+
+    public static void changeSearchViewTextColor(View view, int color) {
+        if (view != null) {
+            if (view instanceof TextView) {
+                ((TextView) view).setTextColor(color);
+                return;
+            } else if (view instanceof ViewGroup) {
+                ViewGroup viewGroup = (ViewGroup) view;
+                for (int i = 0; i < viewGroup.getChildCount(); i++) {
+                    changeSearchViewTextColor(viewGroup.getChildAt(i), color);
+                }
+            }
+        }
     }
 }

@@ -2,8 +2,10 @@ package com.chickenkiller.upods2.activity;
 
 import android.animation.ObjectAnimator;
 import android.app.FragmentManager;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
@@ -11,6 +13,7 @@ import android.view.View;
 import com.chickenkiller.upods2.R;
 import com.chickenkiller.upods2.interfaces.IOverlayable;
 import com.chickenkiller.upods2.interfaces.IToolbarHolder;
+import com.chickenkiller.upods2.utils.UIHelper;
 import com.chickenkiller.upods2.view.controller.FragmentMainFeatured;
 import com.chickenkiller.upods2.view.controller.FragmentSearch;
 import com.chickenkiller.upods2.view.controller.FragmentWellcome;
@@ -32,12 +35,17 @@ public class ActivityMain extends FragmentsActivity implements IOverlayable, ITo
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         vOverlay = findViewById(R.id.vOverlay);
+
+        //Toolbar
         toolbar = (Toolbar) findViewById(R.id.toolbar_main);
         toolbar.inflateMenu(R.menu.menu_activity_main);
         toolbar.setTitle(R.string.radio_main);
         toolbar.setTitleTextColor(getResources().getColor(R.color.white));
-        slidingMenu = new SlidingMenu(this, toolbar);
+        MenuItem searchMenuItem = toolbar.getMenu().findItem(R.id.action_search);
+        SearchView searchView = (SearchView) searchMenuItem.getActionView();
+        UIHelper.changeSearchViewTextColor(searchView, Color.WHITE);
 
+        slidingMenu = new SlidingMenu(this, toolbar);
         showFragment(R.id.fl_content, new FragmentWellcome(), FragmentWellcome.TAG);
 
         if (isFirstRun) {
