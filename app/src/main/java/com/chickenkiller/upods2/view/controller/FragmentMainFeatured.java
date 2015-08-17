@@ -4,6 +4,7 @@ import android.app.Fragment;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
@@ -11,11 +12,12 @@ import android.widget.ProgressBar;
 import com.chickenkiller.upods2.R;
 import com.chickenkiller.upods2.controllers.GridSpacingItemDecoration;
 import com.chickenkiller.upods2.controllers.MediaItemsAdapter;
-import com.chickenkiller.upods2.controllers.RadioTopManager;
+import com.chickenkiller.upods2.controllers.RadioBackendManager;
 import com.chickenkiller.upods2.controllers.SmallPlayer;
 import com.chickenkiller.upods2.interfaces.IContentLoadListener;
 import com.chickenkiller.upods2.interfaces.IFragmentsManager;
 import com.chickenkiller.upods2.interfaces.INetworkUIupdater;
+import com.chickenkiller.upods2.interfaces.IToolbarHolder;
 import com.chickenkiller.upods2.models.MediaItem;
 import com.chickenkiller.upods2.models.MediaItemTitle;
 import com.chickenkiller.upods2.models.RadioItem;
@@ -51,6 +53,19 @@ public class FragmentMainFeatured extends Fragment implements IContentLoadListen
         rvMain = (AutofitRecyclerView) view.findViewById(R.id.rvMain);
         smallPlayer = new SmallPlayer(view, getActivity());
 
+        //Toolbar
+        if (getActivity() instanceof IToolbarHolder) {
+            MenuItem searchMenuItem = ((IToolbarHolder) getActivity()).getToolbar().getMenu().findItem(R.id.action_search);
+            searchMenuItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+                @Override
+                public boolean onMenuItemClick(MenuItem menuItem) {
+                    FragmentSearch fragmentSearch = new FragmentSearch();
+                    ((IFragmentsManager) getActivity()).showFragment(R.id.fl_content, fragmentSearch, FragmentSearch.TAG);
+                    return false;
+                }
+            });
+        }
+
         //Featured adapter
         mediaItemsAdapter = new MediaItemsAdapter(getActivity(), R.layout.card_media_item,
                 R.layout.media_item_title, RadioItem.withOnlyBannersHeader());
@@ -79,7 +94,7 @@ public class FragmentMainFeatured extends Fragment implements IContentLoadListen
     }
 
     private void showTops() {
-        RadioTopManager.getInstance().loadTops(RadioTopManager.TopType.MAIN_FEATURED, new INetworkUIupdater() {
+        RadioBackendManager.getInstance().loadTops(RadioBackendManager.TopType.MAIN_FEATURED, new INetworkUIupdater() {
                     @Override
                     public void updateUISuccess(final JSONObject jResponse) {
                         getActivity().runOnUiThread(new Runnable() {
@@ -123,4 +138,5 @@ public class FragmentMainFeatured extends Fragment implements IContentLoadListen
         pbLoadingFeatured.setVisibility(View.GONE);
         rvMain.setVisibility(View.VISIBLE);
     }
+
 }

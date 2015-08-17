@@ -6,9 +6,9 @@
 
     <ProgressBar
         android:id="@+id/pbLoadingFeatured"
-        android:layout_centerInParent="true"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true" />
 
     <com.chickenkiller.upods2.views.AutofitRecyclerView
         android:id="@+id/rvMain"

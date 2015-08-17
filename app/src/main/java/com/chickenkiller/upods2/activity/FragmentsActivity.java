@@ -3,6 +3,7 @@ package com.chickenkiller.upods2.activity;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.os.Bundle;
 
 import com.chickenkiller.upods2.R;
 import com.chickenkiller.upods2.interfaces.IFragmentsManager;
@@ -11,7 +12,12 @@ import com.chickenkiller.upods2.interfaces.IOverlayable;
 /**
  * Created by alonzilberman on 7/28/15.
  */
-public class FragmentsActivity extends Activity implements IFragmentsManager {
+public class FragmentsActivity extends Activity implements IFragmentsManager{
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
 
     @Override
     public void showFragment(int id, Fragment fragment, String tag, IFragmentsManager.FragmentOpenType openType, IFragmentsManager.FragmentAnimationType animationType) {
@@ -53,4 +59,5 @@ public class FragmentsActivity extends Activity implements IFragmentsManager {
         }
         return tag;
     }
+
 }

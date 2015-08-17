@@ -10,11 +10,13 @@ import android.view.View;
 
 import com.chickenkiller.upods2.R;
 import com.chickenkiller.upods2.interfaces.IOverlayable;
+import com.chickenkiller.upods2.interfaces.IToolbarHolder;
 import com.chickenkiller.upods2.view.controller.FragmentMainFeatured;
+import com.chickenkiller.upods2.view.controller.FragmentSearch;
 import com.chickenkiller.upods2.view.controller.FragmentWellcome;
 import com.chickenkiller.upods2.view.controller.SlidingMenu;
 
-public class ActivityMain extends FragmentsActivity implements IOverlayable {
+public class ActivityMain extends FragmentsActivity implements IOverlayable, IToolbarHolder {
 
 
     private static final float MAX_OVERLAY_LEVEL = 0.8f;
@@ -65,9 +67,13 @@ public class ActivityMain extends FragmentsActivity implements IOverlayable {
         //TODO change
         slidingMenu.getAdapter().clearRowSelections();
         slidingMenu.getAdapter().notifyDataSetChanged();
+
         if (getFragmentManager().getBackStackEntryCount() > 0) {
             if (getLatestFragmentTag().equals(FragmentMainFeatured.TAG)) {
                 finish();
+            } else if (getLatestFragmentTag().equals(FragmentSearch.TAG)) {
+                toolbar.getMenu().findItem(R.id.action_search).collapseActionView();
+                getFragmentManager().popBackStack();
             } else {
                 if (isOverlayShown()) {
                     toggleOverlay();
@@ -78,6 +84,7 @@ public class ActivityMain extends FragmentsActivity implements IOverlayable {
             getFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
             super.onBackPressed();
         }
+
     }
 
     @Override
@@ -101,4 +108,10 @@ public class ActivityMain extends FragmentsActivity implements IOverlayable {
     public void setOverlayAlpha(int alphaPercent) {
         vOverlay.getBackground().setAlpha(alphaPercent);
     }
+
+    @Override
+    public Toolbar getToolbar() {
+        return toolbar;
+    }
+
 }

@@ -14,7 +14,7 @@ import java.io.IOException;
 /**
  * Created by alonzilberman on 7/11/15.
  */
-public class RadioTopManager {
+public class RadioBackendManager {
 
     public enum TopType {
 
@@ -32,25 +32,28 @@ public class RadioTopManager {
     }
 
     private final OkHttpClient client;
-    private static RadioTopManager radioTopManager;
+    private static RadioBackendManager radioBackendManager;
 
-    private RadioTopManager() {
+    private RadioBackendManager() {
         super();
         this.client = new OkHttpClient();
     }
 
-    public static RadioTopManager getInstance() {
-        if (radioTopManager == null) {
-            radioTopManager = new RadioTopManager();
+    public static RadioBackendManager getInstance() {
+        if (radioBackendManager == null) {
+            radioBackendManager = new RadioBackendManager();
         }
-        return radioTopManager;
+        return radioBackendManager;
     }
 
-    public void loadTops(TopType topType, final INetworkUIupdater uiUpdater) {
+    /**
+     * Wrapper for simple backend queries
+     *
+     * @param request - OKHttp request
+     * @param uiUpdater - INetworkUIupdater to update UI
+     */
+    private void sendRequest(Request request, final INetworkUIupdater uiUpdater) {
         try {
-            Request request = new Request.Builder()
-                    .url(ServerApi.TOPS + topType.getStringValue())
-                    .build();
             client.newCall(request).enqueue(new Callback() {
                 @Override
                 public void onFailure(Request request, IOException e) {
@@ -63,7 +66,7 @@ public class RadioTopManager {
                     try {
                         final JSONObject jResponse = new JSONObject(response.body().string());
                         uiUpdater.updateUISuccess(jResponse);
-                    }catch (Exception e){
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }
@@ -72,5 +75,19 @@ public class RadioTopManager {
             e.printStackTrace();
             uiUpdater.updateUIFailed();
         }
+    }
+
+    public void loadTops(TopType topType, final INetworkUIupdater uiUpdater) {
+        Request request = new Request.Builder()
+                .url(ServerApi.TOPS + topType.getStringValue())
+                .build();
+        sendRequest(request, uiUpdater);
+    }
+
+    public void doSearch(String query, final INetworkUIupdater uiUpdater) {
+        Request request = new Request.Builder()
+                .url(ServerApi.RADIO_SEARCH + query)
+                .build();
+        sendRequest(request, uiUpdater);
     }
 }

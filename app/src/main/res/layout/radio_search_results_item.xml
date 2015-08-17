@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.andexert.library.RippleView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rbRadioSearchResults"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="?android:attr/selectableItemBackground"
+        android:clickable="true"
+        android:focusable="true"
+        android:orientation="horizontal"
+        android:padding="10dp">
+
+        <ImageView
+            android:id="@+id/imgSearchRadioCover"
+            android:layout_width="75dp"
+            android:layout_height="75dp"
+            android:layout_alignParentLeft="true"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_account_circle_black_24dp" />
+
+        <TextView
+            android:id="@+id/tvSearchRadioTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@+id/imgSearchRadioCover"
+            android:fontFamily="sans-serif-medium"
+            android:text="test"
+            android:textColor="@color/gray_202020"
+            android:textSize="@dimen/default_text_size_14"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvSearchCountry"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvSearchRadioTitle"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@+id/imgSearchRadioCover"
+            android:fontFamily="sans-serif-medium"
+            android:text="test"
+            android:textColor="@color/gray_202020"
+            android:textSize="@dimen/default_text_size_14"
+            android:textStyle="normal" />
+    </RelativeLayout>
+</com.andexert.library.RippleView>

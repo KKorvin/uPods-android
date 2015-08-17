@@ -50,5 +50,7 @@
     <string name="page_categories">Categories</string>
     <string name="page_favorites">Favorites</string>
     <string name="page_downloaded">Downloaded</string>
+    <string name="nothing_found">Nothing found</string>
+    <string name="start_typing">Start typing</string>
 
 </resources>

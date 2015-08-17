@@ -70,7 +70,7 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         }
 
         private void loadBanners(final Context mContext) {
-            RadioTopManager.getInstance().loadTops(RadioTopManager.TopType.MAIN_BANNER, new INetworkUIupdater() {
+            RadioBackendManager.getInstance().loadTops(RadioBackendManager.TopType.MAIN_BANNER, new INetworkUIupdater() {
                         @Override
                         public void updateUISuccess(final JSONObject jResponse) {
                             ((Activity) mContext).runOnUiThread(new Runnable() {
