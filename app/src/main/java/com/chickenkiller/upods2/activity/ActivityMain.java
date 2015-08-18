@@ -12,6 +12,7 @@ import android.view.View;
 
 import com.chickenkiller.upods2.R;
 import com.chickenkiller.upods2.interfaces.IOverlayable;
+import com.chickenkiller.upods2.interfaces.ISlidingMenuHolder;
 import com.chickenkiller.upods2.interfaces.IToolbarHolder;
 import com.chickenkiller.upods2.utils.UIHelper;
 import com.chickenkiller.upods2.view.controller.FragmentMainFeatured;
@@ -19,7 +20,7 @@ import com.chickenkiller.upods2.view.controller.FragmentSearch;
 import com.chickenkiller.upods2.view.controller.FragmentWellcome;
 import com.chickenkiller.upods2.view.controller.SlidingMenu;
 
-public class ActivityMain extends FragmentsActivity implements IOverlayable, IToolbarHolder {
+public class ActivityMain extends FragmentsActivity implements IOverlayable, IToolbarHolder, ISlidingMenuHolder {
 
 
     private static final float MAX_OVERLAY_LEVEL = 0.8f;
@@ -39,7 +40,6 @@ public class ActivityMain extends FragmentsActivity implements IOverlayable, ITo
         //Toolbar
         toolbar = (Toolbar) findViewById(R.id.toolbar_main);
         toolbar.inflateMenu(R.menu.menu_activity_main);
-        toolbar.setTitle(R.string.radio_main);
         toolbar.setTitleTextColor(getResources().getColor(R.color.white));
         MenuItem searchMenuItem = toolbar.getMenu().findItem(R.id.action_search);
         SearchView searchView = (SearchView) searchMenuItem.getActionView();
@@ -122,4 +122,13 @@ public class ActivityMain extends FragmentsActivity implements IOverlayable, ITo
         return toolbar;
     }
 
+    @Override
+    public SlidingMenu getSlidingMenu() {
+        return slidingMenu;
+    }
+
+    @Override
+    public void setSlidingMenuHeader(String itemName) {
+        slidingMenu.getAdapter().setSelectedRow(itemName);
+    }
 }

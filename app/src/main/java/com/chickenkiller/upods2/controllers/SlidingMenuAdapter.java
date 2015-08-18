@@ -16,6 +16,7 @@ import com.chickenkiller.upods2.interfaces.ISlidingMenuManager;
 import com.chickenkiller.upods2.models.SlidingMenuHeader;
 import com.chickenkiller.upods2.models.SlidingMenuItem;
 import com.chickenkiller.upods2.models.SlidingMenuRow;
+import com.chickenkiller.upods2.view.controller.FragmentMainFeatured;
 import com.chickenkiller.upods2.view.controller.FragmentPodcasts;
 import com.chickenkiller.upods2.view.controller.FragmentSettings;
 
@@ -51,7 +52,6 @@ public class SlidingMenuAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         @Override
         public void onClick(View view) {
             if (items.get(getAdapterPosition()) instanceof SlidingMenuRow) {
-                clearRowSelections();
                 SlidingMenuRow clickedMenuItem = (SlidingMenuRow) items.get(getAdapterPosition());
                 clickedMenuItem.isSelected = true;
                 Context context = view.getContext();
@@ -63,9 +63,23 @@ public class SlidingMenuAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 } else if (clickedMenuItem.getTitle().equals(context.getString(R.string.podcasts_main))) {
                     FragmentPodcasts fragmentPodcasts = new FragmentPodcasts();
                     fragmentsManager.showFragment(R.id.fl_content, fragmentPodcasts, FragmentPodcasts.TAG);
+                } else if (clickedMenuItem.getTitle().equals(context.getString(R.string.radio_main))) {
+                    FragmentMainFeatured fragmentMainFeatured = new FragmentMainFeatured();
+                    fragmentsManager.showFragment(R.id.fl_content, fragmentMainFeatured, FragmentPodcasts.TAG);
                 } else {
                     Toast.makeText(context, "TEST" + clickedMenuItem.getTitle(), Toast.LENGTH_SHORT).show();
                 }
+            }
+        }
+    }
+
+    public void setSelectedRow(String itemName) {
+        clearRowSelections();
+        for (SlidingMenuItem item : items) {
+            if (item instanceof SlidingMenuRow && ((SlidingMenuRow) (item)).getTitle().equals(itemName)) {
+                ((SlidingMenuRow) (item)).isSelected = true;
+                notifyDataSetChanged();
+                return;
             }
         }
     }

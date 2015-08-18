@@ -10,6 +10,8 @@ import android.view.ViewGroup;
 
 import com.chickenkiller.upods2.R;
 import com.chickenkiller.upods2.controllers.PodcastsPagesAdapter;
+import com.chickenkiller.upods2.interfaces.ISlidingMenuHolder;
+import com.chickenkiller.upods2.interfaces.IToolbarHolder;
 
 /**
  * Created by alonzilberman on 8/8/15.
@@ -39,6 +41,10 @@ public class FragmentPodcasts extends Fragment {
                 tlPodcastsTabs.setupWithViewPager(vpPodcasts);
             }
         });
+
+        ((IToolbarHolder) getActivity()).getToolbar().setTitle(R.string.podcasts);
+        ((ISlidingMenuHolder) getActivity()).setSlidingMenuHeader(getString(R.string.podcasts_main));
+
         return view;
     }
 }

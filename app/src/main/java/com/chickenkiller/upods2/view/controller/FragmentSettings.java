@@ -5,6 +5,7 @@ import android.preference.ListPreference;
 import android.preference.PreferenceFragment;
 
 import com.chickenkiller.upods2.R;
+import com.chickenkiller.upods2.interfaces.ISlidingMenuHolder;
 
 /**
  * Created by alonzilberman on 7/8/15.
@@ -18,6 +19,9 @@ public class FragmentSettings extends PreferenceFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        ((ISlidingMenuHolder) getActivity()).setSlidingMenuHeader(getString(R.string.action_settings));
+
         addPreferencesFromResource(R.xml.settings);
     }
 

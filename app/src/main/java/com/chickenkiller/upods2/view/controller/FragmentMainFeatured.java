@@ -17,6 +17,7 @@ import com.chickenkiller.upods2.controllers.SmallPlayer;
 import com.chickenkiller.upods2.interfaces.IContentLoadListener;
 import com.chickenkiller.upods2.interfaces.IFragmentsManager;
 import com.chickenkiller.upods2.interfaces.INetworkUIupdater;
+import com.chickenkiller.upods2.interfaces.ISlidingMenuHolder;
 import com.chickenkiller.upods2.interfaces.IToolbarHolder;
 import com.chickenkiller.upods2.models.MediaItem;
 import com.chickenkiller.upods2.models.MediaItemTitle;
@@ -65,6 +66,8 @@ public class FragmentMainFeatured extends Fragment implements IContentLoadListen
                 }
             });
         }
+        ((IToolbarHolder) getActivity()).getToolbar().setTitle(R.string.radio_main);
+        ((ISlidingMenuHolder) getActivity()).setSlidingMenuHeader(getString(R.string.radio_main));
 
         //Featured adapter
         mediaItemsAdapter = new MediaItemsAdapter(getActivity(), R.layout.card_media_item,

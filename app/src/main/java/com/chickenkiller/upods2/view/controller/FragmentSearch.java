@@ -19,6 +19,7 @@ import com.chickenkiller.upods2.controllers.SearchResultsAdapter;
 import com.chickenkiller.upods2.controllers.SmallPlayer;
 import com.chickenkiller.upods2.interfaces.IFragmentsManager;
 import com.chickenkiller.upods2.interfaces.INetworkUIupdater;
+import com.chickenkiller.upods2.interfaces.ISlidingMenuHolder;
 import com.chickenkiller.upods2.interfaces.IToolbarHolder;
 import com.chickenkiller.upods2.models.MediaItem;
 import com.chickenkiller.upods2.models.RadioItem;
@@ -62,6 +63,8 @@ public class FragmentSearch extends Fragment implements SearchView.OnQueryTextLi
         MenuItem searchMenuItem = ((IToolbarHolder) getActivity()).getToolbar().getMenu().findItem(R.id.action_search);
         SearchView searchView = (SearchView) searchMenuItem.getActionView();
         searchView.setOnQueryTextListener(this);
+        ((IToolbarHolder) getActivity()).getToolbar().setTitle(R.string.search_results);
+        ((ISlidingMenuHolder) getActivity()).setSlidingMenuHeader(getString(R.string.radio_main));
 
         //Featured adapter
         searchResultsAdapter = new SearchResultsAdapter(getActivity(), R.layout.radio_search_results_item);
