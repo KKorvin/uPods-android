@@ -48,7 +48,6 @@ public class FragmentPodcasts extends Fragment {
 
         ((IToolbarHolder) getActivity()).getToolbar().setTitle(R.string.podcasts);
         ((ISlidingMenuHolder) getActivity()).setSlidingMenuHeader(getString(R.string.podcasts_main));
-
         return view;
     }
 }
