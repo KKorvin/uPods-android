@@ -15,26 +15,26 @@ import java.util.ArrayList;
 /**
  * Created by alonzilberman on 7/11/15.
  */
-public class RadioBackendManager {
+public class BackendManager {
 
     public enum TopType {
 
-        MAIN_FEATURED("main_featured"), MAIN_BANNER("main_banner");
+        MAIN_FEATURED("main_featured"), MAIN_BANNER("main_banner"), MAIN_PODCAST("podcasts_featured");
 
-        private String value;
+        private String name;
 
-        TopType(String value) {
-            this.value = value;
+        TopType(String name) {
+            this.name = name;
         }
 
         public String getStringValue() {
-            return value;
+            return name;
         }
     }
 
     private final OkHttpClient client;
     private final int MAX_RETRY = 5;
-    private static RadioBackendManager radioBackendManager;
+    private static BackendManager backendManager;
     private ArrayList<QueueTask> searchQueue;
 
     private class QueueTask {
@@ -47,17 +47,17 @@ public class RadioBackendManager {
         }
     }
 
-    private RadioBackendManager() {
+    private BackendManager() {
         super();
         this.client = new OkHttpClient();
     }
 
-    public static RadioBackendManager getInstance() {
-        if (radioBackendManager == null) {
-            radioBackendManager = new RadioBackendManager();
-            radioBackendManager.searchQueue = new ArrayList<>();
+    public static BackendManager getInstance() {
+        if (backendManager == null) {
+            backendManager = new BackendManager();
+            backendManager.searchQueue = new ArrayList<>();
         }
-        return radioBackendManager;
+        return backendManager;
     }
 
     /**
@@ -107,9 +107,9 @@ public class RadioBackendManager {
         }
     }
 
-    public void loadTops(TopType topType, final INetworkUIupdater uiUpdater) {
+    public void loadTops(TopType topType, String topLink, final INetworkUIupdater uiUpdater) {
         Request request = new Request.Builder()
-                .url(ServerApi.TOPS + topType.getStringValue())
+                .url(topLink + topType.getStringValue())
                 .build();
         sendRequest(request, uiUpdater);
     }

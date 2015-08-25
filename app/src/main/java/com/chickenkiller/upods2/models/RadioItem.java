@@ -2,6 +2,7 @@ package com.chickenkiller.upods2.models;
 
 import android.content.Context;
 
+import com.chickenkiller.upods2.interfaces.IFeaturableMediaItem;
 import com.chickenkiller.upods2.utils.GlobalUtils;
 
 import org.json.JSONArray;
@@ -12,7 +13,7 @@ import java.util.ArrayList;
 /**
  * Created by alonzilberman on 7/3/15.
  */
-public class RadioItem extends MediaItem {
+public class RadioItem extends MediaItem implements IFeaturableMediaItem {
 
     private final static String DEFAULT_IMAGE = "https://upods.io/static/radio_stations/default/no_image.png";
 
@@ -94,6 +95,7 @@ public class RadioItem extends MediaItem {
         this.streamUrl = streamUrl;
     }
 
+    @Override
     public String getName() {
         return name;
     }
@@ -102,6 +104,7 @@ public class RadioItem extends MediaItem {
         this.name = name;
     }
 
+    @Override
     public String getCoverImageUrl() {
         if (coverImageUrl == null || coverImageUrl.isEmpty()) {
             return DEFAULT_IMAGE;

@@ -7,6 +7,7 @@ import android.content.Context;
 import android.support.v13.app.FragmentPagerAdapter;
 
 import com.chickenkiller.upods2.R;
+import com.chickenkiller.upods2.view.controller.FragmentPodcastFeatured;
 import com.chickenkiller.upods2.view.controller.FragmentPodcastsPage;
 
 /**
@@ -24,9 +25,26 @@ public class PodcastsPagesAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        FragmentPodcastsPage fragmentPagePodcasts = new FragmentPodcastsPage();
-        fragmentPagePodcasts.setTestPodcast(String.valueOf(position));
-        return fragmentPagePodcasts;
+        Fragment podcastFragment = null;
+        switch (position) {
+            case 0:
+                podcastFragment = new FragmentPodcastFeatured();
+                break;
+            case 1:
+                podcastFragment = new FragmentPodcastsPage();
+                ((FragmentPodcastsPage) podcastFragment).setTestPodcast(String.valueOf(position));
+                break;
+            case 2:
+                podcastFragment = new FragmentPodcastsPage();
+                ((FragmentPodcastsPage) podcastFragment).setTestPodcast(String.valueOf(position));
+                break;
+            case 3:
+                podcastFragment = new FragmentPodcastsPage();
+                ((FragmentPodcastsPage) podcastFragment).setTestPodcast(String.valueOf(position));
+                break;
+        }
+
+        return podcastFragment;
     }
 
     @Override

@@ -17,12 +17,14 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.chickenkiller.upods2.R;
 import com.chickenkiller.upods2.interfaces.IContentLoadListener;
+import com.chickenkiller.upods2.interfaces.IFeaturableMediaItem;
 import com.chickenkiller.upods2.interfaces.IFragmentsManager;
 import com.chickenkiller.upods2.interfaces.INetworkUIupdater;
 import com.chickenkiller.upods2.models.BannersLayoutItem;
 import com.chickenkiller.upods2.models.MediaItem;
 import com.chickenkiller.upods2.models.MediaItemTitle;
 import com.chickenkiller.upods2.models.RadioItem;
+import com.chickenkiller.upods2.utils.ServerApi;
 import com.chickenkiller.upods2.view.controller.FragmentRadioItemDetails;
 import com.chickenkiller.upods2.views.ImageViewSquare;
 import com.lsjwzh.widget.recyclerviewpager.RecyclerViewPager;
@@ -41,7 +43,7 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     public static final int HEADER = 1;
     public static final int ITEM = 2;
     public static final int BANNERS_LAYOUT = 3;
-    private static final int MAX_CONTENT_LEVEL = 2;
+    private static final int MAX_CONTENT_LEVEL = 2; //count of items to load (banner, main cards)
 
     private int itemLayout;
     private int titleLayout;
@@ -70,7 +72,7 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         }
 
         private void loadBanners(final Context mContext) {
-            RadioBackendManager.getInstance().loadTops(RadioBackendManager.TopType.MAIN_BANNER, new INetworkUIupdater() {
+            BackendManager.getInstance().loadTops(BackendManager.TopType.MAIN_BANNER, ServerApi.RADIO_TOP, new INetworkUIupdater() {
                         @Override
                         public void updateUISuccess(final JSONObject jResponse) {
                             ((Activity) mContext).runOnUiThread(new Runnable() {
@@ -171,6 +173,10 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         this.titleLayout = titleLayout;
     }
 
+    public MediaItemsAdapter(Context mContext, int itemLayout, int titleLayout) {
+        this(mContext, itemLayout, new ArrayList<MediaItem>());
+        this.titleLayout = titleLayout;
+    }
     public void setFragmentsManager(IFragmentsManager fragmentsManager) {
         this.fragmentsManager = fragmentsManager;
     }
@@ -196,7 +202,7 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof ViewHolderCardItem) {
-            RadioItem currentItem = (RadioItem) items.get(position);
+            IFeaturableMediaItem currentItem = (IFeaturableMediaItem) items.get(position);
             Glide.with(mContext).load(currentItem.getCoverImageUrl()).centerCrop()
                                 .crossFade().into(((ViewHolderCardItem) holder).imgSquare);
             ((ViewHolderCardItem) holder).tvSquareTitle.setText(currentItem.getName());

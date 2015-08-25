@@ -44,6 +44,8 @@
     <string name="top40_chanels_subheader">The top internet radio stations</string>
     <string name="description">Description</string>
     <string name="title_activity_activity_player">ActivityPlayer</string>
+    <string name="top40_podcasts">Top 40 Podcasts</string>
+    <string name="top40_podcasts_subheader">The hand made podcasts top</string>
 
     <string name="hello_world">Hello world!</string>
 

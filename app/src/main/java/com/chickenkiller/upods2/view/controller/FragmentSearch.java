@@ -14,7 +14,7 @@ import android.support.v7.widget.SearchView;
 import android.widget.TextView;
 
 import com.chickenkiller.upods2.R;
-import com.chickenkiller.upods2.controllers.RadioBackendManager;
+import com.chickenkiller.upods2.controllers.BackendManager;
 import com.chickenkiller.upods2.controllers.SearchResultsAdapter;
 import com.chickenkiller.upods2.controllers.SmallPlayer;
 import com.chickenkiller.upods2.interfaces.IFragmentsManager;
@@ -85,7 +85,7 @@ public class FragmentSearch extends Fragment implements SearchView.OnQueryTextLi
         lastQuery = query;
         rvSearchResults.setVisibility(View.GONE);
         pbLoadingSearch.setVisibility(View.VISIBLE);
-        RadioBackendManager.getInstance().doSearch(query, new INetworkUIupdater() {
+        BackendManager.getInstance().doSearch(query, new INetworkUIupdater() {
                     @Override
                     public void updateUISuccess(final JSONObject jResponse) {
                         getActivity().runOnUiThread(new Runnable() {
@@ -120,7 +120,7 @@ public class FragmentSearch extends Fragment implements SearchView.OnQueryTextLi
     @Override
     public void onDestroy() {
         smallPlayer.destroy();
-        RadioBackendManager.getInstance().clearSearchQueue();
+        BackendManager.getInstance().clearSearchQueue();
         super.onDestroy();
     }
 

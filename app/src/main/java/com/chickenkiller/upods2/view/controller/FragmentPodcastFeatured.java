@@ -4,7 +4,6 @@ import android.app.Fragment;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
@@ -13,15 +12,12 @@ import com.chickenkiller.upods2.R;
 import com.chickenkiller.upods2.controllers.BackendManager;
 import com.chickenkiller.upods2.controllers.GridSpacingItemDecoration;
 import com.chickenkiller.upods2.controllers.MediaItemsAdapter;
-import com.chickenkiller.upods2.controllers.SmallPlayer;
 import com.chickenkiller.upods2.interfaces.IContentLoadListener;
 import com.chickenkiller.upods2.interfaces.IFragmentsManager;
 import com.chickenkiller.upods2.interfaces.INetworkUIupdater;
-import com.chickenkiller.upods2.interfaces.ISlidingMenuHolder;
-import com.chickenkiller.upods2.interfaces.IToolbarHolder;
 import com.chickenkiller.upods2.models.MediaItem;
 import com.chickenkiller.upods2.models.MediaItemTitle;
-import com.chickenkiller.upods2.models.RadioItem;
+import com.chickenkiller.upods2.models.Podcast;
 import com.chickenkiller.upods2.utils.ServerApi;
 import com.chickenkiller.upods2.views.AutofitRecyclerView;
 
@@ -33,15 +29,11 @@ import java.util.ArrayList;
 /**
  * Created by alonzilberman on 7/10/15.
  */
-public class FragmentMainFeatured extends Fragment implements IContentLoadListener {
+public class FragmentPodcastFeatured extends Fragment implements IContentLoadListener {
 
-    public static final String TAG = "main_featured";
-    public static final int MEDIA_ITEMS_CARDS_MARGIN = 25;
-    public static final int MEDIA_ITEMS_TYPES_COUNT = 3;
-
+    public static final String TAG = "podcasts_featured";
 
     private AutofitRecyclerView rvMain;
-    private SmallPlayer smallPlayer;
     private MediaItemsAdapter mediaItemsAdapter;
     private ProgressBar pbLoadingFeatured;
 
@@ -50,34 +42,17 @@ public class FragmentMainFeatured extends Fragment implements IContentLoadListen
         super.onCreate(savedInstanceState);
 
         //Init fragments views
-        View view = inflater.inflate(R.layout.fragment_main_featured, container, false);
+        View view = inflater.inflate(R.layout.fragment_podcasts_featured, container, false);
         pbLoadingFeatured = (ProgressBar) view.findViewById(R.id.pbLoadingFeatured);
         rvMain = (AutofitRecyclerView) view.findViewById(R.id.rvMain);
-        smallPlayer = new SmallPlayer(view, getActivity());
-
-        //Toolbar
-        if (getActivity() instanceof IToolbarHolder) {
-            MenuItem searchMenuItem = ((IToolbarHolder) getActivity()).getToolbar().getMenu().findItem(R.id.action_search);
-            searchMenuItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-                @Override
-                public boolean onMenuItemClick(MenuItem menuItem) {
-                    FragmentSearch fragmentSearch = new FragmentSearch();
-                    ((IFragmentsManager) getActivity()).showFragment(R.id.fl_content, fragmentSearch, FragmentSearch.TAG);
-                    return false;
-                }
-            });
-        }
-        ((IToolbarHolder) getActivity()).getToolbar().setTitle(R.string.radio_main);
-        ((ISlidingMenuHolder) getActivity()).setSlidingMenuHeader(getString(R.string.radio_main));
 
         //Featured adapter
         mediaItemsAdapter = new MediaItemsAdapter(getActivity(), R.layout.card_media_item,
-                R.layout.media_item_title, RadioItem.withOnlyBannersHeader());
+                R.layout.media_item_title);
         if (getActivity() instanceof IFragmentsManager) {
             mediaItemsAdapter.setFragmentsManager((IFragmentsManager) getActivity());
         }
         mediaItemsAdapter.setContentLoadListener(this);
-
         //Featured recycle view
         rvMain.setHasFixedSize(true);
         rvMain.setAdapter(mediaItemsAdapter);
@@ -89,6 +64,7 @@ public class FragmentMainFeatured extends Fragment implements IContentLoadListen
                         1 : rvMain.getSpanCount();
             }
         });
+        mediaItemsAdapter.notifyContentLoadingStatus();
         rvMain.setVisibility(View.INVISIBLE);
 
         //Load tops from remote server
@@ -98,20 +74,20 @@ public class FragmentMainFeatured extends Fragment implements IContentLoadListen
     }
 
     private void showTops() {
-        BackendManager.getInstance().loadTops(BackendManager.TopType.MAIN_FEATURED, ServerApi.RADIO_TOP, new INetworkUIupdater() {
+        BackendManager.getInstance().loadTops(BackendManager.TopType.MAIN_PODCAST, ServerApi.PODCASTS_TOP, new INetworkUIupdater() {
                     @Override
                     public void updateUISuccess(final JSONObject jResponse) {
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
                                 try {
-                                    ArrayList<MediaItem> topRadioStations = new ArrayList<MediaItem>();
-                                    topRadioStations.add(new MediaItemTitle(getString(R.string.top40_chanels), getString(R.string.top40_chanels_subheader)));
-                                    topRadioStations.addAll(RadioItem.withJsonArray(jResponse.getJSONArray("result"), getActivity()));
-                                    mediaItemsAdapter.addItems(topRadioStations);
-                                    GridSpacingItemDecoration gridSpacingItemDecoration = new GridSpacingItemDecoration(rvMain.getSpanCount(), MEDIA_ITEMS_CARDS_MARGIN, true);
+                                    ArrayList<MediaItem> topPodcasts = new ArrayList<MediaItem>();
+                                    topPodcasts.add(new MediaItemTitle(getString(R.string.top40_podcasts), getString(R.string.top40_chanels_subheader)));
+                                    topPodcasts.addAll(Podcast.withJsonArray(jResponse.getJSONArray("result")));
+                                    mediaItemsAdapter.addItems(topPodcasts);
+                                    GridSpacingItemDecoration gridSpacingItemDecoration = new GridSpacingItemDecoration(rvMain.getSpanCount(), FragmentMainFeatured.MEDIA_ITEMS_CARDS_MARGIN, true);
                                     gridSpacingItemDecoration.setGridItemType(MediaItemsAdapter.ITEM);
-                                    gridSpacingItemDecoration.setItemsTypesCount(MEDIA_ITEMS_TYPES_COUNT);
+                                    gridSpacingItemDecoration.setItemsTypesCount(FragmentMainFeatured.MEDIA_ITEMS_TYPES_COUNT);
                                     rvMain.addItemDecoration(gridSpacingItemDecoration);
                                     mediaItemsAdapter.notifyContentLoadingStatus();
                                 } catch (JSONException e) {
@@ -133,7 +109,6 @@ public class FragmentMainFeatured extends Fragment implements IContentLoadListen
     @Override
     public void onDestroy() {
         mediaItemsAdapter.destroy();
-        smallPlayer.destroy();
         super.onDestroy();
     }
 
