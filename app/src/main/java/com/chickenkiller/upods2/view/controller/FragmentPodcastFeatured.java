@@ -32,6 +32,7 @@ import java.util.ArrayList;
 public class FragmentPodcastFeatured extends Fragment implements IContentLoadListener {
 
     public static final String TAG = "podcasts_featured";
+    public static final int MEDIA_ITEMS_TYPES_COUNT = 2;
 
     private AutofitRecyclerView rvMain;
     private MediaItemsAdapter mediaItemsAdapter;
@@ -87,7 +88,7 @@ public class FragmentPodcastFeatured extends Fragment implements IContentLoadLis
                                     mediaItemsAdapter.addItems(topPodcasts);
                                     GridSpacingItemDecoration gridSpacingItemDecoration = new GridSpacingItemDecoration(rvMain.getSpanCount(), FragmentMainFeatured.MEDIA_ITEMS_CARDS_MARGIN, true);
                                     gridSpacingItemDecoration.setGridItemType(MediaItemsAdapter.ITEM);
-                                    gridSpacingItemDecoration.setItemsTypesCount(FragmentMainFeatured.MEDIA_ITEMS_TYPES_COUNT);
+                                    gridSpacingItemDecoration.setItemsTypesCount(MEDIA_ITEMS_TYPES_COUNT);
                                     rvMain.addItemDecoration(gridSpacingItemDecoration);
                                     mediaItemsAdapter.notifyContentLoadingStatus();
                                 } catch (JSONException e) {
