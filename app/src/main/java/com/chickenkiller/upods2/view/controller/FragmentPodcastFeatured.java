@@ -4,6 +4,7 @@ import android.app.Fragment;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
@@ -15,6 +16,8 @@ import com.chickenkiller.upods2.controllers.MediaItemsAdapter;
 import com.chickenkiller.upods2.interfaces.IContentLoadListener;
 import com.chickenkiller.upods2.interfaces.IFragmentsManager;
 import com.chickenkiller.upods2.interfaces.INetworkUIupdater;
+import com.chickenkiller.upods2.interfaces.ISlidingMenuHolder;
+import com.chickenkiller.upods2.interfaces.IToolbarHolder;
 import com.chickenkiller.upods2.models.MediaItem;
 import com.chickenkiller.upods2.models.MediaItemTitle;
 import com.chickenkiller.upods2.models.Podcast;
@@ -46,6 +49,22 @@ public class FragmentPodcastFeatured extends Fragment implements IContentLoadLis
         View view = inflater.inflate(R.layout.fragment_podcasts_featured, container, false);
         pbLoadingFeatured = (ProgressBar) view.findViewById(R.id.pbLoadingFeatured);
         rvMain = (AutofitRecyclerView) view.findViewById(R.id.rvMain);
+
+        //Toolbar
+        if (getActivity() instanceof IToolbarHolder) {
+            MenuItem searchMenuItem = ((IToolbarHolder) getActivity()).getToolbar().getMenu().findItem(R.id.action_search);
+            searchMenuItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+                @Override
+                public boolean onMenuItemClick(MenuItem menuItem) {
+                    FragmentSearch fragmentSearch = new FragmentSearch();
+                    fragmentSearch.setSearchType(FragmentSearch.SearchType.PODCAST);
+                    ((IFragmentsManager) getActivity()).showFragment(R.id.fl_content, fragmentSearch, FragmentSearch.TAG);
+                    return false;
+                }
+            });
+        }
+        ((IToolbarHolder) getActivity()).getToolbar().setTitle(R.string.podcasts_main);
+        ((ISlidingMenuHolder) getActivity()).setSlidingMenuHeader(getString(R.string.podcasts));
 
         //Featured adapter
         mediaItemsAdapter = new MediaItemsAdapter(getActivity(), R.layout.card_media_item,

@@ -4,6 +4,10 @@ android {
     compileSdkVersion 22
     buildToolsVersion "22"
 
+    packagingOptions {
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'LICENSE.txt'
+    }
     defaultConfig {
         applicationId "com.chickenkiller.upods2"
         minSdkVersion 15

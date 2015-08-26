@@ -5,12 +5,12 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
-import android.support.v7.widget.SearchView;
 import android.widget.TextView;
 
 import com.chickenkiller.upods2.R;
@@ -22,7 +22,9 @@ import com.chickenkiller.upods2.interfaces.INetworkUIupdater;
 import com.chickenkiller.upods2.interfaces.ISlidingMenuHolder;
 import com.chickenkiller.upods2.interfaces.IToolbarHolder;
 import com.chickenkiller.upods2.models.MediaItem;
+import com.chickenkiller.upods2.models.Podcast;
 import com.chickenkiller.upods2.models.RadioItem;
+import com.chickenkiller.upods2.utils.ServerApi;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -34,6 +36,10 @@ import java.util.ArrayList;
  */
 public class FragmentSearch extends Fragment implements SearchView.OnQueryTextListener {
 
+    public enum SearchType {RADIO, PODCAST}
+
+    ;
+
     public static final String TAG = "search_results";
 
     private RecyclerView rvSearchResults;
@@ -43,6 +49,7 @@ public class FragmentSearch extends Fragment implements SearchView.OnQueryTextLi
     private TextView tvSearchNoResults;
     private TextView tvStartTyping;
     private String lastQuery = "";
+    private SearchType searchType;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -81,10 +88,19 @@ public class FragmentSearch extends Fragment implements SearchView.OnQueryTextLi
         return view;
     }
 
+    public void setSearchType(SearchType searchType) {
+        this.searchType = searchType;
+    }
+
     private void loadSearchResults(String query) {
         lastQuery = query;
         rvSearchResults.setVisibility(View.GONE);
         pbLoadingSearch.setVisibility(View.VISIBLE);
+        if (searchType == SearchType.RADIO) {
+            query = ServerApi.RADIO_SEARCH + query;
+        } else {
+            query = ServerApi.PODCAST_SEARCH + query + ServerApi.PODCAST_SEARCH_PARAM;
+        }
         BackendManager.getInstance().doSearch(query, new INetworkUIupdater() {
                     @Override
                     public void updateUISuccess(final JSONObject jResponse) {
@@ -92,13 +108,17 @@ public class FragmentSearch extends Fragment implements SearchView.OnQueryTextLi
                             @Override
                             public void run() {
                                 try {
-                                    ArrayList<MediaItem> resultsRadioStations = new ArrayList<MediaItem>();
-                                    resultsRadioStations.addAll(RadioItem.withJsonArray(jResponse.getJSONArray("result"), getActivity()));
+                                    ArrayList<MediaItem> resultMediaItems = new ArrayList<MediaItem>();
+                                    if (searchType == SearchType.RADIO) {
+                                        resultMediaItems.addAll(RadioItem.withJsonArray(jResponse.getJSONArray("result"), getActivity()));
+                                    }else{
+                                        resultMediaItems.addAll(Podcast.withJsonArray(jResponse.getJSONArray("results")));
+                                    }
                                     searchResultsAdapter.clear();
-                                    searchResultsAdapter.addItems(resultsRadioStations);
+                                    searchResultsAdapter.addItems(resultMediaItems);
                                     pbLoadingSearch.setVisibility(View.GONE);
                                     rvSearchResults.setVisibility(View.VISIBLE);
-                                    if (resultsRadioStations.size() == 0) {
+                                    if (resultMediaItems.size() == 0) {
                                         tvSearchNoResults.setVisibility(View.VISIBLE);
                                     }
                                 } catch (JSONException e) {

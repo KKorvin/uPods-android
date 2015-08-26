@@ -62,6 +62,7 @@ public class FragmentMainFeatured extends Fragment implements IContentLoadListen
                 @Override
                 public boolean onMenuItemClick(MenuItem menuItem) {
                     FragmentSearch fragmentSearch = new FragmentSearch();
+                    fragmentSearch.setSearchType(FragmentSearch.SearchType.RADIO);
                     ((IFragmentsManager) getActivity()).showFragment(R.id.fl_content, fragmentSearch, FragmentSearch.TAG);
                     return false;
                 }

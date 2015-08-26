@@ -1,7 +1,6 @@
 package com.chickenkiller.upods2.controllers;
 
 import com.chickenkiller.upods2.interfaces.INetworkUIupdater;
-import com.chickenkiller.upods2.utils.ServerApi;
 import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
@@ -116,7 +115,7 @@ public class BackendManager {
 
     public void doSearch(String query, final INetworkUIupdater uiUpdater) {
         Request request = new Request.Builder()
-                .url(ServerApi.RADIO_SEARCH + query)
+                .url(query)
                 .build();
         if (searchQueue.isEmpty()) {
             searchQueue.add(new QueueTask(request, uiUpdater));

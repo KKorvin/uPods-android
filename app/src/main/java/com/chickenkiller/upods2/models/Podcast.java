@@ -10,7 +10,7 @@ import java.util.ArrayList;
 /**
  * Created by alonzilberman on 8/24/15.
  */
-public class Podcast extends MediaItem implements IFeaturableMediaItem{
+public class Podcast extends MediaItem implements IFeaturableMediaItem {
     protected String name;
     protected String censoredName;
     protected String artistName;
@@ -25,17 +25,34 @@ public class Podcast extends MediaItem implements IFeaturableMediaItem{
 
     public Podcast(JSONObject jsonItem) {
         try {
-            this.id = jsonItem.has("id") ? jsonItem.getInt("id") : 0;
-            this.name = jsonItem.has("name") ? jsonItem.getString("name") : "";
-            this.censoredName = jsonItem.has("censored_name") ? jsonItem.getString("censored_name") : "";
-            this.artistName = jsonItem.has("artist_name") ? jsonItem.getString("artist_name") : "";
-            this.feedUrl = jsonItem.has("feed_url") ? jsonItem.getString("feed_url") : "";
-            this.imageUrl = jsonItem.has("image_url") ? jsonItem.getString("image_url") : "";
-            this.country = jsonItem.has("country") ? jsonItem.getString("country") : "";
-            this.releaseDate = jsonItem.has("release_date") ? jsonItem.getString("release_date") : "";
-            this.explicitness = jsonItem.has("explicitness") ? jsonItem.getString("explicitness") : "";
-            this.trackCount = jsonItem.has("track_count") ? jsonItem.getString("track_count") : "";
-            this.genre = jsonItem.has("genre") ? jsonItem.getString("genre") : "";
+            if (jsonItem.has("kind")) { //Itnes
+                this.id = jsonItem.has("trackId") ? jsonItem.getInt("trackId") : 0;
+                this.name = jsonItem.has("collectionName") ? jsonItem.getString("collectionName") : "";
+                this.censoredName = jsonItem.has("collectionCensoredName") ? jsonItem.getString("collectionCensoredName") : "";
+                this.artistName = jsonItem.has("artistName") ? jsonItem.getString("artistName") : "";
+                this.feedUrl = jsonItem.has("feedUrl") ? jsonItem.getString("feedUrl") : "";
+                this.imageUrl = jsonItem.has("artworkUrl100") ? jsonItem.getString("artworkUrl100") : "";
+                if(this.imageUrl.isEmpty()){
+                    this.imageUrl = jsonItem.has("artworkUrl60") ? jsonItem.getString("artworkUrl60") : "";
+                }
+                this.country = jsonItem.has("country") ? jsonItem.getString("country") : "";
+                this.releaseDate = jsonItem.has("releaseDate") ? jsonItem.getString("releaseDate") : "";
+                this.explicitness = jsonItem.has("collectionExplicitness") ? jsonItem.getString("collectionExplicitness") : "";
+                this.trackCount = jsonItem.has("trackCount") ? jsonItem.getString("trackCount") : "";
+                this.genre = jsonItem.has("primaryGenreName") ? jsonItem.getString("primaryGenreName") : "";
+            } else {//Our backend
+                this.id = jsonItem.has("id") ? jsonItem.getInt("id") : 0;
+                this.name = jsonItem.has("name") ? jsonItem.getString("name") : "";
+                this.censoredName = jsonItem.has("censored_name") ? jsonItem.getString("censored_name") : "";
+                this.artistName = jsonItem.has("artist_name") ? jsonItem.getString("artist_name") : "";
+                this.feedUrl = jsonItem.has("feed_url") ? jsonItem.getString("feed_url") : "";
+                this.imageUrl = jsonItem.has("image_url") ? jsonItem.getString("image_url") : "";
+                this.country = jsonItem.has("country") ? jsonItem.getString("country") : "";
+                this.releaseDate = jsonItem.has("release_date") ? jsonItem.getString("release_date") : "";
+                this.explicitness = jsonItem.has("explicitness") ? jsonItem.getString("explicitness") : "";
+                this.trackCount = jsonItem.has("track_count") ? jsonItem.getString("track_count") : "";
+                this.genre = jsonItem.has("genre") ? jsonItem.getString("genre") : "";
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -53,6 +70,7 @@ public class Podcast extends MediaItem implements IFeaturableMediaItem{
         }
         return items;
     }
+
     @Override
     public String getName() {
         return name;
