@@ -5,8 +5,8 @@ package com.chickenkiller.upods2.models;
  */
 public abstract class Track {
 
-    public String title;
-    public String mp3Url;
+    protected String title;
+    protected String mp3Url;
 
     public String getTitle() {
         return title;
