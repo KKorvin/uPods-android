@@ -39,8 +39,8 @@
                 android:id="@+id/imgDetailedCover"
                 android:layout_width="120dp"
                 android:layout_height="120dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginLeft="13dp"
+                android:layout_marginTop="13dp"
                 android:scaleType="fitXY"
                 android:src="@drawable/ic_temp" />
 
@@ -50,113 +50,115 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="8dp"
                 android:layout_toLeftOf="@+id/imgDetailedFavorites"
                 android:layout_toRightOf="@+id/imgDetailedCover"
                 android:text="BBC Radio One"
                 android:textColor="@color/white"
+                android:textSize="@dimen/default_text_size_20" />
+                <!--
                 android:textStyle="bold"
-                android:textSize="@dimen/default_text_size_18" />
+                -->
 
-            <ImageView
-                android:id="@+id/imgDetailedFavorites"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="10dp"
-                android:layout_marginTop="10dp"
-                android:layout_toLeftOf="@+id/imgDetailedMenu"
-                android:src="@drawable/ic_star_outline_white_24dp" />
+        <ImageView
+            android:id="@+id/imgDetailedFavorites"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_toLeftOf="@+id/imgDetailedMenu"
+            android:src="@drawable/ic_star_outline_white_24dp" />
 
-            <ImageView
-                android:id="@+id/imgDetailedMenu"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_marginRight="10dp"
-                android:layout_marginTop="10dp"
-                android:src="@drawable/ic_dots_vertical_white_24dp" />
-
-            <TextView
-                android:id="@+id/tvDetailedSubHeader"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_above="@+id/tvDetailedBottomHeader"
-                android:layout_marginLeft="10dp"
-                android:layout_marginBottom="5dp"
-                android:layout_toRightOf="@+id/imgDetailedCover"
-                android:text="England"
-                android:textColor="@color/white"
-                android:textSize="@dimen/default_text_size_18" />
-
-            <TextView
-                android:id="@+id/tvDetailedBottomHeader"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_marginLeft="10dp"
-                android:layout_marginBottom="20dp"
-                android:layout_toRightOf="@+id/imgDetailedCover"
-                android:text="Pop and Rock Music"
-                android:textColor="@color/white"
-                android:textSize="@dimen/default_text_size_18" />
-
-        </RelativeLayout>
-
-        <View
-            android:id="@+id/vDetailsDevider"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_below="@+id/rlDetailsHeaderContainer"
-            android:background="@color/indigo_800"></View>
-
-
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fbDetailsPlay"
+        <ImageView
+            android:id="@+id/imgDetailedMenu"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:layout_marginRight="20dp"
-            android:layout_marginTop="175dp"
-            android:src="@drawable/ic_play_white_24dp"
-            app:backgroundTint="@color/pink_A400"
-            app:elevation="4dp" />
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp"
+            android:src="@drawable/ic_dots_vertical_white_24dp" />
 
-        <com.chickenkiller.upods2.views.DetailsScrollView
-            android:id="@+id/svDetails"
+        <TextView
+            android:id="@+id/tvDetailedSubHeader"
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_below="@+id/vDetailsDevider">
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/tvDetailedBottomHeader"
+            android:layout_marginLeft="10dp"
+            android:layout_marginBottom="0dp"
+            android:layout_toRightOf="@+id/imgDetailedCover"
+            android:text="England"
+            android:textColor="@color/white"
+            android:textSize="@dimen/default_text_size_16" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:paddingBottom="10dp">
+        <TextView
+            android:id="@+id/tvDetailedBottomHeader"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginLeft="10dp"
+            android:layout_marginBottom="15dp"
+            android:layout_toRightOf="@+id/imgDetailedCover"
+            android:text="Pop and Rock Music"
+            android:textColor="@color/white"
+            android:textSize="@dimen/default_text_size_16" />
 
-                <TextView
-                    android:id="@+id/tvDetailedDesHeader"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginTop="22dp"
-                    android:fontFamily="sans-serif"
-                    android:text="@string/description"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/default_text_size_18"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/tvDetailedDescription"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginRight="20dp"
-                    android:layout_marginTop="20dp"
-                    android:fontFamily="sans-serif-light"
-                    android:textColor="@color/gray_202020"
-                    android:textSize="@dimen/default_text_size_16"
-                    android:textStyle="normal" />
-            </LinearLayout>
-        </com.chickenkiller.upods2.views.DetailsScrollView>
     </RelativeLayout>
+
+    <View
+        android:id="@+id/vDetailsDevider"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_below="@+id/rlDetailsHeaderContainer"
+        android:background="@color/indigo_800"></View>
+
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fbDetailsPlay"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="175dp"
+        android:src="@drawable/ic_play_white_24dp"
+        app:backgroundTint="@color/pink_A400"
+        app:elevation="4dp" />
+
+    <com.chickenkiller.upods2.views.DetailsScrollView
+        android:id="@+id/svDetails"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_below="@+id/vDetailsDevider">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:paddingBottom="10dp">
+
+            <TextView
+                android:id="@+id/tvDetailedDesHeader"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="22dp"
+                android:fontFamily="sans-serif"
+                android:text="@string/description"
+                android:textColor="@color/black"
+                android:textSize="@dimen/default_text_size_18"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvDetailedDescription"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="20dp"
+                android:fontFamily="sans-serif-light"
+                android:textColor="@color/gray_202020"
+                android:textSize="@dimen/default_text_size_16"
+                android:textStyle="normal" />
+        </LinearLayout>
+    </com.chickenkiller.upods2.views.DetailsScrollView>
+</RelativeLayout>
 </LinearLayout>
