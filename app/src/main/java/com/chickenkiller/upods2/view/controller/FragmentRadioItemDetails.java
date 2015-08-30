@@ -47,6 +47,7 @@ public class FragmentRadioItemDetails extends Fragment implements View.OnTouchLi
     private TextView tvDetailedDescription;
     private TextView tvDetailedSubHeader;
     private TextView tvDetailedHeader;
+    private TextView tvBottomHeader;
     private TextView tvDetailedDesHeader;
     private View viewDetailedHeader;
     private View viewDetailsDevider;
@@ -72,6 +73,7 @@ public class FragmentRadioItemDetails extends Fragment implements View.OnTouchLi
         tvDetailedHeader = (TextView) view.findViewById(R.id.tvDetailedHeader);
         tvDetailedSubHeader = (TextView) view.findViewById(R.id.tvDetailedSubHeader);
         tvDetailedDesHeader = (TextView) view.findViewById(R.id.tvDetailedDesHeader);
+        tvBottomHeader = (TextView) view.findViewById(R.id.tvDetailedBottomHeader);
         viewDetailedHeader = view.findViewById(R.id.viewDetailedHeader);
         viewDetailsDevider = view.findViewById(R.id.vDetailsDevider);
         imgDetailedTopCover = (ImageView) view.findViewById(R.id.imgDetailedCover);
@@ -84,6 +86,7 @@ public class FragmentRadioItemDetails extends Fragment implements View.OnTouchLi
             initImagesColors();
             tvDetailedHeader.setText(mediaItem.getName());
             tvDetailedSubHeader.setText(mediaItem.getSubHeader());
+            tvBottomHeader.setText(mediaItem.getBottomHeader());
             if (mediaItem.getDescription() != null) {
                 tvDetailedDescription.setText(mediaItem.getDescription());
                 svDetails.setEnabled(false);

@@ -27,6 +27,7 @@ public class RadioItem extends MediaItem implements IFeaturableMediaItem, IPlaya
     protected String facebook;
     protected String twitter;
     protected String country;
+    protected String genre;
 
     public RadioItem(String name, String url, String coverImageUrl) {
         this.name = name;
@@ -63,6 +64,9 @@ public class RadioItem extends MediaItem implements IFeaturableMediaItem, IPlaya
             }
             if (jsonItem.has("streamUrls") && jsonItem.getJSONArray("streamUrls").length() > 0) {
                 this.streamUrl = GlobalUtils.getBestStreamUrl(jsonItem.getJSONArray("streamUrls"));
+            }
+            if (jsonItem.has("genres") && jsonItem.getJSONArray("genres").length() > 0) {
+                this.genre = jsonItem.getJSONArray("genres").getString(0);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -117,6 +121,11 @@ public class RadioItem extends MediaItem implements IFeaturableMediaItem, IPlaya
     @Override
     public String getSubHeader() {
         return this.country;
+    }
+
+    @Override
+    public String getBottomHeader() {
+        return this.genre;
     }
 
     @Override

@@ -132,6 +132,11 @@ public class Podcast extends MediaItem implements IFeaturableMediaItem, IPlayabl
     }
 
     @Override
+    public String getBottomHeader() {
+        return this.country;
+    }
+
+    @Override
     public boolean hasSubTracks() {
         return true;
     }
