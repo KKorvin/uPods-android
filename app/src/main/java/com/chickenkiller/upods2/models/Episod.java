@@ -5,9 +5,10 @@ package com.chickenkiller.upods2.models;
  */
 public class Episod extends Track{
     private String summary;
-    private String lengthDate;
+    private String length;
     private String duration;
     private String btnDownloadText;
+    private String date;
 
     public String getBtnDownloadText() {
         return btnDownloadText;
@@ -25,12 +26,12 @@ public class Episod extends Track{
         this.duration = duration;
     }
 
-    public String getLengthDate() {
-        return lengthDate;
+    public String getLength() {
+        return length;
     }
 
-    public void setLengthDate(String lengthDate) {
-        this.lengthDate = lengthDate;
+    public void setLength(String length) {
+        this.length = length;
     }
 
     public String getSummary() {
@@ -39,5 +40,12 @@ public class Episod extends Track{
 
     public void setSummary(String summary) {
         this.summary = summary;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+    public String getDate() {
+        return this.date;
     }
 }
