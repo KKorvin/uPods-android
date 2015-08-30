@@ -11,6 +11,8 @@ public interface IPlayableMediaItem extends Serializable {
 
     String getSubHeader();
 
+    String getBottomHeader();
+
     String getName();
 
     /**
