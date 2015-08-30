@@ -35,7 +35,7 @@ public class RadioNotificationPanel extends PlayerNotificationPanel {
         this.nBuilder.setOngoing(false);
 
         Intent intentOpen = new Intent(mContext, ActivityPlayer.class);
-        intentOpen.putExtra(ActivityPlayer.RADIO_ITEM_EXTRA, UniversalPlayer.getInstance().getPlayingMediaItem());
+        intentOpen.putExtra(ActivityPlayer.MEDIA_ITEM_EXTRA, UniversalPlayer.getInstance().getPlayingMediaItem());
         PendingIntent piOpen = PendingIntent.getActivity(mContext, 0, intentOpen, 0);
 
         this.nBuilder.setContentIntent(piOpen);

@@ -20,6 +20,7 @@ import com.chickenkiller.upods2.interfaces.IContentLoadListener;
 import com.chickenkiller.upods2.interfaces.IFeaturableMediaItem;
 import com.chickenkiller.upods2.interfaces.IFragmentsManager;
 import com.chickenkiller.upods2.interfaces.INetworkUIupdater;
+import com.chickenkiller.upods2.interfaces.IPlayableMediaItem;
 import com.chickenkiller.upods2.models.BannersLayoutItem;
 import com.chickenkiller.upods2.models.MediaItem;
 import com.chickenkiller.upods2.models.MediaItemTitle;
@@ -138,8 +139,8 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         @Override
         public void onClick(View view) {
             FragmentRadioItemDetails fragmentRadioItemDetails = new FragmentRadioItemDetails();
-            if (items.get(getAdapterPosition()) instanceof RadioItem) {
-                fragmentRadioItemDetails.setRadioItem((RadioItem) items.get(getAdapterPosition()));
+            if (items.get(getAdapterPosition()) instanceof IPlayableMediaItem) {
+                fragmentRadioItemDetails.setPlayableItem((IPlayableMediaItem) items.get(getAdapterPosition()));
             }
             if (!fragmentsManager.hasFragment(FragmentRadioItemDetails.TAG)) {
                 fragmentsManager.showFragment(R.id.fl_window, fragmentRadioItemDetails, FragmentRadioItemDetails.TAG,

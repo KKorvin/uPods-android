@@ -3,6 +3,7 @@ package com.chickenkiller.upods2.models;
 import android.content.Context;
 
 import com.chickenkiller.upods2.interfaces.IFeaturableMediaItem;
+import com.chickenkiller.upods2.interfaces.IPlayableMediaItem;
 import com.chickenkiller.upods2.utils.GlobalUtils;
 
 import org.json.JSONArray;
@@ -13,7 +14,7 @@ import java.util.ArrayList;
 /**
  * Created by alonzilberman on 7/3/15.
  */
-public class RadioItem extends MediaItem implements IFeaturableMediaItem {
+public class RadioItem extends MediaItem implements IFeaturableMediaItem, IPlayableMediaItem {
 
     private final static String DEFAULT_IMAGE = "https://upods.io/static/radio_stations/default/no_image.png";
 
@@ -87,6 +88,7 @@ public class RadioItem extends MediaItem implements IFeaturableMediaItem {
         return items;
     }
 
+    @Override
     public String getStreamUrl() {
         return streamUrl;
     }
@@ -112,10 +114,21 @@ public class RadioItem extends MediaItem implements IFeaturableMediaItem {
         return coverImageUrl;
     }
 
+    @Override
+    public String getSubHeader() {
+        return this.country;
+    }
+
+    @Override
+    public boolean hasSubTracks() {
+        return false;
+    }
+
     public void setCoverImageUrl(String coverImageUrl) {
         this.coverImageUrl = coverImageUrl;
     }
 
+    @Override
     public String getDescription() {
         return description;
     }

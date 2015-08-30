@@ -47,7 +47,7 @@ public class BannerItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         public void onClick(View view) {
             if(fragmentsManager!=null) {
                 FragmentRadioItemDetails fragmentRadioItemDetails = new FragmentRadioItemDetails();
-                fragmentRadioItemDetails.setRadioItem(getItem(getAdapterPosition()));
+                fragmentRadioItemDetails.setPlayableItem(getItem(getAdapterPosition()));
                 if(!fragmentsManager.hasFragment(FragmentRadioItemDetails.TAG)) {
                     fragmentsManager.showFragment(R.id.fl_window, fragmentRadioItemDetails, FragmentRadioItemDetails.TAG,
                             IFragmentsManager.FragmentOpenType.OVERLAY, IFragmentsManager.FragmentAnimationType.BOTTOM_TOP);

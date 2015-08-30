@@ -8,4 +8,5 @@ public interface IFeaturableMediaItem {
     String getCoverImageUrl();
 
     String getName();
+
 }

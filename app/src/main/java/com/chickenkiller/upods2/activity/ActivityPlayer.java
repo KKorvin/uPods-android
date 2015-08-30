@@ -6,24 +6,24 @@ import android.os.Bundle;
 
 import com.chickenkiller.upods2.R;
 import com.chickenkiller.upods2.controllers.UniversalPlayer;
-import com.chickenkiller.upods2.models.MediaItem;
+import com.chickenkiller.upods2.interfaces.IPlayableMediaItem;
 import com.chickenkiller.upods2.models.RadioItem;
 import com.chickenkiller.upods2.view.controller.FragmentMainFeatured;
 import com.chickenkiller.upods2.view.controller.FragmentPlayer;
 
 public class ActivityPlayer extends FragmentsActivity {
 
-    public static final String RADIO_ITEM_EXTRA = "radioItem";
-    private MediaItem currentMediaItem;
+    public static final String MEDIA_ITEM_EXTRA = "mediaItem";
+    private IPlayableMediaItem currentMediaItem;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_player);
-        if (getIntent().hasExtra(RADIO_ITEM_EXTRA)) {
-            currentMediaItem = (RadioItem) getIntent().getExtras().get(RADIO_ITEM_EXTRA);
-        } else if (savedInstanceState.getParcelable(RADIO_ITEM_EXTRA) != null) {
-            currentMediaItem = (RadioItem) savedInstanceState.getSerializable(RADIO_ITEM_EXTRA);
+        if (getIntent().hasExtra(MEDIA_ITEM_EXTRA)) {
+            currentMediaItem = (IPlayableMediaItem) getIntent().getExtras().get(MEDIA_ITEM_EXTRA);
+        } else if (savedInstanceState.getParcelable(MEDIA_ITEM_EXTRA) != null) {
+            currentMediaItem = (IPlayableMediaItem) savedInstanceState.getSerializable(MEDIA_ITEM_EXTRA);
         } else if (UniversalPlayer.getInstance().isPlaying()) {
             currentMediaItem = UniversalPlayer.getInstance().getPlayingMediaItem();
         }
@@ -32,7 +32,7 @@ public class ActivityPlayer extends FragmentsActivity {
         }
         if (getFragmentManager().getBackStackEntryCount() == 0) {
             FragmentPlayer fragmentPlayer = new FragmentPlayer();
-            fragmentPlayer.setRadioItem((RadioItem) currentMediaItem);
+            fragmentPlayer.setPlayableItem((RadioItem) currentMediaItem);
             showFragment(R.id.fl_window, fragmentPlayer, FragmentMainFeatured.TAG);
         }
     }

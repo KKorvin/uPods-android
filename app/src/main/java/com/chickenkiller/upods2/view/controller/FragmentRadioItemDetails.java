@@ -24,7 +24,7 @@ import com.chickenkiller.upods2.R;
 import com.chickenkiller.upods2.activity.ActivityPlayer;
 import com.chickenkiller.upods2.interfaces.IMovable;
 import com.chickenkiller.upods2.interfaces.IOverlayable;
-import com.chickenkiller.upods2.models.RadioItem;
+import com.chickenkiller.upods2.interfaces.IPlayableMediaItem;
 import com.chickenkiller.upods2.utils.UIHelper;
 import com.chickenkiller.upods2.views.DetailsScrollView;
 
@@ -40,7 +40,7 @@ public class FragmentRadioItemDetails extends Fragment implements View.OnTouchLi
     private static int topScrollBorder;
     public static String TAG = "media_details";
 
-    private RadioItem radioItem;
+    private IPlayableMediaItem mediaItem;
 
     private RelativeLayout rlDetailedContent;
     private DetailsScrollView svDetails;
@@ -78,15 +78,20 @@ public class FragmentRadioItemDetails extends Fragment implements View.OnTouchLi
         imgBluredCover = (ImageView) view.findViewById(R.id.imgBluredCover);
         fbDetailsPlay = (FloatingActionButton) view.findViewById(R.id.fbDetailsPlay);
         svDetails = (DetailsScrollView) view.findViewById(R.id.svDetails);
-        svDetails.setEnabled(false);
-        svDetails.setIMovable(this);
         moveDeltaY = 0;
 
-        if (radioItem != null) {
+        if (mediaItem != null) {
             initImagesColors();
-            tvDetailedHeader.setText(radioItem.getName());
-            tvDetailedSubHeader.setText(radioItem.getCountry());
-            tvDetailedDescription.setText(radioItem.getDescription());
+            tvDetailedHeader.setText(mediaItem.getName());
+            tvDetailedSubHeader.setText(mediaItem.getSubHeader());
+            if (mediaItem.getDescription() != null) {
+                tvDetailedDescription.setText(mediaItem.getDescription());
+                svDetails.setEnabled(false);
+                svDetails.setIMovable(this);
+            } else {
+                tvDetailedDescription.setVisibility(View.GONE);
+                svDetails.setVisibility(View.GONE);
+            }
         }
         rlDetailedContent.setOnTouchListener(this);
         view.setOnClickListener(frgamentCloseClickListener);
@@ -96,7 +101,7 @@ public class FragmentRadioItemDetails extends Fragment implements View.OnTouchLi
             @Override
             public void onClick(View view) {
                 Intent myIntent = new Intent(getActivity(), ActivityPlayer.class);
-                myIntent.putExtra(ActivityPlayer.RADIO_ITEM_EXTRA, radioItem);
+                myIntent.putExtra(ActivityPlayer.MEDIA_ITEM_EXTRA, mediaItem);
                 getActivity().startActivity(myIntent);
                 getActivity().finish();
             }
@@ -106,7 +111,7 @@ public class FragmentRadioItemDetails extends Fragment implements View.OnTouchLi
     }
 
     private void initImagesColors() {
-        Glide.with(getActivity()).load(radioItem.getCoverImageUrl()).crossFade().into(new GlideDrawableImageViewTarget(imgDetailedTopCover) {
+        Glide.with(getActivity()).load(mediaItem.getCoverImageUrl()).crossFade().into(new GlideDrawableImageViewTarget(imgDetailedTopCover) {
             @Override
             public void onResourceReady(GlideDrawable drawable, GlideAnimation anim) {
                 super.onResourceReady(drawable, anim);
@@ -128,8 +133,8 @@ public class FragmentRadioItemDetails extends Fragment implements View.OnTouchLi
         topScrollBorder = screenHeight - (int) (screenHeight * TOP_SCROLL_BORDER_PERCENT);
     }
 
-    public void setRadioItem(RadioItem radioItem) {
-        this.radioItem = radioItem;
+    public void setPlayableItem(IPlayableMediaItem mediaItem) {
+        this.mediaItem = mediaItem;
     }
 
     @Override

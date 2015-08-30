@@ -1,6 +1,7 @@
 package com.chickenkiller.upods2.models;
 
 import com.chickenkiller.upods2.interfaces.IFeaturableMediaItem;
+import com.chickenkiller.upods2.interfaces.IPlayableMediaItem;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -10,7 +11,7 @@ import java.util.ArrayList;
 /**
  * Created by alonzilberman on 8/24/15.
  */
-public class Podcast extends MediaItem implements IFeaturableMediaItem {
+public class Podcast extends MediaItem implements IFeaturableMediaItem, IPlayableMediaItem {
     protected String name;
     protected String censoredName;
     protected String artistName;
@@ -32,7 +33,7 @@ public class Podcast extends MediaItem implements IFeaturableMediaItem {
                 this.artistName = jsonItem.has("artistName") ? jsonItem.getString("artistName") : "";
                 this.feedUrl = jsonItem.has("feedUrl") ? jsonItem.getString("feedUrl") : "";
                 this.imageUrl = jsonItem.has("artworkUrl100") ? jsonItem.getString("artworkUrl100") : "";
-                if(this.imageUrl.isEmpty()){
+                if (this.imageUrl.isEmpty()) {
                     this.imageUrl = jsonItem.has("artworkUrl60") ? jsonItem.getString("artworkUrl60") : "";
                 }
                 this.country = jsonItem.has("country") ? jsonItem.getString("country") : "";
@@ -123,6 +124,26 @@ public class Podcast extends MediaItem implements IFeaturableMediaItem {
     @Override
     public String getCoverImageUrl() {
         return imageUrl;
+    }
+
+    @Override
+    public String getSubHeader() {
+        return this.genre;
+    }
+
+    @Override
+    public boolean hasSubTracks() {
+        return true;
+    }
+
+    @Override
+    public String getDescription() {
+        return null;
+    }
+
+    @Override
+    public String getStreamUrl() {
+        return "";
     }
 
     public void setImageUrl(String imageUrl) {

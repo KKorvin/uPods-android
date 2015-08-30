@@ -20,6 +20,7 @@ import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
 import com.chickenkiller.upods2.R;
 import com.chickenkiller.upods2.activity.ActivityPlayer;
 import com.chickenkiller.upods2.controllers.UniversalPlayer;
+import com.chickenkiller.upods2.interfaces.IPlayableMediaItem;
 import com.chickenkiller.upods2.interfaces.IPlayerStateListener;
 import com.chickenkiller.upods2.models.RadioItem;
 import com.chickenkiller.upods2.utils.UIHelper;
@@ -32,7 +33,7 @@ public class FragmentPlayer extends Fragment implements MediaPlayer.OnPreparedLi
     public static String TAG = "fragmentPlayer";
 
     private ImageButton btnPlay;
-    private RadioItem radioItem;
+    private IPlayableMediaItem playableMediaItem;
     private ImageView imgPlayerCover;
     private ImageView imgClosePlayer;
     private RelativeLayout rlTopSectionBckg;
@@ -73,10 +74,10 @@ public class FragmentPlayer extends Fragment implements MediaPlayer.OnPreparedLi
         tvPlayerTitle = (TextView) view.findViewById(R.id.tvPlayerTitle);
         tvPlayserSubtitle = (TextView) view.findViewById(R.id.tvPlayserSubtitle);
 
-        if (radioItem == null) {
-            radioItem = (RadioItem) savedInstanceState.get(ActivityPlayer.RADIO_ITEM_EXTRA);
+        if (playableMediaItem == null) {
+            playableMediaItem = (IPlayableMediaItem) savedInstanceState.get(ActivityPlayer.MEDIA_ITEM_EXTRA);
         }
-        if (radioItem != null) {
+        if (playableMediaItem != null) {
             initRadioUI(view);
             universalPlayer = UniversalPlayer.getInstance();
             runPlayer();
@@ -85,9 +86,9 @@ public class FragmentPlayer extends Fragment implements MediaPlayer.OnPreparedLi
     }
 
     public void initRadioUI(View view) {
-        tvPlayerTitle.setText(radioItem.getName());
-        tvPlayserSubtitle.setText(radioItem.getCountry());
-        Glide.with(getActivity()).load(radioItem.getCoverImageUrl()).crossFade().into(new GlideDrawableImageViewTarget(imgPlayerCover) {
+        tvPlayerTitle.setText(playableMediaItem.getName());
+        tvPlayserSubtitle.setText(playableMediaItem.getSubHeader());
+        Glide.with(getActivity()).load(playableMediaItem.getCoverImageUrl()).crossFade().into(new GlideDrawableImageViewTarget(imgPlayerCover) {
             @Override
             public void onResourceReady(GlideDrawable drawable, GlideAnimation anim) {
                 super.onResourceReady(drawable, anim);
@@ -99,20 +100,20 @@ public class FragmentPlayer extends Fragment implements MediaPlayer.OnPreparedLi
 
     }
 
-    public void setRadioItem(RadioItem radioItem) {
-        this.radioItem = radioItem;
+    public void setPlayableItem(RadioItem radioItem) {
+        this.playableMediaItem = radioItem;
     }
 
     private void runPlayer() {
         universalPlayer.setPreparedListener(this);
         universalPlayer.setPlayerStateListener(this);
-        if (universalPlayer.isPlaying() && universalPlayer.isCurrentMediaItem(radioItem)) {
+        if (universalPlayer.isPlaying() && universalPlayer.isCurrentMediaItem(playableMediaItem)) {
             btnPlay.setBackgroundResource(R.drawable.ic_pause_white);
             return;
         } else if (universalPlayer.isPlaying()) {
             universalPlayer.resetPlayer();
         }
-        universalPlayer.setMediaItem(radioItem);
+        universalPlayer.setMediaItem(playableMediaItem);
         universalPlayer.prepare();
         btnPlay.setBackgroundResource(R.drawable.ic_play_white);
         //btnPlay.setText("Fetching...");
@@ -133,7 +134,7 @@ public class FragmentPlayer extends Fragment implements MediaPlayer.OnPreparedLi
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        outState.putSerializable(ActivityPlayer.RADIO_ITEM_EXTRA, radioItem);
+        outState.putSerializable(ActivityPlayer.MEDIA_ITEM_EXTRA, playableMediaItem);
         super.onSaveInstanceState(outState);
     }
 

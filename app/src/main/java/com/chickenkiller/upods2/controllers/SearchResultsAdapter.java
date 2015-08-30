@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.chickenkiller.upods2.R;
 import com.chickenkiller.upods2.interfaces.IFragmentsManager;
+import com.chickenkiller.upods2.interfaces.IPlayableMediaItem;
 import com.chickenkiller.upods2.interfaces.IToolbarHolder;
 import com.chickenkiller.upods2.models.MediaItem;
 import com.chickenkiller.upods2.models.Podcast;
@@ -50,8 +51,8 @@ public class SearchResultsAdapter extends RecyclerView.Adapter<RecyclerView.View
         @Override
         public void onClick(View view) {
             FragmentRadioItemDetails fragmentRadioItemDetails = new FragmentRadioItemDetails();
-            if (items.get(getAdapterPosition()) instanceof RadioItem) {
-                fragmentRadioItemDetails.setRadioItem((RadioItem) items.get(getAdapterPosition()));
+            if (items.get(getAdapterPosition()) instanceof IPlayableMediaItem) {
+                fragmentRadioItemDetails.setPlayableItem((IPlayableMediaItem) items.get(getAdapterPosition()));
             }
             if (!fragmentsManager.hasFragment(FragmentRadioItemDetails.TAG)) {
                 SearchView searchView = (SearchView) ((IToolbarHolder) mContext).getToolbar().getMenu().findItem(R.id.action_search).getActionView();
