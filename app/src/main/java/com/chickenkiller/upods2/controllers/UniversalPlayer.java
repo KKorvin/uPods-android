@@ -2,8 +2,8 @@ package com.chickenkiller.upods2.controllers;
 
 import android.media.MediaPlayer;
 
+import com.chickenkiller.upods2.interfaces.IPlayableMediaItem;
 import com.chickenkiller.upods2.interfaces.IPlayerStateListener;
-import com.chickenkiller.upods2.models.MediaItem;
 import com.chickenkiller.upods2.models.RadioItem;
 import com.chickenkiller.upods2.views.PlayerNotificationPanel;
 import com.chickenkiller.upods2.views.RadioNotificationPanel;
@@ -22,7 +22,7 @@ public class UniversalPlayer implements MediaPlayer.OnPreparedListener {
     private MediaPlayer mediaPlayer;
     private MediaPlayer.OnPreparedListener preparedListener;
     private IPlayerStateListener playerStateListener;
-    private MediaItem mediaItem;
+    private IPlayableMediaItem mediaItem;
     private PlayerNotificationPanel notificationPanel;
 
     public boolean isPrepaired;
@@ -38,7 +38,7 @@ public class UniversalPlayer implements MediaPlayer.OnPreparedListener {
         return universalPlayer;
     }
 
-    public void setMediaItem(MediaItem mediaItem) {
+    public void setMediaItem(IPlayableMediaItem mediaItem) {
         if (isCurrentMediaItem(mediaItem)) {
             return;
         }
@@ -57,7 +57,7 @@ public class UniversalPlayer implements MediaPlayer.OnPreparedListener {
         this.playerStateListener = playerStateListener;
     }
 
-    public void prepare(MediaItem mediaItem, MediaPlayer.OnPreparedListener preparedListener) {
+    public void prepare(IPlayableMediaItem mediaItem, MediaPlayer.OnPreparedListener preparedListener) {
         setPreparedListener(preparedListener);
         setMediaItem(mediaItem);
         prepare();
@@ -149,17 +149,17 @@ public class UniversalPlayer implements MediaPlayer.OnPreparedListener {
         playerStateListener = null;
     }
 
-    public MediaItem getPlayingMediaItem() {
+    public IPlayableMediaItem getPlayingMediaItem() {
         return mediaItem;
     }
 
 
-    public boolean isCurrentMediaItem(MediaItem mediaItem) {
+    public boolean isCurrentMediaItem(IPlayableMediaItem mediaItem) {
         if (this.mediaItem == null) {
             return false;
         }
-        if (this.mediaItem instanceof RadioItem && mediaItem instanceof RadioItem) {
-            return ((RadioItem) this.mediaItem).getStreamUrl().equals(((RadioItem) mediaItem).getStreamUrl());
+        if (this.mediaItem.equals(mediaItem)) {
+            return this.mediaItem.getStreamUrl().equals(mediaItem.getStreamUrl());
         }
         return false;
     }
