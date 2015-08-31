@@ -32,8 +32,8 @@
                 android:id="@+id/viewDetailedHeader"
                 android:layout_width="fill_parent"
                 android:layout_height="match_parent"
-                android:background="@color/red_500"
-                android:alpha="0.7" />
+                android:alpha="0.7"
+                android:background="@color/red_500" />
 
             <ImageView
                 android:id="@+id/imgDetailedCover"
@@ -55,8 +55,8 @@
                 android:layout_toRightOf="@+id/imgDetailedCover"
                 android:text="BBC Radio One"
                 android:textColor="@color/white"
-                android:textStyle="bold"
-                android:textSize="@dimen/default_text_size_18" />
+                android:textSize="@dimen/default_text_size_18"
+                android:textStyle="bold" />
 
             <ImageView
                 android:id="@+id/imgDetailedFavorites"
@@ -81,8 +81,8 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_above="@+id/tvDetailedBottomHeader"
-                android:layout_marginLeft="10dp"
                 android:layout_marginBottom="5dp"
+                android:layout_marginLeft="10dp"
                 android:layout_toRightOf="@+id/imgDetailedCover"
                 android:text="England"
                 android:textColor="@color/white"
@@ -93,8 +93,8 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
-                android:layout_marginLeft="10dp"
                 android:layout_marginBottom="20dp"
+                android:layout_marginLeft="10dp"
                 android:layout_toRightOf="@+id/imgDetailedCover"
                 android:text="Pop and Rock Music"
                 android:textColor="@color/white"
@@ -125,7 +125,8 @@
             android:id="@+id/svDetails"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:layout_below="@+id/vDetailsDevider">
+            android:layout_below="@+id/vDetailsDevider"
+            android:visibility="gone">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -158,5 +159,22 @@
                     android:textStyle="normal" />
             </LinearLayout>
         </com.chickenkiller.upods2.views.DetailsScrollView>
+
+        <ProgressBar
+            android:id="@+id/pbTracks"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/vDetailsDevider"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="80dp"
+            android:visibility="gone" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rvTracks"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_below="@+id/vDetailsDevider"
+            android:clipToPadding="true"
+            android:visibility="visible" />
     </RelativeLayout>
 </LinearLayout>

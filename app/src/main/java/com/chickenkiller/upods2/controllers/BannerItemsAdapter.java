@@ -14,7 +14,7 @@ import com.bumptech.glide.Glide;
 import com.chickenkiller.upods2.R;
 import com.chickenkiller.upods2.interfaces.IFragmentsManager;
 import com.chickenkiller.upods2.models.RadioItem;
-import com.chickenkiller.upods2.view.controller.FragmentRadioItemDetails;
+import com.chickenkiller.upods2.view.controller.FragmentMediaItemDetails;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,10 +46,10 @@ public class BannerItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         @Override
         public void onClick(View view) {
             if(fragmentsManager!=null) {
-                FragmentRadioItemDetails fragmentRadioItemDetails = new FragmentRadioItemDetails();
-                fragmentRadioItemDetails.setPlayableItem(getItem(getAdapterPosition()));
-                if(!fragmentsManager.hasFragment(FragmentRadioItemDetails.TAG)) {
-                    fragmentsManager.showFragment(R.id.fl_window, fragmentRadioItemDetails, FragmentRadioItemDetails.TAG,
+                FragmentMediaItemDetails fragmentMediaItemDetails = new FragmentMediaItemDetails();
+                fragmentMediaItemDetails.setPlayableItem(getItem(getAdapterPosition()));
+                if(!fragmentsManager.hasFragment(FragmentMediaItemDetails.TAG)) {
+                    fragmentsManager.showFragment(R.id.fl_window, fragmentMediaItemDetails, FragmentMediaItemDetails.TAG,
                             IFragmentsManager.FragmentOpenType.OVERLAY, IFragmentsManager.FragmentAnimationType.BOTTOM_TOP);
                 }
             }

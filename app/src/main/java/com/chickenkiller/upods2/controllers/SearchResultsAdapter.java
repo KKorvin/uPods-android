@@ -17,7 +17,7 @@ import com.chickenkiller.upods2.interfaces.IToolbarHolder;
 import com.chickenkiller.upods2.models.MediaItem;
 import com.chickenkiller.upods2.models.Podcast;
 import com.chickenkiller.upods2.models.RadioItem;
-import com.chickenkiller.upods2.view.controller.FragmentRadioItemDetails;
+import com.chickenkiller.upods2.view.controller.FragmentMediaItemDetails;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,12 +35,12 @@ public class SearchResultsAdapter extends RecyclerView.Adapter<RecyclerView.View
     private IFragmentsManager fragmentsManager;
 
 
-    private class ViewHolderRadioResult extends RecyclerView.ViewHolder implements View.OnClickListener {
+    private class ViewHolderSearchResult extends RecyclerView.ViewHolder implements View.OnClickListener {
         public ImageView imgCover;
         public TextView tvTitle;
         public TextView tvCountry;
 
-        public ViewHolderRadioResult(View view) {
+        public ViewHolderSearchResult(View view) {
             super(view);
             this.imgCover = (ImageView) view.findViewById(R.id.imgSearchRadioCover);
             this.tvTitle = (TextView) view.findViewById(R.id.tvSearchRadioTitle);
@@ -50,14 +50,14 @@ public class SearchResultsAdapter extends RecyclerView.Adapter<RecyclerView.View
 
         @Override
         public void onClick(View view) {
-            FragmentRadioItemDetails fragmentRadioItemDetails = new FragmentRadioItemDetails();
+            FragmentMediaItemDetails fragmentMediaItemDetails = new FragmentMediaItemDetails();
             if (items.get(getAdapterPosition()) instanceof IPlayableMediaItem) {
-                fragmentRadioItemDetails.setPlayableItem((IPlayableMediaItem) items.get(getAdapterPosition()));
+                fragmentMediaItemDetails.setPlayableItem((IPlayableMediaItem) items.get(getAdapterPosition()));
             }
-            if (!fragmentsManager.hasFragment(FragmentRadioItemDetails.TAG)) {
+            if (!fragmentsManager.hasFragment(FragmentMediaItemDetails.TAG)) {
                 SearchView searchView = (SearchView) ((IToolbarHolder) mContext).getToolbar().getMenu().findItem(R.id.action_search).getActionView();
                 searchView.clearFocus();
-                fragmentsManager.showFragment(R.id.fl_window, fragmentRadioItemDetails, FragmentRadioItemDetails.TAG,
+                fragmentsManager.showFragment(R.id.fl_window, fragmentMediaItemDetails, FragmentMediaItemDetails.TAG,
                         IFragmentsManager.FragmentOpenType.OVERLAY, IFragmentsManager.FragmentAnimationType.BOTTOM_TOP);
             }
         }
@@ -80,25 +80,25 @@ public class SearchResultsAdapter extends RecyclerView.Adapter<RecyclerView.View
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(itemLayout, parent, false);
-        RecyclerView.ViewHolder viewHolder = new ViewHolderRadioResult(view);
+        RecyclerView.ViewHolder viewHolder = new ViewHolderSearchResult(view);
         return viewHolder;
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        if (holder instanceof ViewHolderRadioResult) {
+        if (holder instanceof ViewHolderSearchResult) {
             MediaItem currentItem = items.get(position);
             ;
             if (currentItem instanceof RadioItem) {
                 Glide.with(mContext).load(((RadioItem) currentItem).getCoverImageUrl()).centerCrop()
-                        .crossFade().into(((ViewHolderRadioResult) holder).imgCover);
-                ((ViewHolderRadioResult) holder).tvTitle.setText(((RadioItem) currentItem).getName());
-                ((ViewHolderRadioResult) holder).tvCountry.setText(((RadioItem) currentItem).getCountry());
+                        .crossFade().into(((ViewHolderSearchResult) holder).imgCover);
+                ((ViewHolderSearchResult) holder).tvTitle.setText(((RadioItem) currentItem).getName());
+                ((ViewHolderSearchResult) holder).tvCountry.setText(((RadioItem) currentItem).getCountry());
             } else {
                 Glide.with(mContext).load(((Podcast) currentItem).getCoverImageUrl()).centerCrop()
-                        .crossFade().into(((ViewHolderRadioResult) holder).imgCover);
-                ((ViewHolderRadioResult) holder).tvTitle.setText(((Podcast) currentItem).getName());
-                ((ViewHolderRadioResult) holder).tvCountry.setText(((Podcast) currentItem).getGenre());
+                        .crossFade().into(((ViewHolderSearchResult) holder).imgCover);
+                ((ViewHolderSearchResult) holder).tvTitle.setText(((Podcast) currentItem).getName());
+                ((ViewHolderSearchResult) holder).tvCountry.setText(((Podcast) currentItem).getGenre());
             }
             holder.itemView.setTag(currentItem);
         }

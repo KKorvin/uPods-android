@@ -5,6 +5,9 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.OrientationHelper;
+import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -12,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -22,16 +26,29 @@ import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
 import com.chickenkiller.upods2.R;
 import com.chickenkiller.upods2.activity.ActivityPlayer;
+import com.chickenkiller.upods2.controllers.BackendManager;
+import com.chickenkiller.upods2.controllers.EpisodsXMLHandler;
+import com.chickenkiller.upods2.controllers.TracksAdapter;
 import com.chickenkiller.upods2.interfaces.IMovable;
+import com.chickenkiller.upods2.interfaces.INetworkSimpleUIupdater;
 import com.chickenkiller.upods2.interfaces.IOverlayable;
 import com.chickenkiller.upods2.interfaces.IPlayableMediaItem;
+import com.chickenkiller.upods2.interfaces.ITrackable;
 import com.chickenkiller.upods2.utils.UIHelper;
 import com.chickenkiller.upods2.views.DetailsScrollView;
+
+import org.xml.sax.InputSource;
+import org.xml.sax.XMLReader;
+
+import java.io.StringReader;
+
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
 
 /**
  * Created by alonzilberman on 7/8/15.
  */
-public class FragmentRadioItemDetails extends Fragment implements View.OnTouchListener, IMovable {
+public class FragmentMediaItemDetails extends Fragment implements View.OnTouchListener, IMovable {
     private static final int MAGIC_NUMBER = -250; //Don't know what it does
     private static final float BOTTOM_SCROLL_BORDER_PERCENT = 0.35f;
     private static final float TOP_SCROLL_BORDER_PERCENT = 1f;
@@ -40,10 +57,11 @@ public class FragmentRadioItemDetails extends Fragment implements View.OnTouchLi
     private static int topScrollBorder;
     public static String TAG = "media_details";
 
-    private IPlayableMediaItem mediaItem;
+    private IPlayableMediaItem playableItem;
 
     private RelativeLayout rlDetailedContent;
     private DetailsScrollView svDetails;
+    private RecyclerView rvTracks;
     private TextView tvDetailedDescription;
     private TextView tvDetailedSubHeader;
     private TextView tvDetailedHeader;
@@ -54,6 +72,8 @@ public class FragmentRadioItemDetails extends Fragment implements View.OnTouchLi
     private ImageView imgDetailedTopCover;
     private ImageView imgBluredCover;
     private FloatingActionButton fbDetailsPlay;
+    private TracksAdapter tracksAdapter;
+    private ProgressBar pbTracks;
     private int moveDeltaY;
     private int screenHeight;
 
@@ -80,21 +100,36 @@ public class FragmentRadioItemDetails extends Fragment implements View.OnTouchLi
         imgBluredCover = (ImageView) view.findViewById(R.id.imgBluredCover);
         fbDetailsPlay = (FloatingActionButton) view.findViewById(R.id.fbDetailsPlay);
         svDetails = (DetailsScrollView) view.findViewById(R.id.svDetails);
+        rvTracks = (RecyclerView) view.findViewById(R.id.rvTracks);
+        pbTracks = (ProgressBar) view.findViewById(R.id.pbTracks);
         moveDeltaY = 0;
 
-        if (mediaItem != null) {
+        if (playableItem != null) {
             initImagesColors();
-            tvDetailedHeader.setText(mediaItem.getName());
-            tvDetailedSubHeader.setText(mediaItem.getSubHeader());
-            tvBottomHeader.setText(mediaItem.getBottomHeader());
-            if (mediaItem.getDescription() != null) {
-                tvDetailedDescription.setText(mediaItem.getDescription());
+            tvDetailedHeader.setText(playableItem.getName());
+            tvDetailedSubHeader.setText(playableItem.getSubHeader());
+            tvBottomHeader.setText(playableItem.getBottomHeader());
+
+            if (playableItem.hasTracks()) {
+                //Tracks recycle view
+                tracksAdapter = new TracksAdapter(playableItem, getActivity(), R.layout.track_item);
+                rvTracks.setAdapter(tracksAdapter);
+                LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+                layoutManager.setOrientation(OrientationHelper.VERTICAL);
+                rvTracks.setLayoutManager(layoutManager);
+                rvTracks.setVisibility(View.INVISIBLE);
+
+                pbTracks.setVisibility(View.VISIBLE);
+                svDetails.setVisibility(View.GONE);
+                loadTracks();
+            } else {
+                rvTracks.setVisibility(View.GONE);
+                svDetails.setVisibility(View.VISIBLE);
                 svDetails.setEnabled(false);
                 svDetails.setIMovable(this);
-            } else {
-                tvDetailedDescription.setVisibility(View.GONE);
-                svDetails.setVisibility(View.GONE);
+                tvDetailedDescription.setText(playableItem.getDescription());
             }
+
         }
         rlDetailedContent.setOnTouchListener(this);
         view.setOnClickListener(frgamentCloseClickListener);
@@ -104,7 +139,7 @@ public class FragmentRadioItemDetails extends Fragment implements View.OnTouchLi
             @Override
             public void onClick(View view) {
                 Intent myIntent = new Intent(getActivity(), ActivityPlayer.class);
-                myIntent.putExtra(ActivityPlayer.MEDIA_ITEM_EXTRA, mediaItem);
+                myIntent.putExtra(ActivityPlayer.MEDIA_ITEM_EXTRA, playableItem);
                 getActivity().startActivity(myIntent);
                 getActivity().finish();
             }
@@ -114,7 +149,7 @@ public class FragmentRadioItemDetails extends Fragment implements View.OnTouchLi
     }
 
     private void initImagesColors() {
-        Glide.with(getActivity()).load(mediaItem.getCoverImageUrl()).crossFade().into(new GlideDrawableImageViewTarget(imgDetailedTopCover) {
+        Glide.with(getActivity()).load(playableItem.getCoverImageUrl()).crossFade().into(new GlideDrawableImageViewTarget(imgDetailedTopCover) {
             @Override
             public void onResourceReady(GlideDrawable drawable, GlideAnimation anim) {
                 super.onResourceReady(drawable, anim);
@@ -136,8 +171,45 @@ public class FragmentRadioItemDetails extends Fragment implements View.OnTouchLi
         topScrollBorder = screenHeight - (int) (screenHeight * TOP_SCROLL_BORDER_PERCENT);
     }
 
+    private void loadTracks() {
+        BackendManager.getInstance().sendRequest(((ITrackable) playableItem).getTracksFeed(), new INetworkSimpleUIupdater() {
+                    @Override
+                    public void updateUISuccess(final String response) {
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                try {
+                                    SAXParserFactory spf = SAXParserFactory.newInstance();
+                                    SAXParser sp = spf.newSAXParser();
+                                    XMLReader xr = sp.getXMLReader();
+                                    EpisodsXMLHandler episodsXMLHandler = new EpisodsXMLHandler();
+                                    xr.setContentHandler(episodsXMLHandler);
+                                    //TODO could be encoding problem
+                                    InputSource inputSource = new InputSource(new StringReader(response));
+                                    xr.parse(inputSource);
+                                    tracksAdapter.addItems(episodsXMLHandler.getParsedEpisods());
+                                    rvTracks.setVisibility(View.VISIBLE);
+                                    pbTracks.setVisibility(View.GONE);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void updateUIFailed() {
+
+                    }
+                }
+
+        );
+
+    }
+
+
     public void setPlayableItem(IPlayableMediaItem mediaItem) {
-        this.mediaItem = mediaItem;
+        this.playableItem = mediaItem;
     }
 
     @Override

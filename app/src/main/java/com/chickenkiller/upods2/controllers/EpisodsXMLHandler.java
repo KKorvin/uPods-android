@@ -11,7 +11,7 @@ import java.util.ArrayList;
 /**
  * Created by alonzilberman on 8/31/15.
  */
-public class EpisodsParser extends DefaultHandler {
+public class EpisodsXMLHandler extends DefaultHandler {
     private final String ITEM_TITLE = "item";
     private final String TITLE = "title";
     private final String SUMMARY1 = "content:encoded";
@@ -30,7 +30,7 @@ public class EpisodsParser extends DefaultHandler {
     private Episod episod = null;
     private ArrayList<Episod> allEpisods;
 
-    public EpisodsParser() {
+    public EpisodsXMLHandler() {
         allEpisods = new ArrayList<>();
     }
 
@@ -100,6 +100,9 @@ public class EpisodsParser extends DefaultHandler {
         if (elementOn && isItem || elementOn) {
             elementValue.append(new String(ch, start, length));
         }
+    }
 
+    public ArrayList<Episod>getParsedEpisods(){
+        return this.allEpisods;
     }
 }

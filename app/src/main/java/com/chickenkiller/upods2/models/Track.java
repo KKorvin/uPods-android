@@ -8,6 +8,11 @@ public abstract class Track {
     protected String title;
     protected String mp3Url;
 
+    public Track(){
+        this.title = "";
+        this.mp3Url = "";
+    }
+
     public String getTitle() {
         return title;
     }

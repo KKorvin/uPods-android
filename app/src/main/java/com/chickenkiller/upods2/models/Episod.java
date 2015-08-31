@@ -1,14 +1,40 @@
 package com.chickenkiller.upods2.models;
 
+import com.chickenkiller.upods2.interfaces.IPlayableTrack;
+
 /**
  * Created by alonzilberman on 8/31/15.
  */
-public class Episod extends Track{
+public class Episod extends Track implements IPlayableTrack{
     private String summary;
     private String length;
     private String duration;
     private String btnDownloadText;
     private String date;
+
+    public Episod(){
+        super();
+        this.summary="";
+        this.length="";
+        this.duration="";
+        this.btnDownloadText="";
+        this.date="";
+    }
+
+    @Override
+    public String getTitle() {
+        return title;
+    }
+
+    @Override
+    public String getSubTitle() {
+        return date;
+    }
+
+    @Override
+    public String getAudeoUrl() {
+        return mp3Url;
+    }
 
     public String getBtnDownloadText() {
         return btnDownloadText;
@@ -48,4 +74,5 @@ public class Episod extends Track{
     public String getDate() {
         return this.date;
     }
+
 }

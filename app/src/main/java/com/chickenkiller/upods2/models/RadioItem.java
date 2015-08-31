@@ -97,17 +97,14 @@ public class RadioItem extends MediaItem implements IFeaturableMediaItem, IPlaya
         return streamUrl;
     }
 
-    public void setStreamUrl(String streamUrl) {
-        this.streamUrl = streamUrl;
+    @Override
+    public boolean hasTracks() {
+        return false;
     }
 
     @Override
     public String getName() {
         return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     @Override
@@ -125,21 +122,24 @@ public class RadioItem extends MediaItem implements IFeaturableMediaItem, IPlaya
 
     @Override
     public String getBottomHeader() {
-        return this.genre;
-    }
-
-    @Override
-    public boolean hasSubTracks() {
-        return false;
-    }
-
-    public void setCoverImageUrl(String coverImageUrl) {
-        this.coverImageUrl = coverImageUrl;
+        return null;
     }
 
     @Override
     public String getDescription() {
         return description;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setStreamUrl(String streamUrl) {
+        this.streamUrl = streamUrl;
+    }
+
+    public void setCoverImageUrl(String coverImageUrl) {
+        this.coverImageUrl = coverImageUrl;
     }
 
     public void setDescription(String description) {

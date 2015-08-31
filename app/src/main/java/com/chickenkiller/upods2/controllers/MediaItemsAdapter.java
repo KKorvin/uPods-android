@@ -26,7 +26,7 @@ import com.chickenkiller.upods2.models.MediaItem;
 import com.chickenkiller.upods2.models.MediaItemTitle;
 import com.chickenkiller.upods2.models.RadioItem;
 import com.chickenkiller.upods2.utils.ServerApi;
-import com.chickenkiller.upods2.view.controller.FragmentRadioItemDetails;
+import com.chickenkiller.upods2.view.controller.FragmentMediaItemDetails;
 import com.chickenkiller.upods2.views.ImageViewSquare;
 import com.lsjwzh.widget.recyclerviewpager.RecyclerViewPager;
 
@@ -138,12 +138,12 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
         @Override
         public void onClick(View view) {
-            FragmentRadioItemDetails fragmentRadioItemDetails = new FragmentRadioItemDetails();
+            FragmentMediaItemDetails fragmentMediaItemDetails = new FragmentMediaItemDetails();
             if (items.get(getAdapterPosition()) instanceof IPlayableMediaItem) {
-                fragmentRadioItemDetails.setPlayableItem((IPlayableMediaItem) items.get(getAdapterPosition()));
+                fragmentMediaItemDetails.setPlayableItem((IPlayableMediaItem) items.get(getAdapterPosition()));
             }
-            if (!fragmentsManager.hasFragment(FragmentRadioItemDetails.TAG)) {
-                fragmentsManager.showFragment(R.id.fl_window, fragmentRadioItemDetails, FragmentRadioItemDetails.TAG,
+            if (!fragmentsManager.hasFragment(FragmentMediaItemDetails.TAG)) {
+                fragmentsManager.showFragment(R.id.fl_window, fragmentMediaItemDetails, FragmentMediaItemDetails.TAG,
                         IFragmentsManager.FragmentOpenType.OVERLAY, IFragmentsManager.FragmentAnimationType.BOTTOM_TOP);
             }
         }

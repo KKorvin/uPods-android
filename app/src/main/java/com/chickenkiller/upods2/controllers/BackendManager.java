@@ -1,5 +1,6 @@
 package com.chickenkiller.upods2.controllers;
 
+import com.chickenkiller.upods2.interfaces.INetworkSimpleUIupdater;
 import com.chickenkiller.upods2.interfaces.INetworkUIupdater;
 import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.OkHttpClient;
@@ -93,6 +94,31 @@ public class BackendManager {
         }
     }
 
+    private void sendRequest(final Request request, final INetworkSimpleUIupdater uiUpdater) {
+        try {
+            client.newCall(request).enqueue(new Callback() {
+                @Override
+                public void onFailure(Request request, IOException e) {
+                    e.printStackTrace();
+                    uiUpdater.updateUIFailed();
+                }
+
+                @Override
+                public void onResponse(Response response) throws IOException {
+                    try {
+                        uiUpdater.updateUISuccess(response.body().string());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+            uiUpdater.updateUIFailed();
+        }
+    }
+
+
     private void sendRequest(QueueTask queueTask) {
         sendRequest(queueTask.request, queueTask.iNetworkUIupdater);
     }
@@ -104,6 +130,16 @@ public class BackendManager {
                 sendRequest(searchQueue.get(0));
             }
         }
+    }
+
+    /**
+     * Simple HTTP GET request
+     * @param url - any url
+     * @param uiUpdater INetworkSimpleUIupdater
+     */
+    public void sendRequest(String url, final INetworkSimpleUIupdater uiUpdater){
+        Request request = new Request.Builder().url(url).build();
+        sendRequest(request, uiUpdater);
     }
 
     public void loadTops(TopType topType, String topLink, final INetworkUIupdater uiUpdater) {

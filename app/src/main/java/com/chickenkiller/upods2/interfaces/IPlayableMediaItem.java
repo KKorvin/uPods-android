@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 /**
  * Created by alonzilberman on 8/30/15.
+ * Implement this interface by making item playable by player and shown by middle screen
  */
 public interface IPlayableMediaItem extends Serializable {
 
@@ -15,12 +16,9 @@ public interface IPlayableMediaItem extends Serializable {
 
     String getName();
 
-    /**
-     * @return if item has nested tracks (i.e episods for podcasts)
-     */
-    boolean hasSubTracks();
-
     String getDescription();
 
     String getStreamUrl();
+
+    boolean hasTracks();
 }

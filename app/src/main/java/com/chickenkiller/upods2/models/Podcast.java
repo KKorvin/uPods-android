@@ -2,6 +2,7 @@ package com.chickenkiller.upods2.models;
 
 import com.chickenkiller.upods2.interfaces.IFeaturableMediaItem;
 import com.chickenkiller.upods2.interfaces.IPlayableMediaItem;
+import com.chickenkiller.upods2.interfaces.ITrackable;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -11,7 +12,7 @@ import java.util.ArrayList;
 /**
  * Created by alonzilberman on 8/24/15.
  */
-public class Podcast extends MediaItem implements IFeaturableMediaItem, IPlayableMediaItem {
+public class Podcast extends MediaItem implements IFeaturableMediaItem, IPlayableMediaItem, ITrackable {
     protected String name;
     protected String censoredName;
     protected String artistName;
@@ -23,8 +24,15 @@ public class Podcast extends MediaItem implements IFeaturableMediaItem, IPlayabl
     protected String country;
     protected String genre;
 
+    protected ArrayList<Track> episods;
+
+    public Podcast(){
+        super();
+        this.episods = new ArrayList<>();
+    }
 
     public Podcast(JSONObject jsonItem) {
+        this();
         try {
             if (jsonItem.has("kind")) { //Itnes
                 this.id = jsonItem.has("trackId") ? jsonItem.getInt("trackId") : 0;
@@ -77,6 +85,36 @@ public class Podcast extends MediaItem implements IFeaturableMediaItem, IPlayabl
         return name;
     }
 
+    @Override
+    public String getCoverImageUrl() {
+        return imageUrl;
+    }
+
+    @Override
+    public String getSubHeader() {
+        return this.genre;
+    }
+
+    @Override
+    public String getBottomHeader() {
+        return this.country;
+    }
+
+    @Override
+    public String getDescription() {
+        return null;
+    }
+
+    @Override
+    public String getStreamUrl() {
+        return "";
+    }
+
+    @Override
+    public boolean hasTracks() {
+        return true;
+    }
+
     public void setName(String name) {
         this.name = name;
     }
@@ -121,36 +159,6 @@ public class Podcast extends MediaItem implements IFeaturableMediaItem, IPlayabl
         this.trackCount = trackCount;
     }
 
-    @Override
-    public String getCoverImageUrl() {
-        return imageUrl;
-    }
-
-    @Override
-    public String getSubHeader() {
-        return this.genre;
-    }
-
-    @Override
-    public String getBottomHeader() {
-        return this.country;
-    }
-
-    @Override
-    public boolean hasSubTracks() {
-        return true;
-    }
-
-    @Override
-    public String getDescription() {
-        return null;
-    }
-
-    @Override
-    public String getStreamUrl() {
-        return "";
-    }
-
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
     }
@@ -177,5 +185,20 @@ public class Podcast extends MediaItem implements IFeaturableMediaItem, IPlayabl
 
     public void setGenre(String genre) {
         this.genre = genre;
+    }
+
+    @Override
+    public void setTracks(ArrayList<Track> tracks) {
+        this.episods.addAll(tracks);
+    }
+
+    @Override
+    public ArrayList<Track> getTracks() {
+        return this.episods;
+    }
+
+    @Override
+    public String getTracksFeed() {
+        return this.feedUrl;
     }
 }
