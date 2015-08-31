@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:layout_marginLeft="7dp"
-    android:orientation="vertical">
+    android:layout_marginLeft="7dp">
 
     <TextView
         android:id="@+id/tvMediaCardTitle"
-        android:layout_width="fill_parent"
+        android:layout_width="wrap_content"
+        android:layout_alignParentTop="true"
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
         android:layout_marginLeft="15dp"
@@ -18,11 +18,24 @@
 
     <TextView
         android:id="@+id/tvMediaCardSubTitle"
-        android:layout_width="fill_parent"
+        android:layout_width="wrap_content"
+        android:layout_below="@+id/tvMediaCardTitle"
         android:layout_height="wrap_content"
         android:layout_marginBottom="7dp"
         android:layout_marginLeft="15dp"
         android:text="@string/top40_chanels_subheader"
         android:textColor="@color/media_card_subheader"
         android:textSize="@dimen/default_text_size_16" />
-</LinearLayout>
+
+    <Button
+        android:layout_width="65dp"
+        android:textColor="@color/white_material"
+        android:layout_height="40dp"
+        android:textSize="@dimen/default_text_size_12"
+        android:text="@string/btn_more"
+        android:layout_alignParentRight="true"
+        android:backgroundTint="@color/green_600"
+        android:layout_marginRight="19dp"
+        android:layout_marginTop="18dp" />
+
+</RelativeLayout>

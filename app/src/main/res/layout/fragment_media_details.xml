@@ -39,8 +39,8 @@
                 android:id="@+id/imgDetailedCover"
                 android:layout_width="120dp"
                 android:layout_height="120dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginLeft="13dp"
+                android:layout_marginTop="13dp"
                 android:scaleType="fitXY"
                 android:src="@drawable/ic_temp" />
 
@@ -50,13 +50,15 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="8dp"
                 android:layout_toLeftOf="@+id/imgDetailedFavorites"
                 android:layout_toRightOf="@+id/imgDetailedCover"
                 android:text="BBC Radio One"
                 android:textColor="@color/white"
-                android:textSize="@dimen/default_text_size_18"
-                android:textStyle="bold" />
+                android:textSize="@dimen/default_text_size_20" />
+            <!--
+            android:textStyle="bold"
+            -->
 
             <ImageView
                 android:id="@+id/imgDetailedFavorites"
@@ -81,24 +83,24 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_above="@+id/tvDetailedBottomHeader"
-                android:layout_marginBottom="5dp"
+                android:layout_marginBottom="0dp"
                 android:layout_marginLeft="10dp"
                 android:layout_toRightOf="@+id/imgDetailedCover"
                 android:text="England"
                 android:textColor="@color/white"
-                android:textSize="@dimen/default_text_size_18" />
+                android:textSize="@dimen/default_text_size_16" />
 
             <TextView
                 android:id="@+id/tvDetailedBottomHeader"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
-                android:layout_marginBottom="20dp"
+                android:layout_marginBottom="15dp"
                 android:layout_marginLeft="10dp"
                 android:layout_toRightOf="@+id/imgDetailedCover"
                 android:text="Pop and Rock Music"
                 android:textColor="@color/white"
-                android:textSize="@dimen/default_text_size_18" />
+                android:textSize="@dimen/default_text_size_16" />
 
         </RelativeLayout>
 
@@ -125,8 +127,7 @@
             android:id="@+id/svDetails"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:layout_below="@+id/vDetailsDevider"
-            android:visibility="gone">
+            android:layout_below="@+id/vDetailsDevider">
 
             <LinearLayout
                 android:layout_width="match_parent"
