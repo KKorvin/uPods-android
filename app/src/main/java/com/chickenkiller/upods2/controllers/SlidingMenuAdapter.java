@@ -16,7 +16,6 @@ import com.chickenkiller.upods2.interfaces.ISlidingMenuManager;
 import com.chickenkiller.upods2.models.SlidingMenuHeader;
 import com.chickenkiller.upods2.models.SlidingMenuItem;
 import com.chickenkiller.upods2.models.SlidingMenuRow;
-import com.chickenkiller.upods2.view.controller.FragmentMainFeatured;
 import com.chickenkiller.upods2.view.controller.FragmentPodcasts;
 import com.chickenkiller.upods2.view.controller.FragmentSettings;
 
@@ -36,40 +35,22 @@ public class SlidingMenuAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     private IFragmentsManager fragmentsManager;
     private ISlidingMenuManager slidingMenuManager;
 
-    private class ViewHolderItem extends RecyclerView.ViewHolder implements View.OnClickListener {
+    private static class ViewHolderItem extends RecyclerView.ViewHolder {
         public ImageView image;
         public TextView text;
         public RippleView rpSlidingMenuItem;
+        private View rootView;
 
         public ViewHolderItem(View itemView) {
             super(itemView);
             this.image = (ImageView) itemView.findViewById(R.id.imgSMenutIcon);
             this.text = (TextView) itemView.findViewById(R.id.tvSMenuTitle);
             this.rpSlidingMenuItem = (RippleView) itemView.findViewById(R.id.rpSlidingMenuItem);
-            itemView.setOnClickListener(this);
+            this.rootView = itemView;
         }
 
-        @Override
-        public void onClick(View view) {
-            if (items.get(getAdapterPosition()) instanceof SlidingMenuRow) {
-                SlidingMenuRow clickedMenuItem = (SlidingMenuRow) items.get(getAdapterPosition());
-                clickedMenuItem.isSelected = true;
-                Context context = view.getContext();
-                slidingMenuManager.toggle();
-                notifyDataSetChanged();
-                if (clickedMenuItem.getTitle().equals(context.getString(R.string.main_settings))) {
-                    FragmentSettings settingsFragment = new FragmentSettings();
-                    fragmentsManager.showFragment(R.id.fl_content, settingsFragment, FragmentSettings.TAG);
-                } else if (clickedMenuItem.getTitle().equals(context.getString(R.string.podcasts_main))) {
-                    FragmentPodcasts fragmentPodcasts = new FragmentPodcasts();
-                    fragmentsManager.showFragment(R.id.fl_content, fragmentPodcasts, FragmentPodcasts.TAG);
-                } else if (clickedMenuItem.getTitle().equals(context.getString(R.string.radio_main))) {
-                    FragmentMainFeatured fragmentMainFeatured = new FragmentMainFeatured();
-                    fragmentsManager.showFragment(R.id.fl_content, fragmentMainFeatured, FragmentPodcasts.TAG);
-                } else {
-                    Toast.makeText(context, "TEST" + clickedMenuItem.getTitle(), Toast.LENGTH_SHORT).show();
-                }
-            }
+        public void setItemClickListener(View.OnClickListener itemClickListener) {
+            this.rootView.setOnClickListener(itemClickListener);
         }
     }
 
@@ -125,7 +106,7 @@ public class SlidingMenuAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         SlidingMenuItem item = items.get(position);
         if (holder instanceof ViewHolderItem) {
             Context mContext = ((ViewHolderItem) holder).text.getContext();
@@ -139,11 +120,36 @@ public class SlidingMenuAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             } else {
                 ((ViewHolderItem) holder).text.setTextColor(mContext.getResources().getColor(R.color.gray_202020));
                 ((ViewHolderItem) holder).rpSlidingMenuItem.setBackgroundColor(mContext.getResources().getColor(R.color.white));
-                //((ViewHolderItem) holder).rpSlidingMenuItem.setRippleColor(R.color.pink_A400);
                 ((ViewHolderItem) holder).image.setImageResource(((SlidingMenuRow) item).getMainIconId());
             }
+            setSlidingMenuItemClick((ViewHolderItem) holder, position);
         }
         holder.itemView.setTag(item);
+    }
+
+    private void setSlidingMenuItemClick(ViewHolderItem viewHolderItem, final int position) {
+        viewHolderItem.setItemClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (items.get(position) instanceof SlidingMenuRow) {
+                    clearRowSelections();
+                    SlidingMenuRow clickedMenuItem = (SlidingMenuRow) items.get(position);
+                    clickedMenuItem.isSelected = true;
+                    Context context = view.getContext();
+                    slidingMenuManager.toggle();
+                    notifyDataSetChanged();
+                    if (clickedMenuItem.getTitle().equals(context.getString(R.string.main_settings))) {
+                        FragmentSettings settingsFragment = new FragmentSettings();
+                        fragmentsManager.showFragment(R.id.fl_content, settingsFragment, FragmentSettings.TAG);
+                    } else if (clickedMenuItem.getTitle().equals(context.getString(R.string.podcasts_main))) {
+                        FragmentPodcasts fragmentPodcasts = new FragmentPodcasts();
+                        fragmentsManager.showFragment(R.id.fl_content, fragmentPodcasts, FragmentPodcasts.TAG);
+                    } else {
+                        Toast.makeText(context, "TEST" + clickedMenuItem.getTitle(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+        });
     }
 
     @Override

@@ -32,24 +32,20 @@ public class TracksAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     private IFragmentsManager fragmentsManager;
 
 
-    private class ViewHolderTrack extends RecyclerView.ViewHolder implements View.OnClickListener {
+    private static class ViewHolderTrack extends RecyclerView.ViewHolder {
         public TextView tvTitle;
         public TextView tvSubTitle;
+        private View rootView;
 
         public ViewHolderTrack(View view) {
             super(view);
             this.tvTitle = (TextView) view.findViewById(R.id.tvTrackTitle);
             this.tvSubTitle = (TextView) view.findViewById(R.id.tvTrackSubTitle);
-            view.setOnClickListener(this);
+            this.rootView = view;
         }
 
-        @Override
-        public void onClick(View view) {
-            IPlayableTrack iPlayableTrack = tracks.get(getAdapterPosition());
-            Intent myIntent = new Intent(mContext, ActivityPlayer.class);
-            myIntent.putExtra(ActivityPlayer.MEDIA_ITEM_EXTRA, iPlayableMediaItem);
-            mContext.startActivity(myIntent);
-            ((Activity) mContext).finish();
+        public void setClickListner(View.OnClickListener clickListner) {
+            rootView.setOnClickListener(clickListner);
         }
 
     }
@@ -76,11 +72,21 @@ public class TracksAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         if (holder instanceof ViewHolderTrack) {
             IPlayableTrack currentTrack = tracks.get(position);
             ((ViewHolderTrack) holder).tvTitle.setText(currentTrack.getTitle());
             ((ViewHolderTrack) holder).tvSubTitle.setText(currentTrack.getSubTitle());
+            ((ViewHolderTrack) holder).setClickListner(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    IPlayableTrack iPlayableTrack = tracks.get(position);
+                    Intent myIntent = new Intent(mContext, ActivityPlayer.class);
+                    myIntent.putExtra(ActivityPlayer.MEDIA_ITEM_EXTRA, iPlayableMediaItem);
+                    mContext.startActivity(myIntent);
+                    ((Activity) mContext).finish();
+                }
+            });
             holder.itemView.setTag(currentTrack);
         }
     }

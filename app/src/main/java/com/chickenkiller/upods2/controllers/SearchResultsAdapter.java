@@ -35,33 +35,23 @@ public class SearchResultsAdapter extends RecyclerView.Adapter<RecyclerView.View
     private IFragmentsManager fragmentsManager;
 
 
-    private class ViewHolderSearchResult extends RecyclerView.ViewHolder implements View.OnClickListener {
+    private static class ViewHolderSearchResult extends RecyclerView.ViewHolder {
         public ImageView imgCover;
         public TextView tvTitle;
         public TextView tvCountry;
+        private View rootView;
 
         public ViewHolderSearchResult(View view) {
             super(view);
             this.imgCover = (ImageView) view.findViewById(R.id.imgSearchRadioCover);
             this.tvTitle = (TextView) view.findViewById(R.id.tvSearchRadioTitle);
             this.tvCountry = (TextView) view.findViewById(R.id.tvSearchCountry);
-            view.setOnClickListener(this);
+            this.rootView = view;
         }
 
-        @Override
-        public void onClick(View view) {
-            FragmentMediaItemDetails fragmentMediaItemDetails = new FragmentMediaItemDetails();
-            if (items.get(getAdapterPosition()) instanceof IPlayableMediaItem) {
-                fragmentMediaItemDetails.setPlayableItem((IPlayableMediaItem) items.get(getAdapterPosition()));
-            }
-            if (!fragmentsManager.hasFragment(FragmentMediaItemDetails.TAG)) {
-                SearchView searchView = (SearchView) ((IToolbarHolder) mContext).getToolbar().getMenu().findItem(R.id.action_search).getActionView();
-                searchView.clearFocus();
-                fragmentsManager.showFragment(R.id.fl_window, fragmentMediaItemDetails, FragmentMediaItemDetails.TAG,
-                        IFragmentsManager.FragmentOpenType.OVERLAY, IFragmentsManager.FragmentAnimationType.BOTTOM_TOP);
-            }
+        public void setItemClickListener(View.OnClickListener clickListener) {
+            rootView.setOnClickListener(clickListener);
         }
-
     }
 
 
@@ -85,10 +75,9 @@ public class SearchResultsAdapter extends RecyclerView.Adapter<RecyclerView.View
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         if (holder instanceof ViewHolderSearchResult) {
             MediaItem currentItem = items.get(position);
-            ;
             if (currentItem instanceof RadioItem) {
                 Glide.with(mContext).load(((RadioItem) currentItem).getCoverImageUrl()).centerCrop()
                         .crossFade().into(((ViewHolderSearchResult) holder).imgCover);
@@ -100,6 +89,22 @@ public class SearchResultsAdapter extends RecyclerView.Adapter<RecyclerView.View
                 ((ViewHolderSearchResult) holder).tvTitle.setText(((Podcast) currentItem).getName());
                 ((ViewHolderSearchResult) holder).tvCountry.setText(((Podcast) currentItem).getGenre());
             }
+
+            ((ViewHolderSearchResult) holder).setItemClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    FragmentMediaItemDetails fragmentMediaItemDetails = new FragmentMediaItemDetails();
+                    if (items.get(position) instanceof IPlayableMediaItem) {
+                        fragmentMediaItemDetails.setPlayableItem((IPlayableMediaItem) items.get(position));
+                    }
+                    if (!fragmentsManager.hasFragment(FragmentMediaItemDetails.TAG)) {
+                        SearchView searchView = (SearchView) ((IToolbarHolder) mContext).getToolbar().getMenu().findItem(R.id.action_search).getActionView();
+                        searchView.clearFocus();
+                        fragmentsManager.showFragment(R.id.fl_window, fragmentMediaItemDetails, FragmentMediaItemDetails.TAG,
+                                IFragmentsManager.FragmentOpenType.OVERLAY, IFragmentsManager.FragmentAnimationType.BOTTOM_TOP);
+                    }
+                }
+            });
             holder.itemView.setTag(currentItem);
         }
     }
