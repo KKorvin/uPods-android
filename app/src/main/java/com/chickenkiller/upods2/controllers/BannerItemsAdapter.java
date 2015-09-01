@@ -34,25 +34,16 @@ public class BannerItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     private IFragmentsManager fragmentsManager;
 
 
-    private class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    private static class ViewHolder extends RecyclerView.ViewHolder {
         public ImageView imgBaner;
 
         public ViewHolder(View view) {
             super(view);
             this.imgBaner = (ImageView) view.findViewById(R.id.imgBaner);
-            this.imgBaner.setOnClickListener(this);
         }
 
-        @Override
-        public void onClick(View view) {
-            if (fragmentsManager != null) {
-                FragmentMediaItemDetails fragmentMediaItemDetails = new FragmentMediaItemDetails();
-                fragmentMediaItemDetails.setPlayableItem(getItem(getAdapterPosition()));
-                if (!fragmentsManager.hasFragment(FragmentMediaItemDetails.TAG)) {
-                    fragmentsManager.showFragment(R.id.fl_window, fragmentMediaItemDetails, FragmentMediaItemDetails.TAG,
-                            IFragmentsManager.FragmentOpenType.OVERLAY, IFragmentsManager.FragmentAnimationType.BOTTOM_TOP);
-                }
-            }
+        public void setBannerClickListener(View.OnClickListener bannerClickListener) {
+            imgBaner.setOnClickListener(bannerClickListener);
         }
     }
 
@@ -77,11 +68,26 @@ public class BannerItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         RadioItem currentItem = getItem(position);
         LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) ((ViewHolder) holder).imgBaner.getLayoutParams();
         params.width = displaymetrics.widthPixels;
         Glide.with(mContext).load(currentItem.getBannerImageUrl()).into(((ViewHolder) holder).imgBaner);
+        
+        View.OnClickListener bannerClickListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (fragmentsManager != null) {
+                    FragmentMediaItemDetails fragmentMediaItemDetails = new FragmentMediaItemDetails();
+                    fragmentMediaItemDetails.setPlayableItem(getItem(position));
+                    if (!fragmentsManager.hasFragment(FragmentMediaItemDetails.TAG)) {
+                        fragmentsManager.showFragment(R.id.fl_window, fragmentMediaItemDetails, FragmentMediaItemDetails.TAG,
+                                IFragmentsManager.FragmentOpenType.OVERLAY, IFragmentsManager.FragmentAnimationType.BOTTOM_TOP);
+                    }
+                }
+            }
+        };
+        ((ViewHolder) holder).setBannerClickListener(bannerClickListener);
         holder.itemView.setTag(currentItem);
     }
 
