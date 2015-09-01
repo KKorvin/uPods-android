@@ -45,10 +45,10 @@ public class BannerItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
         @Override
         public void onClick(View view) {
-            if(fragmentsManager!=null) {
+            if (fragmentsManager != null) {
                 FragmentMediaItemDetails fragmentMediaItemDetails = new FragmentMediaItemDetails();
                 fragmentMediaItemDetails.setPlayableItem(getItem(getAdapterPosition()));
-                if(!fragmentsManager.hasFragment(FragmentMediaItemDetails.TAG)) {
+                if (!fragmentsManager.hasFragment(FragmentMediaItemDetails.TAG)) {
                     fragmentsManager.showFragment(R.id.fl_window, fragmentMediaItemDetails, FragmentMediaItemDetails.TAG,
                             IFragmentsManager.FragmentOpenType.OVERLAY, IFragmentsManager.FragmentAnimationType.BOTTOM_TOP);
                 }

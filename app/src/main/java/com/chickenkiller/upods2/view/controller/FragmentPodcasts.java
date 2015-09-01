@@ -9,11 +9,10 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.chickenkiller.upods2.R;
-import com.chickenkiller.upods2.controllers.MediaItemsAdapter;
 import com.chickenkiller.upods2.controllers.PodcastsPagesAdapter;
+import com.chickenkiller.upods2.controllers.SmallPlayer;
 import com.chickenkiller.upods2.interfaces.ISlidingMenuHolder;
 import com.chickenkiller.upods2.interfaces.IToolbarHolder;
-import com.chickenkiller.upods2.views.AutofitRecyclerView;
 
 /**
  * Created by alonzilberman on 8/8/15.
@@ -22,10 +21,9 @@ public class FragmentPodcasts extends Fragment {
 
     public static final String TAG = "fragment_podcasts";
     private ViewPager vpPodcasts;
-    private AutofitRecyclerView rvMain;
     private PodcastsPagesAdapter podcastsPagesAdapter;
     private TabLayout tlPodcastsTabs;
-    private MediaItemsAdapter mediaItemsAdapter;
+    private SmallPlayer smallPlayer;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -48,6 +46,15 @@ public class FragmentPodcasts extends Fragment {
 
         ((IToolbarHolder) getActivity()).getToolbar().setTitle(R.string.podcasts);
         ((ISlidingMenuHolder) getActivity()).setSlidingMenuHeader(getString(R.string.podcasts_main));
+
+        smallPlayer = new SmallPlayer(view, getActivity());
+
         return view;
+    }
+
+    @Override
+    public void onDestroy() {
+        smallPlayer.destroy();
+        super.onDestroy();
     }
 }

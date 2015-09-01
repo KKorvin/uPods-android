@@ -5,6 +5,7 @@ import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
 
+import com.bumptech.glide.Glide;
 import com.chickenkiller.upods2.R;
 import com.chickenkiller.upods2.interfaces.IFragmentsManager;
 import com.chickenkiller.upods2.interfaces.IOverlayable;
@@ -60,4 +61,8 @@ public class FragmentsActivity extends Activity implements IFragmentsManager{
         return tag;
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
 }

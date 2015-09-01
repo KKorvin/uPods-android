@@ -18,4 +18,6 @@
         android:layout_weight="1"
         android:background="@android:color/white" />
 
+    <include layout="@layout/small_player"></include>
+
 </LinearLayout>
