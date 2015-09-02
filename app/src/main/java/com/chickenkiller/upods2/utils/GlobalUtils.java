@@ -3,6 +3,11 @@ package com.chickenkiller.upods2.utils;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 /**
  * Created by alonzilberman on 8/14/15.
  */
@@ -29,4 +34,14 @@ public class GlobalUtils {
         return url;
     }
 
+    public static String formatDateToUS(String date) {
+        try {
+            DateFormat dateFormat = new SimpleDateFormat("MMM dd, yyyy");
+            Date inputDate = dateFormat.parse(date);
+            date = inputDate.toString();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return date;
+    }
 }

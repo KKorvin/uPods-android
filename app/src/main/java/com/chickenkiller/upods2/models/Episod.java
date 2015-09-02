@@ -1,6 +1,7 @@
 package com.chickenkiller.upods2.models;
 
 import com.chickenkiller.upods2.interfaces.IPlayableTrack;
+import com.chickenkiller.upods2.utils.GlobalUtils;
 
 /**
  * Created by alonzilberman on 8/31/15.
@@ -28,7 +29,7 @@ public class Episod extends Track implements IPlayableTrack{
 
     @Override
     public String getSubTitle() {
-        return date;
+        return GlobalUtils.formatDateToUS(date);
     }
 
     @Override
