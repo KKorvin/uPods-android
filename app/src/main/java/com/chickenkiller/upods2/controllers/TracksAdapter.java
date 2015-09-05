@@ -14,6 +14,8 @@ import com.chickenkiller.upods2.activity.ActivityPlayer;
 import com.chickenkiller.upods2.interfaces.IFragmentsManager;
 import com.chickenkiller.upods2.interfaces.IPlayableMediaItem;
 import com.chickenkiller.upods2.interfaces.IPlayableTrack;
+import com.chickenkiller.upods2.interfaces.ITrackable;
+import com.chickenkiller.upods2.models.Track;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -84,6 +86,9 @@ public class TracksAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 @Override
                 public void onClick(View view) {
                     IPlayableTrack iPlayableTrack = tracks.get(position);
+                    if(iPlayableTrack instanceof ITrackable && iPlayableTrack instanceof Track){
+                        ((ITrackable) iPlayableTrack).selectTrack((Track)iPlayableTrack);
+                    }
                     Intent myIntent = new Intent(mContext, ActivityPlayer.class);
                     myIntent.putExtra(ActivityPlayer.MEDIA_ITEM_EXTRA, iPlayableMediaItem);
                     mContext.startActivity(myIntent);
@@ -101,6 +106,7 @@ public class TracksAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     }
 
     public void addItems(ArrayList<? extends IPlayableTrack> tracks) {
+        this.tracks.clear();
         this.tracks.addAll(tracks);
         this.notifyDataSetChanged();
     }

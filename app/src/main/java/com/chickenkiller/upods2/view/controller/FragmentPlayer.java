@@ -22,7 +22,6 @@ import com.chickenkiller.upods2.activity.ActivityPlayer;
 import com.chickenkiller.upods2.controllers.UniversalPlayer;
 import com.chickenkiller.upods2.interfaces.IPlayableMediaItem;
 import com.chickenkiller.upods2.interfaces.IPlayerStateListener;
-import com.chickenkiller.upods2.models.RadioItem;
 import com.chickenkiller.upods2.utils.UIHelper;
 
 
@@ -78,14 +77,14 @@ public class FragmentPlayer extends Fragment implements MediaPlayer.OnPreparedLi
             playableMediaItem = (IPlayableMediaItem) savedInstanceState.get(ActivityPlayer.MEDIA_ITEM_EXTRA);
         }
         if (playableMediaItem != null) {
-            initRadioUI(view);
+            initPlayerUI(view);
             universalPlayer = UniversalPlayer.getInstance();
             runPlayer();
         }
         return view;
     }
 
-    public void initRadioUI(View view) {
+    public void initPlayerUI(View view) {
         tvPlayerTitle.setText(playableMediaItem.getName());
         tvPlayserSubtitle.setText(playableMediaItem.getSubHeader());
         Glide.with(getActivity()).load(playableMediaItem.getCoverImageUrl()).crossFade().into(new GlideDrawableImageViewTarget(imgPlayerCover) {
@@ -100,8 +99,8 @@ public class FragmentPlayer extends Fragment implements MediaPlayer.OnPreparedLi
 
     }
 
-    public void setPlayableItem(RadioItem radioItem) {
-        this.playableMediaItem = radioItem;
+    public void setPlayableItem(IPlayableMediaItem iPlayableMediaItem) {
+        this.playableMediaItem = iPlayableMediaItem;
     }
 
     private void runPlayer() {

@@ -4,6 +4,7 @@ import android.media.MediaPlayer;
 
 import com.chickenkiller.upods2.interfaces.IPlayableMediaItem;
 import com.chickenkiller.upods2.interfaces.IPlayerStateListener;
+import com.chickenkiller.upods2.models.Podcast;
 import com.chickenkiller.upods2.models.RadioItem;
 import com.chickenkiller.upods2.views.PlayerNotificationPanel;
 import com.chickenkiller.upods2.views.RadioNotificationPanel;
@@ -38,12 +39,18 @@ public class UniversalPlayer implements MediaPlayer.OnPreparedListener {
         return universalPlayer;
     }
 
+    /**
+     * Checks if given type of media item is supported, if yes copies it and save instance in player.
+     * @param mediaItem
+     */
     public void setMediaItem(IPlayableMediaItem mediaItem) {
         if (isCurrentMediaItem(mediaItem)) {
             return;
         }
         if (mediaItem instanceof RadioItem) {
             this.mediaItem = new RadioItem((RadioItem) mediaItem);
+        } else if (mediaItem instanceof Podcast) {
+            this.mediaItem = new Podcast((Podcast) mediaItem);
         } else {
             throw new RuntimeException("Unsupported type of MediaItem");
         }
@@ -72,9 +79,7 @@ public class UniversalPlayer implements MediaPlayer.OnPreparedListener {
                 if (mediaPlayer == null) {
                     mediaPlayer = new MediaPlayer();
                 }
-                if (mediaItem instanceof RadioItem) {
-                    mediaPlayer.setDataSource(((RadioItem) mediaItem).getStreamUrl());
-                }
+                mediaPlayer.setDataSource(mediaItem.getStreamUrl());
                 mediaPlayer.setOnPreparedListener(this);
                 mediaPlayer.prepareAsync();
             } catch (Exception e) {
@@ -86,7 +91,9 @@ public class UniversalPlayer implements MediaPlayer.OnPreparedListener {
     public void start() {
         if (mediaPlayer != null && isPrepaired) {
             mediaPlayer.start();
-            notificationPanel.updateNotificationStatus(State.PLAYING);
+            if(notificationPanel!=null){
+                notificationPanel.updateNotificationStatus(State.PLAYING);
+            }
             if (playerStateListener != null) {
                 playerStateListener.onStateChanged(State.PLAYING);
             }
@@ -96,7 +103,9 @@ public class UniversalPlayer implements MediaPlayer.OnPreparedListener {
     public void pause() {
         if (mediaPlayer != null && isPrepaired && mediaPlayer.isPlaying()) {
             mediaPlayer.pause();
-            notificationPanel.updateNotificationStatus(State.PAUSED);
+            if(notificationPanel!=null){
+                notificationPanel.updateNotificationStatus(State.PAUSED);
+            }
             if (playerStateListener != null) {
                 playerStateListener.onStateChanged(State.PAUSED);
             }

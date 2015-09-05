@@ -7,7 +7,6 @@ import android.os.Bundle;
 import com.chickenkiller.upods2.R;
 import com.chickenkiller.upods2.controllers.UniversalPlayer;
 import com.chickenkiller.upods2.interfaces.IPlayableMediaItem;
-import com.chickenkiller.upods2.models.RadioItem;
 import com.chickenkiller.upods2.view.controller.FragmentMainFeatured;
 import com.chickenkiller.upods2.view.controller.FragmentPlayer;
 
@@ -32,7 +31,7 @@ public class ActivityPlayer extends FragmentsActivity {
         }
         if (getFragmentManager().getBackStackEntryCount() == 0) {
             FragmentPlayer fragmentPlayer = new FragmentPlayer();
-            fragmentPlayer.setPlayableItem((RadioItem) currentMediaItem);
+            fragmentPlayer.setPlayableItem(currentMediaItem);
             showFragment(R.id.fl_window, fragmentPlayer, FragmentMainFeatured.TAG);
         }
     }

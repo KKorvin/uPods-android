@@ -24,7 +24,7 @@ public class Podcast extends MediaItem implements IFeaturableMediaItem, IPlayabl
     protected String country;
     protected String genre;
 
-    protected ArrayList<Track> episods;
+    protected ArrayList<Episod> episods;
 
     public Podcast(){
         super();
@@ -67,6 +67,20 @@ public class Podcast extends MediaItem implements IFeaturableMediaItem, IPlayabl
         }
     }
 
+    public Podcast(Podcast podcast) {
+        this.name = podcast.getName();
+        this.censoredName = podcast.getCensoredName();
+        this.artistName = podcast.getArtistName();
+        this.feedUrl = podcast.getFeedUrl();
+        this.imageUrl = podcast.getCoverImageUrl();
+        this.releaseDate = podcast.getReleaseDate();
+        this.explicitness = podcast.getExplicitness();
+        this.trackCount = podcast.getTrackCount();
+        this.country = podcast.getCountry();
+        this.genre = podcast.getGenre();
+        this.episods = new ArrayList<Episod>(podcast.episods);
+    }
+
     public static ArrayList<Podcast> withJsonArray(JSONArray jsonPodcastsItems) {
         ArrayList<Podcast> items = new ArrayList<Podcast>();
         try {
@@ -107,7 +121,12 @@ public class Podcast extends MediaItem implements IFeaturableMediaItem, IPlayabl
 
     @Override
     public String getStreamUrl() {
-        return "";
+        for (Track episod: episods) {
+            if(episod.isSelected){
+                return episod.getMp3Url();
+            }
+        }
+        return episods.get(0).getMp3Url();
     }
 
     @Override
@@ -188,17 +207,24 @@ public class Podcast extends MediaItem implements IFeaturableMediaItem, IPlayabl
     }
 
     @Override
-    public void setTracks(ArrayList<Track> tracks) {
-        this.episods.addAll(tracks);
+    public void setTracks(ArrayList<? extends Track> tracks) {
+        this.episods= (ArrayList<Episod>) tracks;
     }
 
     @Override
-    public ArrayList<Track> getTracks() {
+    public ArrayList<? extends Track> getTracks() {
         return this.episods;
     }
 
     @Override
     public String getTracksFeed() {
         return this.feedUrl;
+    }
+
+    @Override
+    public void selectTrack(Track track) {
+        for (Track episod: episods) {
+            episod.isSelected = episod.equals(track) ? true : false;
+        }
     }
 }

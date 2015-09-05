@@ -34,6 +34,7 @@ import com.chickenkiller.upods2.interfaces.INetworkSimpleUIupdater;
 import com.chickenkiller.upods2.interfaces.IOverlayable;
 import com.chickenkiller.upods2.interfaces.IPlayableMediaItem;
 import com.chickenkiller.upods2.interfaces.ITrackable;
+import com.chickenkiller.upods2.models.Episod;
 import com.chickenkiller.upods2.utils.UIHelper;
 import com.chickenkiller.upods2.views.DetailsScrollView;
 
@@ -41,6 +42,7 @@ import org.xml.sax.InputSource;
 import org.xml.sax.XMLReader;
 
 import java.io.StringReader;
+import java.util.ArrayList;
 
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
@@ -187,7 +189,11 @@ public class FragmentMediaItemDetails extends Fragment implements View.OnTouchLi
                                     //TODO could be encoding problem
                                     InputSource inputSource = new InputSource(new StringReader(response));
                                     xr.parse(inputSource);
-                                    tracksAdapter.addItems(episodsXMLHandler.getParsedEpisods());
+                                    ArrayList <Episod> parsedEpisods = episodsXMLHandler.getParsedEpisods();
+                                    if(playableItem instanceof  ITrackable){
+                                        ((ITrackable) playableItem).setTracks(parsedEpisods);
+                                    }
+                                    tracksAdapter.addItems(parsedEpisods);
                                     rvTracks.setVisibility(View.VISIBLE);
                                     pbTracks.setVisibility(View.GONE);
                                 } catch (Exception e) {

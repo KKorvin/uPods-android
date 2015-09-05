@@ -10,9 +10,11 @@ import java.util.ArrayList;
  */
 public interface ITrackable {
 
-    void setTracks(ArrayList<Track> tracks);
+    void setTracks(ArrayList<? extends Track> tracks);
 
-    ArrayList<Track> getTracks();
+    ArrayList<? extends Track>  getTracks();
 
     String getTracksFeed();
+
+    void selectTrack(Track track);
 }

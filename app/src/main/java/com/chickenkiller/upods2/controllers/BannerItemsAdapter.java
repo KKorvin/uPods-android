@@ -72,8 +72,9 @@ public class BannerItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         RadioItem currentItem = getItem(position);
         LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) ((ViewHolder) holder).imgBaner.getLayoutParams();
         params.width = displaymetrics.widthPixels;
-        Glide.with(mContext).load(currentItem.getBannerImageUrl()).into(((ViewHolder) holder).imgBaner);
-
+        if(mContext!=null) {
+            Glide.with(mContext).load(currentItem.getBannerImageUrl()).into(((ViewHolder) holder).imgBaner);
+        }
         View.OnClickListener bannerClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
