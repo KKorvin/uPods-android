@@ -1,5 +1,8 @@
 package com.chickenkiller.upods2.models;
 
+import android.text.format.Formatter;
+
+import com.chickenkiller.upods2.controllers.UpodsApplication;
 import com.chickenkiller.upods2.interfaces.IPlayableTrack;
 
 /**
@@ -34,6 +37,12 @@ public class Episod extends Track implements IPlayableTrack{
     @Override
     public String getAudeoUrl() {
         return mp3Url;
+    }
+
+    @Override
+    public String getData() {
+        String size = Formatter.formatShortFileSize(UpodsApplication.getContext(), Long.valueOf(length));
+        return duration + " / " + size;
     }
 
     public String getBtnDownloadText() {

@@ -44,4 +44,17 @@ public class GlobalUtils {
         }
         return date;
     }
+
+    public static String parserDateToMonth(String date) {
+        try {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("EEE, dd MMM yyyy hh:mm:ss Z");
+            Date inputDate = dateFormat.parse(date);
+            dateFormat = new SimpleDateFormat("MMM dd");
+            date = dateFormat.format(inputDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return date;
+    }
+
 }

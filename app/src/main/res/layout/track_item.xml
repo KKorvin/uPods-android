@@ -24,7 +24,8 @@
         android:textSize="@dimen/default_text_size_16"
         android:textStyle="normal"
         android:layout_marginTop="20dp"
-        android:text="Episod name" />
+        android:layout_marginRight="20dp"
+        android:text="Episod name " />
 
     <TextView
         android:id="@+id/tvTrackSubTitle"

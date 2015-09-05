@@ -15,11 +15,13 @@ import java.util.ArrayList;
 public class EpisodsXMLHandler extends DefaultHandler {
     private final String ITEM_TITLE = "item";
     private final String TITLE = "title";
+    private final String LENGTH = "length";
     private final String SUMMARY1 = "content:encoded";
     private final String SUMMARY2 = "description";
     private final String SUMMARY3 = "itunes:summary";
     private final String MP3_1 = "enclosure";
     private final String MP3_2 = "link";
+    private final String MP3_3 = "url";
     private final String PUBDATE = "pubDate";
     private final String DURATION1 = "itunes:duration";
     private final String DURATION2 = "duration";
@@ -49,8 +51,8 @@ public class EpisodsXMLHandler extends DefaultHandler {
             isItem = true;
         }
         if (localName.equalsIgnoreCase(MP3_1) && isItem) {
-            episod.setLength(attributes.getValue("length"));
-            episod.setMp3Url(attributes.getValue("url"));
+            episod.setLength(attributes.getValue(LENGTH));
+            episod.setMp3Url(attributes.getValue(MP3_3));
         }
 
     }

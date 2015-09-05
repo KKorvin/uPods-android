@@ -11,4 +11,6 @@ public interface IPlayableTrack {
     String getSubTitle();
 
     String getAudeoUrl();
+
+    String getData();
 }
