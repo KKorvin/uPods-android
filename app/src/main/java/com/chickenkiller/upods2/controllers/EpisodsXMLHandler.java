@@ -1,6 +1,7 @@
 package com.chickenkiller.upods2.controllers;
 
 import com.chickenkiller.upods2.models.Episod;
+import com.chickenkiller.upods2.utils.GlobalUtils;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
@@ -80,7 +81,7 @@ public class EpisodsXMLHandler extends DefaultHandler {
                     && episod.getDuration().isEmpty())
                 episod.setDuration(elementValue.toString());
             else if (localName.equalsIgnoreCase(PUBDATE))
-                episod.setDate(elementValue.toString());
+                episod.setDate(GlobalUtils.parserDateToUS(elementValue.toString()));
         }
         if (localName.equals(ITEM_TITLE)) {
             isItem = false;
