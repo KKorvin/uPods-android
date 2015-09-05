@@ -1,19 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <ImageView
+        android:id="@+id/imgTrackDownloadItem"
+        android:src="@drawable/folder_download_96_red"
+        android:layout_width="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_height="wrap_content" />
 
     <TextView
         android:id="@+id/tvTrackTitle"
-        android:layout_width="wrap_content"
+        android:layout_toRightOf="@+id/imgTrackDownloadItem"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:maxLines="2"
+        android:layout_toLeftOf="@+id/tvTrackData"
+        android:textColor="@color/podcast_name_color"
+        android:textSize="@dimen/default_text_size_16"
+        android:textStyle="normal"
+        android:layout_marginTop="20dp"
         android:text="Episod name" />
 
     <TextView
         android:id="@+id/tvTrackSubTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:maxLines="1"
+        android:layout_toRightOf="@+id/imgTrackDownloadItem"
         android:layout_below="@+id/tvTrackTitle"
+        android:textColor="@color/podcast_genre_color"
+        android:textSize="@dimen/default_text_size_14"
+        android:textStyle="normal"
         android:text="Episod subHeader" />
+
+    <TextView
+        android:id="@+id/tvTrackData"
+        android:text="54:00 / Aug 24"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="20dp"
+        android:layout_width="wrap_content"
+        android:textSize="@dimen/default_text_size_14"
+        android:layout_height="wrap_content" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.1dp"
+        android:background="@color/sliding_menu_devider_color"
+        android:layout_below="@+id/tvTrackSubTitle"
+        android:layout_marginTop="10dp"
+        android:layout_toRightOf="@+id/imgTrackDownloadItem"    />
 
 </RelativeLayout>

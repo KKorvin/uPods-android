@@ -7,7 +7,14 @@
     <color name="sliding_menu_background">#FAFAFA</color>
     <color name="white">#FFFFFF</color>
     <color name="black">#000000</color>
+
+    <!-- Devider color -->
     <color name="sliding_menu_devider_color">#dcdcdc</color>
+
+    <!-- Download button color -->
+    <color name="icon_download_color_green">#CDDC39</color>
+    <color name="icon_download_color_red">#F44336</color>
+
     <color name="starFullySelected">#646464</color>
     <color name="starPartiallySelected">#afafaf</color>
     <color name="starNotSelected">#ababab</color>
@@ -71,5 +78,10 @@
     <!-- Black and White Material -->
     <color name="black_material">#000000</color>
     <color name="white_material">#FFFFFF</color>
+
+    <!-- Color name of Podcast -->
+    <color name="podcast_name_color">#1F1F1F</color>
+    <color name="podcast_genre_color">#6D6D6D</color>
+
 
 </resources>
