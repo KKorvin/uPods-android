@@ -47,7 +47,7 @@ public class SlidingMenu implements ISlidingMenuManager {
 
         List<SlidingMenuItem> slidingMenuItems = new ArrayList<>();
         slidingMenuItems.add(new SlidingMenuHeader());
-        slidingMenuItems.addAll(SlidingMenuRow.fromDefaultSlidingMenuSet(activity));
+        slidingMenuItems.addAll(SlidingMenuRow.fromDefaultSlidingMenuSet());
         if (activity instanceof IFragmentsManager) {
             this.slidingMenuAdapter = new SlidingMenuAdapter(slidingMenuItems,
                     R.layout.sliding_menu_item, this, (IFragmentsManager) activity);

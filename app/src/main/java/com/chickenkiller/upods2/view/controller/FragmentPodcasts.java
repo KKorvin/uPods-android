@@ -28,7 +28,7 @@ public class FragmentPodcasts extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_podcasts, container, false);
-        podcastsPagesAdapter = new PodcastsPagesAdapter(getFragmentManager(), getActivity());
+        podcastsPagesAdapter = new PodcastsPagesAdapter(getFragmentManager());
         vpPodcasts = (ViewPager) view.findViewById(R.id.vpPodcasts);
         vpPodcasts.setAdapter(podcastsPagesAdapter);
 

@@ -67,6 +67,7 @@ public class SmallPlayer implements IPlayerStateListener, View.OnClickListener {
 
     public void destroy() {
         UniversalPlayer.getInstance().setPlayerStateListener(null);
+        mActivity = null;
     }
 
     @Override

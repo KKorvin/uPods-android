@@ -29,7 +29,6 @@ public class BannerItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     private int itemLayout;
     private List<RadioItem> items;
-    private Context mContext;
     private DisplayMetrics displaymetrics;
     private IFragmentsManager fragmentsManager;
 
@@ -51,7 +50,6 @@ public class BannerItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         super();
         this.items = items;
         this.itemLayout = itemLayout;
-        this.mContext = mContext;
         this.displaymetrics = new DisplayMetrics();
         ((Activity) mContext).getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
         MIDDLE = HALF_MAX_VALUE - HALF_MAX_VALUE % items.size();

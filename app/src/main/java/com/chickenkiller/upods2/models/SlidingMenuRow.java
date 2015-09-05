@@ -3,6 +3,7 @@ package com.chickenkiller.upods2.models;
 import android.content.Context;
 
 import com.chickenkiller.upods2.R;
+import com.chickenkiller.upods2.controllers.UpodsApplication;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,7 +47,8 @@ public class SlidingMenuRow extends SlidingMenuItem {
     }
 
 
-    public static List<SlidingMenuItem> fromDefaultSlidingMenuSet(Context mContext) {
+    public static List<SlidingMenuItem> fromDefaultSlidingMenuSet() {
+        Context mContext = UpodsApplication.getContext();
         ArrayList<SlidingMenuItem> allItems = new ArrayList<SlidingMenuItem>();
         allItems.add(new SlidingMenuRow(mContext.getString(R.string.profile_my_profile), R.drawable.ic_account_circle_grey600_24dp, R.drawable.help_circle));
         allItems.add(new SlidingMenuRow(mContext.getString(R.string.radio_main), R.drawable.ic_radio_grey600_24dp, R.drawable.radio));

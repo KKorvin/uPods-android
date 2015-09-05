@@ -10,9 +10,7 @@ public abstract class MediaItem implements Serializable{
 
     protected int id;
 
-    public MediaItem() {
-
-    }
+    public MediaItem() {}
 
     public int getId() {
         return id;

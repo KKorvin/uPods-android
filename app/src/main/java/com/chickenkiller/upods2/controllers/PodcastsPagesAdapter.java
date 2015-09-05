@@ -16,11 +16,9 @@ import com.chickenkiller.upods2.view.controller.FragmentPodcastsPage;
 public class PodcastsPagesAdapter extends FragmentStatePagerAdapter {
 
     private final int PAGE_COUNTS = 4;
-    private Context mContext;
 
-    public PodcastsPagesAdapter(FragmentManager fm, Context mContext) {
+    public PodcastsPagesAdapter(FragmentManager fm) {
         super(fm);
-        this.mContext = mContext;
     }
 
     @Override
@@ -51,13 +49,13 @@ public class PodcastsPagesAdapter extends FragmentStatePagerAdapter {
     public CharSequence getPageTitle(int position) {
         switch (position) {
             case 0:
-                return mContext.getString(R.string.page_featured);
+                return UpodsApplication.getContext().getString(R.string.page_featured);
             case 1:
-                return mContext.getString(R.string.page_favorites);
+                return UpodsApplication.getContext().getString(R.string.page_favorites);
             case 2:
-                return mContext.getString(R.string.page_downloaded);
+                return UpodsApplication.getContext().getString(R.string.page_downloaded);
             case 3:
-                return mContext.getString(R.string.page_categories);
+                return UpodsApplication.getContext().getString(R.string.page_categories);
         }
         return "";
     }
