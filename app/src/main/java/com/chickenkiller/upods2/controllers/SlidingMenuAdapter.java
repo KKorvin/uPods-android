@@ -16,6 +16,7 @@ import com.chickenkiller.upods2.interfaces.ISlidingMenuManager;
 import com.chickenkiller.upods2.models.SlidingMenuHeader;
 import com.chickenkiller.upods2.models.SlidingMenuItem;
 import com.chickenkiller.upods2.models.SlidingMenuRow;
+import com.chickenkiller.upods2.view.controller.FragmentMainFeatured;
 import com.chickenkiller.upods2.view.controller.FragmentPodcasts;
 import com.chickenkiller.upods2.view.controller.FragmentSettings;
 
@@ -144,6 +145,9 @@ public class SlidingMenuAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                     } else if (clickedMenuItem.getTitle().equals(context.getString(R.string.podcasts_main))) {
                         FragmentPodcasts fragmentPodcasts = new FragmentPodcasts();
                         fragmentsManager.showFragment(R.id.fl_content, fragmentPodcasts, FragmentPodcasts.TAG);
+                    } else if (clickedMenuItem.getTitle().equals(context.getString(R.string.radio_main))) {
+                        FragmentMainFeatured fragmentMainFeatured = new FragmentMainFeatured();
+                        fragmentsManager.showFragment(R.id.fl_content, fragmentMainFeatured, FragmentMainFeatured.TAG);
                     } else {
                         Toast.makeText(context, "TEST" + clickedMenuItem.getTitle(), Toast.LENGTH_SHORT).show();
                     }
