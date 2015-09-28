@@ -55,7 +55,7 @@
                 android:maxLines="2"
                 android:text="BBC Radio One"
                 android:textColor="@color/white"
-                android:textSize="@dimen/default_text_size_20" />
+                android:textSize="@dimen/default_text_size_16" />
             <!--
             android:textStyle="bold"
             -->
@@ -71,7 +71,7 @@
                 android:layout_toRightOf="@+id/imgDetailedCover"
                 android:text="England"
                 android:textColor="@color/white"
-                android:textSize="@dimen/default_text_size_16" />
+                android:textSize="@dimen/default_text_size_12" />
 
             <TextView
                 android:id="@+id/tvDetailedBottomHeader"
@@ -83,7 +83,7 @@
                 android:layout_toRightOf="@+id/imgDetailedCover"
                 android:text="Pop and Rock Music"
                 android:textColor="@color/white"
-                android:textSize="@dimen/default_text_size_16" />
+                android:textSize="@dimen/default_text_size_12" />
 
             <Button
                 android:id="@+id/btnSubscribe"
