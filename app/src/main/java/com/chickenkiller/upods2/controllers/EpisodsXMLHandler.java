@@ -83,7 +83,7 @@ public class EpisodsXMLHandler extends DefaultHandler {
                     && episod.getDuration().isEmpty())
                 episod.setDuration(elementValue.toString());
             else if (localName.equalsIgnoreCase(PUBDATE))
-                episod.setDate(GlobalUtils.parserDateToUS(elementValue.toString()));
+                episod.setDate(GlobalUtils.parserDateToMonth(elementValue.toString()));
         }
         if (localName.equals(ITEM_TITLE)) {
             isItem = false;

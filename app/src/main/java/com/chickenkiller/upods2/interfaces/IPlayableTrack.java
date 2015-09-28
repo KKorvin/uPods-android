@@ -12,6 +12,6 @@ public interface IPlayableTrack {
 
     String getAudeoUrl();
 
-    String getData();
+    String getDate();
 
 }

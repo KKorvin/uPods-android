@@ -4,58 +4,59 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <ImageView
-        android:id="@+id/imgTrackDownloadItem"
-        android:src="@drawable/folder_download_96_red"
+    <TextView
+        android:id="@+id/tvTrackDate"
         android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
         android:layout_marginLeft="15dp"
-        android:layout_marginTop="15dp"
         android:layout_marginRight="15dp"
-        android:layout_height="wrap_content" />
+        android:layout_marginTop="15dp"
+        android:gravity="center"
+        android:text="Aug\n24"
+        android:textSize="@dimen/default_text_size_26" />
 
     <TextView
         android:id="@+id/tvTrackTitle"
-        android:layout_toRightOf="@+id/imgTrackDownloadItem"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_toLeftOf="@+id/btnMore"
+        android:layout_toRightOf="@+id/tvTrackDate"
         android:maxLines="2"
-        android:layout_toLeftOf="@+id/tvTrackData"
+        android:text="Episod name "
         android:textColor="@color/podcast_name_color"
         android:textSize="@dimen/default_text_size_16"
-        android:textStyle="normal"
-        android:layout_marginTop="20dp"
-        android:layout_marginRight="20dp"
-        android:text="Episod name " />
+        android:textStyle="normal" />
 
     <TextView
         android:id="@+id/tvTrackSubTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:maxLines="1"
-        android:layout_toRightOf="@+id/imgTrackDownloadItem"
         android:layout_below="@+id/tvTrackTitle"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="5dp"
+        android:layout_toLeftOf="@+id/btnMore"
+        android:layout_toRightOf="@+id/tvTrackDate"
+        android:maxLines="1"
+        android:text="Episod subHeader"
         android:textColor="@color/podcast_genre_color"
         android:textSize="@dimen/default_text_size_14"
-        android:textStyle="normal"
-        android:text="Episod subHeader" />
+        android:textStyle="normal" />
 
-    <TextView
-        android:id="@+id/tvTrackData"
-        android:text="54:00 / Aug 24"
+    <Button
+        android:id="@+id/btnMore"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
         android:layout_marginRight="10dp"
         android:layout_marginTop="20dp"
-        android:layout_width="wrap_content"
-        android:textSize="@dimen/default_text_size_14"
-        android:layout_height="wrap_content" />
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0.1dp"
-        android:background="@color/sliding_menu_devider_color"
-        android:layout_below="@+id/tvTrackSubTitle"
-        android:layout_marginTop="10dp"
-        android:layout_toRightOf="@+id/imgTrackDownloadItem"    />
+        android:backgroundTint="@color/green_600"
+        android:text="@string/download"
+        android:textColor="@color/white_material"
+        android:textSize="@dimen/default_text_size_14" />
 
 </RelativeLayout>

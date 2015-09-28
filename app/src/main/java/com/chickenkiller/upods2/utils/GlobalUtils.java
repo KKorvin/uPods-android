@@ -49,7 +49,7 @@ public class GlobalUtils {
         try {
             SimpleDateFormat dateFormat = new SimpleDateFormat("EEE, dd MMM yyyy hh:mm:ss Z");
             Date inputDate = dateFormat.parse(date);
-            dateFormat = new SimpleDateFormat("MMM dd");
+            dateFormat = new SimpleDateFormat("MMM\ndd");
             date = dateFormat.format(inputDate);
         } catch (ParseException e) {
             e.printStackTrace();

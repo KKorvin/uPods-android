@@ -8,20 +8,20 @@ import com.chickenkiller.upods2.interfaces.IPlayableTrack;
 /**
  * Created by alonzilberman on 8/31/15.
  */
-public class Episod extends Track implements IPlayableTrack{
+public class Episod extends Track implements IPlayableTrack {
     private String summary;
     private String length;
     private String duration;
     private String btnDownloadText;
     private String date;
 
-    public Episod(){
+    public Episod() {
         super();
-        this.summary="";
-        this.length="";
-        this.duration="";
-        this.btnDownloadText="";
-        this.date="";
+        this.summary = "";
+        this.length = "";
+        this.duration = "";
+        this.btnDownloadText = "";
+        this.date = "";
     }
 
     @Override
@@ -31,18 +31,13 @@ public class Episod extends Track implements IPlayableTrack{
 
     @Override
     public String getSubTitle() {
-        return date;
+        String size = Formatter.formatShortFileSize(UpodsApplication.getContext(), Long.valueOf(length));
+        return duration + " / " + size;
     }
 
     @Override
     public String getAudeoUrl() {
         return mp3Url;
-    }
-
-    @Override
-    public String getData() {
-        String size = Formatter.formatShortFileSize(UpodsApplication.getContext(), Long.valueOf(length));
-        return duration + " / " + size;
     }
 
     public String getBtnDownloadText() {
@@ -80,6 +75,8 @@ public class Episod extends Track implements IPlayableTrack{
     public void setDate(String date) {
         this.date = date;
     }
+
+    @Override
     public String getDate() {
         return this.date;
     }

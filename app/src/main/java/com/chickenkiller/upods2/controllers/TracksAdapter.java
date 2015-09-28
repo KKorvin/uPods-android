@@ -37,14 +37,14 @@ public class TracksAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     private static class ViewHolderTrack extends RecyclerView.ViewHolder {
         public TextView tvTitle;
         public TextView tvSubTitle;
-        public TextView tvData;
+        public TextView tvDate;
         private View rootView;
 
         public ViewHolderTrack(View view) {
             super(view);
             this.tvTitle = (TextView) view.findViewById(R.id.tvTrackTitle);
             this.tvSubTitle = (TextView) view.findViewById(R.id.tvTrackSubTitle);
-            this.tvData = (TextView)view.findViewById(R.id.tvTrackData);
+            this.tvDate = (TextView)view.findViewById(R.id.tvTrackDate);
             this.rootView = view;
         }
 
@@ -81,7 +81,7 @@ public class TracksAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             IPlayableTrack currentTrack = tracks.get(position);
             ((ViewHolderTrack) holder).tvTitle.setText(currentTrack.getTitle());
             ((ViewHolderTrack) holder).tvSubTitle.setText(currentTrack.getSubTitle());
-            ((ViewHolderTrack) holder).tvData.setText(currentTrack.getData());
+            ((ViewHolderTrack) holder).tvDate.setText(currentTrack.getDate());
             ((ViewHolderTrack) holder).setClickListner(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
