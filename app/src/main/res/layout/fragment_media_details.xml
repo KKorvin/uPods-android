@@ -19,7 +19,7 @@
         <RelativeLayout
             android:id="@+id/rlDetailsHeaderContainer"
             android:layout_width="fill_parent"
-            android:layout_height="150dp">
+            android:layout_height="146dp">
 
             <ImageView
                 android:id="@+id/imgBluredCover"
@@ -42,7 +42,7 @@
                 android:layout_marginLeft="13dp"
                 android:layout_marginTop="13dp"
                 android:scaleType="fitXY"
-                android:src="@drawable/ic_temp" />
+                android:src="@drawable/radio" />
 
             <TextView
                 android:id="@+id/tvDetailedHeader"
@@ -51,8 +51,8 @@
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:layout_marginTop="8dp"
-                android:layout_toLeftOf="@+id/imgDetailedFavorites"
                 android:layout_toRightOf="@+id/imgDetailedCover"
+                android:maxLines="2"
                 android:text="BBC Radio One"
                 android:textColor="@color/white"
                 android:textSize="@dimen/default_text_size_20" />
@@ -60,31 +60,14 @@
             android:textStyle="bold"
             -->
 
-            <ImageView
-                android:id="@+id/imgDetailedFavorites"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="10dp"
-                android:layout_marginTop="10dp"
-                android:layout_toLeftOf="@+id/imgDetailedMenu"
-                android:src="@drawable/ic_star_outline_white_24dp" />
-
-            <ImageView
-                android:id="@+id/imgDetailedMenu"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_marginRight="10dp"
-                android:layout_marginTop="10dp"
-                android:src="@drawable/ic_dots_vertical_white_24dp" />
-
             <TextView
                 android:id="@+id/tvDetailedSubHeader"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_above="@+id/tvDetailedBottomHeader"
+                android:layout_below="@+id/tvDetailedHeader"
                 android:layout_marginBottom="0dp"
                 android:layout_marginLeft="10dp"
+                android:layout_marginRight="13dp"
                 android:layout_toRightOf="@+id/imgDetailedCover"
                 android:text="England"
                 android:textColor="@color/white"
@@ -94,22 +77,27 @@
                 android:id="@+id/tvDetailedBottomHeader"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_marginBottom="15dp"
+                android:layout_below="@+id/tvDetailedSubHeader"
                 android:layout_marginLeft="10dp"
+                android:layout_marginRight="13dp"
                 android:layout_toRightOf="@+id/imgDetailedCover"
                 android:text="Pop and Rock Music"
                 android:textColor="@color/white"
                 android:textSize="@dimen/default_text_size_16" />
 
-        </RelativeLayout>
+            <Button
+                android:id="@+id/btnSubscribe"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginBottom="7dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="11dp"
+                android:layout_toRightOf="@+id/imgDetailedCover"
+                android:text="@string/subscribe" />
 
-        <View
-            android:id="@+id/vDetailsDevider"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_below="@+id/rlDetailsHeaderContainer"
-            android:background="@color/indigo_800"></View>
+        </RelativeLayout>
 
 
         <android.support.design.widget.FloatingActionButton
@@ -118,7 +106,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_marginRight="20dp"
-            android:layout_marginTop="175dp"
+            android:layout_marginTop="125dp"
             android:src="@drawable/ic_play_white_24dp"
             app:backgroundTint="@color/pink_A400"
             app:elevation="4dp" />
@@ -127,7 +115,7 @@
             android:id="@+id/svDetails"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:layout_below="@+id/vDetailsDevider">
+            android:layout_below="@+id/rlDetailsHeaderContainer">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -165,7 +153,7 @@
             android:id="@+id/pbTracks"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/vDetailsDevider"
+            android:layout_below="@+id/rlDetailsHeaderContainer"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="80dp"
             android:visibility="gone" />
@@ -174,7 +162,7 @@
             android:id="@+id/rvTracks"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:layout_below="@+id/vDetailsDevider"
+            android:layout_below="@+id/rlDetailsHeaderContainer"
             android:clipToPadding="true"
             android:visibility="visible" />
     </RelativeLayout>

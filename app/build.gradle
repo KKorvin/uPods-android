@@ -35,4 +35,5 @@ dependencies {
     compile 'com.squareup.okhttp:mockwebserver:+'
     compile 'com.lsjwzh:recyclerviewpager:+'
     compile 'com.github.traex.rippleeffect:library:+'
+    compile 'com.pixplicity.easyprefs:library:+'
 }

@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -70,7 +71,7 @@ public class FragmentMediaItemDetails extends Fragment implements View.OnTouchLi
     private TextView tvBottomHeader;
     private TextView tvDetailedDesHeader;
     private View viewDetailedHeader;
-    private View viewDetailsDevider;
+    private Button btnSubscribe;
     private ImageView imgDetailedTopCover;
     private ImageView imgBluredCover;
     private FloatingActionButton fbDetailsPlay;
@@ -97,7 +98,7 @@ public class FragmentMediaItemDetails extends Fragment implements View.OnTouchLi
         tvDetailedDesHeader = (TextView) view.findViewById(R.id.tvDetailedDesHeader);
         tvBottomHeader = (TextView) view.findViewById(R.id.tvDetailedBottomHeader);
         viewDetailedHeader = view.findViewById(R.id.viewDetailedHeader);
-        viewDetailsDevider = view.findViewById(R.id.vDetailsDevider);
+        btnSubscribe = (Button) view.findViewById(R.id.btnSubscribe);
         imgDetailedTopCover = (ImageView) view.findViewById(R.id.imgDetailedCover);
         imgBluredCover = (ImageView) view.findViewById(R.id.imgBluredCover);
         fbDetailsPlay = (FloatingActionButton) view.findViewById(R.id.fbDetailsPlay);
@@ -120,32 +121,32 @@ public class FragmentMediaItemDetails extends Fragment implements View.OnTouchLi
                 layoutManager.setOrientation(OrientationHelper.VERTICAL);
                 rvTracks.setLayoutManager(layoutManager);
                 rvTracks.setVisibility(View.INVISIBLE);
-
                 pbTracks.setVisibility(View.VISIBLE);
                 svDetails.setVisibility(View.GONE);
+                fbDetailsPlay.setVisibility(View.GONE);
                 loadTracks();
             } else {
                 rvTracks.setVisibility(View.GONE);
                 svDetails.setVisibility(View.VISIBLE);
                 svDetails.setEnabled(false);
                 svDetails.setIMovable(this);
+                btnSubscribe.setVisibility(View.GONE);
                 tvDetailedDescription.setText(playableItem.getDescription());
+                fbDetailsPlay.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent myIntent = new Intent(getActivity(), ActivityPlayer.class);
+                        myIntent.putExtra(ActivityPlayer.MEDIA_ITEM_EXTRA, playableItem);
+                        getActivity().startActivity(myIntent);
+                        getActivity().finish();
+                    }
+                });
             }
-
         }
+
         rlDetailedContent.setOnTouchListener(this);
         view.setOnClickListener(frgamentCloseClickListener);
         initFragmentScrollConstants();
-
-        fbDetailsPlay.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent myIntent = new Intent(getActivity(), ActivityPlayer.class);
-                myIntent.putExtra(ActivityPlayer.MEDIA_ITEM_EXTRA, playableItem);
-                getActivity().startActivity(myIntent);
-                getActivity().finish();
-            }
-        });
 
         return view;
     }
@@ -158,7 +159,7 @@ public class FragmentMediaItemDetails extends Fragment implements View.OnTouchLi
                 Bitmap bitmap = ((GlideBitmapDrawable) drawable).getBitmap();
                 int dominantColor = UIHelper.getDominantColor(bitmap);
                 viewDetailedHeader.setBackgroundColor(dominantColor);
-                viewDetailsDevider.setBackgroundColor(dominantColor);
+                //viewDetailsDevider.setBackgroundColor(dominantColor);
                 tvDetailedDesHeader.setTextColor(dominantColor);
                 imgBluredCover.setImageBitmap(UIHelper.createScaledBitmap(bitmap, COVER_SCALE_FACTOR));
             }
@@ -189,8 +190,8 @@ public class FragmentMediaItemDetails extends Fragment implements View.OnTouchLi
                                     //TODO could be encoding problem
                                     InputSource inputSource = new InputSource(new StringReader(response));
                                     xr.parse(inputSource);
-                                    ArrayList <Episod> parsedEpisods = episodsXMLHandler.getParsedEpisods();
-                                    if(playableItem instanceof  ITrackable){
+                                    ArrayList<Episod> parsedEpisods = episodsXMLHandler.getParsedEpisods();
+                                    if (playableItem instanceof ITrackable) {
                                         ((ITrackable) playableItem).setTracks(parsedEpisods);
                                     }
                                     tracksAdapter.addItems(parsedEpisods);
