@@ -1,10 +1,13 @@
 package com.chickenkiller.upods2.models;
 
+import android.util.Log;
+
 import com.chickenkiller.upods2.interfaces.IFeaturableMediaItem;
 import com.chickenkiller.upods2.interfaces.IPlayableMediaItem;
 import com.chickenkiller.upods2.interfaces.ITrackable;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -13,6 +16,7 @@ import java.util.ArrayList;
  * Created by alonzilberman on 8/24/15.
  */
 public class Podcast extends MediaItem implements IFeaturableMediaItem, IPlayableMediaItem, ITrackable {
+    private static String PODCAST_ERROR_LOG = "PODCAST_ERROR";
     protected String name;
     protected String censoredName;
     protected String artistName;
@@ -26,7 +30,7 @@ public class Podcast extends MediaItem implements IFeaturableMediaItem, IPlayabl
 
     protected ArrayList<Episod> episods;
 
-    public Podcast(){
+    public Podcast() {
         super();
         this.episods = new ArrayList<>();
     }
@@ -61,10 +65,58 @@ public class Podcast extends MediaItem implements IFeaturableMediaItem, IPlayabl
                 this.explicitness = jsonItem.has("explicitness") ? jsonItem.getString("explicitness") : "";
                 this.trackCount = jsonItem.has("track_count") ? jsonItem.getString("track_count") : "";
                 this.genre = jsonItem.has("genre") ? jsonItem.getString("genre") : "";
+                if (jsonItem.has("episods")) {
+                    JSONArray jsonEpisods = jsonItem.getJSONArray("episods");
+                    for (int i = 0; i < jsonEpisods.length(); i++) {
+                        this.episods.add(new Episod(jsonEpisods.getJSONObject(i)));
+                    }
+                }
             }
         } catch (Exception e) {
+            Log.e(PODCAST_ERROR_LOG, "Can't parse podcast from json");
             e.printStackTrace();
         }
+    }
+
+    public JSONObject toJSON(boolean convertEpisods) {
+        JSONObject podcast = new JSONObject();
+        try {
+            podcast.put("id", this.id);
+            podcast.put("name", this.name);
+            podcast.put("censored_name", this.censoredName);
+            podcast.put("artist_name", this.artistName);
+            podcast.put("feed_url", this.feedUrl);
+            podcast.put("image_url", this.imageUrl);
+            podcast.put("country", this.country);
+            podcast.put("release_date", this.releaseDate);
+            podcast.put("explicitness", this.explicitness);
+            podcast.put("track_count", this.trackCount);
+            podcast.put("genre", this.genre);
+            if (convertEpisods) {
+                podcast.put("episods", Episod.toJSONArray(this.episods));
+            }
+        } catch (JSONException e) {
+            Log.e(PODCAST_ERROR_LOG, "Can't convert podcast to json");
+            e.printStackTrace();
+        }
+        return podcast;
+    }
+
+    public static JSONArray toJsonArray(ArrayList<Podcast> podcasts, boolean convertEpisods) {
+        JSONArray jsonPodcasts = new JSONArray();
+        for (Podcast podcast : podcasts) {
+            jsonPodcasts.put(podcast.toJSON(convertEpisods));
+        }
+        return jsonPodcasts;
+    }
+
+    public static boolean hasPodcastWithName(ArrayList<Podcast> podcasts, Podcast podcastToCheck) {
+        for (Podcast podcast : podcasts) {
+            if (podcast.getName().equals(podcastToCheck.getName())) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public Podcast(Podcast podcast) {
@@ -121,8 +173,8 @@ public class Podcast extends MediaItem implements IFeaturableMediaItem, IPlayabl
 
     @Override
     public String getStreamUrl() {
-        for (Track episod: episods) {
-            if(episod.isSelected){
+        for (Track episod : episods) {
+            if (episod.isSelected) {
                 return episod.getMp3Url();
             }
         }
@@ -208,7 +260,7 @@ public class Podcast extends MediaItem implements IFeaturableMediaItem, IPlayabl
 
     @Override
     public void setTracks(ArrayList<? extends Track> tracks) {
-        this.episods= (ArrayList<Episod>) tracks;
+        this.episods = (ArrayList<Episod>) tracks;
     }
 
     @Override
@@ -223,7 +275,7 @@ public class Podcast extends MediaItem implements IFeaturableMediaItem, IPlayabl
 
     @Override
     public void selectTrack(Track track) {
-        for (Track episod: episods) {
+        for (Track episod : episods) {
             episod.isSelected = episod.equals(track) ? true : false;
         }
     }
