@@ -19,7 +19,7 @@ public class ProfileManager {
     public enum ProfileItem {DOWNLOADED_PODCASTS, SUBSCRIBDED_PODCASTS, SUBSCRIBED_STATIONS}
 
     private static String PROFILE_PREF = "profile_pref";
-    private static String PROFILE_LOG_ERROR = "PROFILE ERROR";
+    private static String PROFILE = "PROFILE";
     public static ProfileManager profileManager;
     private ArrayList<Podcast> downloadedPodcasts;
     private ArrayList<Podcast> subscribedPodcasts;
@@ -38,7 +38,7 @@ public class ProfileManager {
                 rootProfile.put("subscribedPodcasts", subscribedPodcasts);
                 rootProfile.put("subscribedStations", subscribedRadioStations);
             } catch (JSONException e) {
-                Log.e(PROFILE_LOG_ERROR, "Can't create empty profile object");
+                Log.e(PROFILE, "Can't create empty profile object");
                 e.printStackTrace();
             }
             profileJsonStr = rootProfile.toString();
@@ -49,12 +49,12 @@ public class ProfileManager {
             initProfilePodcastItem(rootProfile.getJSONArray("downloadedPodcasts"), ProfileItem.DOWNLOADED_PODCASTS);
             initProfilePodcastItem(rootProfile.getJSONArray("subscribedPodcasts"), ProfileItem.SUBSCRIBDED_PODCASTS);
         } catch (JSONException e) {
-            Log.e(PROFILE_LOG_ERROR, "Can't parse profile string to json: " + profileJsonStr);
+            Log.e(PROFILE, "Can't parse profile string to json: " + profileJsonStr);
             e.printStackTrace();
         }
     }
 
-    public ProfileManager getInstance() {
+    public static ProfileManager getInstance() {
         if (profileManager == null) {
             profileManager = new ProfileManager();
         }
@@ -71,7 +71,7 @@ public class ProfileManager {
                     subscribedPodcasts.add(podcast);
                 }
             } catch (JSONException e) {
-                Log.e(PROFILE_LOG_ERROR, "Can't fetch downaloeded podcast from json object at index" + String.valueOf(i));
+                Log.e(PROFILE, "Can't fetch downaloeded podcast from json object at index" + String.valueOf(i));
                 e.printStackTrace();
             }
         }
@@ -83,6 +83,10 @@ public class ProfileManager {
             saveChanges(ProfileItem.SUBSCRIBDED_PODCASTS);
         }
 
+    }
+
+    public boolean isSubscribedToPodcast(Podcast podcast){
+        return Podcast.hasPodcastWithName(subscribedPodcasts, podcast);
     }
 
     public void removeSubscribedPodcasts(Podcast podcast) {
@@ -100,11 +104,12 @@ public class ProfileManager {
                 if (profileItem == ProfileItem.DOWNLOADED_PODCASTS) {
                     rootProfile.put("downloadedPodcasts", Podcast.toJsonArray(downloadedPodcasts, true));
                 } else if (profileItem == ProfileItem.SUBSCRIBDED_PODCASTS) {
-                    rootProfile.put("subscribedPodcasts", Podcast.toJsonArray(downloadedPodcasts, true));
+                    rootProfile.put("subscribedPodcasts", Podcast.toJsonArray(subscribedPodcasts, false));
                 }
-                Prefs.putString(PROFILE_PREF, profileJsonStr);
+                Prefs.putString(PROFILE_PREF, rootProfile.toString());
+                Log.i(PROFILE_PREF,rootProfile.toString());
             } catch (JSONException e) {
-                Log.e(PROFILE_LOG_ERROR, "Can't parse profile string to json: " + profileJsonStr);
+                Log.e(PROFILE, "Can't parse profile string to json: " + profileJsonStr);
                 e.printStackTrace();
             }
         }

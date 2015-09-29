@@ -29,6 +29,7 @@ import com.chickenkiller.upods2.R;
 import com.chickenkiller.upods2.activity.ActivityPlayer;
 import com.chickenkiller.upods2.controllers.BackendManager;
 import com.chickenkiller.upods2.controllers.EpisodsXMLHandler;
+import com.chickenkiller.upods2.controllers.ProfileManager;
 import com.chickenkiller.upods2.controllers.TracksAdapter;
 import com.chickenkiller.upods2.interfaces.IMovable;
 import com.chickenkiller.upods2.interfaces.INetworkSimpleUIupdater;
@@ -36,6 +37,7 @@ import com.chickenkiller.upods2.interfaces.IOverlayable;
 import com.chickenkiller.upods2.interfaces.IPlayableMediaItem;
 import com.chickenkiller.upods2.interfaces.ITrackable;
 import com.chickenkiller.upods2.models.Episod;
+import com.chickenkiller.upods2.models.Podcast;
 import com.chickenkiller.upods2.utils.UIHelper;
 import com.chickenkiller.upods2.views.DetailsScrollView;
 
@@ -114,33 +116,9 @@ public class FragmentMediaItemDetails extends Fragment implements View.OnTouchLi
             tvBottomHeader.setText(playableItem.getBottomHeader());
 
             if (playableItem.hasTracks()) {
-                //Tracks recycle view
-                tracksAdapter = new TracksAdapter(playableItem, getActivity(), R.layout.track_item);
-                rvTracks.setAdapter(tracksAdapter);
-                LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
-                layoutManager.setOrientation(OrientationHelper.VERTICAL);
-                rvTracks.setLayoutManager(layoutManager);
-                rvTracks.setVisibility(View.INVISIBLE);
-                pbTracks.setVisibility(View.VISIBLE);
-                svDetails.setVisibility(View.GONE);
-                fbDetailsPlay.setVisibility(View.GONE);
-                loadTracks();
+                initTrackable();
             } else {
-                rvTracks.setVisibility(View.GONE);
-                svDetails.setVisibility(View.VISIBLE);
-                svDetails.setEnabled(false);
-                svDetails.setIMovable(this);
-                btnSubscribe.setVisibility(View.GONE);
-                tvDetailedDescription.setText(playableItem.getDescription());
-                fbDetailsPlay.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        Intent myIntent = new Intent(getActivity(), ActivityPlayer.class);
-                        myIntent.putExtra(ActivityPlayer.MEDIA_ITEM_EXTRA, playableItem);
-                        getActivity().startActivity(myIntent);
-                        getActivity().finish();
-                    }
-                });
+                initNotTrackable();
             }
         }
 
@@ -149,6 +127,59 @@ public class FragmentMediaItemDetails extends Fragment implements View.OnTouchLi
         initFragmentScrollConstants();
 
         return view;
+    }
+
+    /**
+     * Init playable item with tracks (i.e podcast)
+     */
+    private void initTrackable() {
+        //Tracks recycle view
+        tracksAdapter = new TracksAdapter(playableItem, getActivity(), R.layout.track_item);
+        rvTracks.setAdapter(tracksAdapter);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        layoutManager.setOrientation(OrientationHelper.VERTICAL);
+        rvTracks.setLayoutManager(layoutManager);
+        rvTracks.setVisibility(View.INVISIBLE);
+        pbTracks.setVisibility(View.VISIBLE);
+        svDetails.setVisibility(View.GONE);
+        fbDetailsPlay.setVisibility(View.GONE);
+        loadTracks();
+        if (playableItem instanceof Podcast) {
+            btnSubscribe.setText(ProfileManager.getInstance().isSubscribedToPodcast((Podcast) playableItem) ? getString(R.string.unsubscribe) : getString(R.string.subscribe));
+            btnSubscribe.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (ProfileManager.getInstance().isSubscribedToPodcast((Podcast) playableItem)) {
+                        ProfileManager.getInstance().removeSubscribedPodcasts((Podcast) playableItem);
+                        btnSubscribe.setText(getString(R.string.subscribe));
+                    } else {
+                        ProfileManager.getInstance().addSubscribedPodcast((Podcast) playableItem);
+                        btnSubscribe.setText(getString(R.string.unsubscribe));
+                    }
+                }
+            });
+        }
+    }
+
+    /**
+     * Init playable without tracks (i.e radio station)
+     */
+    private void initNotTrackable() {
+        rvTracks.setVisibility(View.GONE);
+        svDetails.setVisibility(View.VISIBLE);
+        svDetails.setEnabled(false);
+        svDetails.setIMovable(this);
+        btnSubscribe.setVisibility(View.GONE);
+        tvDetailedDescription.setText(playableItem.getDescription());
+        fbDetailsPlay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent myIntent = new Intent(getActivity(), ActivityPlayer.class);
+                myIntent.putExtra(ActivityPlayer.MEDIA_ITEM_EXTRA, playableItem);
+                getActivity().startActivity(myIntent);
+                getActivity().finish();
+            }
+        });
     }
 
     private void initImagesColors() {

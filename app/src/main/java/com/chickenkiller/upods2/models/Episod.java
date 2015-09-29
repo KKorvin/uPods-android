@@ -16,7 +16,7 @@ import java.util.ArrayList;
  * Created by alonzilberman on 8/31/15.
  */
 public class Episod extends Track implements IPlayableTrack {
-    private static String EPISOD_ERROR_LOG = "EPISOD_ERROR";
+    private static String EPISOD_LOG = "EPISOD";
     private String summary;
     private String length;
     private String duration;
@@ -43,7 +43,7 @@ public class Episod extends Track implements IPlayableTrack {
             this.date = jsonItem.has("date") ? jsonItem.getString("date") : "";
             this.isDownloaded = jsonItem.has("isDownloaded") ? jsonItem.getBoolean("isDownloaded") : false;
         } catch (JSONException e) {
-            Log.e(EPISOD_ERROR_LOG, "Can't parse episod from json");
+            Log.e(EPISOD_LOG, "Can't parse episod from json");
             e.printStackTrace();
         }
 
@@ -58,7 +58,7 @@ public class Episod extends Track implements IPlayableTrack {
             jsonEpisod.put("date", this.date);
             jsonEpisod.put("isDownloaded", isDownloaded);
         } catch (JSONException e) {
-            Log.e(EPISOD_ERROR_LOG, "Can't save episod to json");
+            Log.e(EPISOD_LOG, "Can't save episod to json");
             e.printStackTrace();
         }
         return jsonEpisod;

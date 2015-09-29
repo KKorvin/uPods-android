@@ -16,7 +16,7 @@ import java.util.ArrayList;
  * Created by alonzilberman on 8/24/15.
  */
 public class Podcast extends MediaItem implements IFeaturableMediaItem, IPlayableMediaItem, ITrackable {
-    private static String PODCAST_ERROR_LOG = "PODCAST_ERROR";
+    private static String PODCAST_LOG = "PODCAST";
     protected String name;
     protected String censoredName;
     protected String artistName;
@@ -73,7 +73,7 @@ public class Podcast extends MediaItem implements IFeaturableMediaItem, IPlayabl
                 }
             }
         } catch (Exception e) {
-            Log.e(PODCAST_ERROR_LOG, "Can't parse podcast from json");
+            Log.e(PODCAST_LOG, "Can't parse podcast from json");
             e.printStackTrace();
         }
     }
@@ -96,7 +96,7 @@ public class Podcast extends MediaItem implements IFeaturableMediaItem, IPlayabl
                 podcast.put("episods", Episod.toJSONArray(this.episods));
             }
         } catch (JSONException e) {
-            Log.e(PODCAST_ERROR_LOG, "Can't convert podcast to json");
+            Log.e(PODCAST_LOG, "Can't convert podcast to json");
             e.printStackTrace();
         }
         return podcast;
