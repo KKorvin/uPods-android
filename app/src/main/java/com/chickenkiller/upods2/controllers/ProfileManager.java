@@ -2,6 +2,7 @@ package com.chickenkiller.upods2.controllers;
 
 import android.util.Log;
 
+import com.chickenkiller.upods2.models.Episod;
 import com.chickenkiller.upods2.models.Podcast;
 import com.pixplicity.easyprefs.library.Prefs;
 
@@ -85,7 +86,40 @@ public class ProfileManager {
 
     }
 
-    public boolean isSubscribedToPodcast(Podcast podcast){
+    public void addDownloadedEpisod(Podcast tempPodcast, Episod episod) {
+        if (!Podcast.hasPodcastWithName(downloadedPodcasts, tempPodcast)) {
+            Podcast podcast = new Podcast(tempPodcast);
+            podcast.getEpisods().clear();
+            podcast.getEpisods().add(episod);
+            downloadedPodcasts.add(podcast);
+        } else {
+            Podcast podcast = Podcast.getPodcastByName(downloadedPodcasts, tempPodcast);
+            podcast.getEpisods().add(episod);
+        }
+        saveChanges(ProfileItem.DOWNLOADED_PODCASTS);
+    }
+
+    public void removeDownloadedEpisod(Podcast tempPodcast, Episod episod) {
+        if (Podcast.hasPodcastWithName(downloadedPodcasts, tempPodcast)) {
+            Podcast podcast = Podcast.getPodcastByName(downloadedPodcasts, tempPodcast);
+            if (podcast.getEpisods().size() == 1) {
+                downloadedPodcasts.remove(podcast);
+            } else {
+                podcast.getEpisods().remove(episod);
+            }
+            saveChanges(ProfileItem.DOWNLOADED_PODCASTS);
+        }
+    }
+
+    public boolean isDownloaded(Podcast tempPodcast, Episod episod) {
+        if (Podcast.hasPodcastWithName(downloadedPodcasts, tempPodcast)) {
+            Podcast podcast = Podcast.getPodcastByName(downloadedPodcasts, tempPodcast);
+            return podcast.getEpisods().contains(episod);
+        }
+        return false;
+    }
+
+    public boolean isSubscribedToPodcast(Podcast podcast) {
         return Podcast.hasPodcastWithName(subscribedPodcasts, podcast);
     }
 
@@ -107,7 +141,7 @@ public class ProfileManager {
                     rootProfile.put("subscribedPodcasts", Podcast.toJsonArray(subscribedPodcasts, false));
                 }
                 Prefs.putString(PROFILE_PREF, rootProfile.toString());
-                Log.i(PROFILE_PREF,rootProfile.toString());
+                Log.i(PROFILE_PREF, rootProfile.toString());
             } catch (JSONException e) {
                 Log.e(PROFILE, "Can't parse profile string to json: " + profileJsonStr);
                 e.printStackTrace();

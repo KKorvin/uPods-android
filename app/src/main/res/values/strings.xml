@@ -64,6 +64,7 @@
     <string name="download">Download</string>
     <string name="subscribe">Subscribe</string>
     <string name="unsubscribe">Unsubscribe</string>
+    <string name="play">Play</string>
 
 
 </resources>

@@ -119,6 +119,15 @@ public class Podcast extends MediaItem implements IFeaturableMediaItem, IPlayabl
         return false;
     }
 
+    public static Podcast getPodcastByName(ArrayList<Podcast> podcasts, Podcast podcastToCheck) {
+        for (Podcast podcast : podcasts) {
+            if (podcast.getName().equals(podcastToCheck.getName())) {
+                return podcast;
+            }
+        }
+        return null;
+    }
+
     public Podcast(Podcast podcast) {
         this.name = podcast.getName();
         this.censoredName = podcast.getCensoredName();
@@ -256,6 +265,10 @@ public class Podcast extends MediaItem implements IFeaturableMediaItem, IPlayabl
 
     public void setGenre(String genre) {
         this.genre = genre;
+    }
+
+    public ArrayList<Episod> getEpisods() {
+        return episods;
     }
 
     @Override

@@ -7,7 +7,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.chickenkiller.upods2.R;
 import com.chickenkiller.upods2.activity.ActivityPlayer;
@@ -15,6 +17,8 @@ import com.chickenkiller.upods2.interfaces.IFragmentsManager;
 import com.chickenkiller.upods2.interfaces.IPlayableMediaItem;
 import com.chickenkiller.upods2.interfaces.IPlayableTrack;
 import com.chickenkiller.upods2.interfaces.ITrackable;
+import com.chickenkiller.upods2.models.Episod;
+import com.chickenkiller.upods2.models.Podcast;
 import com.chickenkiller.upods2.models.Track;
 
 import java.util.ArrayList;
@@ -38,6 +42,7 @@ public class TracksAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         public TextView tvTitle;
         public TextView tvSubTitle;
         public TextView tvDate;
+        public Button btnDownload;
         private View rootView;
 
         public ViewHolderTrack(View view) {
@@ -45,6 +50,7 @@ public class TracksAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             this.tvTitle = (TextView) view.findViewById(R.id.tvTrackTitle);
             this.tvSubTitle = (TextView) view.findViewById(R.id.tvTrackSubTitle);
             this.tvDate = (TextView)view.findViewById(R.id.tvTrackDate);
+            this.btnDownload = (Button)view.findViewById(R.id.btnDownload);
             this.rootView = view;
         }
 
@@ -52,6 +58,10 @@ public class TracksAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             rootView.setOnClickListener(clickListner);
         }
 
+
+        public void setDownloadBtnClickListener(View.OnClickListener clickListner){
+            btnDownload.setOnClickListener(clickListner);
+        }
     }
 
 
@@ -86,8 +96,8 @@ public class TracksAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 @Override
                 public void onClick(View view) {
                     IPlayableTrack iPlayableTrack = tracks.get(position);
-                    if(iPlayableTrack instanceof ITrackable && iPlayableTrack instanceof Track){
-                        ((ITrackable) iPlayableTrack).selectTrack((Track)iPlayableTrack);
+                    if (iPlayableTrack instanceof ITrackable && iPlayableTrack instanceof Track) {
+                        ((ITrackable) iPlayableTrack).selectTrack((Track) iPlayableTrack);
                     }
                     Intent myIntent = new Intent(mContext, ActivityPlayer.class);
                     myIntent.putExtra(ActivityPlayer.MEDIA_ITEM_EXTRA, iPlayableMediaItem);
@@ -95,6 +105,16 @@ public class TracksAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                     ((Activity) mContext).finish();
                 }
             });
+            if(currentTrack instanceof Episod && iPlayableMediaItem instanceof Podcast){
+                boolean isDownloaed = ProfileManager.getInstance().isDownloaded((Podcast)iPlayableMediaItem, (Episod)currentTrack);
+                ((ViewHolderTrack) holder).btnDownload.setText(isDownloaed ? mContext.getString(R.string.play) : mContext.getString(R.string.download));
+                ((ViewHolderTrack) holder).btnDownload.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Toast.makeText(mContext, "dsds",Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
             holder.itemView.setTag(currentTrack);
         }
     }

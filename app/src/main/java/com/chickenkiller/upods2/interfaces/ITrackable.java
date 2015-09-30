@@ -16,5 +16,8 @@ public interface ITrackable {
 
     String getTracksFeed();
 
+    /**
+     * Selects track which will be automatycly played when ITrackable will be passed to player
+     */
     void selectTrack(Track track);
 }

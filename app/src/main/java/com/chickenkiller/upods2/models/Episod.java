@@ -22,6 +22,7 @@ public class Episod extends Track implements IPlayableTrack {
     private String duration;
     private String btnDownloadText;
     private String date;
+    private String pathOnDisk;
     private boolean isDownloaded;
 
     public Episod() {
@@ -31,6 +32,7 @@ public class Episod extends Track implements IPlayableTrack {
         this.duration = "";
         this.btnDownloadText = "";
         this.date = "";
+        this.pathOnDisk = "";
         this.isDownloaded = false;
     }
 
@@ -41,7 +43,7 @@ public class Episod extends Track implements IPlayableTrack {
             this.length = jsonItem.has("length") ? jsonItem.getString("length") : "";
             this.duration = jsonItem.has("duration") ? jsonItem.getString("duration") : "";
             this.date = jsonItem.has("date") ? jsonItem.getString("date") : "";
-            this.isDownloaded = jsonItem.has("isDownloaded") ? jsonItem.getBoolean("isDownloaded") : false;
+            this.date = jsonItem.has("pathOnDisk") ? jsonItem.getString("pathOnDisk") : "";
         } catch (JSONException e) {
             Log.e(EPISOD_LOG, "Can't parse episod from json");
             e.printStackTrace();

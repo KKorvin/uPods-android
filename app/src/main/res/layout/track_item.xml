@@ -19,7 +19,7 @@
         android:layout_height="match_parent"
         android:layout_marginRight="20dp"
         android:layout_marginLeft="20dp"
-        android:layout_toLeftOf="@+id/btnMore"
+        android:layout_toLeftOf="@+id/btnDownload"
         android:layout_toRightOf="@+id/tvTrackDate"
         android:gravity="center_vertical"
         android:orientation="vertical">
@@ -48,7 +48,7 @@
     </LinearLayout>
 
     <Button
-        android:id="@+id/btnMore"
+        android:id="@+id/btnDownload"
         android:layout_width="85dp"
         android:layout_height="40dp"
         android:layout_alignParentRight="true"
