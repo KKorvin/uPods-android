@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.chickenkiller.upods2.R;
 import com.chickenkiller.upods2.activity.ActivityPlayer;
@@ -49,8 +48,8 @@ public class TracksAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             super(view);
             this.tvTitle = (TextView) view.findViewById(R.id.tvTrackTitle);
             this.tvSubTitle = (TextView) view.findViewById(R.id.tvTrackSubTitle);
-            this.tvDate = (TextView)view.findViewById(R.id.tvTrackDate);
-            this.btnDownload = (Button)view.findViewById(R.id.btnDownload);
+            this.tvDate = (TextView) view.findViewById(R.id.tvTrackDate);
+            this.btnDownload = (Button) view.findViewById(R.id.btnDownload);
             this.rootView = view;
         }
 
@@ -59,7 +58,7 @@ public class TracksAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         }
 
 
-        public void setDownloadBtnClickListener(View.OnClickListener clickListner){
+        public void setDownloadBtnClickListener(View.OnClickListener clickListner) {
             btnDownload.setOnClickListener(clickListner);
         }
     }
@@ -86,9 +85,9 @@ public class TracksAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
+    public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
         if (holder instanceof ViewHolderTrack) {
-            IPlayableTrack currentTrack = tracks.get(position);
+            final IPlayableTrack currentTrack = tracks.get(position);
             ((ViewHolderTrack) holder).tvTitle.setText(currentTrack.getTitle());
             ((ViewHolderTrack) holder).tvSubTitle.setText(currentTrack.getSubTitle());
             ((ViewHolderTrack) holder).tvDate.setText(currentTrack.getDate());
@@ -105,13 +104,19 @@ public class TracksAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                     ((Activity) mContext).finish();
                 }
             });
-            if(currentTrack instanceof Episod && iPlayableMediaItem instanceof Podcast){
-                boolean isDownloaed = ProfileManager.getInstance().isDownloaded((Podcast)iPlayableMediaItem, (Episod)currentTrack);
+            if (currentTrack instanceof Episod && iPlayableMediaItem instanceof Podcast) {
+                final boolean isDownloaed = ProfileManager.getInstance().isDownloaded((Podcast) iPlayableMediaItem, (Episod) currentTrack);
                 ((ViewHolderTrack) holder).btnDownload.setText(isDownloaed ? mContext.getString(R.string.play) : mContext.getString(R.string.download));
                 ((ViewHolderTrack) holder).btnDownload.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Toast.makeText(mContext, "dsds",Toast.LENGTH_SHORT).show();
+                        if (isDownloaed) {
+                            ProfileManager.getInstance().removeDownloadedEpisod((Podcast) iPlayableMediaItem, (Episod) currentTrack);
+                            ((ViewHolderTrack) holder).btnDownload.setText(mContext.getString(R.string.download));
+                        } else {
+                            ProfileManager.getInstance().addDownloadedEpisod((Podcast) iPlayableMediaItem, (Episod) currentTrack);
+                            ((ViewHolderTrack) holder).btnDownload.setText(mContext.getString(R.string.play));
+                        }
                     }
                 });
             }

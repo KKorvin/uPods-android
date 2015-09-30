@@ -23,7 +23,6 @@ public class Episod extends Track implements IPlayableTrack {
     private String btnDownloadText;
     private String date;
     private String pathOnDisk;
-    private boolean isDownloaded;
 
     public Episod() {
         super();
@@ -33,17 +32,17 @@ public class Episod extends Track implements IPlayableTrack {
         this.btnDownloadText = "";
         this.date = "";
         this.pathOnDisk = "";
-        this.isDownloaded = false;
     }
 
     public Episod(JSONObject jsonItem) {
         this();
         try {
+            this.title = jsonItem.has("title") ? jsonItem.getString("title") : "";
             this.summary = jsonItem.has("summary") ? jsonItem.getString("summary") : "";
             this.length = jsonItem.has("length") ? jsonItem.getString("length") : "";
             this.duration = jsonItem.has("duration") ? jsonItem.getString("duration") : "";
             this.date = jsonItem.has("date") ? jsonItem.getString("date") : "";
-            this.date = jsonItem.has("pathOnDisk") ? jsonItem.getString("pathOnDisk") : "";
+            this.pathOnDisk = jsonItem.has("pathOnDisk") ? jsonItem.getString("pathOnDisk") : "";
         } catch (JSONException e) {
             Log.e(EPISOD_LOG, "Can't parse episod from json");
             e.printStackTrace();
@@ -51,14 +50,33 @@ public class Episod extends Track implements IPlayableTrack {
 
     }
 
+    public static boolean hasEpisodWithTitle(ArrayList<Episod> episods, Episod episodToCheck) {
+        for (Episod episod : episods) {
+            if (episod.getTitle().equals(episodToCheck.getTitle())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static Episod getEpisodByTitle(ArrayList<Episod> episods, Episod episodToCheck) {
+        for (Episod episod : episods) {
+            if (episod.getTitle().equals(episodToCheck.getTitle())) {
+                return episod;
+            }
+        }
+        return null;
+    }
+
     public JSONObject toJson() {
         JSONObject jsonEpisod = new JSONObject();
         try {
+            jsonEpisod.put("title", this.title);
             jsonEpisod.put("summary", this.summary);
             jsonEpisod.put("length", this.length);
             jsonEpisod.put("duration", this.duration);
             jsonEpisod.put("date", this.date);
-            jsonEpisod.put("isDownloaded", isDownloaded);
+            jsonEpisod.put("pathOnDisk", this.pathOnDisk);
         } catch (JSONException e) {
             Log.e(EPISOD_LOG, "Can't save episod to json");
             e.printStackTrace();

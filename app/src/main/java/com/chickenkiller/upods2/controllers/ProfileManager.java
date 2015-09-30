@@ -72,10 +72,17 @@ public class ProfileManager {
                     subscribedPodcasts.add(podcast);
                 }
             } catch (JSONException e) {
-                Log.e(PROFILE, "Can't fetch downaloeded podcast from json object at index" + String.valueOf(i));
+                Log.e(PROFILE, "Can't fetch podcast from json object at index" + String.valueOf(i));
                 e.printStackTrace();
             }
         }
+        String podcastType = "";
+        if (profileItem == ProfileItem.DOWNLOADED_PODCASTS) {
+            podcastType=" downloaded ";
+        } else if (profileItem == ProfileItem.SUBSCRIBDED_PODCASTS) {
+            podcastType=" subscribded ";
+        }
+        Log.i(PROFILE, "Fetcheed " + String.valueOf(podcasts.length()) + podcastType + "podcasts from json profile");
     }
 
     public void addSubscribedPodcast(Podcast podcast) {
@@ -105,7 +112,7 @@ public class ProfileManager {
             if (podcast.getEpisods().size() == 1) {
                 downloadedPodcasts.remove(podcast);
             } else {
-                podcast.getEpisods().remove(episod);
+                podcast.getEpisods().remove(Episod.getEpisodByTitle(podcast.getEpisods(), episod));
             }
             saveChanges(ProfileItem.DOWNLOADED_PODCASTS);
         }
@@ -114,7 +121,7 @@ public class ProfileManager {
     public boolean isDownloaded(Podcast tempPodcast, Episod episod) {
         if (Podcast.hasPodcastWithName(downloadedPodcasts, tempPodcast)) {
             Podcast podcast = Podcast.getPodcastByName(downloadedPodcasts, tempPodcast);
-            return podcast.getEpisods().contains(episod);
+            return Episod.hasEpisodWithTitle(podcast.getEpisods(), episod);
         }
         return false;
     }
