@@ -57,4 +57,9 @@ public class GlobalUtils {
         return date;
     }
 
+    public static String getCleanFileName(String str){
+        str = str.toLowerCase();
+        return str.replaceAll("[^a-zA-Z0-9]+","_");
+    }
+
 }
