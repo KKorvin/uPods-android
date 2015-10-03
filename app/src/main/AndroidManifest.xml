@@ -28,6 +28,7 @@
             android:launchMode="singleInstance"></activity>
 
         <receiver android:name=".controllers.MainBroadcastRecivier">
+            <action android:name="android.intent.action.DOWNLOAD_COMPLETE" />
             <action android:name="com.chickenkiller.upods2.player.PLAY" />
             <action android:name="com.chickenkiller.upods2.player.PAUSE" />
         </receiver>

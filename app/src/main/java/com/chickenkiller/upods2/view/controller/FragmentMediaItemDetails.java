@@ -145,15 +145,15 @@ public class FragmentMediaItemDetails extends Fragment implements View.OnTouchLi
         fbDetailsPlay.setVisibility(View.GONE);
         loadTracks();
         if (playableItem instanceof Podcast) {
-            btnSubscribe.setText(ProfileManager.getInstance().isSubscribedToPodcast((Podcast) playableItem) ? getString(R.string.unsubscribe) : getString(R.string.subscribe));
+            btnSubscribe.setText(ProfileManager.getInstance().isSubscribedToMediaItem((Podcast) playableItem) ? getString(R.string.unsubscribe) : getString(R.string.subscribe));
             btnSubscribe.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (ProfileManager.getInstance().isSubscribedToPodcast((Podcast) playableItem)) {
-                        ProfileManager.getInstance().removeSubscribedPodcasts((Podcast) playableItem);
+                    if (ProfileManager.getInstance().isSubscribedToMediaItem((Podcast) playableItem)) {
+                        ProfileManager.getInstance().removeSubscribedMediaItem((Podcast) playableItem);
                         btnSubscribe.setText(getString(R.string.subscribe));
                     } else {
-                        ProfileManager.getInstance().addSubscribedPodcast((Podcast) playableItem);
+                        ProfileManager.getInstance().addSubscribedMediaItem((Podcast) playableItem);
                         btnSubscribe.setText(getString(R.string.unsubscribe));
                     }
                 }

@@ -2,6 +2,8 @@ package com.chickenkiller.upods2.controllers;
 
 import android.util.Log;
 
+import com.chickenkiller.upods2.interfaces.IPlayableMediaItem;
+import com.chickenkiller.upods2.interfaces.IPlayableTrack;
 import com.chickenkiller.upods2.models.Episod;
 import com.chickenkiller.upods2.models.Podcast;
 import com.pixplicity.easyprefs.library.Prefs;
@@ -78,62 +80,74 @@ public class ProfileManager {
         }
         String podcastType = "";
         if (profileItem == ProfileItem.DOWNLOADED_PODCASTS) {
-            podcastType=" downloaded ";
+            podcastType = " downloaded ";
         } else if (profileItem == ProfileItem.SUBSCRIBDED_PODCASTS) {
-            podcastType=" subscribded ";
+            podcastType = " subscribded ";
         }
         Log.i(PROFILE, "Fetcheed " + String.valueOf(podcasts.length()) + podcastType + "podcasts from json profile");
     }
 
-    public void addSubscribedPodcast(Podcast podcast) {
-        if (!Podcast.hasPodcastWithName(subscribedPodcasts, podcast)) {
-            subscribedPodcasts.add(podcast);
-            saveChanges(ProfileItem.SUBSCRIBDED_PODCASTS);
+    public void addSubscribedMediaItem(IPlayableMediaItem mediaItem) {
+        if (mediaItem instanceof Podcast) {
+            if (!Podcast.hasPodcastWithName(subscribedPodcasts, (Podcast) mediaItem)) {
+                subscribedPodcasts.add((Podcast) mediaItem);
+                saveChanges(ProfileItem.SUBSCRIBDED_PODCASTS);
+            }
         }
-
     }
 
-    public void addDownloadedEpisod(Podcast tempPodcast, Episod episod) {
-        if (!Podcast.hasPodcastWithName(downloadedPodcasts, tempPodcast)) {
-            Podcast podcast = new Podcast(tempPodcast);
-            podcast.getEpisods().clear();
-            podcast.getEpisods().add(episod);
-            downloadedPodcasts.add(podcast);
-        } else {
-            Podcast podcast = Podcast.getPodcastByName(downloadedPodcasts, tempPodcast);
-            podcast.getEpisods().add(episod);
-        }
-        saveChanges(ProfileItem.DOWNLOADED_PODCASTS);
-    }
-
-    public void removeDownloadedEpisod(Podcast tempPodcast, Episod episod) {
-        if (Podcast.hasPodcastWithName(downloadedPodcasts, tempPodcast)) {
-            Podcast podcast = Podcast.getPodcastByName(downloadedPodcasts, tempPodcast);
-            if (podcast.getEpisods().size() == 1) {
-                downloadedPodcasts.remove(podcast);
+    public void addDownloadedTrack(IPlayableMediaItem mediaItem, IPlayableTrack track) {
+        if (mediaItem instanceof Podcast && track instanceof Episod) {
+            if (!Podcast.hasPodcastWithName(downloadedPodcasts, (Podcast) mediaItem)) {
+                Podcast podcast = new Podcast((Podcast) mediaItem);
+                podcast.getEpisods().clear();
+                podcast.getEpisods().add((Episod) track);
+                downloadedPodcasts.add(podcast);
             } else {
-                podcast.getEpisods().remove(Episod.getEpisodByTitle(podcast.getEpisods(), episod));
+                Podcast podcast = Podcast.getPodcastByName(downloadedPodcasts, (Podcast) mediaItem);
+                podcast.getEpisods().add((Episod) track);
             }
             saveChanges(ProfileItem.DOWNLOADED_PODCASTS);
         }
     }
 
-    public boolean isDownloaded(Podcast tempPodcast, Episod episod) {
-        if (Podcast.hasPodcastWithName(downloadedPodcasts, tempPodcast)) {
-            Podcast podcast = Podcast.getPodcastByName(downloadedPodcasts, tempPodcast);
-            return Episod.hasEpisodWithTitle(podcast.getEpisods(), episod);
+    public void removeDownloadedTrack(IPlayableMediaItem mediaItem, IPlayableTrack track) {
+        if (mediaItem instanceof Podcast && track instanceof Episod) {
+            if (Podcast.hasPodcastWithName(downloadedPodcasts, (Podcast) mediaItem)) {
+                Podcast podcast = Podcast.getPodcastByName(downloadedPodcasts, (Podcast) mediaItem);
+                if (podcast.getEpisods().size() == 1) {
+                    downloadedPodcasts.remove(podcast);
+                } else {
+                    podcast.getEpisods().remove(Episod.getEpisodByTitle(podcast.getEpisods(), (Episod) track));
+                }
+                saveChanges(ProfileItem.DOWNLOADED_PODCASTS);
+            }
+        }
+    }
+
+    public boolean isDownloaded(IPlayableMediaItem mediaItem, IPlayableTrack track) {
+        if (mediaItem instanceof Podcast && track instanceof Episod) {
+            if (Podcast.hasPodcastWithName(downloadedPodcasts, (Podcast) mediaItem)) {
+                Podcast podcast = Podcast.getPodcastByName(downloadedPodcasts, (Podcast) mediaItem);
+                return Episod.hasEpisodWithTitle(podcast.getEpisods(), (Episod) track);
+            }
         }
         return false;
     }
 
-    public boolean isSubscribedToPodcast(Podcast podcast) {
-        return Podcast.hasPodcastWithName(subscribedPodcasts, podcast);
+    public boolean isSubscribedToMediaItem(IPlayableMediaItem mediaItem) {
+        if (mediaItem instanceof Podcast) {
+            return Podcast.hasPodcastWithName(subscribedPodcasts, (Podcast) mediaItem);
+        }
+        return false;
     }
 
-    public void removeSubscribedPodcasts(Podcast podcast) {
-        if (Podcast.hasPodcastWithName(subscribedPodcasts, podcast)) {
-            subscribedPodcasts.remove(podcast);
-            saveChanges(ProfileItem.SUBSCRIBDED_PODCASTS);
+    public void removeSubscribedMediaItem(IPlayableMediaItem mediaItem) {
+        if (mediaItem instanceof Podcast) {
+            if (Podcast.hasPodcastWithName(subscribedPodcasts, (Podcast) mediaItem)) {
+                subscribedPodcasts.remove((Podcast) mediaItem);
+                saveChanges(ProfileItem.SUBSCRIBDED_PODCASTS);
+            }
         }
     }
 

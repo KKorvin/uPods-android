@@ -1,5 +1,6 @@
 package com.chickenkiller.upods2.controllers;
 
+import android.app.DownloadManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -20,6 +21,9 @@ public class MainBroadcastRecivier extends BroadcastReceiver {
             if (UniversalPlayer.getInstance().isPrepaired) {
                 UniversalPlayer.getInstance().pause();
             }
+        } else if (DownloadManager.ACTION_DOWNLOAD_COMPLETE.equals(intent.getAction())) {
+            long downloadId = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, 0);
+
         }
     }
 }

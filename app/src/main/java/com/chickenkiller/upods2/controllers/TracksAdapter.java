@@ -16,7 +16,6 @@ import com.chickenkiller.upods2.interfaces.IFragmentsManager;
 import com.chickenkiller.upods2.interfaces.IPlayableMediaItem;
 import com.chickenkiller.upods2.interfaces.IPlayableTrack;
 import com.chickenkiller.upods2.interfaces.ITrackable;
-import com.chickenkiller.upods2.models.Episod;
 import com.chickenkiller.upods2.models.Podcast;
 import com.chickenkiller.upods2.models.Track;
 
@@ -104,22 +103,21 @@ public class TracksAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                     ((Activity) mContext).finish();
                 }
             });
-            if (currentTrack instanceof Episod && iPlayableMediaItem instanceof Podcast) {
-                final boolean isDownloaed = ProfileManager.getInstance().isDownloaded((Podcast) iPlayableMediaItem, (Episod) currentTrack);
-                ((ViewHolderTrack) holder).btnDownload.setText(isDownloaed ? mContext.getString(R.string.play) : mContext.getString(R.string.download));
-                ((ViewHolderTrack) holder).btnDownload.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        if (isDownloaed) {
-                            ProfileManager.getInstance().removeDownloadedEpisod((Podcast) iPlayableMediaItem, (Episod) currentTrack);
-                            ((ViewHolderTrack) holder).btnDownload.setText(mContext.getString(R.string.download));
-                        } else {
-                            ProfileManager.getInstance().addDownloadedEpisod((Podcast) iPlayableMediaItem, (Episod) currentTrack);
-                            ((ViewHolderTrack) holder).btnDownload.setText(mContext.getString(R.string.play));
-                        }
+
+            final boolean isDownloaed = ProfileManager.getInstance().isDownloaded(iPlayableMediaItem, currentTrack);
+            ((ViewHolderTrack) holder).btnDownload.setText(isDownloaed ? mContext.getString(R.string.play) : mContext.getString(R.string.download));
+            ((ViewHolderTrack) holder).btnDownload.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (isDownloaed) {
+                        ProfileManager.getInstance().removeDownloadedTrack((Podcast) iPlayableMediaItem, currentTrack);
+                        ((ViewHolderTrack) holder).btnDownload.setText(mContext.getString(R.string.download));
+                    } else {
+                        ProfileManager.getInstance().addDownloadedTrack((Podcast) iPlayableMediaItem, currentTrack);
+                        ((ViewHolderTrack) holder).btnDownload.setText(mContext.getString(R.string.play));
                     }
-                });
-            }
+                }
+            });
             holder.itemView.setTag(currentTrack);
         }
     }
