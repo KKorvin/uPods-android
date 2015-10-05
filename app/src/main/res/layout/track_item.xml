@@ -64,8 +64,8 @@
     <at.grabner.circleprogress.CircleProgressView
         android:id="@+id/cvDownloadProgress"
 
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
 
         android:visibility="visible"
         android:layout_alignParentRight="true"
@@ -78,8 +78,8 @@
 
         CircleProgressView:cpv_contourSize="0dp"
 
-        CircleProgressView:cpv_textSize="13dp"
-        CircleProgressView:cpv_unitSize="13dp"
+        CircleProgressView:cpv_textSize="12dp"
+        CircleProgressView:cpv_unitSize="12dp"
 
         CircleProgressView:cpv_showUnit="true"
         CircleProgressView:cpv_maxValue="100"
