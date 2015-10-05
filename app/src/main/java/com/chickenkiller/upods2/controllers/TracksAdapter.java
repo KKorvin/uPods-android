@@ -132,11 +132,11 @@ public class TracksAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             ((ViewHolderTrack) holder).btnDownload.setOnClickListener(getPlayClickListener(position));
             //Play audeo
         } else if (DownloadMaster.getInstance().isItemDownloading(currentTrack.getTitle())) {
-            ((ViewHolderTrack) holder).btnDownload.setVisibility(View.INVISIBLE);
-            ((ViewHolderTrack) holder).cvDownloadProgress.setVisibility(View.VISIBLE);
+            ((ViewHolderTrack) holder).btnDownload.setVisibility(View.VISIBLE);
+            ((ViewHolderTrack) holder).cvDownloadProgress.setVisibility(View.INVISIBLE);
         } else {
             ((ViewHolderTrack) holder).cvDownloadProgress.setVisibility(View.INVISIBLE);
-            ((ViewHolderTrack) holder).btnDownload.setVisibility(View.INVISIBLE);
+            ((ViewHolderTrack) holder).btnDownload.setVisibility(View.VISIBLE);
             ((ViewHolderTrack) holder).btnDownload.setText(mContext.getString(R.string.download));
             ((ViewHolderTrack) holder).btnDownload.setOnClickListener(new View.OnClickListener() {
                 @Override
