@@ -70,10 +70,8 @@
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         CircleProgressView:cpv_barColor="#00796B"
-
         CircleProgressView:cpv_barWidth="5dp"
         CircleProgressView:cpv_rimWidth="5dp"
-
         CircleProgressView:cpv_contourSize="0dp"
         CircleProgressView:cpv_autoTextSize="true"
         CircleProgressView:cpv_maxValue="100"
