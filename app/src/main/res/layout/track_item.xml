@@ -57,7 +57,7 @@
         android:layout_marginRight="10dp"
         android:backgroundTint="@color/green_600"
         android:text="@string/download"
-        android:visibility="gone"
+        android:visibility="visible"
         android:textColor="@color/white_material"
         android:textSize="@dimen/default_text_size_10" />
 
@@ -67,6 +67,7 @@
         android:layout_width="45dp"
         android:layout_height="45dp"
 
+        android:visibility="gone"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         CircleProgressView:cpv_barColor="#00796B"
