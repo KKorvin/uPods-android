@@ -105,6 +105,9 @@ public class Episod extends Track implements IPlayableTrack {
 
     @Override
     public String getAudeoUrl() {
+        if (pathOnDisk != null && !pathOnDisk.isEmpty()) {
+            return pathOnDisk;
+        }
         return mp3Url;
     }
 

@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.chickenkiller.upods2">
-    
+
+    <uses-permission android:name="android.permission.SEND_DOWNLOAD_COMPLETED_INTENTS" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
@@ -28,7 +30,10 @@
             android:launchMode="singleInstance"></activity>
 
         <receiver android:name=".controllers.MainBroadcastRecivier">
-            <action android:name="android.intent.action.DOWNLOAD_COMPLETE" />
+            <intent-filter>
+                <action android:name="android.intent.action.DOWNLOAD_COMPLETE" />
+                <action android:name="android.intent.action.DOWNLOAD_NOTIFICATION_CLICKED" />
+            </intent-filter>
             <action android:name="com.chickenkiller.upods2.player.PLAY" />
             <action android:name="com.chickenkiller.upods2.player.PAUSE" />
         </receiver>

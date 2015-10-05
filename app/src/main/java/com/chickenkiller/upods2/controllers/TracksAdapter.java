@@ -16,7 +16,6 @@ import com.chickenkiller.upods2.interfaces.IFragmentsManager;
 import com.chickenkiller.upods2.interfaces.IPlayableMediaItem;
 import com.chickenkiller.upods2.interfaces.IPlayableTrack;
 import com.chickenkiller.upods2.interfaces.ITrackable;
-import com.chickenkiller.upods2.interfaces.IUIProgressUpdater;
 import com.chickenkiller.upods2.models.Track;
 
 import java.util.ArrayList;
@@ -94,57 +93,77 @@ public class TracksAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             ((ViewHolderTrack) holder).tvTitle.setText(currentTrack.getTitle());
             ((ViewHolderTrack) holder).tvSubTitle.setText(currentTrack.getSubTitle());
             ((ViewHolderTrack) holder).tvDate.setText(currentTrack.getDate());
-            ((ViewHolderTrack) holder).setClickListner(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    IPlayableTrack iPlayableTrack = tracks.get(position);
-                    if (iPlayableTrack instanceof ITrackable && iPlayableTrack instanceof Track) {
-                        ((ITrackable) iPlayableTrack).selectTrack((Track) iPlayableTrack);
-                    }
-                    Intent myIntent = new Intent(mContext, ActivityPlayer.class);
-                    myIntent.putExtra(ActivityPlayer.MEDIA_ITEM_EXTRA, iPlayableMediaItem);
-                    mContext.startActivity(myIntent);
-                    ((Activity) mContext).finish();
-                }
-            });
-
-            final boolean isDownloaed = ProfileManager.getInstance().isDownloaded(iPlayableMediaItem, currentTrack);
-            if (isDownloaed) {
-                ((ViewHolderTrack) holder).btnDownload.setVisibility(View.VISIBLE);
-                ((ViewHolderTrack) holder).cvDownloadProgress.setVisibility(View.GONE);
-                ((ViewHolderTrack) holder).btnDownload.setText(mContext.getString(R.string.play));
-                //Play audeo
-            } else if (DownloadMaster.getInstance().isItemDownloading(currentTrack.getTitle())) {
-                ((ViewHolderTrack) holder).btnDownload.setVisibility(View.GONE);
-                ((ViewHolderTrack) holder).cvDownloadProgress.setVisibility(View.VISIBLE);
-            } else {
-                ((ViewHolderTrack) holder).cvDownloadProgress.setVisibility(View.GONE);
-                ((ViewHolderTrack) holder).btnDownload.setVisibility(View.VISIBLE);
-                ((ViewHolderTrack) holder).btnDownload.setText(mContext.getString(R.string.download));
-                ((ViewHolderTrack) holder).btnDownload.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        DownloadMaster.DownloadTask downloadTask = new DownloadMaster.DownloadTask();
-                        downloadTask.mediaItem = iPlayableMediaItem;
-                        downloadTask.track = currentTrack;
-                        downloadTask.progressUpdater = new IUIProgressUpdater() {
-                            @Override
-                            public void updateProgressUI(double progress) {
-                                if (((ViewHolderTrack) holder).cvDownloadProgress != null) {
-                                    ((ViewHolderTrack) holder).cvDownloadProgress.setValue((float) progress);
-                                }
-                            }
-                        };
-                        DownloadMaster.getInstance().download(downloadTask);
-                        ((ViewHolderTrack) holder).btnDownload.setVisibility(View.GONE);
-                        ((ViewHolderTrack) holder).cvDownloadProgress.setVisibility(View.VISIBLE);
-                    }
-                });
-            }
+            ((ViewHolderTrack) holder).setClickListner(getPlayClickListener(position));
+            initDownloadBtn(holder, currentTrack, position);
             holder.itemView.setTag(currentTrack);
         }
     }
 
+    private View.OnClickListener getPlayClickListener(final int position) {
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                IPlayableTrack iPlayableTrack = tracks.get(position);
+                if (iPlayableTrack instanceof ITrackable && iPlayableTrack instanceof Track) {
+                    ((ITrackable) iPlayableTrack).selectTrack((Track) iPlayableTrack);
+                }
+                Intent myIntent = new Intent(mContext, ActivityPlayer.class);
+                myIntent.putExtra(ActivityPlayer.MEDIA_ITEM_EXTRA, iPlayableMediaItem);
+                mContext.startActivity(myIntent);
+                ((Activity) mContext).finish();
+            }
+        };
+    }
+
+    private void initDownloadBtn(final RecyclerView.ViewHolder holder, final IPlayableTrack currentTrack, final int position) {
+        ((ViewHolderTrack) holder).btnDownload.setVisibility(View.GONE);
+        ((ViewHolderTrack) holder).cvDownloadProgress.setVisibility(View.VISIBLE);
+        ((ViewHolderTrack) holder).cvDownloadProgress.setValue(40f);
+        return;/*
+        final boolean isDownloaed = ProfileManager.getInstance().isDownloaded(iPlayableMediaItem, currentTrack);
+        if (isDownloaed) {
+            ((ViewHolderTrack) holder).btnDownload.setVisibility(View.VISIBLE);
+            ((ViewHolderTrack) holder).cvDownloadProgress.setVisibility(View.GONE);
+            ((ViewHolderTrack) holder).btnDownload.setText(mContext.getString(R.string.play));
+            ((ViewHolderTrack) holder).btnDownload.setOnClickListener(getPlayClickListener(position));
+            //Play audeo
+        } else if (DownloadMaster.getInstance().isItemDownloading(currentTrack.getTitle())) {
+            ((ViewHolderTrack) holder).btnDownload.setVisibility(View.GONE);
+            ((ViewHolderTrack) holder).cvDownloadProgress.setVisibility(View.VISIBLE);
+        } else {
+            ((ViewHolderTrack) holder).cvDownloadProgress.setVisibility(View.GONE);
+            ((ViewHolderTrack) holder).btnDownload.setVisibility(View.VISIBLE);
+            ((ViewHolderTrack) holder).btnDownload.setText(mContext.getString(R.string.download));
+            ((ViewHolderTrack) holder).btnDownload.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    DownloadMaster.DownloadTask downloadTask = new DownloadMaster.DownloadTask();
+                    downloadTask.mediaItem = iPlayableMediaItem;
+                    downloadTask.track = currentTrack;
+                    downloadTask.progressUpdater = new IUIProgressUpdater() {
+                        @Override
+                        public void updateProgressUI(double progress) {
+                            if (((ViewHolderTrack) holder).cvDownloadProgress != null) {
+                                ((ViewHolderTrack) holder).cvDownloadProgress.setValue((float) progress);
+                            }
+                        }
+                    };
+                    downloadTask.contentLoadListener = new IContentLoadListener() {
+                        @Override
+                        public void onContentLoaded() {
+                            ((ViewHolderTrack) holder).btnDownload.setText(mContext.getString(R.string.play));
+                            ((ViewHolderTrack) holder).btnDownload.setOnClickListener(getPlayClickListener(position));
+                            ((ViewHolderTrack) holder).btnDownload.setVisibility(View.VISIBLE);
+                            ((ViewHolderTrack) holder).cvDownloadProgress.setVisibility(View.GONE);
+                        }
+                    };
+                    DownloadMaster.getInstance().download(downloadTask);
+                    ((ViewHolderTrack) holder).btnDownload.setVisibility(View.GONE);
+                    ((ViewHolderTrack) holder).cvDownloadProgress.setVisibility(View.VISIBLE);
+                }
+            });
+        }*/
+    }
 
     @Override
     public int getItemCount() {
