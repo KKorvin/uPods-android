@@ -16,11 +16,13 @@ import com.chickenkiller.upods2.interfaces.IFragmentsManager;
 import com.chickenkiller.upods2.interfaces.IPlayableMediaItem;
 import com.chickenkiller.upods2.interfaces.IPlayableTrack;
 import com.chickenkiller.upods2.interfaces.ITrackable;
-import com.chickenkiller.upods2.models.Podcast;
+import com.chickenkiller.upods2.interfaces.IUIProgressUpdater;
 import com.chickenkiller.upods2.models.Track;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import at.grabner.circleprogress.CircleProgressView;
 
 /**
  * Created by alonzilberman on 7/2/15.
@@ -42,6 +44,7 @@ public class TracksAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         public TextView tvDate;
         public Button btnDownload;
         private View rootView;
+        private CircleProgressView cvDownloadProgress;
 
         public ViewHolderTrack(View view) {
             super(view);
@@ -49,6 +52,7 @@ public class TracksAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             this.tvSubTitle = (TextView) view.findViewById(R.id.tvTrackSubTitle);
             this.tvDate = (TextView) view.findViewById(R.id.tvTrackDate);
             this.btnDownload = (Button) view.findViewById(R.id.btnDownload);
+            this.cvDownloadProgress = (CircleProgressView) view.findViewById(R.id.cvDownloadProgress);
             this.rootView = view;
         }
 
@@ -105,19 +109,38 @@ public class TracksAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             });
 
             final boolean isDownloaed = ProfileManager.getInstance().isDownloaded(iPlayableMediaItem, currentTrack);
-            ((ViewHolderTrack) holder).btnDownload.setText(isDownloaed ? mContext.getString(R.string.play) : mContext.getString(R.string.download));
-            ((ViewHolderTrack) holder).btnDownload.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if (isDownloaed) {
-                        ProfileManager.getInstance().removeDownloadedTrack((Podcast) iPlayableMediaItem, currentTrack);
-                        ((ViewHolderTrack) holder).btnDownload.setText(mContext.getString(R.string.download));
-                    } else {
-                        ProfileManager.getInstance().addDownloadedTrack((Podcast) iPlayableMediaItem, currentTrack);
-                        ((ViewHolderTrack) holder).btnDownload.setText(mContext.getString(R.string.play));
+            if (isDownloaed) {
+                ((ViewHolderTrack) holder).btnDownload.setVisibility(View.VISIBLE);
+                ((ViewHolderTrack) holder).cvDownloadProgress.setVisibility(View.GONE);
+                ((ViewHolderTrack) holder).btnDownload.setText(mContext.getString(R.string.play));
+                //Play audeo
+            } else if (DownloadMaster.getInstance().isItemDownloading(currentTrack.getTitle())) {
+                ((ViewHolderTrack) holder).btnDownload.setVisibility(View.GONE);
+                ((ViewHolderTrack) holder).cvDownloadProgress.setVisibility(View.VISIBLE);
+            } else {
+                ((ViewHolderTrack) holder).cvDownloadProgress.setVisibility(View.GONE);
+                ((ViewHolderTrack) holder).btnDownload.setVisibility(View.VISIBLE);
+                ((ViewHolderTrack) holder).btnDownload.setText(mContext.getString(R.string.download));
+                ((ViewHolderTrack) holder).btnDownload.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        DownloadMaster.DownloadTask downloadTask = new DownloadMaster.DownloadTask();
+                        downloadTask.mediaItem = iPlayableMediaItem;
+                        downloadTask.track = currentTrack;
+                        downloadTask.progressUpdater = new IUIProgressUpdater() {
+                            @Override
+                            public void updateProgressUI(double progress) {
+                                if (((ViewHolderTrack) holder).cvDownloadProgress != null) {
+                                    ((ViewHolderTrack) holder).cvDownloadProgress.setValue((float) progress);
+                                }
+                            }
+                        };
+                        DownloadMaster.getInstance().download(downloadTask);
+                        ((ViewHolderTrack) holder).btnDownload.setVisibility(View.GONE);
+                        ((ViewHolderTrack) holder).cvDownloadProgress.setVisibility(View.VISIBLE);
                     }
-                }
-            });
+                });
+            }
             holder.itemView.setTag(currentTrack);
         }
     }

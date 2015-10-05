@@ -5,9 +5,9 @@ import android.app.DownloadManager.Request;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.Environment;
 import android.util.Log;
 
+import com.chickenkiller.upods2.interfaces.IContentLoadListener;
 import com.chickenkiller.upods2.interfaces.IPlayableMediaItem;
 import com.chickenkiller.upods2.interfaces.IPlayableTrack;
 import com.chickenkiller.upods2.interfaces.IUIProgressUpdater;
@@ -22,7 +22,7 @@ import java.util.TimerTask;
  */
 public class DownloadMaster {
 
-    public static final String PODCASTS_DOWNLOAD_DIRECTORY = "/airtune/";
+    public static final String PODCASTS_DOWNLOAD_DIRECTORY = "/airtune";
 
     private static final String DM_LOG = "DownloadMaster";
     private static final long PRGRESS_UPDATE_RATE = 500;
@@ -30,17 +30,19 @@ public class DownloadMaster {
     private ArrayList<DownloadTask> allTasks;
     private TimerTask progressUpdateTask;
 
-    private class DownloadTask {
+    public static class DownloadTask {
         public IPlayableMediaItem mediaItem;
         public IPlayableTrack track;
         public long downloadId;
         public IUIProgressUpdater progressUpdater;
+        public IContentLoadListener contentLoadListener;
 
-        DownloadTask(long downloadId, IPlayableMediaItem mediaItem, IPlayableTrack track) {
-            this.downloadId = downloadId;
-            this.mediaItem = mediaItem;
-            this.track = track;
+        DownloadTask() {
+            this.downloadId = 0;
+            this.mediaItem = null;
+            this.track = null;
             this.progressUpdater = null;
+            this.contentLoadListener = null;
         }
     }
 
@@ -55,20 +57,20 @@ public class DownloadMaster {
         return downloadMaster;
     }
 
-    public void downloadTrack(IPlayableMediaItem mediaItem, IPlayableTrack track) {
+    public void download(DownloadTask task) {
         DownloadManager downloadManager = (DownloadManager) UpodsApplication.getContext().getSystemService(Context.DOWNLOAD_SERVICE);
-        Uri episodUri = Uri.parse(track.getAudeoUrl());
+        Uri episodUri = Uri.parse(task.track.getAudeoUrl());
         Request request = new Request(episodUri);
         request.setAllowedNetworkTypes(Request.NETWORK_MOBILE | Request.NETWORK_WIFI);
-        request.setTitle(track.getTitle());
-        request.setDescription(track.getSubTitle());
-        String trackName = GlobalUtils.getCleanFileName(track.getTitle()) + ".mp3";
-        String mediaItemName = "/" + GlobalUtils.getCleanFileName(mediaItem.getName()) + "/";
-        String finalPath = PODCASTS_DOWNLOAD_DIRECTORY + mediaItemName + trackName;
-        request.setDestinationInExternalPublicDir(Environment.DIRECTORY_PODCASTS, finalPath);
-        long downloadId = downloadManager.enqueue(request);
-        allTasks.add(new DownloadTask(downloadId, mediaItem, track));
-        Log.i(DM_LOG, "Starting download episod " + trackName + " to " + Environment.DIRECTORY_PODCASTS + finalPath);
+        request.setTitle(task.track.getTitle());
+        request.setDescription(task.track.getSubTitle());
+        String trackName = GlobalUtils.getCleanFileName(task.track.getTitle()) + ".mp3";
+        String mediaItemName = "/" + GlobalUtils.getCleanFileName(task.mediaItem.getName());
+        String finalPath = PODCASTS_DOWNLOAD_DIRECTORY+mediaItemName;
+        request.setDestinationInExternalPublicDir(finalPath, trackName);
+        task.downloadId = downloadManager.enqueue(request);
+        allTasks.add(task);
+        Log.i(DM_LOG, "Starting download episod " + trackName + " to "  + finalPath);
         runProgressUpdater();
     }
 
@@ -128,6 +130,7 @@ public class DownloadMaster {
                 long downloaded = c.getInt(downloadedIndex);
                 if (size != -1) progress = downloaded * 100.0 / size;
             }
+            c.close();
         }
         return progress;
     }
@@ -163,13 +166,15 @@ public class DownloadMaster {
         Cursor c = downloadManager.query(query);
         if (c.moveToFirst()) {
             DownloadTask task = getTaskById(downloadId);
+            int columnIndex = c.getColumnIndex(DownloadManager.COLUMN_STATUS);
             if (task != null) {
+                if (DownloadManager.STATUS_SUCCESSFUL == c.getInt(columnIndex)) {
+                    ProfileManager.getInstance().addDownloadedTrack(task.mediaItem, task.track);
+                    task.contentLoadListener.onContentLoaded();
+                }
                 allTasks.remove(task);
             }
-            int columnIndex = c.getColumnIndex(DownloadManager.COLUMN_STATUS);
-            if (DownloadManager.STATUS_SUCCESSFUL == c.getInt(columnIndex)) {
-
-            }
         }
+        c.close();
     }
 }

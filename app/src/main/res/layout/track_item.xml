@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:CircleProgressView="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="90dp"
     android:orientation="vertical">
@@ -17,8 +18,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginRight="20dp"
         android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
         android:layout_toLeftOf="@+id/btnDownload"
         android:layout_toRightOf="@+id/tvTrackDate"
         android:gravity="center_vertical"
@@ -52,11 +53,31 @@
         android:layout_width="85dp"
         android:layout_height="40dp"
         android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
         android:layout_marginRight="10dp"
         android:backgroundTint="@color/green_600"
         android:text="@string/download"
         android:textColor="@color/white_material"
-        android:layout_centerVertical="true"
         android:textSize="@dimen/default_text_size_10" />
+
+
+    <at.grabner.circleprogress.CircleProgressView
+        android:id="@+id/cvDownloadProgress"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:visibility="gone"
+        CircleProgressView:cpv_autoTextSize="true"
+        CircleProgressView:cpv_barColor="@color/green_600"
+        CircleProgressView:cpv_barWidth="25dp"
+        CircleProgressView:cpv_contourSize="0dp"
+        CircleProgressView:cpv_maxValue="100"
+        CircleProgressView:cpv_rimColor="@color/green_500"
+        CircleProgressView:cpv_rimWidth="25dp"
+        CircleProgressView:cpv_seekMode="true"
+        CircleProgressView:cpv_textColor="@color/green_700"
+        CircleProgressView:cpv_unit="%"
+        CircleProgressView:cpv_unitColor="@color/green_800" />
 
 </RelativeLayout>

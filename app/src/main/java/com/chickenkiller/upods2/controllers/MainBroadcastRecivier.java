@@ -23,7 +23,7 @@ public class MainBroadcastRecivier extends BroadcastReceiver {
             }
         } else if (DownloadManager.ACTION_DOWNLOAD_COMPLETE.equals(intent.getAction())) {
             long downloadId = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, 0);
-
+            DownloadMaster.getInstance().markDownloadTaskFinished(downloadId);
         }
     }
 }

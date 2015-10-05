@@ -1,8 +1,8 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 22
-    buildToolsVersion "22"
+    compileSdkVersion 23
+    buildToolsVersion "23"
 
     packagingOptions {
         exclude 'META-INF/LICENSE.txt'
@@ -36,4 +36,5 @@ dependencies {
     compile 'com.lsjwzh:recyclerviewpager:+'
     compile 'com.github.traex.rippleeffect:library:+'
     compile 'com.pixplicity.easyprefs:library:+'
+    compile 'com.github.jakob-grabner:Circle-Progress-View:v1.2.3'
 }
