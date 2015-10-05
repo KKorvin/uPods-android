@@ -12,10 +12,12 @@ import android.widget.TextView;
 
 import com.chickenkiller.upods2.R;
 import com.chickenkiller.upods2.activity.ActivityPlayer;
+import com.chickenkiller.upods2.interfaces.IContentLoadListener;
 import com.chickenkiller.upods2.interfaces.IFragmentsManager;
 import com.chickenkiller.upods2.interfaces.IPlayableMediaItem;
 import com.chickenkiller.upods2.interfaces.IPlayableTrack;
 import com.chickenkiller.upods2.interfaces.ITrackable;
+import com.chickenkiller.upods2.interfaces.IUIProgressUpdater;
 import com.chickenkiller.upods2.models.Track;
 
 import java.util.ArrayList;
@@ -116,23 +118,25 @@ public class TracksAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     }
 
     private void initDownloadBtn(final RecyclerView.ViewHolder holder, final IPlayableTrack currentTrack, final int position) {
+        /* For progress br test
         ((ViewHolderTrack) holder).btnDownload.setVisibility(View.GONE);
         ((ViewHolderTrack) holder).cvDownloadProgress.setVisibility(View.VISIBLE);
         ((ViewHolderTrack) holder).cvDownloadProgress.setValue(40f);
-        return;/*
+        return;*/
+
         final boolean isDownloaed = ProfileManager.getInstance().isDownloaded(iPlayableMediaItem, currentTrack);
         if (isDownloaed) {
             ((ViewHolderTrack) holder).btnDownload.setVisibility(View.VISIBLE);
-            ((ViewHolderTrack) holder).cvDownloadProgress.setVisibility(View.GONE);
+            ((ViewHolderTrack) holder).cvDownloadProgress.setVisibility(View.INVISIBLE);
             ((ViewHolderTrack) holder).btnDownload.setText(mContext.getString(R.string.play));
             ((ViewHolderTrack) holder).btnDownload.setOnClickListener(getPlayClickListener(position));
             //Play audeo
         } else if (DownloadMaster.getInstance().isItemDownloading(currentTrack.getTitle())) {
-            ((ViewHolderTrack) holder).btnDownload.setVisibility(View.GONE);
+            ((ViewHolderTrack) holder).btnDownload.setVisibility(View.INVISIBLE);
             ((ViewHolderTrack) holder).cvDownloadProgress.setVisibility(View.VISIBLE);
         } else {
-            ((ViewHolderTrack) holder).cvDownloadProgress.setVisibility(View.GONE);
-            ((ViewHolderTrack) holder).btnDownload.setVisibility(View.VISIBLE);
+            ((ViewHolderTrack) holder).cvDownloadProgress.setVisibility(View.INVISIBLE);
+            ((ViewHolderTrack) holder).btnDownload.setVisibility(View.INVISIBLE);
             ((ViewHolderTrack) holder).btnDownload.setText(mContext.getString(R.string.download));
             ((ViewHolderTrack) holder).btnDownload.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -153,16 +157,16 @@ public class TracksAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                         public void onContentLoaded() {
                             ((ViewHolderTrack) holder).btnDownload.setText(mContext.getString(R.string.play));
                             ((ViewHolderTrack) holder).btnDownload.setOnClickListener(getPlayClickListener(position));
-                            ((ViewHolderTrack) holder).btnDownload.setVisibility(View.VISIBLE);
+                            ((ViewHolderTrack) holder).btnDownload.setVisibility(View.INVISIBLE);
                             ((ViewHolderTrack) holder).cvDownloadProgress.setVisibility(View.GONE);
                         }
                     };
                     DownloadMaster.getInstance().download(downloadTask);
                     ((ViewHolderTrack) holder).btnDownload.setVisibility(View.GONE);
-                    ((ViewHolderTrack) holder).cvDownloadProgress.setVisibility(View.VISIBLE);
+                    ((ViewHolderTrack) holder).cvDownloadProgress.setVisibility(View.INVISIBLE);
                 }
             });
-        }*/
+        }
     }
 
     @Override
