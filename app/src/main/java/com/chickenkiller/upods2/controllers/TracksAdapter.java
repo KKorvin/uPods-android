@@ -162,8 +162,8 @@ public class TracksAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                         }
                     };
                     DownloadMaster.getInstance().download(downloadTask);
-                    ((ViewHolderTrack) holder).btnDownload.setVisibility(View.GONE);
-                    ((ViewHolderTrack) holder).cvDownloadProgress.setVisibility(View.INVISIBLE);
+                    ((ViewHolderTrack) holder).btnDownload.setVisibility(View.INVISIBLE);
+                    ((ViewHolderTrack) holder).cvDownloadProgress.setVisibility(View.VISIBLE);
                 }
             });
         }
