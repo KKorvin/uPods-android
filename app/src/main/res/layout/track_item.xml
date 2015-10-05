@@ -61,23 +61,27 @@
         android:textColor="@color/white_material"
         android:textSize="@dimen/default_text_size_10" />
 
-
     <at.grabner.circleprogress.CircleProgressView
         android:id="@+id/cvDownloadProgress"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
+
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
-        CircleProgressView:cpv_autoTextSize="true"
-        CircleProgressView:cpv_barColor="@color/green_600"
-        CircleProgressView:cpv_barWidth="25dp"
+        CircleProgressView:cpv_barColor="#00796B"
+
+        CircleProgressView:cpv_barWidth="5dp"
+        CircleProgressView:cpv_rimWidth="5dp"
+
         CircleProgressView:cpv_contourSize="0dp"
+        CircleProgressView:cpv_autoTextSize="true"
         CircleProgressView:cpv_maxValue="100"
-        CircleProgressView:cpv_rimColor="@color/green_500"
-        CircleProgressView:cpv_rimWidth="25dp"
+        CircleProgressView:cpv_rimColor="#B2DFDB"
         CircleProgressView:cpv_seekMode="true"
-        CircleProgressView:cpv_textColor="@color/green_700"
+        CircleProgressView:cpv_textColor="#00796B"
         CircleProgressView:cpv_unit="%"
-        CircleProgressView:cpv_unitColor="@color/green_800" />
+        CircleProgressView:cpv_unitColor="#009688"
+        />
 
 </RelativeLayout>
