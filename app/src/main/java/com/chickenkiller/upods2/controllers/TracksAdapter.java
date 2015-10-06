@@ -105,12 +105,13 @@ public class TracksAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                DownloadMaster.getInstance().cleanProgressInterfaces();
                 IPlayableTrack iPlayableTrack = tracks.get(position);
                 if (iPlayableTrack instanceof ITrackable && iPlayableTrack instanceof Track) {
                     ((ITrackable) iPlayableTrack).selectTrack((Track) iPlayableTrack);
                 }
                 Intent myIntent = new Intent(mContext, ActivityPlayer.class);
-                myIntent.putExtra(ActivityPlayer.MEDIA_ITEM_EXTRA, iPlayableMediaItem);
+                UniversalPlayer.getInstance().setMediaItem(iPlayableMediaItem);
                 mContext.startActivity(myIntent);
                 ((Activity) mContext).finish();
             }

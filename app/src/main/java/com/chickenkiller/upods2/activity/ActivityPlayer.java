@@ -21,9 +21,11 @@ public class ActivityPlayer extends FragmentsActivity {
         setContentView(R.layout.activity_player);
         if (getIntent().hasExtra(MEDIA_ITEM_EXTRA)) {
             currentMediaItem = (IPlayableMediaItem) getIntent().getExtras().get(MEDIA_ITEM_EXTRA);
-        } else if (savedInstanceState.getParcelable(MEDIA_ITEM_EXTRA) != null) {
+        } else if (savedInstanceState != null && savedInstanceState.getParcelable(MEDIA_ITEM_EXTRA) != null) {
             currentMediaItem = (IPlayableMediaItem) savedInstanceState.getSerializable(MEDIA_ITEM_EXTRA);
         } else if (UniversalPlayer.getInstance().isPlaying()) {
+            currentMediaItem = UniversalPlayer.getInstance().getPlayingMediaItem();
+        } else if (currentMediaItem == null && UniversalPlayer.getInstance().getPlayingMediaItem() != null) {
             currentMediaItem = UniversalPlayer.getInstance().getPlayingMediaItem();
         }
         if (currentMediaItem == null) {

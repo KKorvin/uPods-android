@@ -1,6 +1,7 @@
 package com.chickenkiller.upods2.controllers;
 
 import android.media.MediaPlayer;
+import android.util.Log;
 
 import com.chickenkiller.upods2.interfaces.IPlayableMediaItem;
 import com.chickenkiller.upods2.interfaces.IPlayerStateListener;
@@ -18,6 +19,7 @@ public class UniversalPlayer implements MediaPlayer.OnPreparedListener {
 
     public static final String INTENT_ACTION_PLAY = "com.chickenkiller.upods2.player.PLAY";
     public static final String INTENT_ACTION_PAUSE = "com.chickenkiller.upods2.player.PAUSE";
+    private static final String PLAYER_LOG = "UniversalPlayer";
 
     public static UniversalPlayer universalPlayer;
     private MediaPlayer mediaPlayer;
@@ -41,6 +43,7 @@ public class UniversalPlayer implements MediaPlayer.OnPreparedListener {
 
     /**
      * Checks if given type of media item is supported, if yes copies it and save instance in player.
+     *
      * @param mediaItem
      */
     public void setMediaItem(IPlayableMediaItem mediaItem) {
@@ -79,6 +82,7 @@ public class UniversalPlayer implements MediaPlayer.OnPreparedListener {
                 if (mediaPlayer == null) {
                     mediaPlayer = new MediaPlayer();
                 }
+                Log.i(PLAYER_LOG, "Trying to play: " + mediaItem.getStreamUrl());
                 mediaPlayer.setDataSource(mediaItem.getStreamUrl());
                 mediaPlayer.setOnPreparedListener(this);
                 mediaPlayer.prepareAsync();
@@ -91,7 +95,7 @@ public class UniversalPlayer implements MediaPlayer.OnPreparedListener {
     public void start() {
         if (mediaPlayer != null && isPrepaired) {
             mediaPlayer.start();
-            if(notificationPanel!=null){
+            if (notificationPanel != null) {
                 notificationPanel.updateNotificationStatus(State.PLAYING);
             }
             if (playerStateListener != null) {
@@ -103,7 +107,7 @@ public class UniversalPlayer implements MediaPlayer.OnPreparedListener {
     public void pause() {
         if (mediaPlayer != null && isPrepaired && mediaPlayer.isPlaying()) {
             mediaPlayer.pause();
-            if(notificationPanel!=null){
+            if (notificationPanel != null) {
                 notificationPanel.updateNotificationStatus(State.PAUSED);
             }
             if (playerStateListener != null) {
