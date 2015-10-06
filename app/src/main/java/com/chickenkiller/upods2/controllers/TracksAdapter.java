@@ -157,7 +157,7 @@ public class TracksAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                         public void onContentLoaded() {
                             ((ViewHolderTrack) holder).btnDownload.setText(mContext.getString(R.string.play));
                             ((ViewHolderTrack) holder).btnDownload.setOnClickListener(getPlayClickListener(position));
-                            ((ViewHolderTrack) holder).btnDownload.setVisibility(View.INVISIBLE);
+                            ((ViewHolderTrack) holder).btnDownload.setVisibility(View.VISIBLE);
                             ((ViewHolderTrack) holder).cvDownloadProgress.setVisibility(View.GONE);
                         }
                     };
