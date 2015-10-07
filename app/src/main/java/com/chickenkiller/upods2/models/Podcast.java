@@ -2,7 +2,6 @@ package com.chickenkiller.upods2.models;
 
 import android.util.Log;
 
-import com.chickenkiller.upods2.interfaces.IFeaturableMediaItem;
 import com.chickenkiller.upods2.interfaces.IPlayableMediaItem;
 import com.chickenkiller.upods2.interfaces.ITrackable;
 
@@ -15,7 +14,7 @@ import java.util.ArrayList;
 /**
  * Created by alonzilberman on 8/24/15.
  */
-public class Podcast extends MediaItem implements IFeaturableMediaItem, IPlayableMediaItem, ITrackable {
+public class Podcast extends MediaItem implements IPlayableMediaItem, ITrackable {
     private static String PODCAST_LOG = "PODCAST";
     protected String name;
     protected String censoredName;

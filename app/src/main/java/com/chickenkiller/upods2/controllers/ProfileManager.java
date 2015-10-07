@@ -2,6 +2,7 @@ package com.chickenkiller.upods2.controllers;
 
 import android.util.Log;
 
+import com.chickenkiller.upods2.R;
 import com.chickenkiller.upods2.interfaces.IPlayableMediaItem;
 import com.chickenkiller.upods2.models.Episod;
 import com.chickenkiller.upods2.models.Podcast;
@@ -62,6 +63,14 @@ public class ProfileManager {
             profileManager = new ProfileManager();
         }
         return profileManager;
+    }
+
+    public ArrayList<Podcast> getDownloadedPodcasts() {
+        return this.downloadedPodcasts;
+    }
+
+    public ArrayList<Podcast> getSubscribedPodcasts() {
+        return this.subscribedPodcasts;
     }
 
     private void initProfilePodcastItem(JSONArray podcasts, ProfileItem profileItem) {
@@ -149,6 +158,21 @@ public class ProfileManager {
                 saveChanges(ProfileItem.SUBSCRIBDED_PODCASTS);
             }
         }
+    }
+
+    /**
+     * @param mediaItem
+     * @return id of string which is status of medida item (i.e downloaded, subscribed etc)
+     */
+    public int getItemStatus(IPlayableMediaItem mediaItem){
+        if(mediaItem instanceof  Podcast){
+            if(Podcast.hasPodcastWithName(downloadedPodcasts, (Podcast) mediaItem)){
+                return R.string.downloaded;
+            }else if(Podcast.hasPodcastWithName(downloadedPodcasts, (Podcast) mediaItem)){
+                return R.string.subscribed;
+            }
+        }
+        return R.string.none;
     }
 
     private void saveChanges(ProfileItem profileItem) {

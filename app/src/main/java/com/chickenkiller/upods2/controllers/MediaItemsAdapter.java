@@ -8,13 +8,13 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.chickenkiller.upods2.R;
 import com.chickenkiller.upods2.interfaces.IContentLoadListener;
-import com.chickenkiller.upods2.interfaces.IFeaturableMediaItem;
 import com.chickenkiller.upods2.interfaces.IFragmentsManager;
 import com.chickenkiller.upods2.interfaces.IPlayableMediaItem;
 import com.chickenkiller.upods2.models.BannersLayoutItem;
@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * Can be used for any layout which shows MediaItems (or only cards with IPlayableMediaItem)
  * Created by alonzilberman on 7/2/15.
  */
 public class MediaItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -50,13 +51,17 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     private static class ViewHolderCardItem extends RecyclerView.ViewHolder {
         public ImageViewSquare imgSquare;
         public TextView tvSquareTitle;
+        public TextView tvItemStatus;
+        public TextView tvSquareSubTitle;
         public RatingBar rbMediaItem;
         public CardView cvSquare;
 
         public ViewHolderCardItem(View view) {
             super(view);
             this.imgSquare = (ImageViewSquare) view.findViewById(R.id.imgSquare);
+            this.tvItemStatus = (TextView) view.findViewById(R.id.tvItemStatus);
             this.tvSquareTitle = (TextView) view.findViewById(R.id.tvSquareTitle);
+            this.tvSquareSubTitle = (TextView) view.findViewById(R.id.tvSquareSubTitle);
             this.rbMediaItem = (RatingBar) view.findViewById(R.id.rbMediaItem);
             this.cvSquare = (CardView) view;
             Context context = view.getContext();
@@ -75,11 +80,13 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     private static class ViewHolderMediaItemTitle extends RecyclerView.ViewHolder {
         public TextView tvMediaCardTitle;
         public TextView tvMediaCardSubTitle;
+        public Button btnMediaTitleMore;
 
         public ViewHolderMediaItemTitle(View view) {
             super(view);
             this.tvMediaCardTitle = (TextView) view.findViewById(R.id.tvMediaCardTitle);
             this.tvMediaCardSubTitle = (TextView) view.findViewById(R.id.tvMediaCardSubTitle);
+            this.btnMediaTitleMore = (Button) view.findViewById(R.id.btnMediaTitleMore);
         }
 
     }
@@ -132,10 +139,18 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         if (holder instanceof ViewHolderCardItem) {//Card
-            IFeaturableMediaItem currentItem = (IFeaturableMediaItem) items.get(position);
+            IPlayableMediaItem currentItem = (IPlayableMediaItem) items.get(position);
             Glide.with(mContext).load(currentItem.getCoverImageUrl()).centerCrop()
                     .crossFade().into(((ViewHolderCardItem) holder).imgSquare);
             ((ViewHolderCardItem) holder).tvSquareTitle.setText(currentItem.getName());
+            if (((ViewHolderCardItem) holder).tvSquareSubTitle != null) {
+                ((ViewHolderCardItem) holder).tvSquareSubTitle.setText(currentItem.getSubHeader());
+            }
+            if (((ViewHolderCardItem) holder).tvItemStatus != null) {
+                String status = mContext.getString(ProfileManager.getInstance().getItemStatus(currentItem));
+                ((ViewHolderCardItem) holder).tvItemStatus.setText(status);
+            }
+
             holder.itemView.setTag(currentItem);
             ((ViewHolderCardItem) holder).setCardClickListener(new View.OnClickListener() {
                 @Override
@@ -153,7 +168,15 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         } else if (holder instanceof ViewHolderMediaItemTitle) {//Title
             MediaItemTitle currentItem = (MediaItemTitle) items.get(position);
             ((ViewHolderMediaItemTitle) holder).tvMediaCardTitle.setText(currentItem.getTitle());
-            ((ViewHolderMediaItemTitle) holder).tvMediaCardSubTitle.setText(currentItem.getSubTitle());
+            if (currentItem.getSubTitle().isEmpty()) {
+                ((ViewHolderMediaItemTitle) holder).tvMediaCardSubTitle.setVisibility(View.GONE);
+            } else {
+                ((ViewHolderMediaItemTitle) holder).tvMediaCardSubTitle.setVisibility(View.VISIBLE);
+                ((ViewHolderMediaItemTitle) holder).tvMediaCardSubTitle.setText(currentItem.getSubTitle());
+            }
+            if (!currentItem.showButton) {
+                ((ViewHolderMediaItemTitle) holder).btnMediaTitleMore.setVisibility(View.GONE);
+            }
             holder.itemView.setTag(currentItem);
         }
     }

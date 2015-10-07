@@ -3,10 +3,11 @@ package com.chickenkiller.upods2.controllers;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
-import android.content.Context;
 import android.support.v13.app.FragmentStatePagerAdapter;
 
 import com.chickenkiller.upods2.R;
+import com.chickenkiller.upods2.view.controller.FragmentDownloadedPodcasts;
+import com.chickenkiller.upods2.view.controller.FragmentFavoritesPodcasts;
 import com.chickenkiller.upods2.view.controller.FragmentPodcastFeatured;
 import com.chickenkiller.upods2.view.controller.FragmentPodcastsPage;
 
@@ -29,12 +30,10 @@ public class PodcastsPagesAdapter extends FragmentStatePagerAdapter {
                 podcastFragment = new FragmentPodcastFeatured();
                 break;
             case 1:
-                podcastFragment = new FragmentPodcastsPage();
-                ((FragmentPodcastsPage) podcastFragment).setTestPodcast(String.valueOf(position));
+                podcastFragment = new FragmentFavoritesPodcasts();
                 break;
             case 2:
-                podcastFragment = new FragmentPodcastsPage();
-                ((FragmentPodcastsPage) podcastFragment).setTestPodcast(String.valueOf(position));
+                podcastFragment = new FragmentDownloadedPodcasts();
                 break;
             case 3:
                 podcastFragment = new FragmentPodcastsPage();

@@ -2,7 +2,6 @@ package com.chickenkiller.upods2.models;
 
 import android.content.Context;
 
-import com.chickenkiller.upods2.interfaces.IFeaturableMediaItem;
 import com.chickenkiller.upods2.interfaces.IPlayableMediaItem;
 import com.chickenkiller.upods2.utils.GlobalUtils;
 
@@ -14,7 +13,7 @@ import java.util.ArrayList;
 /**
  * Created by alonzilberman on 7/3/15.
  */
-public class RadioItem extends MediaItem implements IFeaturableMediaItem, IPlayableMediaItem {
+public class RadioItem extends MediaItem implements IPlayableMediaItem {
 
     private final static String DEFAULT_IMAGE = "https://upods.io/static/radio_stations/default/no_image.png";
 
