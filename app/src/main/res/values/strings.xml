@@ -65,6 +65,11 @@
     <string name="subscribe">Subscribe</string>
     <string name="unsubscribe">Unsubscribe</string>
     <string name="play">Play</string>
+    <string name="subscribed">SUBSCRIBED</string>
+    <string name="downloaded">DOWNLOADED</string>
+    <string name="recently_subscribed">Recently subscribed</string>
+    <string name="recently_downloaded">Recently downloaded</string>
+    <string name="none">none</string>
 
 
 </resources>

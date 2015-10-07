@@ -28,6 +28,7 @@
         android:textSize="@dimen/default_text_size_16" />
 
     <Button
+        android:id="@+id/btnMediaTitleMore"
         android:layout_width="65dp"
         android:textColor="@color/white_material"
         android:layout_height="40dp"

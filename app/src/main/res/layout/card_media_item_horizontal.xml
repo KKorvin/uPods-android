@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cvSquare"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:layout_margin="@dimen/horizontal_card_margin"
+    android:clickable="true"
+    android:focusable="true"
+    card_view:cardCornerRadius="@dimen/default_card_corner_radius">
+
+    <RelativeLayout
+        android:padding="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="?android:attr/selectableItemBackground">
+
+        <com.chickenkiller.upods2.views.ImageViewSquare
+            android:id="@+id/imgSquare"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:adjustViewBounds="true"
+            android:scaleType="fitXY"
+            android:src="@drawable/ic_temp" />
+
+        <TextView
+            android:id="@+id/tvSquareTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/imgSquare"
+            android:lines="1"
+            android:maxLines="2"
+            android:paddingLeft="7dp"
+            android:paddingRight="7dp"
+            android:text="Test text"
+            android:textColor="@color/black" />
+
+        <TextView
+            android:id="@+id/tvSquareSubTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvSquareTitle"
+            android:layout_toRightOf="@+id/imgSquare"
+            android:lines="1"
+            android:maxLines="2"
+            android:paddingLeft="7dp"
+            android:paddingRight="7dp"
+            android:text="Test text"
+            android:textColor="@color/black" />
+
+        <RatingBar
+            android:id="@+id/rbMediaItem"
+            style="?android:attr/ratingBarStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvSquareSubTitle"
+            android:layout_toRightOf="@+id/imgSquare"
+            android:isIndicator="true"
+            android:numStars="5"
+            android:paddingLeft="7dp"
+            android:paddingRight="7dp"
+            android:rating="3"
+            android:scaleX="0.7"
+            android:scaleY="0.7"
+            android:stepSize="0.5"
+            android:transformPivotX="0dp"
+            android:transformPivotY="0dp" />
+
+        <TextView
+            android:id="@+id/tvItemStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/rbMediaItem"
+            android:lines="1"
+            android:maxLines="2"
+            android:paddingLeft="7dp"
+            android:paddingRight="7dp"
+            android:text="DOWNLOADED"
+            android:textColor="@color/black" />
+    </RelativeLayout>
+</android.support.v7.widget.CardView>

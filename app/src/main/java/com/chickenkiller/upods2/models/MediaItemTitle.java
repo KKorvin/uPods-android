@@ -7,18 +7,23 @@ public class MediaItemTitle extends MediaItem {
 
     private String title;
     private String subTitle;
+    public boolean showButton;
 
     public String getTitle() {
         return title;
     }
 
     public MediaItemTitle(String title) {
+        super();
+        this.subTitle = "";
+        this.showButton = true;
         this.title = title;
     }
 
     public MediaItemTitle(String title, String subTitle) {
         this.title = title;
         this.subTitle = subTitle;
+        this.showButton = false;
     }
 
     public void setTitle(String title) {

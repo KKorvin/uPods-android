@@ -72,7 +72,7 @@ public class FragmentMainFeatured extends Fragment implements IContentLoadListen
         ((ISlidingMenuHolder) getActivity()).setSlidingMenuHeader(getString(R.string.radio_main));
 
         //Featured adapter
-        mediaItemsAdapter = new MediaItemsAdapter(getActivity(), R.layout.card_media_item,
+        mediaItemsAdapter = new MediaItemsAdapter(getActivity(), R.layout.card_media_item_vertical,
                 R.layout.media_item_title, RadioItem.withOnlyBannersHeader());
         if (getActivity() instanceof IFragmentsManager) {
             mediaItemsAdapter.setFragmentsManager((IFragmentsManager) getActivity());

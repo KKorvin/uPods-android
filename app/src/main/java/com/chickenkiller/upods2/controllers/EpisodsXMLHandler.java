@@ -52,7 +52,7 @@ public class EpisodsXMLHandler extends DefaultHandler {
         }
         if (localName.equalsIgnoreCase(MP3_1) && isItem) {
             episod.setLength(attributes.getValue(LENGTH));
-            episod.setMp3Url(attributes.getValue(MP3_3));
+            episod.setAudeoUrl(attributes.getValue(MP3_3));
         }
 
     }
@@ -75,8 +75,8 @@ public class EpisodsXMLHandler extends DefaultHandler {
                     && episod.getSummary().equals(""))
                 episod.setSummary(elementValue.toString());
             else if (localName.equalsIgnoreCase(MP3_2)
-                    && episod.getMp3Url().isEmpty())
-                episod.setMp3Url(elementValue.toString());
+                    && episod.getAudeoUrl().isEmpty())
+                episod.setAudeoUrl(elementValue.toString());
             else if (qName.equalsIgnoreCase(DURATION1))
                 episod.setDuration(elementValue.toString());
             else if (localName.equalsIgnoreCase(DURATION2)
@@ -105,7 +105,7 @@ public class EpisodsXMLHandler extends DefaultHandler {
         }
     }
 
-    public ArrayList<Episod>getParsedEpisods(){
+    public ArrayList<Episod> getParsedEpisods() {
         return this.allEpisods;
     }
 }

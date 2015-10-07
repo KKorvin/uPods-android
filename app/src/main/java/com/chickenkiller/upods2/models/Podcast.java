@@ -2,7 +2,6 @@ package com.chickenkiller.upods2.models;
 
 import android.util.Log;
 
-import com.chickenkiller.upods2.interfaces.IFeaturableMediaItem;
 import com.chickenkiller.upods2.interfaces.IPlayableMediaItem;
 import com.chickenkiller.upods2.interfaces.ITrackable;
 
@@ -15,7 +14,7 @@ import java.util.ArrayList;
 /**
  * Created by alonzilberman on 8/24/15.
  */
-public class Podcast extends MediaItem implements IFeaturableMediaItem, IPlayableMediaItem, ITrackable {
+public class Podcast extends MediaItem implements IPlayableMediaItem, ITrackable {
     private static String PODCAST_LOG = "PODCAST";
     protected String name;
     protected String censoredName;
@@ -181,13 +180,13 @@ public class Podcast extends MediaItem implements IFeaturableMediaItem, IPlayabl
     }
 
     @Override
-    public String getStreamUrl() {
-        for (Track episod : episods) {
+    public String getAudeoLink() {
+        for (Episod episod : episods) {
             if (episod.isSelected) {
-                return episod.getMp3Url();
+                return episod.getAudeoUrl();
             }
         }
-        return episods.get(0).getMp3Url();
+        return episods.get(0).getAudeoUrl();
     }
 
     @Override
@@ -288,7 +287,7 @@ public class Podcast extends MediaItem implements IFeaturableMediaItem, IPlayabl
 
     @Override
     public void selectTrack(Track track) {
-        for (Track episod : episods) {
+        for (Episod episod : episods) {
             episod.isSelected = episod.equals(track) ? true : false;
         }
     }

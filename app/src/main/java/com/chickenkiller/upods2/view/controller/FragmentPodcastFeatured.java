@@ -67,7 +67,7 @@ public class FragmentPodcastFeatured extends Fragment implements IContentLoadLis
         ((ISlidingMenuHolder) getActivity()).setSlidingMenuHeader(getString(R.string.podcasts));
 
         //Featured adapter
-        mediaItemsAdapter = new MediaItemsAdapter(getActivity(), R.layout.card_media_item,
+        mediaItemsAdapter = new MediaItemsAdapter(getActivity(), R.layout.card_media_item_vertical,
                 R.layout.media_item_title);
         if (getActivity() instanceof IFragmentsManager) {
             mediaItemsAdapter.setFragmentsManager((IFragmentsManager) getActivity());

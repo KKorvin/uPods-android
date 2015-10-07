@@ -4,7 +4,6 @@ import android.text.format.Formatter;
 import android.util.Log;
 
 import com.chickenkiller.upods2.controllers.UpodsApplication;
-import com.chickenkiller.upods2.interfaces.IPlayableTrack;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -15,7 +14,7 @@ import java.util.ArrayList;
 /**
  * Created by alonzilberman on 8/31/15.
  */
-public class Episod extends Track implements IPlayableTrack {
+public class Episod extends Track {
     private static String EPISOD_LOG = "EPISOD";
     private String summary;
     private String length;
@@ -43,6 +42,7 @@ public class Episod extends Track implements IPlayableTrack {
             this.duration = jsonItem.has("duration") ? jsonItem.getString("duration") : "";
             this.date = jsonItem.has("date") ? jsonItem.getString("date") : "";
             this.pathOnDisk = jsonItem.has("pathOnDisk") ? jsonItem.getString("pathOnDisk") : "";
+            this.audeoUrl = jsonItem.has("audeoUrl") ? jsonItem.getString("audeoUrl") : "";
         } catch (JSONException e) {
             Log.e(EPISOD_LOG, "Can't parse episod from json");
             e.printStackTrace();
@@ -77,6 +77,7 @@ public class Episod extends Track implements IPlayableTrack {
             jsonEpisod.put("duration", this.duration);
             jsonEpisod.put("date", this.date);
             jsonEpisod.put("pathOnDisk", this.pathOnDisk);
+            jsonEpisod.put("audeoUrl", this.audeoUrl);
         } catch (JSONException e) {
             Log.e(EPISOD_LOG, "Can't save episod to json");
             e.printStackTrace();
@@ -108,7 +109,7 @@ public class Episod extends Track implements IPlayableTrack {
         if (pathOnDisk != null && !pathOnDisk.isEmpty()) {
             return pathOnDisk;
         }
-        return mp3Url;
+        return audeoUrl;
     }
 
     public String getBtnDownloadText() {

@@ -8,28 +8,28 @@ import java.io.Serializable;
 public abstract class Track implements Serializable {
 
     protected String title;
-    protected String mp3Url;
+    protected String audeoUrl;
     protected boolean isSelected;
 
     public Track(){
         this.title = "";
-        this.mp3Url = "";
+        this.audeoUrl = "";
         this.isSelected = false;
     }
 
-    public String getTitle() {
-        return title;
-    }
+    public abstract String getDate();
+
+    public abstract String getTitle();
+
+    public abstract String getAudeoUrl();
+
+    public abstract String getSubTitle();
 
     public void setTitle(String title) {
         this.title = title;
     }
 
-    public String getMp3Url() {
-        return mp3Url;
-    }
-
-    public void setMp3Url(String mp3Url) {
-        this.mp3Url = mp3Url;
+    public void setAudeoUrl(String audeoUrl) {
+        this.audeoUrl = audeoUrl;
     }
 }

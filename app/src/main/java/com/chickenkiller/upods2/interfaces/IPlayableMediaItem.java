@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 /**
  * Created by alonzilberman on 8/30/15.
- * Implement this interface by making item playable by player and shown by middle screen
+ * Implement this interface by making item playable by player, shown by middle screen and shown in all "card_media_item" layouts
  */
 public interface IPlayableMediaItem extends Serializable {
 
@@ -18,7 +18,7 @@ public interface IPlayableMediaItem extends Serializable {
 
     String getDescription();
 
-    String getStreamUrl();
+    String getAudeoLink();
 
     boolean hasTracks();
 }
