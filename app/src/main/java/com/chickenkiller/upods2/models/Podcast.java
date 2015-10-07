@@ -181,13 +181,13 @@ public class Podcast extends MediaItem implements IFeaturableMediaItem, IPlayabl
     }
 
     @Override
-    public String getStreamUrl() {
-        for (Track episod : episods) {
+    public String getAudeoLink() {
+        for (Episod episod : episods) {
             if (episod.isSelected) {
-                return episod.getMp3Url();
+                return episod.getAudeoUrl();
             }
         }
-        return episods.get(0).getMp3Url();
+        return episods.get(0).getAudeoUrl();
     }
 
     @Override
@@ -288,7 +288,7 @@ public class Podcast extends MediaItem implements IFeaturableMediaItem, IPlayabl
 
     @Override
     public void selectTrack(Track track) {
-        for (Track episod : episods) {
+        for (Episod episod : episods) {
             episod.isSelected = episod.equals(track) ? true : false;
         }
     }

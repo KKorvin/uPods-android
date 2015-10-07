@@ -9,8 +9,8 @@ import android.util.Log;
 
 import com.chickenkiller.upods2.interfaces.IContentLoadListener;
 import com.chickenkiller.upods2.interfaces.IPlayableMediaItem;
-import com.chickenkiller.upods2.interfaces.IPlayableTrack;
 import com.chickenkiller.upods2.interfaces.IUIProgressUpdater;
+import com.chickenkiller.upods2.models.Track;
 import com.chickenkiller.upods2.utils.GlobalUtils;
 
 import java.util.ArrayList;
@@ -32,7 +32,7 @@ public class DownloadMaster {
 
     public static class DownloadTask {
         public IPlayableMediaItem mediaItem;
-        public IPlayableTrack track;
+        public Track track;
         public long downloadId;
         public IUIProgressUpdater progressUpdater;
         public IContentLoadListener contentLoadListener;
@@ -58,6 +58,7 @@ public class DownloadMaster {
     }
 
     public void download(DownloadTask task) {
+        //TODO better path
         DownloadManager downloadManager = (DownloadManager) UpodsApplication.getContext().getSystemService(Context.DOWNLOAD_SERVICE);
         Uri episodUri = Uri.parse(task.track.getAudeoUrl());
         Request request = new Request(episodUri);

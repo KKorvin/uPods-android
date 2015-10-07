@@ -15,7 +15,6 @@ import com.chickenkiller.upods2.activity.ActivityPlayer;
 import com.chickenkiller.upods2.interfaces.IContentLoadListener;
 import com.chickenkiller.upods2.interfaces.IFragmentsManager;
 import com.chickenkiller.upods2.interfaces.IPlayableMediaItem;
-import com.chickenkiller.upods2.interfaces.IPlayableTrack;
 import com.chickenkiller.upods2.interfaces.ITrackable;
 import com.chickenkiller.upods2.interfaces.IUIProgressUpdater;
 import com.chickenkiller.upods2.models.Track;
@@ -33,7 +32,7 @@ public class TracksAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
     private int itemLayout;
 
-    private List<IPlayableTrack> tracks;
+    private List<Track> tracks;
     private IPlayableMediaItem iPlayableMediaItem;
     private Context mContext;
     private IFragmentsManager fragmentsManager;
@@ -91,7 +90,7 @@ public class TracksAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     @Override
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
         if (holder instanceof ViewHolderTrack) {
-            final IPlayableTrack currentTrack = tracks.get(position);
+            final Track currentTrack = tracks.get(position);
             ((ViewHolderTrack) holder).tvTitle.setText(currentTrack.getTitle());
             ((ViewHolderTrack) holder).tvSubTitle.setText(currentTrack.getSubTitle());
             ((ViewHolderTrack) holder).tvDate.setText(currentTrack.getDate());
@@ -106,9 +105,9 @@ public class TracksAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             @Override
             public void onClick(View view) {
                 DownloadMaster.getInstance().cleanProgressInterfaces();
-                IPlayableTrack iPlayableTrack = tracks.get(position);
-                if (iPlayableTrack instanceof ITrackable && iPlayableTrack instanceof Track) {
-                    ((ITrackable) iPlayableTrack).selectTrack((Track) iPlayableTrack);
+                Track track = tracks.get(position);
+                if (iPlayableMediaItem instanceof ITrackable) {
+                    ((ITrackable) iPlayableMediaItem).selectTrack(track);
                 }
                 Intent myIntent = new Intent(mContext, ActivityPlayer.class);
                 UniversalPlayer.getInstance().setMediaItem(iPlayableMediaItem);
@@ -118,7 +117,7 @@ public class TracksAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         };
     }
 
-    private void initDownloadBtn(final RecyclerView.ViewHolder holder, final IPlayableTrack currentTrack, final int position) {
+    private void initDownloadBtn(final RecyclerView.ViewHolder holder, final Track currentTrack, final int position) {
         /* For progress br test
         ((ViewHolderTrack) holder).btnDownload.setVisibility(View.GONE);
         ((ViewHolderTrack) holder).cvDownloadProgress.setVisibility(View.VISIBLE);
@@ -175,7 +174,7 @@ public class TracksAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         return tracks.size();
     }
 
-    public void addItems(ArrayList<? extends IPlayableTrack> tracks) {
+    public void addItems(ArrayList<? extends Track> tracks) {
         this.tracks.clear();
         this.tracks.addAll(tracks);
         this.notifyDataSetChanged();

@@ -93,7 +93,7 @@ public class RadioItem extends MediaItem implements IFeaturableMediaItem, IPlaya
     }
 
     @Override
-    public String getStreamUrl() {
+    public String getAudeoLink() {
         return streamUrl;
     }
 

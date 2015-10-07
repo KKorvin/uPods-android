@@ -18,7 +18,7 @@ public interface IPlayableMediaItem extends Serializable {
 
     String getDescription();
 
-    String getStreamUrl();
+    String getAudeoLink();
 
     boolean hasTracks();
 }

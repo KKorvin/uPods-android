@@ -82,8 +82,8 @@ public class UniversalPlayer implements MediaPlayer.OnPreparedListener {
                 if (mediaPlayer == null) {
                     mediaPlayer = new MediaPlayer();
                 }
-                Log.i(PLAYER_LOG, "Trying to play: " + mediaItem.getStreamUrl());
-                mediaPlayer.setDataSource(mediaItem.getStreamUrl());
+                Log.i(PLAYER_LOG, "Trying to play: " + mediaItem.getAudeoLink());
+                mediaPlayer.setDataSource(mediaItem.getAudeoLink());
                 mediaPlayer.setOnPreparedListener(this);
                 mediaPlayer.prepareAsync();
             } catch (Exception e) {
@@ -172,7 +172,7 @@ public class UniversalPlayer implements MediaPlayer.OnPreparedListener {
             return false;
         }
         if (this.mediaItem.equals(mediaItem)) {
-            return this.mediaItem.getStreamUrl().equals(mediaItem.getStreamUrl());
+            return this.mediaItem.getAudeoLink().equals(mediaItem.getAudeoLink());
         }
         return false;
     }
