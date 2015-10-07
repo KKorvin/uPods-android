@@ -9,7 +9,7 @@ import com.chickenkiller.upods2.R;
 import com.chickenkiller.upods2.view.controller.FragmentDownloadedPodcasts;
 import com.chickenkiller.upods2.view.controller.FragmentFavoritesPodcasts;
 import com.chickenkiller.upods2.view.controller.FragmentPodcastFeatured;
-import com.chickenkiller.upods2.view.controller.FragmentPodcastsPage;
+import com.chickenkiller.upods2.view.controller.FragmentPodcastsCategories;
 
 /**
  * Created by alonzilberman on 8/14/15.
@@ -36,8 +36,7 @@ public class PodcastsPagesAdapter extends FragmentStatePagerAdapter {
                 podcastFragment = new FragmentDownloadedPodcasts();
                 break;
             case 3:
-                podcastFragment = new FragmentPodcastsPage();
-                ((FragmentPodcastsPage) podcastFragment).setTestPodcast(String.valueOf(position));
+                podcastFragment = new FragmentPodcastsCategories();
                 break;
         }
 

@@ -70,6 +70,7 @@
     <string name="recently_subscribed">Recently subscribed</string>
     <string name="recently_downloaded">Recently downloaded</string>
     <string name="none">none</string>
+    <string name="categories">Categories</string>
 
 
 </resources>
