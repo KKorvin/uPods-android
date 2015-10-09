@@ -134,10 +134,22 @@ public class BackendManager {
 
     /**
      * Simple HTTP GET request
-     * @param url - any url
+     *
+     * @param url       - any url
      * @param uiUpdater INetworkSimpleUIupdater
      */
-    public void sendRequest(String url, final INetworkSimpleUIupdater uiUpdater){
+    public void sendRequest(String url, final INetworkSimpleUIupdater uiUpdater) {
+        Request request = new Request.Builder().url(url).build();
+        sendRequest(request, uiUpdater);
+    }
+
+    /**
+     * Simple HTTP GET request
+     *
+     * @param url       - any url
+     * @param uiUpdater INetworkUIupdater
+     */
+    public void sendRequest(String url, final INetworkUIupdater uiUpdater) {
         Request request = new Request.Builder().url(url).build();
         sendRequest(request, uiUpdater);
     }

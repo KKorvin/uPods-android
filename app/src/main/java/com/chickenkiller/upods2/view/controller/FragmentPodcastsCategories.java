@@ -30,7 +30,7 @@ public class FragmentPodcastsCategories extends Fragment {
         View categoriesHeader = Li.inflate(R.layout.category_item_header, null);
         ((TextView) categoriesHeader.findViewById(R.id.tvCategoriesHeader)).setText(getString(R.string.categories));
         lvCategories = (ListView) view.findViewById(R.id.lvCategories);
-        List<Category> categories = Category.getTestCategoriesList();
+        List<Category> categories = Category.getPodcastsCategoriesList();
         categoriesAdapter = new CategoriesAdapter(getActivity(), R.layout.category_item, categories);
         lvCategories.addHeaderView(categoriesHeader);
         lvCategories.setAdapter(categoriesAdapter);

@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.Context;
 import android.content.ContextWrapper;
 
+import com.chickenkiller.upods2.models.Category;
 import com.pixplicity.easyprefs.library.Prefs;
 
 /**
@@ -22,6 +23,7 @@ public class UpodsApplication extends Application {
                 .setPrefsName(getPackageName())
                 .setUseDefaultSharedPreference(true)
                 .build();
+        Category.initCatrgories();
         super.onCreate();
     }
 
