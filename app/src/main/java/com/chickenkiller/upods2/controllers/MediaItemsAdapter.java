@@ -201,6 +201,10 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         this.notifyDataSetChanged();
     }
 
+    public void clearItems() {
+        this.items.clear();
+    }
+
     public void setContentLoadListener(IContentLoadListener contentLoadListener) {
         this.iContentLoadListener = contentLoadListener;
     }

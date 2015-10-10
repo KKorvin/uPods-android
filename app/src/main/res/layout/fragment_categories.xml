@@ -10,4 +10,19 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
+    <ProgressBar
+        android:id="@+id/pbLoadingMediaItems"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone" />
+
+    <com.chickenkiller.upods2.views.AutofitRecyclerView
+        android:id="@+id/rvMain"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipToPadding="true"
+        android:columnWidth="@dimen/rv_cards_column_width"
+        android:visibility="gone" />
+
 </RelativeLayout>

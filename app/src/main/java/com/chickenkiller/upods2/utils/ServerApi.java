@@ -12,6 +12,7 @@ public class ServerApi {
     public static final String PODCAST_CATEGORIES;
     public static final String PODCAST_SEARCH;
     public static final String PODCAST_SEARCH_PARAM;
+    public static final String PODCASTS_BY_CATEGORY;
 
     static {
         DOMAIN = "https://upods.io";
@@ -21,5 +22,6 @@ public class ServerApi {
         PODCAST_CATEGORIES = DOMAIN + "/upods/api/v1.0/podcasts-categories?type=all";
         PODCAST_SEARCH = "https://itunes.apple.com/search?term=";
         PODCAST_SEARCH_PARAM = "&entity=podcast";
+        PODCASTS_BY_CATEGORY = DOMAIN + "/upods/api/v1.0/podcasts/category?id=";
     }
 }

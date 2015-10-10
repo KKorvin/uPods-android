@@ -11,15 +11,17 @@ import android.view.ViewGroup;
 import com.chickenkiller.upods2.R;
 import com.chickenkiller.upods2.controllers.PodcastsPagesAdapter;
 import com.chickenkiller.upods2.controllers.SmallPlayer;
+import com.chickenkiller.upods2.interfaces.ICustumziedBackPress;
 import com.chickenkiller.upods2.interfaces.ISlidingMenuHolder;
 import com.chickenkiller.upods2.interfaces.IToolbarHolder;
 
 /**
  * Created by alonzilberman on 8/8/15.
  */
-public class FragmentPodcasts extends Fragment {
+public class FragmentPodcasts extends Fragment implements ICustumziedBackPress {
 
     public static final String TAG = "fragment_podcasts";
+    private static final int CATEGORIES_FRAGMENT_POSITION = 3;
     private ViewPager vpPodcasts;
     private PodcastsPagesAdapter podcastsPagesAdapter;
     private TabLayout tlPodcastsTabs;
@@ -56,5 +58,16 @@ public class FragmentPodcasts extends Fragment {
     public void onDestroy() {
         smallPlayer.destroy();
         super.onDestroy();
+    }
+
+    @Override
+    public boolean onBackPressed() {
+        if (vpPodcasts.getCurrentItem() == CATEGORIES_FRAGMENT_POSITION) {
+            FragmentMediaItemsCategories fCategories = (FragmentMediaItemsCategories) vpPodcasts.getAdapter().instantiateItem(vpPodcasts, vpPodcasts.getCurrentItem());
+            if (fCategories instanceof ICustumziedBackPress) {
+                return fCategories.onBackPressed();
+            }
+        }
+        return true;
     }
 }

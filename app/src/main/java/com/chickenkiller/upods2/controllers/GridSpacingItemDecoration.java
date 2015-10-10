@@ -34,7 +34,7 @@ public class GridSpacingItemDecoration extends RecyclerView.ItemDecoration {
     @Override
     public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
         int position = parent.getChildAdapterPosition(view); // item position
-        if (cardItemType == -1 || parent.getAdapter().getItemViewType(position) == cardItemType) {
+        if ((cardItemType == -1 || parent.getAdapter().getItemViewType(position) == cardItemType) && spanCount != 0) {
             position -= (itemsTypesCount - 1);
             int column = position % spanCount; // item column
 

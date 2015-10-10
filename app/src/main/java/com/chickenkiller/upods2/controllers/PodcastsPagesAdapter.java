@@ -8,8 +8,8 @@ import android.support.v13.app.FragmentStatePagerAdapter;
 import com.chickenkiller.upods2.R;
 import com.chickenkiller.upods2.view.controller.FragmentDownloadedPodcasts;
 import com.chickenkiller.upods2.view.controller.FragmentFavoritesPodcasts;
+import com.chickenkiller.upods2.view.controller.FragmentMediaItemsCategories;
 import com.chickenkiller.upods2.view.controller.FragmentPodcastFeatured;
-import com.chickenkiller.upods2.view.controller.FragmentPodcastsCategories;
 
 /**
  * Created by alonzilberman on 8/14/15.
@@ -21,6 +21,7 @@ public class PodcastsPagesAdapter extends FragmentStatePagerAdapter {
     public PodcastsPagesAdapter(FragmentManager fm) {
         super(fm);
     }
+
 
     @Override
     public Fragment getItem(int position) {
@@ -36,7 +37,7 @@ public class PodcastsPagesAdapter extends FragmentStatePagerAdapter {
                 podcastFragment = new FragmentDownloadedPodcasts();
                 break;
             case 3:
-                podcastFragment = new FragmentPodcastsCategories();
+                podcastFragment = new FragmentMediaItemsCategories();
                 break;
         }
 
@@ -57,6 +58,8 @@ public class PodcastsPagesAdapter extends FragmentStatePagerAdapter {
         }
         return "";
     }
+
+
 
     @Override
     public int getCount() {

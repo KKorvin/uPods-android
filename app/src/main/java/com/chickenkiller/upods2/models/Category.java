@@ -22,8 +22,15 @@ public class Category {
     private final static String CATEGORIES_LOG = "Categories";
     private final static String CATEGORIES_PREF = "podcasts_categories";
     private String name;
+    private int id;
 
     public Category(String name) {
+        this.id = -1;
+        this.name = name;
+    }
+
+    public Category(String name, int id) {
+        this.id = id;
         this.name = name;
     }
 
@@ -33,7 +40,8 @@ public class Category {
         try {
             JSONArray jsonCategories = jsonCategories = new JSONArray(categoriesJsonStr);
             for (int i = 0; i < jsonCategories.length(); i++) {
-                podcastsCategories.add(new Category(jsonCategories.getJSONObject(i).getString("name")));
+                podcastsCategories.add(new Category(jsonCategories.getJSONObject(i).getString("name"),
+                        jsonCategories.getJSONObject(i).getInt("id")));
             }
         } catch (JSONException e) {
             Log.i(CATEGORIES_LOG, "Can't get podcasts categories from shared prefs");
@@ -44,6 +52,10 @@ public class Category {
 
     public String getName() {
         return name;
+    }
+
+    public int getId() {
+        return id;
     }
 
     /**
