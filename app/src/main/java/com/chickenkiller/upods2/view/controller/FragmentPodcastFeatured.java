@@ -15,7 +15,7 @@ import com.chickenkiller.upods2.controllers.GridSpacingItemDecoration;
 import com.chickenkiller.upods2.controllers.MediaItemsAdapter;
 import com.chickenkiller.upods2.interfaces.IContentLoadListener;
 import com.chickenkiller.upods2.interfaces.IFragmentsManager;
-import com.chickenkiller.upods2.interfaces.INetworkUIupdater;
+import com.chickenkiller.upods2.interfaces.IRequestHandler;
 import com.chickenkiller.upods2.interfaces.ISlidingMenuHolder;
 import com.chickenkiller.upods2.interfaces.IToolbarHolder;
 import com.chickenkiller.upods2.models.MediaItem;
@@ -94,7 +94,7 @@ public class FragmentPodcastFeatured extends Fragment implements IContentLoadLis
     }
 
     private void showTops() {
-        BackendManager.getInstance().loadTops(BackendManager.TopType.MAIN_PODCAST, ServerApi.PODCASTS_TOP, new INetworkUIupdater() {
+        BackendManager.getInstance().loadTops(BackendManager.TopType.MAIN_PODCAST, ServerApi.PODCASTS_TOP, new IRequestHandler() {
                     @Override
                     public void updateUISuccess(final JSONObject jResponse) {
                         getActivity().runOnUiThread(new Runnable() {

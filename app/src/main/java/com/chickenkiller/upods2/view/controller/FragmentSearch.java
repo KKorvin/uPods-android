@@ -18,7 +18,7 @@ import com.chickenkiller.upods2.controllers.BackendManager;
 import com.chickenkiller.upods2.controllers.SearchResultsAdapter;
 import com.chickenkiller.upods2.controllers.SmallPlayer;
 import com.chickenkiller.upods2.interfaces.IFragmentsManager;
-import com.chickenkiller.upods2.interfaces.INetworkUIupdater;
+import com.chickenkiller.upods2.interfaces.IRequestHandler;
 import com.chickenkiller.upods2.interfaces.ISlidingMenuHolder;
 import com.chickenkiller.upods2.interfaces.IToolbarHolder;
 import com.chickenkiller.upods2.models.MediaItem;
@@ -101,7 +101,7 @@ public class FragmentSearch extends Fragment implements SearchView.OnQueryTextLi
         } else {
             query = ServerApi.PODCAST_SEARCH + query + ServerApi.PODCAST_SEARCH_PARAM;
         }
-        BackendManager.getInstance().doSearch(query, new INetworkUIupdater() {
+        BackendManager.getInstance().doSearch(query, new IRequestHandler() {
                     @Override
                     public void updateUISuccess(final JSONObject jResponse) {
                         getActivity().runOnUiThread(new Runnable() {

@@ -16,7 +16,7 @@ import com.chickenkiller.upods2.controllers.MediaItemsAdapter;
 import com.chickenkiller.upods2.controllers.SmallPlayer;
 import com.chickenkiller.upods2.interfaces.IContentLoadListener;
 import com.chickenkiller.upods2.interfaces.IFragmentsManager;
-import com.chickenkiller.upods2.interfaces.INetworkUIupdater;
+import com.chickenkiller.upods2.interfaces.IRequestHandler;
 import com.chickenkiller.upods2.interfaces.ISlidingMenuHolder;
 import com.chickenkiller.upods2.interfaces.IToolbarHolder;
 import com.chickenkiller.upods2.models.MediaItem;
@@ -99,7 +99,7 @@ public class FragmentMainFeatured extends Fragment implements IContentLoadListen
     }
 
     private void showTops() {
-        BackendManager.getInstance().loadTops(BackendManager.TopType.MAIN_FEATURED, ServerApi.RADIO_TOP, new INetworkUIupdater() {
+        BackendManager.getInstance().loadTops(BackendManager.TopType.MAIN_FEATURED, ServerApi.RADIO_TOP, new IRequestHandler() {
                     @Override
                     public void updateUISuccess(final JSONObject jResponse) {
                         getActivity().runOnUiThread(new Runnable() {

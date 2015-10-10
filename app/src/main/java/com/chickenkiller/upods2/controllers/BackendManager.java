@@ -1,7 +1,7 @@
 package com.chickenkiller.upods2.controllers;
 
-import com.chickenkiller.upods2.interfaces.INetworkSimpleUIupdater;
-import com.chickenkiller.upods2.interfaces.INetworkUIupdater;
+import com.chickenkiller.upods2.interfaces.ISimpleRequestHandler;
+import com.chickenkiller.upods2.interfaces.IRequestHandler;
 import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
@@ -39,11 +39,11 @@ public class BackendManager {
 
     private class QueueTask {
         public Request request;
-        public INetworkUIupdater iNetworkUIupdater;
+        public IRequestHandler iRequestHandler;
 
-        public QueueTask(Request request, INetworkUIupdater uiUpdater) {
+        public QueueTask(Request request, IRequestHandler uiUpdater) {
             this.request = request;
-            this.iNetworkUIupdater = uiUpdater;
+            this.iRequestHandler = uiUpdater;
         }
     }
 
@@ -66,7 +66,7 @@ public class BackendManager {
      * @param request   - OKHttp request
      * @param uiUpdater - INetworkUIupdater to update UI
      */
-    private void sendRequest(final Request request, final INetworkUIupdater uiUpdater) {
+    private void sendRequest(final Request request, final IRequestHandler uiUpdater) {
         try {
             client.newCall(request).enqueue(new Callback() {
                 @Override
@@ -94,7 +94,7 @@ public class BackendManager {
         }
     }
 
-    private void sendRequest(final Request request, final INetworkSimpleUIupdater uiUpdater) {
+    private void sendRequest(final Request request, final ISimpleRequestHandler uiUpdater) {
         try {
             client.newCall(request).enqueue(new Callback() {
                 @Override
@@ -120,7 +120,7 @@ public class BackendManager {
 
 
     private void sendRequest(QueueTask queueTask) {
-        sendRequest(queueTask.request, queueTask.iNetworkUIupdater);
+        sendRequest(queueTask.request, queueTask.iRequestHandler);
     }
 
     private void searchQueueNextStep() {
@@ -136,9 +136,9 @@ public class BackendManager {
      * Simple HTTP GET request
      *
      * @param url       - any url
-     * @param uiUpdater INetworkSimpleUIupdater
+     * @param uiUpdater ISimpleRequestHandler
      */
-    public void sendRequest(String url, final INetworkSimpleUIupdater uiUpdater) {
+    public void sendRequest(String url, final ISimpleRequestHandler uiUpdater) {
         Request request = new Request.Builder().url(url).build();
         sendRequest(request, uiUpdater);
     }
@@ -147,21 +147,21 @@ public class BackendManager {
      * Simple HTTP GET request
      *
      * @param url       - any url
-     * @param uiUpdater INetworkUIupdater
+     * @param uiUpdater IRequestHandler
      */
-    public void sendRequest(String url, final INetworkUIupdater uiUpdater) {
+    public void sendRequest(String url, final IRequestHandler uiUpdater) {
         Request request = new Request.Builder().url(url).build();
         sendRequest(request, uiUpdater);
     }
 
-    public void loadTops(TopType topType, String topLink, final INetworkUIupdater uiUpdater) {
+    public void loadTops(TopType topType, String topLink, final IRequestHandler uiUpdater) {
         Request request = new Request.Builder()
                 .url(topLink + topType.getStringValue())
                 .build();
         sendRequest(request, uiUpdater);
     }
 
-    public void doSearch(String query, final INetworkUIupdater uiUpdater) {
+    public void doSearch(String query, final IRequestHandler uiUpdater) {
         Request request = new Request.Builder()
                 .url(query)
                 .build();

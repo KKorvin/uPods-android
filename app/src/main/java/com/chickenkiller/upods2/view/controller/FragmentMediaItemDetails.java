@@ -32,7 +32,7 @@ import com.chickenkiller.upods2.controllers.EpisodsXMLHandler;
 import com.chickenkiller.upods2.controllers.ProfileManager;
 import com.chickenkiller.upods2.controllers.TracksAdapter;
 import com.chickenkiller.upods2.interfaces.IMovable;
-import com.chickenkiller.upods2.interfaces.INetworkSimpleUIupdater;
+import com.chickenkiller.upods2.interfaces.ISimpleRequestHandler;
 import com.chickenkiller.upods2.interfaces.IOverlayable;
 import com.chickenkiller.upods2.interfaces.IPlayableMediaItem;
 import com.chickenkiller.upods2.interfaces.ITrackable;
@@ -206,7 +206,7 @@ public class FragmentMediaItemDetails extends Fragment implements View.OnTouchLi
     }
 
     private void loadTracks() {
-        BackendManager.getInstance().sendRequest(((ITrackable) playableItem).getTracksFeed(), new INetworkSimpleUIupdater() {
+        BackendManager.getInstance().sendRequest(((ITrackable) playableItem).getTracksFeed(), new ISimpleRequestHandler() {
                     @Override
                     public void updateUISuccess(final String response) {
                         getActivity().runOnUiThread(new Runnable() {

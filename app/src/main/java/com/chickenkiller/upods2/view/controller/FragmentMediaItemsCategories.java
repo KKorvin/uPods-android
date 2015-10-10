@@ -19,7 +19,7 @@ import com.chickenkiller.upods2.controllers.GridSpacingItemDecoration;
 import com.chickenkiller.upods2.controllers.MediaItemsAdapter;
 import com.chickenkiller.upods2.interfaces.ICustumziedBackPress;
 import com.chickenkiller.upods2.interfaces.IFragmentsManager;
-import com.chickenkiller.upods2.interfaces.INetworkUIupdater;
+import com.chickenkiller.upods2.interfaces.IRequestHandler;
 import com.chickenkiller.upods2.models.Category;
 import com.chickenkiller.upods2.models.MediaItem;
 import com.chickenkiller.upods2.models.MediaItemTitle;
@@ -32,6 +32,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -39,7 +40,7 @@ import java.util.List;
  */
 public class FragmentMediaItemsCategories extends Fragment implements AdapterView.OnItemClickListener, ICustumziedBackPress {
 
-    public static final String TAG = "fragment_media_items_categories";
+    public static final String TAG;
     public static final int MEDIA_ITEMS_TYPES_COUNT = 2;
 
     private static final String LOG_TAG = "fragment_categories";
@@ -51,6 +52,11 @@ public class FragmentMediaItemsCategories extends Fragment implements AdapterVie
     private GridSpacingItemDecoration gridSpacingItemDecoration;
 
     private MediaItemType mediaItemType;
+
+    static {
+        long time = Calendar.getInstance().get(Calendar.MILLISECOND);
+        TAG = "f_media_items_categories" + String.valueOf(time);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -115,7 +121,7 @@ public class FragmentMediaItemsCategories extends Fragment implements AdapterVie
     private void loadMediaItems(final Category category) {
         lvCategories.setVisibility(View.GONE);
         pbLoadingMediaItems.setVisibility(View.VISIBLE);
-        BackendManager.getInstance().sendRequest(ServerApi.PODCASTS_BY_CATEGORY + String.valueOf(category.getId()), new INetworkUIupdater() {
+        BackendManager.getInstance().sendRequest(ServerApi.PODCASTS_BY_CATEGORY + String.valueOf(category.getId()), new IRequestHandler() {
                     @Override
                     public void updateUISuccess(final JSONObject jResponse) {
                         getActivity().runOnUiThread(new Runnable() {
@@ -131,7 +137,7 @@ public class FragmentMediaItemsCategories extends Fragment implements AdapterVie
                                     mediaItemsAdapter.clearItems();
                                     mediaItemsAdapter.addItems(podcastsByCategory);
 
-                                    if(gridSpacingItemDecoration!=null) {
+                                    if (gridSpacingItemDecoration != null) {
                                         rvMain.removeItemDecoration(gridSpacingItemDecoration);
                                     }
                                     gridSpacingItemDecoration = new GridSpacingItemDecoration(rvMain.getSpanCount(), FragmentMainFeatured.MEDIA_ITEMS_CARDS_MARGIN, true);
