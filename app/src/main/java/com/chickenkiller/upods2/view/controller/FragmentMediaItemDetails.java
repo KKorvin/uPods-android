@@ -32,7 +32,7 @@ import com.chickenkiller.upods2.controllers.EpisodsXMLHandler;
 import com.chickenkiller.upods2.controllers.ProfileManager;
 import com.chickenkiller.upods2.controllers.TracksAdapter;
 import com.chickenkiller.upods2.interfaces.IMovable;
-import com.chickenkiller.upods2.interfaces.ISimpleRequestHandler;
+import com.chickenkiller.upods2.interfaces.ISimpleRequestCallback;
 import com.chickenkiller.upods2.interfaces.IOverlayable;
 import com.chickenkiller.upods2.interfaces.IPlayableMediaItem;
 import com.chickenkiller.upods2.interfaces.ITrackable;
@@ -182,6 +182,9 @@ public class FragmentMediaItemDetails extends Fragment implements View.OnTouchLi
         });
     }
 
+    /**
+     * Init colors and settings of header images
+     */
     private void initImagesColors() {
         Glide.with(getActivity()).load(playableItem.getCoverImageUrl()).crossFade().into(new GlideDrawableImageViewTarget(imgDetailedTopCover) {
             @Override
@@ -206,9 +209,9 @@ public class FragmentMediaItemDetails extends Fragment implements View.OnTouchLi
     }
 
     private void loadTracks() {
-        BackendManager.getInstance().sendRequest(((ITrackable) playableItem).getTracksFeed(), new ISimpleRequestHandler() {
+        BackendManager.getInstance().sendRequest(((ITrackable) playableItem).getTracksFeed(), new ISimpleRequestCallback() {
                     @Override
-                    public void updateUISuccess(final String response) {
+                    public void onRequestSuccessed(final String response) {
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -236,7 +239,7 @@ public class FragmentMediaItemDetails extends Fragment implements View.OnTouchLi
                     }
 
                     @Override
-                    public void updateUIFailed() {
+                    public void onRequestFailed() {
 
                     }
                 }

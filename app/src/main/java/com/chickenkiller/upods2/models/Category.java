@@ -3,7 +3,7 @@ package com.chickenkiller.upods2.models;
 import android.util.Log;
 
 import com.chickenkiller.upods2.controllers.BackendManager;
-import com.chickenkiller.upods2.interfaces.IRequestHandler;
+import com.chickenkiller.upods2.interfaces.IRequestCallback;
 import com.chickenkiller.upods2.utils.ServerApi;
 import com.pixplicity.easyprefs.library.Prefs;
 
@@ -64,9 +64,9 @@ public class Category {
     public static void initCatrgories() {
         String categoriesJsonStr = Prefs.getString(CATEGORIES_PREF, null);
         if (categoriesJsonStr == null) {
-            BackendManager.getInstance().sendRequest(ServerApi.PODCAST_CATEGORIES, new IRequestHandler() {
+            BackendManager.getInstance().sendRequest(ServerApi.PODCAST_CATEGORIES, new IRequestCallback() {
                 @Override
-                public void updateUISuccess(JSONObject jResponse) {
+                public void onRequestSuccessed(JSONObject jResponse) {
                     try {
                         JSONArray result = jResponse.getJSONArray("result");
                         Prefs.putString(CATEGORIES_PREF, result.toString());
@@ -78,7 +78,7 @@ public class Category {
                 }
 
                 @Override
-                public void updateUIFailed() {
+                public void onRequestFailed() {
 
                 }
             });

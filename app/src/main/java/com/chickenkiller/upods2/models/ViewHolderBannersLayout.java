@@ -12,7 +12,7 @@ import com.chickenkiller.upods2.controllers.BackendManager;
 import com.chickenkiller.upods2.controllers.BannerItemsAdapter;
 import com.chickenkiller.upods2.interfaces.IContentLoadListener;
 import com.chickenkiller.upods2.interfaces.IFragmentsManager;
-import com.chickenkiller.upods2.interfaces.IRequestHandler;
+import com.chickenkiller.upods2.interfaces.IRequestCallback;
 import com.chickenkiller.upods2.utils.ServerApi;
 import com.lsjwzh.widget.recyclerviewpager.RecyclerViewPager;
 
@@ -51,9 +51,9 @@ public class ViewHolderBannersLayout extends RecyclerView.ViewHolder {
     }
 
     private void loadBanners(final Context mContext) {
-        BackendManager.getInstance().loadTops(BackendManager.TopType.MAIN_BANNER, ServerApi.RADIO_TOP, new IRequestHandler() {
+        BackendManager.getInstance().loadTops(BackendManager.TopType.MAIN_BANNER, ServerApi.RADIO_TOP, new IRequestCallback() {
                     @Override
-                    public void updateUISuccess(final JSONObject jResponse) {
+                    public void onRequestSuccessed(final JSONObject jResponse) {
                         ((Activity) mContext).runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -84,7 +84,7 @@ public class ViewHolderBannersLayout extends RecyclerView.ViewHolder {
                     }
 
                     @Override
-                    public void updateUIFailed() {
+                    public void onRequestFailed() {
 
                     }
                 }

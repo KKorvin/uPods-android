@@ -19,7 +19,7 @@ import com.chickenkiller.upods2.controllers.GridSpacingItemDecoration;
 import com.chickenkiller.upods2.controllers.MediaItemsAdapter;
 import com.chickenkiller.upods2.interfaces.ICustumziedBackPress;
 import com.chickenkiller.upods2.interfaces.IFragmentsManager;
-import com.chickenkiller.upods2.interfaces.IRequestHandler;
+import com.chickenkiller.upods2.interfaces.IRequestCallback;
 import com.chickenkiller.upods2.models.Category;
 import com.chickenkiller.upods2.models.MediaItem;
 import com.chickenkiller.upods2.models.MediaItemTitle;
@@ -121,9 +121,9 @@ public class FragmentMediaItemsCategories extends Fragment implements AdapterVie
     private void loadMediaItems(final Category category) {
         lvCategories.setVisibility(View.GONE);
         pbLoadingMediaItems.setVisibility(View.VISIBLE);
-        BackendManager.getInstance().sendRequest(ServerApi.PODCASTS_BY_CATEGORY + String.valueOf(category.getId()), new IRequestHandler() {
+        BackendManager.getInstance().sendRequest(ServerApi.PODCASTS_BY_CATEGORY + String.valueOf(category.getId()), new IRequestCallback() {
                     @Override
-                    public void updateUISuccess(final JSONObject jResponse) {
+                    public void onRequestSuccessed(final JSONObject jResponse) {
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -156,7 +156,7 @@ public class FragmentMediaItemsCategories extends Fragment implements AdapterVie
                     }
 
                     @Override
-                    public void updateUIFailed() {
+                    public void onRequestFailed() {
 
                     }
 

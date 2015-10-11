@@ -6,9 +6,9 @@ import org.json.JSONObject;
  * Created by alonzilberman on 7/11/15.
  * Handles http responses when response is json
  */
-public interface IRequestHandler {
+public interface IRequestCallback {
 
-    void updateUISuccess(JSONObject jResponse);
+    void onRequestSuccessed(JSONObject jResponse);
 
-    void updateUIFailed();
+    void onRequestFailed();
 }

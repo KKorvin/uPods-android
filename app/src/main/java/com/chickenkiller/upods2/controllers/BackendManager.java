@@ -1,7 +1,7 @@
 package com.chickenkiller.upods2.controllers;
 
-import com.chickenkiller.upods2.interfaces.ISimpleRequestHandler;
-import com.chickenkiller.upods2.interfaces.IRequestHandler;
+import com.chickenkiller.upods2.interfaces.ISimpleRequestCallback;
+import com.chickenkiller.upods2.interfaces.IRequestCallback;
 import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
@@ -39,9 +39,9 @@ public class BackendManager {
 
     private class QueueTask {
         public Request request;
-        public IRequestHandler iRequestHandler;
+        public IRequestCallback iRequestHandler;
 
-        public QueueTask(Request request, IRequestHandler uiUpdater) {
+        public QueueTask(Request request, IRequestCallback uiUpdater) {
             this.request = request;
             this.iRequestHandler = uiUpdater;
         }
@@ -66,13 +66,13 @@ public class BackendManager {
      * @param request   - OKHttp request
      * @param uiUpdater - INetworkUIupdater to update UI
      */
-    private void sendRequest(final Request request, final IRequestHandler uiUpdater) {
+    private void sendRequest(final Request request, final IRequestCallback uiUpdater) {
         try {
             client.newCall(request).enqueue(new Callback() {
                 @Override
                 public void onFailure(Request request, IOException e) {
                     e.printStackTrace();
-                    uiUpdater.updateUIFailed();
+                    uiUpdater.onRequestFailed();
                     searchQueueNextStep();
                 }
 
@@ -80,7 +80,7 @@ public class BackendManager {
                 public void onResponse(Response response) throws IOException {
                     try {
                         final JSONObject jResponse = new JSONObject(response.body().string());
-                        uiUpdater.updateUISuccess(jResponse);
+                        uiUpdater.onRequestSuccessed(jResponse);
                         searchQueueNextStep();
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -89,24 +89,24 @@ public class BackendManager {
             });
         } catch (Exception e) {
             e.printStackTrace();
-            uiUpdater.updateUIFailed();
+            uiUpdater.onRequestFailed();
             searchQueueNextStep();
         }
     }
 
-    private void sendRequest(final Request request, final ISimpleRequestHandler uiUpdater) {
+    private void sendRequest(final Request request, final ISimpleRequestCallback uiUpdater) {
         try {
             client.newCall(request).enqueue(new Callback() {
                 @Override
                 public void onFailure(Request request, IOException e) {
                     e.printStackTrace();
-                    uiUpdater.updateUIFailed();
+                    uiUpdater.onRequestFailed();
                 }
 
                 @Override
                 public void onResponse(Response response) throws IOException {
                     try {
-                        uiUpdater.updateUISuccess(response.body().string());
+                        uiUpdater.onRequestSuccessed(response.body().string());
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -114,7 +114,7 @@ public class BackendManager {
             });
         } catch (Exception e) {
             e.printStackTrace();
-            uiUpdater.updateUIFailed();
+            uiUpdater.onRequestFailed();
         }
     }
 
@@ -138,7 +138,7 @@ public class BackendManager {
      * @param url       - any url
      * @param uiUpdater ISimpleRequestHandler
      */
-    public void sendRequest(String url, final ISimpleRequestHandler uiUpdater) {
+    public void sendRequest(String url, final ISimpleRequestCallback uiUpdater) {
         Request request = new Request.Builder().url(url).build();
         sendRequest(request, uiUpdater);
     }
@@ -149,19 +149,19 @@ public class BackendManager {
      * @param url       - any url
      * @param uiUpdater IRequestHandler
      */
-    public void sendRequest(String url, final IRequestHandler uiUpdater) {
+    public void sendRequest(String url, final IRequestCallback uiUpdater) {
         Request request = new Request.Builder().url(url).build();
         sendRequest(request, uiUpdater);
     }
 
-    public void loadTops(TopType topType, String topLink, final IRequestHandler uiUpdater) {
+    public void loadTops(TopType topType, String topLink, final IRequestCallback uiUpdater) {
         Request request = new Request.Builder()
                 .url(topLink + topType.getStringValue())
                 .build();
         sendRequest(request, uiUpdater);
     }
 
-    public void doSearch(String query, final IRequestHandler uiUpdater) {
+    public void doSearch(String query, final IRequestCallback uiUpdater) {
         Request request = new Request.Builder()
                 .url(query)
                 .build();
