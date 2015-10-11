@@ -46,16 +46,18 @@ public class FragmentMediaItemsList extends Fragment {
 
         if (mediaItemType == MediaItemType.PODCAST_DOWNLOADED || mediaItemType == null) {
             mediaItemTitle = new MediaItemTitle(getString(R.string.recently_downloaded));
+            mediaItemTitle.showButton = false;
+            allItems.add(mediaItemTitle);
             ArrayList<Podcast> downloadedPodcasts = ProfileManager.getInstance().getDownloadedPodcasts();
             allItems.addAll(downloadedPodcasts);
         } else if (mediaItemType == MediaItemType.PODCAST_FAVORITE) {
             mediaItemTitle = new MediaItemTitle(getString(R.string.recently_subscribed));
+            mediaItemTitle.showButton = false;
+            allItems.add(mediaItemTitle);
             ArrayList<Podcast> favoritePodcasts = ProfileManager.getInstance().getSubscribedPodcasts();
             allItems.addAll(favoritePodcasts);
         }
 
-        mediaItemTitle.showButton = false;
-        allItems.add(mediaItemTitle);
         mediaItemsAdapter = new MediaItemsAdapter(getActivity(), R.layout.card_media_item_horizontal, R.layout.media_item_title, allItems);
         mediaItemsAdapter.setFragmentsManager((IFragmentsManager) getActivity());
 
