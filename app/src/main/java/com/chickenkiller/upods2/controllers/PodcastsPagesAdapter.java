@@ -6,6 +6,7 @@ import android.app.FragmentManager;
 import android.support.v13.app.FragmentStatePagerAdapter;
 
 import com.chickenkiller.upods2.R;
+import com.chickenkiller.upods2.interfaces.IUpdateableFragment;
 import com.chickenkiller.upods2.utils.MediaItemType;
 import com.chickenkiller.upods2.view.controller.FragmentMediaItemsCategories;
 import com.chickenkiller.upods2.view.controller.FragmentMediaItemsList;
@@ -44,6 +45,14 @@ public class PodcastsPagesAdapter extends FragmentStatePagerAdapter {
         }
 
         return podcastFragment;
+    }
+
+    @Override
+    public int getItemPosition(Object object) {
+        if (object instanceof IUpdateableFragment) {
+            ((IUpdateableFragment) object).update();
+        }
+        return super.getItemPosition(object);
     }
 
     @Override

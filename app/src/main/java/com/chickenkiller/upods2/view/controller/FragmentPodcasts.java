@@ -10,8 +10,10 @@ import android.view.ViewGroup;
 
 import com.chickenkiller.upods2.R;
 import com.chickenkiller.upods2.controllers.PodcastsPagesAdapter;
+import com.chickenkiller.upods2.controllers.ProfileManager;
 import com.chickenkiller.upods2.controllers.SmallPlayer;
 import com.chickenkiller.upods2.interfaces.ICustumziedBackPress;
+import com.chickenkiller.upods2.interfaces.IOperationFinishCallback;
 import com.chickenkiller.upods2.interfaces.ISlidingMenuHolder;
 import com.chickenkiller.upods2.interfaces.IToolbarHolder;
 
@@ -51,11 +53,20 @@ public class FragmentPodcasts extends Fragment implements ICustumziedBackPress {
 
         smallPlayer = new SmallPlayer(view, getActivity());
 
+        //Set callback for ProviderProfileManager
+        ProfileManager.getInstance().setOperationFinishCallback(new IOperationFinishCallback() {
+            @Override
+            public void operationFinished() {
+                podcastsPagesAdapter.notifyDataSetChanged();
+            }
+        });
+
         return view;
     }
 
     @Override
     public void onDestroy() {
+        ProfileManager.getInstance().setOperationFinishCallback(null);
         smallPlayer.destroy();
         super.onDestroy();
     }

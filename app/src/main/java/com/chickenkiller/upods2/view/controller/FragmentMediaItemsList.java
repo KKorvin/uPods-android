@@ -13,6 +13,7 @@ import com.chickenkiller.upods2.R;
 import com.chickenkiller.upods2.controllers.MediaItemsAdapter;
 import com.chickenkiller.upods2.controllers.ProfileManager;
 import com.chickenkiller.upods2.interfaces.IFragmentsManager;
+import com.chickenkiller.upods2.interfaces.IUpdateableFragment;
 import com.chickenkiller.upods2.models.MediaItem;
 import com.chickenkiller.upods2.models.MediaItemTitle;
 import com.chickenkiller.upods2.models.Podcast;
@@ -24,7 +25,7 @@ import java.util.Calendar;
 /**
  * Created by alonzilberman on 8/8/15.
  */
-public class FragmentMediaItemsList extends Fragment {
+public class FragmentMediaItemsList extends Fragment implements IUpdateableFragment {
 
     public static final String TAG;
     private RecyclerView rvMediaItems;
@@ -70,5 +71,21 @@ public class FragmentMediaItemsList extends Fragment {
 
     public void setMediaItemType(MediaItemType mediaItemType) {
         this.mediaItemType = mediaItemType;
+    }
+
+    @Override
+    public void update() {
+        ArrayList<MediaItem> allItems = new ArrayList<>();
+        allItems.add(mediaItemsAdapter.getItemAt(0));
+        if (mediaItemType == MediaItemType.PODCAST_DOWNLOADED || mediaItemType == null) {
+            ArrayList<Podcast> downloadedPodcasts = ProfileManager.getInstance().getDownloadedPodcasts();
+            allItems.addAll(downloadedPodcasts);
+        } else if (mediaItemType == MediaItemType.PODCAST_FAVORITE) {
+            ArrayList<Podcast> favoritePodcasts = ProfileManager.getInstance().getSubscribedPodcasts();
+            allItems.addAll(favoritePodcasts);
+        }
+        mediaItemsAdapter.clearItems();
+        mediaItemsAdapter.addItems(allItems);
+        mediaItemsAdapter.notifyDataSetChanged();
     }
 }

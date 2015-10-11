@@ -205,6 +205,10 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         this.items.clear();
     }
 
+    public MediaItem getItemAt(int position) {
+        return this.items.get(position);
+    }
+
     public void setContentLoadListener(IContentLoadListener contentLoadListener) {
         this.iContentLoadListener = contentLoadListener;
     }

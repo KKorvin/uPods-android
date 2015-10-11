@@ -13,6 +13,7 @@ import com.chickenkiller.upods2.R;
 import com.chickenkiller.upods2.controllers.BackendManager;
 import com.chickenkiller.upods2.controllers.GridSpacingItemDecoration;
 import com.chickenkiller.upods2.controllers.MediaItemsAdapter;
+import com.chickenkiller.upods2.controllers.ProfileManager;
 import com.chickenkiller.upods2.interfaces.IContentLoadListener;
 import com.chickenkiller.upods2.interfaces.IFragmentsManager;
 import com.chickenkiller.upods2.interfaces.IRequestHandler;
@@ -89,6 +90,8 @@ public class FragmentPodcastFeatured extends Fragment implements IContentLoadLis
 
         //Load tops from remote server
         showTops();
+
+
 
         return view;
     }

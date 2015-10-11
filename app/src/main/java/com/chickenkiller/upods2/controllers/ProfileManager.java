@@ -3,6 +3,7 @@ package com.chickenkiller.upods2.controllers;
 import android.util.Log;
 
 import com.chickenkiller.upods2.R;
+import com.chickenkiller.upods2.interfaces.IOperationFinishCallback;
 import com.chickenkiller.upods2.interfaces.IPlayableMediaItem;
 import com.chickenkiller.upods2.models.Episod;
 import com.chickenkiller.upods2.models.Podcast;
@@ -27,6 +28,7 @@ public class ProfileManager {
     public static ProfileManager profileManager;
     private ArrayList<Podcast> downloadedPodcasts;
     private ArrayList<Podcast> subscribedPodcasts;
+    private IOperationFinishCallback profileSavedCallback;
 
     private ProfileManager() {
         this.downloadedPodcasts = new ArrayList<>();
@@ -63,6 +65,10 @@ public class ProfileManager {
             profileManager = new ProfileManager();
         }
         return profileManager;
+    }
+
+    public void setOperationFinishCallback(IOperationFinishCallback profileSavedCallback) {
+        this.profileSavedCallback = profileSavedCallback;
     }
 
     public ArrayList<Podcast> getDownloadedPodcasts() {
@@ -164,11 +170,11 @@ public class ProfileManager {
      * @param mediaItem
      * @return id of string which is status of medida item (i.e downloaded, subscribed etc)
      */
-    public int getItemStatus(IPlayableMediaItem mediaItem){
-        if(mediaItem instanceof  Podcast){
-            if(Podcast.hasPodcastWithName(downloadedPodcasts, (Podcast) mediaItem)){
+    public int getItemStatus(IPlayableMediaItem mediaItem) {
+        if (mediaItem instanceof Podcast) {
+            if (Podcast.hasPodcastWithName(downloadedPodcasts, (Podcast) mediaItem)) {
                 return R.string.downloaded;
-            }else if(Podcast.hasPodcastWithName(downloadedPodcasts, (Podcast) mediaItem)){
+            } else if (Podcast.hasPodcastWithName(downloadedPodcasts, (Podcast) mediaItem)) {
                 return R.string.subscribed;
             }
         }
@@ -190,6 +196,9 @@ public class ProfileManager {
             } catch (JSONException e) {
                 Log.e(PROFILE, "Can't parse profile string to json: " + profileJsonStr);
                 e.printStackTrace();
+            }
+            if (profileSavedCallback != null) {
+                profileSavedCallback.operationFinished();
             }
         }
     }
