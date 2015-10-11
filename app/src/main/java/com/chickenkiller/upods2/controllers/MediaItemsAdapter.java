@@ -47,6 +47,7 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     private Context mContext;
     private IFragmentsManager fragmentsManager;
     private IContentLoadListener iContentLoadListener;
+    private View.OnClickListener cardClickListener;
 
     private static class ViewHolderCardItem extends RecyclerView.ViewHolder {
         public ImageViewSquare imgSquare;
@@ -152,19 +153,7 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             }
 
             holder.itemView.setTag(currentItem);
-            ((ViewHolderCardItem) holder).setCardClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    FragmentMediaItemDetails fragmentMediaItemDetails = new FragmentMediaItemDetails();
-                    if (items.get(position) instanceof IPlayableMediaItem) {
-                        fragmentMediaItemDetails.setPlayableItem((IPlayableMediaItem) items.get(position));
-                    }
-                    if (!fragmentsManager.hasFragment(FragmentMediaItemDetails.TAG)) {
-                        fragmentsManager.showFragment(R.id.fl_window, fragmentMediaItemDetails, FragmentMediaItemDetails.TAG,
-                                IFragmentsManager.FragmentOpenType.OVERLAY, IFragmentsManager.FragmentAnimationType.BOTTOM_TOP);
-                    }
-                }
-            });
+            ((ViewHolderCardItem) holder).setCardClickListener(getCardClickListener(position));
         } else if (holder instanceof ViewHolderMediaItemTitle) {//Title
             MediaItemTitle currentItem = (MediaItemTitle) items.get(position);
             ((ViewHolderMediaItemTitle) holder).tvMediaCardTitle.setText(currentItem.getTitle());
@@ -179,6 +168,22 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             }
             holder.itemView.setTag(currentItem);
         }
+    }
+
+    private View.OnClickListener getCardClickListener(final int position) {
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FragmentMediaItemDetails fragmentMediaItemDetails = new FragmentMediaItemDetails();
+                if (items.get(position) instanceof IPlayableMediaItem) {
+                    fragmentMediaItemDetails.setPlayableItem((IPlayableMediaItem) items.get(position));
+                }
+                if (!fragmentsManager.hasFragment(FragmentMediaItemDetails.TAG)) {
+                    fragmentsManager.showFragment(R.id.fl_window, fragmentMediaItemDetails, FragmentMediaItemDetails.TAG,
+                            IFragmentsManager.FragmentOpenType.OVERLAY, IFragmentsManager.FragmentAnimationType.BOTTOM_TOP);
+                }
+            }
+        };
     }
 
     @Override

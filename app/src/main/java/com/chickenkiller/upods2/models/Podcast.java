@@ -63,7 +63,9 @@ public class Podcast extends MediaItem implements IPlayableMediaItem, ITrackable
                 this.releaseDate = jsonItem.has("release_date") ? jsonItem.getString("release_date") : "";
                 this.explicitness = jsonItem.has("explicitness") ? jsonItem.getString("explicitness") : "";
                 this.trackCount = jsonItem.has("track_count") ? jsonItem.getString("track_count") : "";
-                this.genre = jsonItem.has("genre") ? jsonItem.getString("genre") : "";
+                if (jsonItem.has("genres") && jsonItem.getJSONArray("genres").length() > 0) {
+                    this.genre = jsonItem.getJSONArray("genres").getString(0);
+                }
                 if (jsonItem.has("episods")) {
                     JSONArray jsonEpisods = jsonItem.getJSONArray("episods");
                     for (int i = 0; i < jsonEpisods.length(); i++) {
