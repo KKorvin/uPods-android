@@ -4,7 +4,6 @@
     android:layout_height="fill_parent"
     android:orientation="vertical">
 
-
     <TextView
         android:id="@+id/tvCategoryName"
         android:layout_width="wrap_content"
@@ -13,8 +12,8 @@
         android:layout_marginBottom="15dp"
         android:layout_marginLeft="15dp"
         android:layout_marginTop="15dp"
-        android:text="@string/top40_chanels"
-        android:textColor="@color/gray_202020"
-        android:textSize="@dimen/default_text_size_18" />
+        android:text="@string/categories_example"
+        android:textColor="@color/green_800"
+        android:textSize="@dimen/default_text_size_16" />
 
 </LinearLayout>

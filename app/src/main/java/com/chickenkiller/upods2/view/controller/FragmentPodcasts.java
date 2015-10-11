@@ -37,6 +37,10 @@ public class FragmentPodcasts extends Fragment implements ICustumziedBackPress {
         vpPodcasts.setAdapter(podcastsPagesAdapter);
 
         tlPodcastsTabs = (TabLayout) view.findViewById(R.id.tlPodcastsTabs);
+        tlPodcastsTabs.setBackgroundResource(R.color.color_primary);
+
+        //Tabs color
+        //tlPodcastsTabs.setTabTextColors(R.color.white_material, R.color.viewPagerNotSelectedWhite);
 
         // Workaround for Google's bugs
         // See https://code.google.com/p/android/issues/detail?id=180462

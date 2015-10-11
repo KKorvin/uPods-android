@@ -13,8 +13,9 @@
         android:layout_marginLeft="15dp"
         android:text="@string/top40_chanels"
         android:textColor="@color/gray_202020"
+        android:fontFamily="sans-serif-medium"
         android:textSize="@dimen/default_text_size_18"
-        android:textStyle="bold" />
+         />
 
     <TextView
         android:id="@+id/tvMediaCardSubTitle"

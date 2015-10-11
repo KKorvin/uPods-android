@@ -8,4 +8,15 @@
         <item name="colorAccent">@color/red_500</item>
     </style>
 
+    <style name="MyCustomTabLayout" parent="Widget.Design.TabLayout">
+        <item name="tabTextAppearance">@style/MyCustomTabTextAppearance</item>
+        <item name="tabSelectedTextColor">@color/white_material</item>
+    </style>
+
+    <style name="MyCustomTabTextAppearance" parent="TextAppearance.Design.Tab">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/viewPagerNotSelectedWhite</item>
+        <item name="textAllCaps">true</item>
+    </style>
+
 </resources>

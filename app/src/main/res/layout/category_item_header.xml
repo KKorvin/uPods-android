@@ -12,9 +12,10 @@
         android:layout_marginBottom="15dp"
         android:layout_marginLeft="15dp"
         android:layout_marginTop="15dp"
-        android:text="@string/top40_chanels"
+        android:text="@string/categories"
         android:textColor="@color/gray_202020"
-        android:textSize="@dimen/default_text_size_18"
-        android:textStyle="bold" />
+        android:textSize="@dimen/default_text_size_20"
+        android:fontFamily="sans-serif-medium"
+        />
 
 </LinearLayout>
