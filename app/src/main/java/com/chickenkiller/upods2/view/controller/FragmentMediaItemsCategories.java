@@ -66,6 +66,7 @@ public class FragmentMediaItemsCategories extends Fragment implements AdapterVie
             mediaItemType = MediaItemType.PODCAST;
         }
 
+        //Listview categories
         LayoutInflater Li = LayoutInflater.from(getActivity());
         View categoriesHeader = Li.inflate(R.layout.category_item_header, null);
         ((TextView) categoriesHeader.findViewById(R.id.tvCategoriesHeader)).setText(getString(R.string.categories));
@@ -81,7 +82,8 @@ public class FragmentMediaItemsCategories extends Fragment implements AdapterVie
         }
 
         categoriesAdapter = new CategoriesAdapter(getActivity(), R.layout.category_item, categories);
-        lvCategories.addHeaderView(categoriesHeader);
+        lvCategories.addHeaderView(categoriesHeader, null, false);
+        lvCategories.setHeaderDividersEnabled(false);
         lvCategories.setAdapter(categoriesAdapter);
         lvCategories.setOnItemClickListener(this);
 
