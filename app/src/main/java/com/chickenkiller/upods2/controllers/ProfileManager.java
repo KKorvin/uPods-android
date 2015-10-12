@@ -160,7 +160,8 @@ public class ProfileManager {
     public void removeSubscribedMediaItem(IPlayableMediaItem mediaItem) {
         if (mediaItem instanceof Podcast) {
             if (Podcast.hasPodcastWithName(subscribedPodcasts, (Podcast) mediaItem)) {
-                subscribedPodcasts.remove((Podcast) mediaItem);
+                Podcast podcast = Podcast.getPodcastByName(subscribedPodcasts, (Podcast) mediaItem);
+                subscribedPodcasts.remove(podcast);
                 saveChanges(ProfileItem.SUBSCRIBDED_PODCASTS);
             }
         }
