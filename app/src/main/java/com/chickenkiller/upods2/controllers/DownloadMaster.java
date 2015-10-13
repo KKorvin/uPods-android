@@ -155,6 +155,7 @@ public class DownloadMaster {
     public void cancelDownload(String itemName) {
         DownloadManager downloadManager = (DownloadManager) UpodsApplication.getContext().getSystemService(Context.DOWNLOAD_SERVICE);
         DownloadTask task = getTaskByName(itemName);
+        task.progressUpdater = null;
         downloadManager.remove(task.downloadId);
         allTasks.remove(task);
         Log.i(DM_LOG, "Task for item name: " + itemName + " canceled ");

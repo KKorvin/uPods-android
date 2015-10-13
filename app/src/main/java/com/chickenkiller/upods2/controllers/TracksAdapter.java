@@ -100,38 +100,22 @@ public class TracksAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         }
     }
 
-    private View.OnClickListener getPlayClickListener(final int position) {
-        return new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                DownloadMaster.getInstance().cleanProgressInterfaces();
-                Track track = tracks.get(position);
-                if (iPlayableMediaItem instanceof ITrackable) {
-                    ((ITrackable) iPlayableMediaItem).selectTrack(track);
-                }
-                Intent myIntent = new Intent(mContext, ActivityPlayer.class);
-                UniversalPlayer.getInstance().setMediaItem(iPlayableMediaItem);
-                mContext.startActivity(myIntent);
-                ((Activity) mContext).finish();
-            }
-        };
-    }
-
+    /**
+     * Handles logic of download button and progress bar. Including all click listener and progress updates.
+     *
+     * @param holder
+     * @param currentTrack
+     * @param position
+     */
     private void initDownloadBtn(final RecyclerView.ViewHolder holder, final Track currentTrack, final int position) {
-        /* For progress br test
-        ((ViewHolderTrack) holder).btnDownload.setVisibility(View.GONE);
-        ((ViewHolderTrack) holder).cvDownloadProgress.setVisibility(View.VISIBLE);
-        ((ViewHolderTrack) holder).cvDownloadProgress.setValue(40f);
-        return;*/
-
         final boolean isDownloaed = ProfileManager.getInstance().isDownloaded(iPlayableMediaItem, currentTrack);
-        if (isDownloaed) {
+        if (isDownloaed) {//Already downloaded item
             ((ViewHolderTrack) holder).btnDownload.setVisibility(View.VISIBLE);
             ((ViewHolderTrack) holder).cvDownloadProgress.setVisibility(View.INVISIBLE);
             ((ViewHolderTrack) holder).btnDownload.setText(mContext.getString(R.string.play));
             ((ViewHolderTrack) holder).btnDownload.setOnClickListener(getPlayClickListener(position));
             //Play audeo
-        } else if (DownloadMaster.getInstance().isItemDownloading(currentTrack.getTitle())) {
+        } else if (DownloadMaster.getInstance().isItemDownloading(currentTrack.getTitle())) {//still in downloading progress
             ((ViewHolderTrack) holder).btnDownload.setVisibility(View.INVISIBLE);
             ((ViewHolderTrack) holder).cvDownloadProgress.setVisibility(View.VISIBLE);
             DownloadMaster.DownloadTask task = DownloadMaster.getInstance().getTaskByName(currentTrack.getTitle());
@@ -140,7 +124,7 @@ public class TracksAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 task.progressUpdater = getDownloadProgressUpdater(holder);
                 task.contentLoadListener = getContentLoadListener(holder, position);
             }
-        } else {
+        } else {//normal state
             ((ViewHolderTrack) holder).cvDownloadProgress.setVisibility(View.INVISIBLE);
             ((ViewHolderTrack) holder).btnDownload.setVisibility(View.VISIBLE);
             ((ViewHolderTrack) holder).btnDownload.setText(mContext.getString(R.string.download));
@@ -158,6 +142,7 @@ public class TracksAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 }
             });
         }
+        ((ViewHolderTrack) holder).cvDownloadProgress.setOnClickListener(getDownloadCancellListener(holder, currentTrack));
     }
 
     private IUIProgressUpdater getDownloadProgressUpdater(final RecyclerView.ViewHolder holder) {
@@ -179,6 +164,37 @@ public class TracksAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 ((ViewHolderTrack) holder).btnDownload.setOnClickListener(getPlayClickListener(position));
                 ((ViewHolderTrack) holder).btnDownload.setVisibility(View.VISIBLE);
                 ((ViewHolderTrack) holder).cvDownloadProgress.setVisibility(View.GONE);
+            }
+        };
+    }
+
+    private View.OnClickListener getPlayClickListener(final int position) {
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                DownloadMaster.getInstance().cleanProgressInterfaces();
+                Track track = tracks.get(position);
+                if (iPlayableMediaItem instanceof ITrackable) {
+                    ((ITrackable) iPlayableMediaItem).selectTrack(track);
+                }
+                Intent myIntent = new Intent(mContext, ActivityPlayer.class);
+                UniversalPlayer.getInstance().setMediaItem(iPlayableMediaItem);
+                mContext.startActivity(myIntent);
+                ((Activity) mContext).finish();
+            }
+        };
+    }
+
+    private View.OnClickListener getDownloadCancellListener(final RecyclerView.ViewHolder holder, final Track currentTrack) {
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                DownloadMaster.DownloadTask task = DownloadMaster.getInstance().getTaskByName(currentTrack.getTitle());
+                if (task != null) {
+                    DownloadMaster.getInstance().cancelDownload(currentTrack.getTitle());
+                    ((ViewHolderTrack) holder).btnDownload.setVisibility(View.VISIBLE);
+                    ((ViewHolderTrack) holder).cvDownloadProgress.setVisibility(View.INVISIBLE);
+                }
             }
         };
     }

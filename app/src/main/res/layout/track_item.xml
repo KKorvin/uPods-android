@@ -67,14 +67,13 @@
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:layout_marginRight="29dp"
-
+        android:clickable="true"
 
         android:visibility="visible"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
 
         CircleProgressView:cpv_barColor="#00796B"
-
         CircleProgressView:cpv_barWidth="5dp"
         CircleProgressView:cpv_rimWidth="5dp"
 
@@ -86,7 +85,7 @@
         CircleProgressView:cpv_showUnit="true"
         CircleProgressView:cpv_maxValue="100"
         CircleProgressView:cpv_rimColor="#B2DFDB"
-        CircleProgressView:cpv_seekMode="true"
+        CircleProgressView:cpv_seekMode="false"
         CircleProgressView:cpv_textColor="#00796B"
         CircleProgressView:cpv_unit="%"
         CircleProgressView:cpv_unitColor="#009688"
