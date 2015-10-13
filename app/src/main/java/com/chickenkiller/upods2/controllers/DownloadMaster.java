@@ -25,7 +25,7 @@ public class DownloadMaster {
     public static final String PODCASTS_DOWNLOAD_DIRECTORY = "/airtune";
 
     private static final String DM_LOG = "DownloadMaster";
-    private static final long PRGRESS_UPDATE_RATE = 500;
+    private static final long PRGRESS_UPDATE_RATE = 400;
     private static DownloadMaster downloadMaster;
     private ArrayList<DownloadTask> allTasks;
     private TimerTask progressUpdateTask;
@@ -34,6 +34,7 @@ public class DownloadMaster {
         public IPlayableMediaItem mediaItem;
         public Track track;
         public long downloadId;
+        public double lastProgress; //Last known progress for this task
         public IUIProgressUpdater progressUpdater;
         public IContentLoadListener contentLoadListener;
 
@@ -43,6 +44,7 @@ public class DownloadMaster {
             this.track = null;
             this.progressUpdater = null;
             this.contentLoadListener = null;
+            this.lastProgress = 0;
         }
     }
 
@@ -67,11 +69,11 @@ public class DownloadMaster {
         request.setDescription(task.track.getSubTitle());
         String trackName = GlobalUtils.getCleanFileName(task.track.getTitle()) + ".mp3";
         String mediaItemName = "/" + GlobalUtils.getCleanFileName(task.mediaItem.getName());
-        String finalPath = PODCASTS_DOWNLOAD_DIRECTORY+mediaItemName;
+        String finalPath = PODCASTS_DOWNLOAD_DIRECTORY + mediaItemName;
         request.setDestinationInExternalPublicDir(finalPath, trackName);
         task.downloadId = downloadManager.enqueue(request);
         allTasks.add(task);
-        Log.i(DM_LOG, "Starting download episod " + trackName + " to "  + finalPath);
+        Log.i(DM_LOG, "Starting download episod " + trackName + " to " + finalPath);
         runProgressUpdater();
     }
 
@@ -96,7 +98,7 @@ public class DownloadMaster {
         }
     }
 
-    private DownloadTask getTaskByName(String itemName) {
+    public DownloadTask getTaskByName(String itemName) {
         for (DownloadTask task : allTasks) {
             if (task.track.getTitle().equals(itemName)) {
                 return task;
@@ -105,7 +107,7 @@ public class DownloadMaster {
         return null;
     }
 
-    private DownloadTask getTaskById(long downloadId) {
+    public DownloadTask getTaskById(long downloadId) {
         for (DownloadTask task : allTasks) {
             if (task.downloadId == downloadId) {
                 return task;
@@ -132,6 +134,7 @@ public class DownloadMaster {
                 if (size != -1) progress = downloaded * 100.0 / size;
             }
             c.close();
+            task.lastProgress = progress;
         }
         return progress;
     }
