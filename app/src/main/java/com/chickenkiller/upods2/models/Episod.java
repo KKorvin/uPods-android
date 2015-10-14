@@ -105,6 +105,11 @@ public class Episod extends Track {
     }
 
     @Override
+    public String getInfo() {
+        return summary;
+    }
+
+    @Override
     public String getAudeoUrl() {
         if (pathOnDisk != null && !pathOnDisk.isEmpty()) {
             return pathOnDisk;

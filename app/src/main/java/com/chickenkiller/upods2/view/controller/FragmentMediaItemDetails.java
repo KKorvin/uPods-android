@@ -31,6 +31,7 @@ import com.chickenkiller.upods2.controllers.BackendManager;
 import com.chickenkiller.upods2.controllers.EpisodsXMLHandler;
 import com.chickenkiller.upods2.controllers.ProfileManager;
 import com.chickenkiller.upods2.controllers.TracksAdapter;
+import com.chickenkiller.upods2.interfaces.IFragmentsManager;
 import com.chickenkiller.upods2.interfaces.IMovable;
 import com.chickenkiller.upods2.interfaces.ISimpleRequestCallback;
 import com.chickenkiller.upods2.interfaces.IOverlayable;
@@ -135,6 +136,7 @@ public class FragmentMediaItemDetails extends Fragment implements View.OnTouchLi
     private void initTrackable() {
         //Tracks recycle view
         tracksAdapter = new TracksAdapter(playableItem, getActivity(), R.layout.track_item);
+        tracksAdapter.setFragmentsManager((IFragmentsManager) getActivity());
         rvTracks.setAdapter(tracksAdapter);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setOrientation(OrientationHelper.VERTICAL);

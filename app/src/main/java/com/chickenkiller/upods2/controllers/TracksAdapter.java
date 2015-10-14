@@ -18,6 +18,7 @@ import com.chickenkiller.upods2.interfaces.IPlayableMediaItem;
 import com.chickenkiller.upods2.interfaces.ITrackable;
 import com.chickenkiller.upods2.interfaces.IUIProgressUpdater;
 import com.chickenkiller.upods2.models.Track;
+import com.chickenkiller.upods2.view.controller.DialogFragmentTrackInfo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -94,7 +95,7 @@ public class TracksAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             ((ViewHolderTrack) holder).tvTitle.setText(currentTrack.getTitle());
             ((ViewHolderTrack) holder).tvSubTitle.setText(currentTrack.getSubTitle());
             ((ViewHolderTrack) holder).tvDate.setText(currentTrack.getDate());
-            ((ViewHolderTrack) holder).setClickListner(getPlayClickListener(position));
+            ((ViewHolderTrack) holder).setClickListner(getShowInfoClick(fragmentsManager, currentTrack));
             initDownloadBtn(holder, currentTrack, position);
             holder.itemView.setTag(currentTrack);
         }
@@ -195,6 +196,17 @@ public class TracksAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                     ((ViewHolderTrack) holder).btnDownload.setVisibility(View.VISIBLE);
                     ((ViewHolderTrack) holder).cvDownloadProgress.setVisibility(View.INVISIBLE);
                 }
+            }
+        };
+    }
+
+    private View.OnClickListener getShowInfoClick(final IFragmentsManager fragmentsManager, final Track track) {
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                DialogFragmentTrackInfo dialogFragmentTrackInfo = new DialogFragmentTrackInfo();
+                dialogFragmentTrackInfo.setTrack(track);
+                fragmentsManager.showDialogFragment(dialogFragmentTrackInfo);
             }
         };
     }

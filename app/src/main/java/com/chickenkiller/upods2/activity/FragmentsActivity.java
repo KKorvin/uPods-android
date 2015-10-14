@@ -1,19 +1,21 @@
 package com.chickenkiller.upods2.activity;
 
 import android.app.Activity;
+import android.app.DialogFragment;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
 
-import com.bumptech.glide.Glide;
 import com.chickenkiller.upods2.R;
 import com.chickenkiller.upods2.interfaces.IFragmentsManager;
 import com.chickenkiller.upods2.interfaces.IOverlayable;
 
+import java.util.Calendar;
+
 /**
  * Created by alonzilberman on 7/28/15.
  */
-public class FragmentsActivity extends Activity implements IFragmentsManager{
+public class FragmentsActivity extends Activity implements IFragmentsManager {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +46,13 @@ public class FragmentsActivity extends Activity implements IFragmentsManager{
     @Override
     public void showFragment(int id, Fragment fragment, String tag) {
         showFragment(id, fragment, tag, IFragmentsManager.FragmentOpenType.REPLACE, IFragmentsManager.FragmentAnimationType.DEFAULT);
+    }
+
+    @Override
+    public void showDialogFragment(DialogFragment dialogFragment) {
+        long time = Calendar.getInstance().get(Calendar.MILLISECOND);
+        String tag = "fr_dialog_" + String.valueOf(time);
+        dialogFragment.show(getFragmentManager(), tag);
     }
 
     @Override

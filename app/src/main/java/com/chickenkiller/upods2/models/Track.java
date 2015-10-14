@@ -25,6 +25,8 @@ public abstract class Track implements Serializable {
 
     public abstract String getSubTitle();
 
+    public abstract String getInfo();
+
     public void setTitle(String title) {
         this.title = title;
     }

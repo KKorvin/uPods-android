@@ -1,6 +1,7 @@
 package com.chickenkiller.upods2.interfaces;
 
 
+import android.app.DialogFragment;
 import android.app.Fragment;
 
 /**
@@ -16,6 +17,8 @@ public interface IFragmentsManager {
     void showFragment(int id, Fragment fragment, String tag, FragmentOpenType openType, FragmentAnimationType animationType);
 
     void showFragment(int id, Fragment fragment, String tag);
+
+    void showDialogFragment(DialogFragment dialogFragment);
 
     boolean hasFragment(String tag);
 
