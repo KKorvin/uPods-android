@@ -95,7 +95,7 @@ public class TracksAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             ((ViewHolderTrack) holder).tvTitle.setText(currentTrack.getTitle());
             ((ViewHolderTrack) holder).tvSubTitle.setText(currentTrack.getSubTitle());
             ((ViewHolderTrack) holder).tvDate.setText(currentTrack.getDate());
-            ((ViewHolderTrack) holder).setClickListner(getShowInfoClick(fragmentsManager, currentTrack));
+            ((ViewHolderTrack) holder).setClickListner(getShowInfoClick(fragmentsManager, currentTrack, position));
             initDownloadBtn(holder, currentTrack, position);
             holder.itemView.setTag(currentTrack);
         }
@@ -200,12 +200,13 @@ public class TracksAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         };
     }
 
-    private View.OnClickListener getShowInfoClick(final IFragmentsManager fragmentsManager, final Track track) {
+    private View.OnClickListener getShowInfoClick(final IFragmentsManager fragmentsManager, final Track track, final int position) {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 DialogFragmentTrackInfo dialogFragmentTrackInfo = new DialogFragmentTrackInfo();
                 dialogFragmentTrackInfo.setTrack(track);
+                dialogFragmentTrackInfo.setStreamClickListener(getPlayClickListener(position));
                 fragmentsManager.showDialogFragment(dialogFragmentTrackInfo);
             }
         };
