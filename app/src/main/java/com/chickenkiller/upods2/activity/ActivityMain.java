@@ -7,12 +7,18 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.view.ContextMenu;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.chickenkiller.upods2.R;
+import com.chickenkiller.upods2.interfaces.IContextMenuManager;
 import com.chickenkiller.upods2.interfaces.ICustumziedBackPress;
 import com.chickenkiller.upods2.interfaces.IOverlayable;
+import com.chickenkiller.upods2.interfaces.IPlayableMediaItem;
 import com.chickenkiller.upods2.interfaces.ISlidingMenuHolder;
 import com.chickenkiller.upods2.interfaces.IToolbarHolder;
 import com.chickenkiller.upods2.utils.UIHelper;
@@ -21,7 +27,7 @@ import com.chickenkiller.upods2.view.controller.FragmentSearch;
 import com.chickenkiller.upods2.view.controller.FragmentWellcome;
 import com.chickenkiller.upods2.view.controller.SlidingMenu;
 
-public class ActivityMain extends FragmentsActivity implements IOverlayable, IToolbarHolder, ISlidingMenuHolder {
+public class ActivityMain extends FragmentsActivity implements IOverlayable, IToolbarHolder, ISlidingMenuHolder, IContextMenuManager {
 
 
     private static final float MAX_OVERLAY_LEVEL = 0.8f;
@@ -31,6 +37,7 @@ public class ActivityMain extends FragmentsActivity implements IOverlayable, ITo
     private Toolbar toolbar;
     private SlidingMenu slidingMenu;
     private View vOverlay;
+    private Object currentContextMenuData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,11 +72,6 @@ public class ActivityMain extends FragmentsActivity implements IOverlayable, ITo
         isFirstRun = false;
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        return super.onOptionsItemSelected(item);
-    }
 
     @Override
     public void onBackPressed() {
@@ -144,5 +146,37 @@ public class ActivityMain extends FragmentsActivity implements IOverlayable, ITo
     @Override
     protected void onDestroy() {
         super.onDestroy();
+    }
+
+    @Override
+    public void openContextMenu(View view, Object dataToPass) {
+        registerForContextMenu(view);
+        openContextMenu(view);
+    }
+
+    @Override
+    public void onContextMenuClosed(Menu menu) {
+        currentContextMenuData = null;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (currentContextMenuData != null && currentContextMenuData instanceof IPlayableMediaItem) {
+            Toast.makeText(this, ((IPlayableMediaItem) currentContextMenuData).getName(), Toast.LENGTH_SHORT).show();
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_media_item_feature, menu);
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        return super.onContextItemSelected(item);
     }
 }

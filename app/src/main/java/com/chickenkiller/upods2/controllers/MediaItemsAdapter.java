@@ -9,12 +9,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.chickenkiller.upods2.R;
 import com.chickenkiller.upods2.interfaces.IContentLoadListener;
+import com.chickenkiller.upods2.interfaces.IContextMenuManager;
 import com.chickenkiller.upods2.interfaces.IFragmentsManager;
 import com.chickenkiller.upods2.interfaces.IPlayableMediaItem;
 import com.chickenkiller.upods2.models.BannersLayoutItem;
@@ -47,7 +49,6 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     private Context mContext;
     private IFragmentsManager fragmentsManager;
     private IContentLoadListener iContentLoadListener;
-    private View.OnClickListener cardClickListener;
 
     private static class ViewHolderCardItem extends RecyclerView.ViewHolder {
         public ImageViewSquare imgSquare;
@@ -56,10 +57,12 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         public TextView tvSquareSubTitle;
         public RatingBar rbMediaItem;
         public CardView cvSquare;
+        public ImageView imgCardMenuVert;
 
         public ViewHolderCardItem(View view) {
             super(view);
             this.imgSquare = (ImageViewSquare) view.findViewById(R.id.imgSquare);
+            this.imgCardMenuVert = (ImageView) view.findViewById(R.id.imgCardMenuVert);
             this.tvItemStatus = (TextView) view.findViewById(R.id.tvItemStatus);
             this.tvSquareTitle = (TextView) view.findViewById(R.id.tvSquareTitle);
             this.tvSquareSubTitle = (TextView) view.findViewById(R.id.tvSquareSubTitle);
@@ -74,6 +77,10 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
         public void setCardClickListener(View.OnClickListener cardClickListener) {
             cvSquare.setOnClickListener(cardClickListener);
+        }
+
+        public void setCardMenuClickListener(View.OnClickListener cardMenuClickListener) {
+            imgCardMenuVert.setOnClickListener(cardMenuClickListener);
         }
 
     }
@@ -154,6 +161,7 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
             holder.itemView.setTag(currentItem);
             ((ViewHolderCardItem) holder).setCardClickListener(getCardClickListener(position));
+            ((ViewHolderCardItem) holder).setCardMenuClickListener(getCardMenuClickListener(position));
         } else if (holder instanceof ViewHolderMediaItemTitle) {//Title
             MediaItemTitle currentItem = (MediaItemTitle) items.get(position);
             ((ViewHolderMediaItemTitle) holder).tvMediaCardTitle.setText(currentItem.getTitle());
@@ -181,6 +189,17 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                 if (!fragmentsManager.hasFragment(FragmentMediaItemDetails.TAG)) {
                     fragmentsManager.showFragment(R.id.fl_window, fragmentMediaItemDetails, FragmentMediaItemDetails.TAG,
                             IFragmentsManager.FragmentOpenType.OVERLAY, IFragmentsManager.FragmentAnimationType.BOTTOM_TOP);
+                }
+            }
+        };
+    }
+
+    private View.OnClickListener getCardMenuClickListener(final int position) {
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (items.get(position) instanceof IPlayableMediaItem && mContext instanceof IContextMenuManager) {
+                    ((IContextMenuManager) mContext).openContextMenu(view, items.get(position));
                 }
             }
         };

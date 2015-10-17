@@ -37,6 +37,7 @@
     <string name="languages">Languages</string>
     <string name="podcasts">Podcasts</string>
     <string name="search_results">Search results</string>
+    <string name="media_action">Media action</string>
 
     <!-- Trash staff block -->
     <string name="action_settings">Settings</string>
