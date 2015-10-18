@@ -80,7 +80,9 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         }
 
         public void setCardMenuClickListener(View.OnClickListener cardMenuClickListener) {
-            imgCardMenuVert.setOnClickListener(cardMenuClickListener);
+            if(imgCardMenuVert!=null) {
+                imgCardMenuVert.setOnClickListener(cardMenuClickListener);
+            }
         }
 
     }
