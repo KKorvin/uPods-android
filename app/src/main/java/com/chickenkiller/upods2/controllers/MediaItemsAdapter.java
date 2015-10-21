@@ -23,6 +23,7 @@ import com.chickenkiller.upods2.models.BannersLayoutItem;
 import com.chickenkiller.upods2.models.MediaItem;
 import com.chickenkiller.upods2.models.MediaItemTitle;
 import com.chickenkiller.upods2.models.ViewHolderBannersLayout;
+import com.chickenkiller.upods2.utils.ContextMenuType;
 import com.chickenkiller.upods2.view.controller.FragmentMediaItemDetails;
 import com.chickenkiller.upods2.views.ImageViewSquare;
 
@@ -201,7 +202,7 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             @Override
             public void onClick(View view) {
                 if (items.get(position) instanceof IPlayableMediaItem && mContext instanceof IContextMenuManager) {
-                    ((IContextMenuManager) mContext).openContextMenu(view, items.get(position));
+                    ((IContextMenuManager) mContext).openContextMenu(view, ContextMenuType.CARD_DEFAULT, items.get(position));
                 }
             }
         };

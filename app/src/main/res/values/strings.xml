@@ -76,6 +76,9 @@
     <string name="episod_notes">Episod notes</string>
     <string name="ok">OK</string>
     <string name="stream">Stream</string>
+    <string name="about_podcast">About podcast</string>
+    <string name="open_on_disk">Open on disk</string>
+    <string name="remove_all_episods">Remove all episods</string>
 
 
 </resources>

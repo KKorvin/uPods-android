@@ -31,14 +31,16 @@ import com.chickenkiller.upods2.controllers.BackendManager;
 import com.chickenkiller.upods2.controllers.EpisodsXMLHandler;
 import com.chickenkiller.upods2.controllers.ProfileManager;
 import com.chickenkiller.upods2.controllers.TracksAdapter;
+import com.chickenkiller.upods2.interfaces.IContextMenuManager;
 import com.chickenkiller.upods2.interfaces.IFragmentsManager;
 import com.chickenkiller.upods2.interfaces.IMovable;
-import com.chickenkiller.upods2.interfaces.ISimpleRequestCallback;
 import com.chickenkiller.upods2.interfaces.IOverlayable;
 import com.chickenkiller.upods2.interfaces.IPlayableMediaItem;
+import com.chickenkiller.upods2.interfaces.ISimpleRequestCallback;
 import com.chickenkiller.upods2.interfaces.ITrackable;
 import com.chickenkiller.upods2.models.Episod;
 import com.chickenkiller.upods2.models.Podcast;
+import com.chickenkiller.upods2.utils.ContextMenuType;
 import com.chickenkiller.upods2.utils.UIHelper;
 import com.chickenkiller.upods2.views.DetailsScrollView;
 
@@ -77,6 +79,7 @@ public class FragmentMediaItemDetails extends Fragment implements View.OnTouchLi
     private Button btnSubscribe;
     private ImageView imgDetailedTopCover;
     private ImageView imgBluredCover;
+    private ImageView imgMediaMore;
     private FloatingActionButton fbDetailsPlay;
     private TracksAdapter tracksAdapter;
     private ProgressBar pbTracks;
@@ -104,6 +107,7 @@ public class FragmentMediaItemDetails extends Fragment implements View.OnTouchLi
         btnSubscribe = (Button) view.findViewById(R.id.btnSubscribe);
         imgDetailedTopCover = (ImageView) view.findViewById(R.id.imgDetailedCover);
         imgBluredCover = (ImageView) view.findViewById(R.id.imgBluredCover);
+        imgMediaMore = (ImageView) view.findViewById(R.id.imgMediaMore);
         fbDetailsPlay = (FloatingActionButton) view.findViewById(R.id.fbDetailsPlay);
         svDetails = (DetailsScrollView) view.findViewById(R.id.svDetails);
         rvTracks = (RecyclerView) view.findViewById(R.id.rvTracks);
@@ -158,6 +162,13 @@ public class FragmentMediaItemDetails extends Fragment implements View.OnTouchLi
                         ProfileManager.getInstance().addSubscribedMediaItem((Podcast) playableItem);
                         btnSubscribe.setText(getString(R.string.unsubscribe));
                     }
+                }
+            });
+
+            imgMediaMore.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ((IContextMenuManager) getActivity()).openContextMenu(v, ContextMenuType.PODCAST_MIDDLE_SCREEN, (Podcast) playableItem);
                 }
             });
         }

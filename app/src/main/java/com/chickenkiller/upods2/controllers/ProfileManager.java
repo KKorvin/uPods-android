@@ -150,6 +150,13 @@ public class ProfileManager {
         return false;
     }
 
+    public boolean isDownloaded(IPlayableMediaItem mediaItem) {
+        if (mediaItem instanceof Podcast) {
+            return Podcast.hasPodcastWithName(downloadedPodcasts, (Podcast) mediaItem);
+        }
+        return false;
+    }
+
     public boolean isSubscribedToMediaItem(IPlayableMediaItem mediaItem) {
         if (mediaItem instanceof Podcast) {
             return Podcast.hasPodcastWithName(subscribedPodcasts, (Podcast) mediaItem);

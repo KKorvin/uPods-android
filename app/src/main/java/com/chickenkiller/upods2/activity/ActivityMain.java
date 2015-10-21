@@ -15,12 +15,15 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.chickenkiller.upods2.R;
+import com.chickenkiller.upods2.controllers.ProfileManager;
 import com.chickenkiller.upods2.interfaces.IContextMenuManager;
 import com.chickenkiller.upods2.interfaces.ICustumziedBackPress;
 import com.chickenkiller.upods2.interfaces.IOverlayable;
 import com.chickenkiller.upods2.interfaces.IPlayableMediaItem;
 import com.chickenkiller.upods2.interfaces.ISlidingMenuHolder;
 import com.chickenkiller.upods2.interfaces.IToolbarHolder;
+import com.chickenkiller.upods2.models.Podcast;
+import com.chickenkiller.upods2.utils.ContextMenuType;
 import com.chickenkiller.upods2.utils.UIHelper;
 import com.chickenkiller.upods2.view.controller.FragmentMainFeatured;
 import com.chickenkiller.upods2.view.controller.FragmentSearch;
@@ -38,6 +41,7 @@ public class ActivityMain extends FragmentsActivity implements IOverlayable, ITo
     private SlidingMenu slidingMenu;
     private View vOverlay;
     private Object currentContextMenuData;
+    private ContextMenuType contextMenuType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -149,7 +153,9 @@ public class ActivityMain extends FragmentsActivity implements IOverlayable, ITo
     }
 
     @Override
-    public void openContextMenu(View view, Object dataToPass) {
+    public void openContextMenu(View view, ContextMenuType type, Object dataToPass) {
+        currentContextMenuData = dataToPass;
+        contextMenuType = type;
         registerForContextMenu(view);
         openContextMenu(view);
     }
@@ -157,6 +163,7 @@ public class ActivityMain extends FragmentsActivity implements IOverlayable, ITo
     @Override
     public void onContextMenuClosed(Menu menu) {
         currentContextMenuData = null;
+        contextMenuType = null;
     }
 
     @Override
@@ -171,8 +178,17 @@ public class ActivityMain extends FragmentsActivity implements IOverlayable, ITo
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_media_item_feature, menu);
+        if (contextMenuType == ContextMenuType.PODCAST_MIDDLE_SCREEN) {
+            MenuInflater inflater = getMenuInflater();
+            inflater.inflate(R.menu.menu_podcast_middle_screen, menu);
+            if (ProfileManager.getInstance().isDownloaded((Podcast) currentContextMenuData)) {
+                menu.add(getString(R.string.open_on_disk));
+                menu.add(getString(R.string.remove_all_episods));
+            }
+        } else {
+            MenuInflater inflater = getMenuInflater();
+            inflater.inflate(R.menu.menu_media_item_feature, menu);
+        }
     }
 
     @Override
