@@ -22,7 +22,6 @@ public class DialogFragmentTrackInfo extends DialogFragment {
     public static final String TAG = "df_track_info";
     private View.OnClickListener streamClickListener;
     private Track track;
-    private WebView wbTrackInfo;
 
 
     public Dialog onCreateDialog(Bundle savedInstanceState) {

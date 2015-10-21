@@ -33,7 +33,10 @@ public class EpisodsXMLHandler extends DefaultHandler {
     private Episod episod = null;
     private ArrayList<Episod> allEpisods;
 
+    private String podcastSummary;
+
     public EpisodsXMLHandler() {
+        this.podcastSummary = "";
         allEpisods = new ArrayList<>();
     }
 
@@ -84,6 +87,14 @@ public class EpisodsXMLHandler extends DefaultHandler {
                 episod.setDuration(elementValue.toString());
             else if (localName.equalsIgnoreCase(PUBDATE))
                 episod.setDate(GlobalUtils.parserDateToMonth(elementValue.toString()));
+        } else {
+            if (qName.equalsIgnoreCase(SUMMARY1))
+                podcastSummary = elementValue.toString();
+            else if (localName.equalsIgnoreCase(SUMMARY2) && podcastSummary.isEmpty())
+                podcastSummary = elementValue.toString();
+            else if (qName.equalsIgnoreCase(SUMMARY3)
+                    && podcastSummary.isEmpty())
+                podcastSummary = elementValue.toString();
         }
         if (localName.equals(ITEM_TITLE)) {
             isItem = false;
@@ -107,5 +118,9 @@ public class EpisodsXMLHandler extends DefaultHandler {
 
     public ArrayList<Episod> getParsedEpisods() {
         return this.allEpisods;
+    }
+
+    public String getPodcastSummary() {
+        return podcastSummary;
     }
 }

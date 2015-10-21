@@ -241,6 +241,9 @@ public class FragmentMediaItemDetails extends Fragment implements View.OnTouchLi
                                     if (playableItem instanceof ITrackable) {
                                         ((ITrackable) playableItem).setTracks(parsedEpisods);
                                     }
+                                    if (playableItem instanceof Podcast) {
+                                        ((Podcast) playableItem).setDescription(episodsXMLHandler.getPodcastSummary());
+                                    }
                                     tracksAdapter.addItems(parsedEpisods);
                                     rvTracks.setVisibility(View.VISIBLE);
                                     pbTracks.setVisibility(View.GONE);

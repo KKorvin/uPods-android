@@ -25,6 +25,7 @@ import com.chickenkiller.upods2.interfaces.IToolbarHolder;
 import com.chickenkiller.upods2.models.Podcast;
 import com.chickenkiller.upods2.utils.ContextMenuType;
 import com.chickenkiller.upods2.utils.UIHelper;
+import com.chickenkiller.upods2.view.controller.DialogFragmentMessage;
 import com.chickenkiller.upods2.view.controller.FragmentMainFeatured;
 import com.chickenkiller.upods2.view.controller.FragmentSearch;
 import com.chickenkiller.upods2.view.controller.FragmentWellcome;
@@ -193,6 +194,13 @@ public class ActivityMain extends FragmentsActivity implements IOverlayable, ITo
 
     @Override
     public boolean onContextItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (currentContextMenuData != null && currentContextMenuData instanceof Podcast && id == R.id.about_podcast) {
+            DialogFragmentMessage dialogFragmentMessage = new DialogFragmentMessage();
+            dialogFragmentMessage.setTitle(((Podcast) currentContextMenuData).getName());
+            dialogFragmentMessage.setMessage(((Podcast) currentContextMenuData).getDescription());
+            showDialogFragment(dialogFragmentMessage);
+        }
         return super.onContextItemSelected(item);
     }
 }

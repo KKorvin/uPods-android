@@ -26,6 +26,7 @@ public class Podcast extends MediaItem implements IPlayableMediaItem, ITrackable
     protected String trackCount;
     protected String country;
     protected String genre;
+    protected String description;
 
     protected ArrayList<Episod> episods;
 
@@ -37,6 +38,7 @@ public class Podcast extends MediaItem implements IPlayableMediaItem, ITrackable
     public Podcast(JSONObject jsonItem) {
         this();
         try {
+            this.description = jsonItem.has("description") ? jsonItem.getString("description") : "";
             if (jsonItem.has("kind")) { //Itnes
                 this.id = jsonItem.has("trackId") ? jsonItem.getInt("trackId") : 0;
                 this.name = jsonItem.has("collectionName") ? jsonItem.getString("collectionName") : "";
@@ -93,6 +95,7 @@ public class Podcast extends MediaItem implements IPlayableMediaItem, ITrackable
             podcast.put("explicitness", this.explicitness);
             podcast.put("track_count", this.trackCount);
             podcast.put("genre", this.genre);
+            podcast.put("description", this.description);
             if (convertEpisods) {
                 podcast.put("episods", Episod.toJSONArray(this.episods));
             }
@@ -178,7 +181,7 @@ public class Podcast extends MediaItem implements IPlayableMediaItem, ITrackable
 
     @Override
     public String getDescription() {
-        return null;
+        return description;
     }
 
     @Override
@@ -270,6 +273,10 @@ public class Podcast extends MediaItem implements IPlayableMediaItem, ITrackable
 
     public ArrayList<Episod> getEpisods() {
         return episods;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     @Override
