@@ -300,4 +300,15 @@ public class Podcast extends MediaItem implements IPlayableMediaItem, ITrackable
             episod.isSelected = episod.equals(track) ? true : false;
         }
     }
+
+    public String getPathOnDisk() {
+        if (!episods.isEmpty()) {
+            for (Episod episod : episods) {
+                if (!episod.getPathOnDisk().isEmpty()) {
+                    return episod.getPathOnDisk();
+                }
+            }
+        }
+        return null;
+    }
 }

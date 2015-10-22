@@ -153,6 +153,10 @@ public class Episod extends Track {
         this.date = date;
     }
 
+    public String getPathOnDisk() {
+        return pathOnDisk;
+    }
+
     @Override
     public String getDate() {
         return this.date;

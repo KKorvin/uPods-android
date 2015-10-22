@@ -2,7 +2,9 @@ package com.chickenkiller.upods2.activity;
 
 import android.animation.ObjectAnimator;
 import android.app.FragmentManager;
+import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.widget.SearchView;
@@ -200,6 +202,13 @@ public class ActivityMain extends FragmentsActivity implements IOverlayable, ITo
             dialogFragmentMessage.setTitle(((Podcast) currentContextMenuData).getName());
             dialogFragmentMessage.setMessage(((Podcast) currentContextMenuData).getDescription());
             showDialogFragment(dialogFragmentMessage);
+        } else if (currentContextMenuData != null && currentContextMenuData instanceof Podcast
+                && item.getTitle().equals(getString(R.string.open_on_disk))) {
+            String path = ((Podcast) currentContextMenuData).getPathOnDisk();
+            Uri selectedUri = Uri.parse(path);
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.setDataAndType(selectedUri, "resource/folder");
+            startActivity(intent);
         }
         return super.onContextItemSelected(item);
     }
