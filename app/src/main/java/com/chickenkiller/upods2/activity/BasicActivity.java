@@ -5,17 +5,30 @@ import android.app.DialogFragment;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
 
 import com.chickenkiller.upods2.R;
+import com.chickenkiller.upods2.interfaces.IContextMenuManager;
 import com.chickenkiller.upods2.interfaces.IFragmentsManager;
 import com.chickenkiller.upods2.interfaces.IOverlayable;
+import com.chickenkiller.upods2.interfaces.OnActionFinished;
+import com.chickenkiller.upods2.utils.ContextMenuType;
 
 import java.util.Calendar;
 
 /**
  * Created by alonzilberman on 7/28/15.
+ * Extend this activity to get basic logic for context menu and fragments working
  */
-public class FragmentsActivity extends Activity implements IFragmentsManager {
+public class BasicActivity extends Activity implements IFragmentsManager, IContextMenuManager {
+
+    //For context menus
+    protected Object currentContextMenuData;
+    protected ContextMenuType contextMenuType;
+    protected OnActionFinished onContextItemSelected;
+    private boolean isContextItemSelected = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,5 +86,33 @@ public class FragmentsActivity extends Activity implements IFragmentsManager {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+    }
+
+    @Override
+    public void openContextMenu(View view, ContextMenuType type, Object dataToPass, OnActionFinished actionFinished) {
+        currentContextMenuData = dataToPass;
+        contextMenuType = type;
+        onContextItemSelected = actionFinished;
+        registerForContextMenu(view);
+        openContextMenu(view);
+    }
+
+    @Override
+    public void onContextMenuClosed(Menu menu) {
+        if (!isContextItemSelected) {
+            currentContextMenuData = null;
+            contextMenuType = null;
+            onContextItemSelected = null;
+        }
+        isContextItemSelected = false;
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        isContextItemSelected = true;
+        currentContextMenuData = null;
+        contextMenuType = null;
+        onContextItemSelected = null;
+        return super.onContextItemSelected(item);
     }
 }

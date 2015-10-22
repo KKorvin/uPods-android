@@ -2,15 +2,12 @@ package com.chickenkiller.upods2.activity;
 
 import android.animation.ObjectAnimator;
 import android.app.FragmentManager;
-import android.content.Intent;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.ContextMenu;
-import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,27 +15,21 @@ import android.widget.Toast;
 
 import com.chickenkiller.upods2.R;
 import com.chickenkiller.upods2.controllers.ProfileManager;
-import com.chickenkiller.upods2.interfaces.IContextMenuManager;
 import com.chickenkiller.upods2.interfaces.ICustumziedBackPress;
 import com.chickenkiller.upods2.interfaces.IOverlayable;
 import com.chickenkiller.upods2.interfaces.IPlayableMediaItem;
 import com.chickenkiller.upods2.interfaces.ISlidingMenuHolder;
 import com.chickenkiller.upods2.interfaces.IToolbarHolder;
-import com.chickenkiller.upods2.interfaces.OnActionFinished;
 import com.chickenkiller.upods2.models.Podcast;
+import com.chickenkiller.upods2.utils.ContextMenuHelper;
 import com.chickenkiller.upods2.utils.ContextMenuType;
-import com.chickenkiller.upods2.utils.GlobalUtils;
 import com.chickenkiller.upods2.utils.UIHelper;
-import com.chickenkiller.upods2.view.controller.DialogFragmentConfarmation;
-import com.chickenkiller.upods2.view.controller.DialogFragmentMessage;
 import com.chickenkiller.upods2.view.controller.FragmentMainFeatured;
 import com.chickenkiller.upods2.view.controller.FragmentSearch;
 import com.chickenkiller.upods2.view.controller.FragmentWellcome;
 import com.chickenkiller.upods2.view.controller.SlidingMenu;
 
-import java.io.File;
-
-public class ActivityMain extends FragmentsActivity implements IOverlayable, IToolbarHolder, ISlidingMenuHolder, IContextMenuManager {
+public class ActivityMain extends BasicActivity implements IOverlayable, IToolbarHolder, ISlidingMenuHolder{
 
 
     private static final float MAX_OVERLAY_LEVEL = 0.8f;
@@ -49,9 +40,6 @@ public class ActivityMain extends FragmentsActivity implements IOverlayable, ITo
     private SlidingMenu slidingMenu;
     private View vOverlay;
 
-    private Object currentContextMenuData;
-    private ContextMenuType contextMenuType;
-    private OnActionFinished contextItemSelected;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -162,18 +150,7 @@ public class ActivityMain extends FragmentsActivity implements IOverlayable, ITo
         super.onDestroy();
     }
 
-    @Override
-    public void openContextMenu(View view, ContextMenuType type, Object dataToPass, OnActionFinished actionFinished) {
-        currentContextMenuData = dataToPass;
-        contextMenuType = type;
-        contextItemSelected = actionFinished;
-        registerForContextMenu(view);
-        openContextMenu(view);
-    }
 
-    @Override
-    public void onContextMenuClosed(Menu menu) {
-    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -204,32 +181,13 @@ public class ActivityMain extends FragmentsActivity implements IOverlayable, ITo
     public boolean onContextItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (currentContextMenuData != null && currentContextMenuData instanceof Podcast && id == R.id.about_podcast) {
-            DialogFragmentMessage dialogFragmentMessage = new DialogFragmentMessage();
-            dialogFragmentMessage.setTitle(((Podcast) currentContextMenuData).getName());
-            dialogFragmentMessage.setMessage(((Podcast) currentContextMenuData).getDescription());
-            showDialogFragment(dialogFragmentMessage);
+            ContextMenuHelper.showAboutPodcastDialog((Podcast) currentContextMenuData, this);
         } else if (currentContextMenuData != null && currentContextMenuData instanceof Podcast
                 && item.getTitle().equals(getString(R.string.open_on_disk))) {
-            String path = ProfileManager.getInstance().getDownloadedMediaItemPath((IPlayableMediaItem) currentContextMenuData);
-            Uri selectedUri = Uri.parse(path);
-            Intent intent = new Intent(Intent.ACTION_VIEW);
-            intent.setDataAndType(selectedUri, "*/*");
-            startActivity(intent);
+            ContextMenuHelper.showPodcastInFolder((IPlayableMediaItem) currentContextMenuData, this);
         } else if (currentContextMenuData != null && currentContextMenuData instanceof Podcast
                 && item.getTitle().equals(getString(R.string.remove_all_episods))) {
-            DialogFragmentConfarmation dialogFragmentConfarmation = new DialogFragmentConfarmation();
-            dialogFragmentConfarmation.setTitle(((Podcast) currentContextMenuData).getName());
-            dialogFragmentConfarmation.setMessage(getString(R.string.remove_podcast_conformation));
-            dialogFragmentConfarmation.setPositiveClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    String path = ProfileManager.getInstance().getDownloadedMediaItemPath((IPlayableMediaItem) currentContextMenuData);
-                    GlobalUtils.deleteDirectory(new File(path));
-                    ProfileManager.getInstance().removeDownloadedMediaItem((IPlayableMediaItem) currentContextMenuData);
-                    contextItemSelected.onActionFinished();
-                }
-            });
-            showDialogFragment(dialogFragmentConfarmation);
+            ContextMenuHelper.removeAllDonwloadedEpisods(this, (Podcast) currentContextMenuData, onContextItemSelected);
         }
         return super.onContextItemSelected(item);
     }

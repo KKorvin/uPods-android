@@ -10,7 +10,7 @@ import com.chickenkiller.upods2.interfaces.IPlayableMediaItem;
 import com.chickenkiller.upods2.view.controller.FragmentMainFeatured;
 import com.chickenkiller.upods2.view.controller.FragmentPlayer;
 
-public class ActivityPlayer extends FragmentsActivity {
+public class ActivityPlayer extends BasicActivity {
 
     public static final String MEDIA_ITEM_EXTRA = "mediaItem";
     private IPlayableMediaItem currentMediaItem;
