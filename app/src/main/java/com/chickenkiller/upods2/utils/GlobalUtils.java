@@ -3,6 +3,7 @@ package com.chickenkiller.upods2.utils;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import java.io.File;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -62,4 +63,21 @@ public class GlobalUtils {
         return str.replaceAll("[^a-zA-Z0-9]+","_");
     }
 
+    public static boolean deleteDirectory(File path) {
+        if( path.exists() ) {
+            File[] files = path.listFiles();
+            if (files == null) {
+                return true;
+            }
+            for(int i=0; i<files.length; i++) {
+                if(files[i].isDirectory()) {
+                    deleteDirectory(files[i]);
+                }
+                else {
+                    files[i].delete();
+                }
+            }
+        }
+        return( path.delete() );
+    }
 }

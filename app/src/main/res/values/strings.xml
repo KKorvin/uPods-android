@@ -79,6 +79,8 @@
     <string name="about_podcast">About podcast</string>
     <string name="open_on_disk">Open on disk</string>
     <string name="remove_all_episods">Remove all episods</string>
+    <string name="cancel">Cancel</string>
+    <string name="remove_podcast_conformation">Are you sure you want to delete all downloaded episods for this podcast?</string>
 
 
 </resources>

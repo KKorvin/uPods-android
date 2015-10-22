@@ -38,6 +38,7 @@ import com.chickenkiller.upods2.interfaces.IOverlayable;
 import com.chickenkiller.upods2.interfaces.IPlayableMediaItem;
 import com.chickenkiller.upods2.interfaces.ISimpleRequestCallback;
 import com.chickenkiller.upods2.interfaces.ITrackable;
+import com.chickenkiller.upods2.interfaces.OnActionFinished;
 import com.chickenkiller.upods2.models.Episod;
 import com.chickenkiller.upods2.models.Podcast;
 import com.chickenkiller.upods2.utils.ContextMenuType;
@@ -168,7 +169,12 @@ public class FragmentMediaItemDetails extends Fragment implements View.OnTouchLi
             imgMediaMore.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ((IContextMenuManager) getActivity()).openContextMenu(v, ContextMenuType.PODCAST_MIDDLE_SCREEN, (Podcast) playableItem);
+                    ((IContextMenuManager) getActivity()).openContextMenu(v, ContextMenuType.PODCAST_MIDDLE_SCREEN, (Podcast) playableItem, new OnActionFinished() {
+                        @Override
+                        public void onActionFinished() {
+                            tracksAdapter.notifyDataSetChanged();
+                        }
+                    });
                 }
             });
         }

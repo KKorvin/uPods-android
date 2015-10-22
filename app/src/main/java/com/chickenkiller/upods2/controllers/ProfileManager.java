@@ -140,6 +140,16 @@ public class ProfileManager {
         }
     }
 
+    public void removeDownloadedMediaItem(IPlayableMediaItem mediaItem) {
+        if (mediaItem instanceof Podcast) {
+            if (Podcast.hasPodcastWithName(downloadedPodcasts, (Podcast) mediaItem)) {
+                Podcast podcast = Podcast.getPodcastByName(downloadedPodcasts, (Podcast) mediaItem);
+                downloadedPodcasts.remove(podcast);
+                saveChanges(ProfileItem.DOWNLOADED_PODCASTS);
+            }
+        }
+    }
+
     public String getDownloadedMediaItemPath(IPlayableMediaItem mediaItem) {
         if (mediaItem instanceof Podcast) {
             if (Podcast.hasPodcastWithName(downloadedPodcasts, (Podcast) mediaItem)) {

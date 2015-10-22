@@ -202,7 +202,7 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             @Override
             public void onClick(View view) {
                 if (items.get(position) instanceof IPlayableMediaItem && mContext instanceof IContextMenuManager) {
-                    ((IContextMenuManager) mContext).openContextMenu(view, ContextMenuType.CARD_DEFAULT, items.get(position));
+                    ((IContextMenuManager) mContext).openContextMenu(view, ContextMenuType.CARD_DEFAULT, items.get(position), null);
                 }
             }
         };

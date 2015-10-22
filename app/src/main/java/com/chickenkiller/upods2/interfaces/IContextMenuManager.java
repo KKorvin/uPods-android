@@ -14,5 +14,5 @@ public interface IContextMenuManager {
      * @param type       - type of context menu to show
      * @param dataToPass - data which will be used for actions inside menu
      */
-    void openContextMenu(View view, ContextMenuType type, Object dataToPass);
+    void openContextMenu(View view, ContextMenuType type, Object dataToPass, OnActionFinished contextItemClicked);
 }
