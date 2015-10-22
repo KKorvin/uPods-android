@@ -204,10 +204,10 @@ public class ActivityMain extends FragmentsActivity implements IOverlayable, ITo
             showDialogFragment(dialogFragmentMessage);
         } else if (currentContextMenuData != null && currentContextMenuData instanceof Podcast
                 && item.getTitle().equals(getString(R.string.open_on_disk))) {
-            String path = ((Podcast) currentContextMenuData).getPathOnDisk();
+            String path = ProfileManager.getInstance().getDownloadedMediaItemPath((IPlayableMediaItem) currentContextMenuData);
             Uri selectedUri = Uri.parse(path);
             Intent intent = new Intent(Intent.ACTION_VIEW);
-            intent.setDataAndType(selectedUri, "resource/folder");
+            intent.setDataAndType(selectedUri, "*/*");
             startActivity(intent);
         }
         return super.onContextItemSelected(item);

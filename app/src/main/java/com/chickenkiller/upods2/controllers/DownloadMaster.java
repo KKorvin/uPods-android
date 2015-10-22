@@ -5,6 +5,7 @@ import android.app.DownloadManager.Request;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Environment;
 import android.util.Log;
 
 import com.chickenkiller.upods2.interfaces.IContentLoadListener;
@@ -32,6 +33,7 @@ public class DownloadMaster {
 
     public static class DownloadTask {
         public IPlayableMediaItem mediaItem;
+        public String filePath;
         public Track track;
         public long downloadId;
         public double lastProgress; //Last known progress for this task
@@ -40,6 +42,7 @@ public class DownloadMaster {
 
         DownloadTask() {
             this.downloadId = 0;
+            this.filePath = "";
             this.mediaItem = null;
             this.track = null;
             this.progressUpdater = null;
@@ -72,6 +75,7 @@ public class DownloadMaster {
         String finalPath = PODCASTS_DOWNLOAD_DIRECTORY + mediaItemName;
         request.setDestinationInExternalPublicDir(finalPath, trackName);
         task.downloadId = downloadManager.enqueue(request);
+        task.filePath = Environment.getExternalStoragePublicDirectory(finalPath) + "/" + trackName;
         allTasks.add(task);
         Log.i(DM_LOG, "Starting download episod " + trackName + " to " + finalPath);
         runProgressUpdater();
@@ -174,6 +178,7 @@ public class DownloadMaster {
             int columnIndex = c.getColumnIndex(DownloadManager.COLUMN_STATUS);
             if (task != null) {
                 if (DownloadManager.STATUS_SUCCESSFUL == c.getInt(columnIndex)) {
+                    task.track.setAudeoUrl(task.filePath);
                     ProfileManager.getInstance().addDownloadedTrack(task.mediaItem, task.track);
                     task.contentLoadListener.onContentLoaded();
                 }

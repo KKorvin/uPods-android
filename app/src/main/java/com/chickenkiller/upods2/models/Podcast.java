@@ -123,9 +123,9 @@ public class Podcast extends MediaItem implements IPlayableMediaItem, ITrackable
         return false;
     }
 
-    public static Podcast getPodcastByName(ArrayList<Podcast> podcasts, Podcast podcastToCheck) {
+    public static Podcast getPodcastByName(ArrayList<Podcast> podcasts, Podcast podcastToget) {
         for (Podcast podcast : podcasts) {
-            if (podcast.getName().equals(podcastToCheck.getName())) {
+            if (podcast.getName().equals(podcastToget.getName())) {
                 return podcast;
             }
         }
@@ -301,14 +301,5 @@ public class Podcast extends MediaItem implements IPlayableMediaItem, ITrackable
         }
     }
 
-    public String getPathOnDisk() {
-        if (!episods.isEmpty()) {
-            for (Episod episod : episods) {
-                if (!episod.getPathOnDisk().isEmpty()) {
-                    return episod.getPathOnDisk();
-                }
-            }
-        }
-        return null;
-    }
+
 }

@@ -140,6 +140,18 @@ public class ProfileManager {
         }
     }
 
+    public String getDownloadedMediaItemPath(IPlayableMediaItem mediaItem) {
+        if (mediaItem instanceof Podcast) {
+            if (Podcast.hasPodcastWithName(downloadedPodcasts, (Podcast) mediaItem)) {
+                Podcast podcast = Podcast.getPodcastByName(downloadedPodcasts, (Podcast) mediaItem);
+                for (Episod episod : podcast.getEpisods()) {
+                    return episod.getAudeoUrl().replaceFirst("/.[^/]+mp3$","");
+                }
+            }
+        }
+        return "";
+    }
+
     public boolean isDownloaded(IPlayableMediaItem mediaItem, Track track) {
         if (mediaItem instanceof Podcast && track instanceof Episod) {
             if (Podcast.hasPodcastWithName(downloadedPodcasts, (Podcast) mediaItem)) {
