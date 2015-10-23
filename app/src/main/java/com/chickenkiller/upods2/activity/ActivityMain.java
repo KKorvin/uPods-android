@@ -16,6 +16,7 @@ import android.widget.Toast;
 import com.chickenkiller.upods2.R;
 import com.chickenkiller.upods2.controllers.app.ProfileManager;
 import com.chickenkiller.upods2.fragments.FragmentMainFeatured;
+import com.chickenkiller.upods2.fragments.FragmentMediaItemsGrid;
 import com.chickenkiller.upods2.fragments.FragmentSearch;
 import com.chickenkiller.upods2.fragments.FragmentWellcome;
 import com.chickenkiller.upods2.interfaces.ICustumziedBackPress;
@@ -28,16 +29,17 @@ import com.chickenkiller.upods2.models.Podcast;
 import com.chickenkiller.upods2.models.Track;
 import com.chickenkiller.upods2.utils.ContextMenuHelper;
 import com.chickenkiller.upods2.utils.ContextMenuType;
+import com.chickenkiller.upods2.utils.MediaItemType;
 import com.chickenkiller.upods2.utils.UIHelper;
 import com.chickenkiller.upods2.views.SlidingMenu;
 
 public class ActivityMain extends BasicActivity implements IOverlayable, IToolbarHolder, ISlidingMenuHolder {
 
+    public static boolean isFirstRun = true;
 
     private static final float MAX_OVERLAY_LEVEL = 0.8f;
     private static final int FRAGMENT_TRANSACTION_TIME = 300;
     private static final int WELLCOME_SCREEN_TIME = 2000;
-    private static boolean isFirstRun = true;
     private Toolbar toolbar;
     private SlidingMenu slidingMenu;
     private View vOverlay;
@@ -65,21 +67,21 @@ public class ActivityMain extends BasicActivity implements IOverlayable, IToolba
             new Handler().postDelayed(new Runnable() {
                 public void run() {
                     toolbar.setVisibility(View.VISIBLE);
-                    showFragment(R.id.fl_content, new FragmentMainFeatured(), FragmentMainFeatured.TAG);
+                    FragmentMediaItemsGrid fragmentMediaItemsGrid = new FragmentMediaItemsGrid();
+                    fragmentMediaItemsGrid.setMediaItemType(MediaItemType.RADIO);
+                    showFragment(R.id.fl_content, fragmentMediaItemsGrid, FragmentMediaItemsGrid.TAG);
                 }
             }, WELLCOME_SCREEN_TIME);
         } else {
             toolbar.setVisibility(View.VISIBLE);
             showFragment(R.id.fl_content, new FragmentMainFeatured(), FragmentMainFeatured.TAG);
         }
-
         isFirstRun = false;
     }
 
 
     @Override
     public void onBackPressed() {
-
         if (getFragmentManager().findFragmentByTag(getLatestFragmentTag()) instanceof ICustumziedBackPress) {
             boolean performBackPress = ((ICustumziedBackPress) getFragmentManager().findFragmentByTag(getLatestFragmentTag())).onBackPressed();
             if (!performBackPress) {
@@ -90,11 +92,8 @@ public class ActivityMain extends BasicActivity implements IOverlayable, IToolba
         //TODO change
         slidingMenu.getAdapter().clearRowSelections();
         slidingMenu.getAdapter().notifyDataSetChanged();
-
         if (getFragmentManager().getBackStackEntryCount() > 0) {
-            if (getLatestFragmentTag().equals(FragmentMainFeatured.TAG)) {
-                finish();
-            } else if (getLatestFragmentTag().equals(FragmentSearch.TAG)) {
+            if (getLatestFragmentTag().equals(FragmentSearch.TAG)) {
                 toolbar.getMenu().findItem(R.id.action_search).collapseActionView();
                 getFragmentManager().popBackStack();
             } else {

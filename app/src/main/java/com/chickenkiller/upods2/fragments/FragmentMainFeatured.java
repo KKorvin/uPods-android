@@ -10,20 +10,19 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
 import com.chickenkiller.upods2.R;
-import com.chickenkiller.upods2.controllers.internet.BackendManager;
-import com.chickenkiller.upods2.views.GridSpacingItemDecoration;
 import com.chickenkiller.upods2.controllers.adaperts.MediaItemsAdapter;
+import com.chickenkiller.upods2.controllers.internet.BackendManager;
 import com.chickenkiller.upods2.controllers.player.SmallPlayer;
 import com.chickenkiller.upods2.interfaces.IContentLoadListener;
 import com.chickenkiller.upods2.interfaces.IFragmentsManager;
 import com.chickenkiller.upods2.interfaces.IRequestCallback;
-import com.chickenkiller.upods2.interfaces.ISlidingMenuHolder;
 import com.chickenkiller.upods2.interfaces.IToolbarHolder;
 import com.chickenkiller.upods2.models.MediaItem;
 import com.chickenkiller.upods2.models.MediaItemTitle;
 import com.chickenkiller.upods2.models.RadioItem;
 import com.chickenkiller.upods2.utils.ServerApi;
 import com.chickenkiller.upods2.views.AutofitRecyclerView;
+import com.chickenkiller.upods2.views.GridSpacingItemDecoration;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -68,8 +67,6 @@ public class FragmentMainFeatured extends Fragment implements IContentLoadListen
                 }
             });
         }
-        ((IToolbarHolder) getActivity()).getToolbar().setTitle(R.string.radio_main);
-        ((ISlidingMenuHolder) getActivity()).setSlidingMenuHeader(getString(R.string.radio_main));
 
         //Featured adapter
         mediaItemsAdapter = new MediaItemsAdapter(getActivity(), R.layout.card_media_item_vertical,

@@ -9,35 +9,44 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.chickenkiller.upods2.R;
-import com.chickenkiller.upods2.controllers.adaperts.PodcastsPagesAdapter;
+import com.chickenkiller.upods2.controllers.adaperts.MediaPagesAdapter;
 import com.chickenkiller.upods2.controllers.app.ProfileManager;
 import com.chickenkiller.upods2.controllers.player.SmallPlayer;
 import com.chickenkiller.upods2.interfaces.ICustumziedBackPress;
 import com.chickenkiller.upods2.interfaces.IOperationFinishCallback;
 import com.chickenkiller.upods2.interfaces.ISlidingMenuHolder;
 import com.chickenkiller.upods2.interfaces.IToolbarHolder;
+import com.chickenkiller.upods2.utils.MediaItemType;
+
+import java.util.Calendar;
 
 /**
  * Created by alonzilberman on 8/8/15.
  */
-public class FragmentPodcasts extends Fragment implements ICustumziedBackPress {
+public class FragmentMediaItemsGrid extends Fragment implements ICustumziedBackPress {
 
-    public static final String TAG = "fragment_podcasts";
+    public static final String TAG;
     private static final int CATEGORIES_FRAGMENT_POSITION = 3;
-    private ViewPager vpPodcasts;
-    private PodcastsPagesAdapter podcastsPagesAdapter;
-    private TabLayout tlPodcastsTabs;
+    private ViewPager vpMedia;
+    private MediaPagesAdapter mediaPagesAdapter;
+    private TabLayout vpMediaTabs;
     private SmallPlayer smallPlayer;
+    private MediaItemType mediaItemType;
+
+    static {
+        long time = Calendar.getInstance().get(Calendar.MILLISECOND);
+        TAG = "f_media_grid" + String.valueOf(time);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_podcasts, container, false);
-        podcastsPagesAdapter = new PodcastsPagesAdapter(getFragmentManager());
-        vpPodcasts = (ViewPager) view.findViewById(R.id.vpPodcasts);
-        vpPodcasts.setAdapter(podcastsPagesAdapter);
+        mediaPagesAdapter = new MediaPagesAdapter(getFragmentManager(), mediaItemType);
+        vpMedia = (ViewPager) view.findViewById(R.id.vpMedia);
+        vpMedia.setAdapter(mediaPagesAdapter);
 
-        tlPodcastsTabs = (TabLayout) view.findViewById(R.id.tlPodcastsTabs);
-        tlPodcastsTabs.setBackgroundResource(R.color.color_primary);
+        vpMediaTabs = (TabLayout) view.findViewById(R.id.tlMediaTabs);
+        vpMediaTabs.setBackgroundResource(R.color.color_primary);
 
         //Tabs color
         //tlPodcastsTabs.setTabTextColors(R.color.white_material, R.color.viewPagerNotSelectedWhite);
@@ -45,15 +54,21 @@ public class FragmentPodcasts extends Fragment implements ICustumziedBackPress {
         // Workaround for Google's bugs
         // See https://code.google.com/p/android/issues/detail?id=180462
 
-        tlPodcastsTabs.post(new Runnable() {
+        vpMediaTabs.post(new Runnable() {
             @Override
             public void run() {
-                tlPodcastsTabs.setupWithViewPager(vpPodcasts);
+                vpMediaTabs.setupWithViewPager(vpMedia);
             }
         });
 
-        ((IToolbarHolder) getActivity()).getToolbar().setTitle(R.string.podcasts);
-        ((ISlidingMenuHolder) getActivity()).setSlidingMenuHeader(getString(R.string.podcasts_main));
+        if (mediaItemType == MediaItemType.PODCAST) {
+            ((IToolbarHolder) getActivity()).getToolbar().setTitle(R.string.podcasts);
+            ((ISlidingMenuHolder) getActivity()).setSlidingMenuHeader(getString(R.string.podcasts_main));
+        } else {
+            ((IToolbarHolder) getActivity()).getToolbar().setTitle(R.string.radio_main);
+            ((ISlidingMenuHolder) getActivity()).setSlidingMenuHeader(getString(R.string.radio_main));
+        }
+
 
         smallPlayer = new SmallPlayer(view, getActivity());
 
@@ -61,11 +76,15 @@ public class FragmentPodcasts extends Fragment implements ICustumziedBackPress {
         ProfileManager.getInstance().setOperationFinishCallback(new IOperationFinishCallback() {
             @Override
             public void operationFinished() {
-                podcastsPagesAdapter.notifyDataSetChanged();
+                mediaPagesAdapter.notifyDataSetChanged();
             }
         });
 
         return view;
+    }
+
+    public void setMediaItemType(MediaItemType mediaItemType) {
+        this.mediaItemType = mediaItemType;
     }
 
     @Override
@@ -77,11 +96,13 @@ public class FragmentPodcasts extends Fragment implements ICustumziedBackPress {
 
     @Override
     public boolean onBackPressed() {
-        if (vpPodcasts.getCurrentItem() == CATEGORIES_FRAGMENT_POSITION) {
-            FragmentMediaItemsCategories fCategories = (FragmentMediaItemsCategories) vpPodcasts.getAdapter().instantiateItem(vpPodcasts, vpPodcasts.getCurrentItem());
+        if (mediaItemType == MediaItemType.PODCAST && vpMedia.getCurrentItem() == CATEGORIES_FRAGMENT_POSITION) {
+            FragmentMediaItemsCategories fCategories = (FragmentMediaItemsCategories) vpMedia.getAdapter().instantiateItem(vpMedia, vpMedia.getCurrentItem());
             if (fCategories instanceof ICustumziedBackPress) {
                 return fCategories.onBackPressed();
             }
+        } else if (mediaItemType == MediaItemType.RADIO) {
+            getActivity().finish();
         }
         return true;
     }

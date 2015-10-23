@@ -1,11 +1,13 @@
 package com.chickenkiller.upods2.models;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.chickenkiller.upods2.interfaces.IPlayableMediaItem;
 import com.chickenkiller.upods2.utils.GlobalUtils;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -16,6 +18,7 @@ import java.util.ArrayList;
 public class RadioItem extends MediaItem implements IPlayableMediaItem {
 
     private final static String DEFAULT_IMAGE = "https://upods.io/static/radio_stations/default/no_image.png";
+    private static final String RADIO_LOG = "RADIO_LOG";
 
     protected String name;
     protected String streamUrl;
@@ -113,6 +116,36 @@ public class RadioItem extends MediaItem implements IPlayableMediaItem {
         }
         return coverImageUrl;
     }
+
+    public JSONObject toJSON() {
+        JSONObject radioItem = new JSONObject();
+        try {
+            radioItem.put("id", this.id);
+            radioItem.put("name", this.name);
+            radioItem.put("stream_url", this.streamUrl);
+            radioItem.put("cover_image_url", this.coverImageUrl);
+            radioItem.put("banner_image_url", this.bannerImageUrl);
+            radioItem.put("description", this.description);
+            radioItem.put("website", this.website);
+            radioItem.put("facebook", this.facebook);
+            radioItem.put("twitter", this.twitter);
+            radioItem.put("country", this.country);
+            radioItem.put("genre", this.genre);
+        } catch (JSONException e) {
+            Log.e(RADIO_LOG, "Can't convert radio to json");
+            e.printStackTrace();
+        }
+        return radioItem;
+    }
+
+    public static JSONArray toJsonArray(ArrayList<RadioItem> radioItems) {
+        JSONArray jsonRadioItems = new JSONArray();
+        for (RadioItem radioItem : radioItems) {
+            jsonRadioItems.put(radioItem.toJSON());
+        }
+        return jsonRadioItems;
+    }
+
 
     @Override
     public String getSubHeader() {

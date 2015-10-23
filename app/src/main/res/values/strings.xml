@@ -84,6 +84,9 @@
     <string name="delete">Delete</string>
     <string name="episod_removed">Episod removed</string>
     <string name="marks_as_played">Mark played</string>
+    <string name="page_subscribed">Subscribed</string>
+    <string name="page_recent">Recent</string>
+    <string name="recently_played">Recently played</string>
 
 
 </resources>

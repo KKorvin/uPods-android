@@ -114,24 +114,6 @@ public class Podcast extends MediaItem implements IPlayableMediaItem, ITrackable
         return jsonPodcasts;
     }
 
-    public static boolean hasPodcastWithName(ArrayList<Podcast> podcasts, Podcast podcastToCheck) {
-        for (Podcast podcast : podcasts) {
-            if (podcast.getName().equals(podcastToCheck.getName())) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public static Podcast getPodcastByName(ArrayList<Podcast> podcasts, Podcast podcastToget) {
-        for (Podcast podcast : podcasts) {
-            if (podcast.getName().equals(podcastToget.getName())) {
-                return podcast;
-            }
-        }
-        return null;
-    }
-
     public Podcast(Podcast podcast) {
         this.name = podcast.getName();
         this.censoredName = podcast.getCensoredName();

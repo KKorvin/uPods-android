@@ -17,6 +17,7 @@ import com.chickenkiller.upods2.interfaces.IUpdateableFragment;
 import com.chickenkiller.upods2.models.MediaItem;
 import com.chickenkiller.upods2.models.MediaItemTitle;
 import com.chickenkiller.upods2.models.Podcast;
+import com.chickenkiller.upods2.models.RadioItem;
 import com.chickenkiller.upods2.utils.MediaItemType;
 
 import java.util.ArrayList;
@@ -57,6 +58,18 @@ public class FragmentMediaItemsList extends Fragment implements IUpdateableFragm
             allItems.add(mediaItemTitle);
             ArrayList<Podcast> favoritePodcasts = ProfileManager.getInstance().getSubscribedPodcasts();
             allItems.addAll(favoritePodcasts);
+        } else if (mediaItemType == MediaItemType.RADIO_SUBSCRIBED) {
+            mediaItemTitle = new MediaItemTitle(getString(R.string.recently_subscribed));
+            mediaItemTitle.showButton = false;
+            allItems.add(mediaItemTitle);
+            ArrayList<RadioItem> subscribedRadioItems = ProfileManager.getInstance().getSubscribedRadioItems();
+            allItems.addAll(subscribedRadioItems);
+        } else if (mediaItemType == MediaItemType.RADIO_RECENT) {
+            mediaItemTitle = new MediaItemTitle(getString(R.string.recently_played));
+            mediaItemTitle.showButton = false;
+            allItems.add(mediaItemTitle);
+            ArrayList<RadioItem> recentRadioItems = ProfileManager.getInstance().getRecentRadioItems();
+            allItems.addAll(recentRadioItems);
         }
 
         mediaItemsAdapter = new MediaItemsAdapter(getActivity(), R.layout.card_media_item_horizontal, R.layout.media_item_title, allItems);
@@ -83,6 +96,12 @@ public class FragmentMediaItemsList extends Fragment implements IUpdateableFragm
         } else if (mediaItemType == MediaItemType.PODCAST_FAVORITE) {
             ArrayList<Podcast> favoritePodcasts = ProfileManager.getInstance().getSubscribedPodcasts();
             allItems.addAll(favoritePodcasts);
+        } else if (mediaItemType == MediaItemType.RADIO_SUBSCRIBED) {
+            ArrayList<RadioItem> subscribedRadioItems = ProfileManager.getInstance().getSubscribedRadioItems();
+            allItems.addAll(subscribedRadioItems);
+        } else if (mediaItemType == MediaItemType.RADIO_RECENT) {
+            ArrayList<RadioItem> recentRadioItems = ProfileManager.getInstance().getRecentRadioItems();
+            allItems.addAll(recentRadioItems);
         }
         mediaItemsAdapter.clearItems();
         mediaItemsAdapter.addItems(allItems);

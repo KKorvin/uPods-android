@@ -11,14 +11,14 @@ import android.widget.Toast;
 
 import com.andexert.library.RippleView;
 import com.chickenkiller.upods2.R;
+import com.chickenkiller.upods2.fragments.FragmentMediaItemsGrid;
+import com.chickenkiller.upods2.fragments.FragmentSettings;
 import com.chickenkiller.upods2.interfaces.IFragmentsManager;
 import com.chickenkiller.upods2.interfaces.ISlidingMenuManager;
 import com.chickenkiller.upods2.models.SlidingMenuHeader;
 import com.chickenkiller.upods2.models.SlidingMenuItem;
 import com.chickenkiller.upods2.models.SlidingMenuRow;
-import com.chickenkiller.upods2.fragments.FragmentMainFeatured;
-import com.chickenkiller.upods2.fragments.FragmentPodcasts;
-import com.chickenkiller.upods2.fragments.FragmentSettings;
+import com.chickenkiller.upods2.utils.MediaItemType;
 
 import java.util.List;
 
@@ -143,11 +143,13 @@ public class SlidingMenuAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                         FragmentSettings settingsFragment = new FragmentSettings();
                         fragmentsManager.showFragment(R.id.fl_content, settingsFragment, FragmentSettings.TAG);
                     } else if (clickedMenuItem.getTitle().equals(context.getString(R.string.podcasts_main))) {
-                        FragmentPodcasts fragmentPodcasts = new FragmentPodcasts();
-                        fragmentsManager.showFragment(R.id.fl_content, fragmentPodcasts, FragmentPodcasts.TAG);
+                        FragmentMediaItemsGrid fragmentMediaItemsGrid = new FragmentMediaItemsGrid();
+                        fragmentMediaItemsGrid.setMediaItemType(MediaItemType.PODCAST);
+                        fragmentsManager.showFragment(R.id.fl_content, fragmentMediaItemsGrid, FragmentMediaItemsGrid.TAG);
                     } else if (clickedMenuItem.getTitle().equals(context.getString(R.string.radio_main))) {
-                        FragmentMainFeatured fragmentMainFeatured = new FragmentMainFeatured();
-                        fragmentsManager.showFragment(R.id.fl_content, fragmentMainFeatured, FragmentMainFeatured.TAG);
+                        FragmentMediaItemsGrid fragmentMediaItemsGrid = new FragmentMediaItemsGrid();
+                        fragmentMediaItemsGrid.setMediaItemType(MediaItemType.RADIO);
+                        fragmentsManager.showFragment(R.id.fl_content, fragmentMediaItemsGrid, FragmentMediaItemsGrid.TAG);
                     } else {
                         Toast.makeText(context, "TEST" + clickedMenuItem.getTitle(), Toast.LENGTH_SHORT).show();
                     }
