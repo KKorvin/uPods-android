@@ -10,7 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -173,9 +172,8 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             ((ViewHolderMediaItemTitle) holder).tvMediaCardTitle.setText(currentItem.getTitle());
             if (currentItem.getSubTitle().isEmpty()) {
                 ((ViewHolderMediaItemTitle) holder).tvMediaCardSubTitle.setVisibility(View.GONE);
-                RelativeLayout.LayoutParams llp = new RelativeLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
-                        RelativeLayout.LayoutParams.WRAP_CONTENT);
-                llp.setMargins(25, 25, 0, 7);
+                RelativeLayout.LayoutParams llp = (RelativeLayout.LayoutParams) ((ViewHolderMediaItemTitle) holder).tvMediaCardTitle.getLayoutParams();
+                llp.setMargins(15, 50, 0, 7);
                 ((ViewHolderMediaItemTitle) holder).tvMediaCardTitle.setLayoutParams(llp);
             } else {
                 ((ViewHolderMediaItemTitle) holder).tvMediaCardSubTitle.setVisibility(View.VISIBLE);
