@@ -91,7 +91,6 @@ public class FragmentPodcastFeatured extends Fragment implements IContentLoadLis
         showTops();
 
 
-
         return view;
     }
 
@@ -104,7 +103,9 @@ public class FragmentPodcastFeatured extends Fragment implements IContentLoadLis
                             public void run() {
                                 try {
                                     ArrayList<MediaItem> topPodcasts = new ArrayList<MediaItem>();
-                                    topPodcasts.add(new MediaItemTitle(getString(R.string.top40_podcasts), getString(R.string.top40_podcasts_long)));
+                                    MediaItemTitle mediaItemTitle = new MediaItemTitle(getString(R.string.top40_podcasts), getString(R.string.top40_podcasts_long));
+                                    mediaItemTitle.showButton = true;
+                                    topPodcasts.add(mediaItemTitle);
                                     topPodcasts.addAll(Podcast.withJsonArray(jResponse.getJSONArray("result")));
                                     mediaItemsAdapter.addItems(topPodcasts);
                                     GridSpacingItemDecoration gridSpacingItemDecoration = new GridSpacingItemDecoration(rvMain.getSpanCount(), FragmentMainFeatured.MEDIA_ITEMS_CARDS_MARGIN, true);

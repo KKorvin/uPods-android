@@ -107,7 +107,9 @@ public class FragmentMainFeatured extends Fragment implements IContentLoadListen
                             public void run() {
                                 try {
                                     ArrayList<MediaItem> topRadioStations = new ArrayList<MediaItem>();
-                                    topRadioStations.add(new MediaItemTitle(getString(R.string.top40_chanels), getString(R.string.top40_chanels_subheader)));
+                                    MediaItemTitle mediaItemTitle = new MediaItemTitle(getString(R.string.top40_chanels), getString(R.string.top40_chanels_subheader));
+                                    mediaItemTitle.showButton = true;
+                                    topRadioStations.add(mediaItemTitle);
                                     topRadioStations.addAll(RadioItem.withJsonArray(jResponse.getJSONArray("result"), getActivity()));
                                     mediaItemsAdapter.addItems(topRadioStations);
                                     GridSpacingItemDecoration gridSpacingItemDecoration = new GridSpacingItemDecoration(rvMain.getSpanCount(), MEDIA_ITEMS_CARDS_MARGIN, true);
