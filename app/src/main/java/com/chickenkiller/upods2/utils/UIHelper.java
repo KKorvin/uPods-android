@@ -8,6 +8,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.chickenkiller.upods2.controllers.app.UpodsApplication;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -58,5 +60,11 @@ public class UIHelper {
                 }
             }
         }
+    }
+
+    public static int pixelsToDp(int value) {
+        float d = UpodsApplication.getContext().getResources().getDisplayMetrics().density;
+        int margin = (int) (value * d);
+        return margin;
     }
 }

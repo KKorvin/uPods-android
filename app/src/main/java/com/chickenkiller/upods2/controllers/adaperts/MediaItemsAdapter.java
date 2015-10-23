@@ -27,6 +27,7 @@ import com.chickenkiller.upods2.models.MediaItem;
 import com.chickenkiller.upods2.models.MediaItemTitle;
 import com.chickenkiller.upods2.models.ViewHolderBannersLayout;
 import com.chickenkiller.upods2.utils.ContextMenuType;
+import com.chickenkiller.upods2.utils.UIHelper;
 import com.chickenkiller.upods2.views.ImageViewSquare;
 
 import java.util.ArrayList;
@@ -173,7 +174,7 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             if (currentItem.getSubTitle().isEmpty()) {
                 ((ViewHolderMediaItemTitle) holder).tvMediaCardSubTitle.setVisibility(View.GONE);
                 RelativeLayout.LayoutParams llp = (RelativeLayout.LayoutParams) ((ViewHolderMediaItemTitle) holder).tvMediaCardTitle.getLayoutParams();
-                llp.setMargins(15, 50, 0, 7);
+                llp.setMargins(UIHelper.pixelsToDp(15), UIHelper.pixelsToDp(15), UIHelper.pixelsToDp(15), UIHelper.pixelsToDp(15));
                 ((ViewHolderMediaItemTitle) holder).tvMediaCardTitle.setLayoutParams(llp);
             } else {
                 ((ViewHolderMediaItemTitle) holder).tvMediaCardSubTitle.setVisibility(View.VISIBLE);
