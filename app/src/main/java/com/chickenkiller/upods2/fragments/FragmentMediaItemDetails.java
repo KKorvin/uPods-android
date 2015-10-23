@@ -150,7 +150,9 @@ public class FragmentMediaItemDetails extends Fragment implements View.OnTouchLi
         pbTracks.setVisibility(View.VISIBLE);
         svDetails.setVisibility(View.GONE);
         fbDetailsPlay.setVisibility(View.GONE);
+
         loadTracks();
+
         if (playableItem instanceof Podcast) {
             btnSubscribe.setText(ProfileManager.getInstance().isSubscribedToMediaItem((Podcast) playableItem) ? getString(R.string.unsubscribe) : getString(R.string.subscribe));
             btnSubscribe.setOnClickListener(new View.OnClickListener() {
@@ -228,6 +230,13 @@ public class FragmentMediaItemDetails extends Fragment implements View.OnTouchLi
     }
 
     private void loadTracks() {
+        if (playableItem instanceof Podcast && !((Podcast) playableItem).getEpisods().isEmpty()) {
+            tracksAdapter.addItems(((Podcast) playableItem).getEpisods());
+            rvTracks.setVisibility(View.VISIBLE);
+            pbTracks.setVisibility(View.GONE);
+            return;
+        }
+
         BackendManager.getInstance().sendRequest(((ITrackable) playableItem).getTracksFeed(), new ISimpleRequestCallback() {
                     @Override
                     public void onRequestSuccessed(final String response) {
