@@ -3,9 +3,14 @@
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:id="@+id/cvSquare"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
+    android:layout_height="90dp"
     android:layout_gravity="center"
-    android:layout_margin="@dimen/horizontal_card_margin"
+
+    android:layout_marginLeft="@dimen/horizontal_card_side_margin"
+    android:layout_marginRight="@dimen/horizontal_card_side_margin"
+    android:layout_marginTop="@dimen/horizantal_card_top_margin"
+    android:layout_marginBottom="@dimen/horizantal_card_top_margin"
+
     android:clickable="true"
     android:focusable="true"
     card_view:cardCornerRadius="@dimen/default_card_corner_radius">
@@ -34,6 +39,8 @@
             android:paddingLeft="7dp"
             android:paddingRight="7dp"
             android:text="Test text"
+            android:textSize="@dimen/default_text_size_16"
+            android:fontFamily="sans-serif-medium"
             android:textColor="@color/black" />
 
         <TextView
@@ -47,7 +54,8 @@
             android:paddingLeft="7dp"
             android:paddingRight="7dp"
             android:text="Test text"
-            android:textColor="@color/black" />
+            android:textColor="@color/media_card_subheader"
+ />
 
         <RatingBar
             android:id="@+id/rbMediaItem"
@@ -72,20 +80,20 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:layout_below="@+id/rbMediaItem"
+            android:layout_alignParentBottom="true"
             android:lines="1"
             android:maxLines="2"
             android:paddingLeft="7dp"
-            android:paddingRight="7dp"
             android:text="DOWNLOADED"
-            android:textColor="@color/black" />
+            android:textColor="@color/green_800" />
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/rbMediaItem"
+            android:layout_alignParentBottom="true"
             android:layout_toLeftOf="@+id/tvItemStatus"
-            android:src="@drawable/ic_help_circle_pink" />
+            android:layout_marginBottom="-3dp"
+            android:src="@drawable/cloud_download48" />
 
     </RelativeLayout>
 </android.support.v7.widget.CardView>
