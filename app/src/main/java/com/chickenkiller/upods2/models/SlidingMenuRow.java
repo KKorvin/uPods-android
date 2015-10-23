@@ -3,7 +3,7 @@ package com.chickenkiller.upods2.models;
 import android.content.Context;
 
 import com.chickenkiller.upods2.R;
-import com.chickenkiller.upods2.controllers.UpodsApplication;
+import com.chickenkiller.upods2.controllers.app.UpodsApplication;
 
 import java.util.ArrayList;
 import java.util.List;

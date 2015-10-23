@@ -2,7 +2,7 @@ package com.chickenkiller.upods2.models;
 
 import android.util.Log;
 
-import com.chickenkiller.upods2.controllers.BackendManager;
+import com.chickenkiller.upods2.controllers.internet.BackendManager;
 import com.chickenkiller.upods2.interfaces.IRequestCallback;
 import com.chickenkiller.upods2.utils.ServerApi;
 import com.pixplicity.easyprefs.library.Prefs;

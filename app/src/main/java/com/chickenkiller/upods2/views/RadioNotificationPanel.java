@@ -12,8 +12,8 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.NotificationTarget;
 import com.chickenkiller.upods2.R;
 import com.chickenkiller.upods2.activity.ActivityPlayer;
-import com.chickenkiller.upods2.controllers.MainBroadcastRecivier;
-import com.chickenkiller.upods2.controllers.UniversalPlayer;
+import com.chickenkiller.upods2.controllers.app.MainBroadcastRecivier;
+import com.chickenkiller.upods2.controllers.player.UniversalPlayer;
 import com.chickenkiller.upods2.models.RadioItem;
 
 /**

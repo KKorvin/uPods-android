@@ -5,10 +5,10 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.chickenkiller.upods2.R;
-import com.chickenkiller.upods2.controllers.UniversalPlayer;
+import com.chickenkiller.upods2.controllers.player.UniversalPlayer;
 import com.chickenkiller.upods2.interfaces.IPlayableMediaItem;
-import com.chickenkiller.upods2.view.controller.FragmentMainFeatured;
-import com.chickenkiller.upods2.view.controller.FragmentPlayer;
+import com.chickenkiller.upods2.fragments.FragmentMainFeatured;
+import com.chickenkiller.upods2.fragments.FragmentPlayer;
 
 public class ActivityPlayer extends BasicActivity {
 

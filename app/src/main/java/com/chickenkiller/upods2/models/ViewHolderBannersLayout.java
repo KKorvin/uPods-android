@@ -8,8 +8,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.chickenkiller.upods2.R;
-import com.chickenkiller.upods2.controllers.BackendManager;
-import com.chickenkiller.upods2.controllers.BannerItemsAdapter;
+import com.chickenkiller.upods2.controllers.internet.BackendManager;
+import com.chickenkiller.upods2.controllers.adaperts.BannerItemsAdapter;
 import com.chickenkiller.upods2.interfaces.IContentLoadListener;
 import com.chickenkiller.upods2.interfaces.IFragmentsManager;
 import com.chickenkiller.upods2.interfaces.IRequestCallback;

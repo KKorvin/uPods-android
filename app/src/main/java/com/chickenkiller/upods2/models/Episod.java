@@ -3,7 +3,7 @@ package com.chickenkiller.upods2.models;
 import android.text.format.Formatter;
 import android.util.Log;
 
-import com.chickenkiller.upods2.controllers.UpodsApplication;
+import com.chickenkiller.upods2.controllers.app.UpodsApplication;
 
 import org.json.JSONArray;
 import org.json.JSONException;

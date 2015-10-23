@@ -12,8 +12,8 @@ import android.view.View;
 import com.chickenkiller.upods2.R;
 import com.chickenkiller.upods2.interfaces.IContextMenuManager;
 import com.chickenkiller.upods2.interfaces.IFragmentsManager;
+import com.chickenkiller.upods2.interfaces.IOperationFinishCallback;
 import com.chickenkiller.upods2.interfaces.IOverlayable;
-import com.chickenkiller.upods2.interfaces.OnActionFinished;
 import com.chickenkiller.upods2.utils.ContextMenuType;
 
 import java.util.Calendar;
@@ -27,7 +27,7 @@ public class BasicActivity extends Activity implements IFragmentsManager, IConte
     //For context menus
     protected Object currentContextMenuData;
     protected ContextMenuType contextMenuType;
-    protected OnActionFinished onContextItemSelected;
+    protected IOperationFinishCallback onContextItemSelected;
     private boolean isContextItemSelected = false;
 
     @Override
@@ -89,7 +89,7 @@ public class BasicActivity extends Activity implements IFragmentsManager, IConte
     }
 
     @Override
-    public void openContextMenu(View view, ContextMenuType type, Object dataToPass, OnActionFinished actionFinished) {
+    public void openContextMenu(View view, ContextMenuType type, Object dataToPass, IOperationFinishCallback actionFinished) {
         currentContextMenuData = dataToPass;
         contextMenuType = type;
         onContextItemSelected = actionFinished;

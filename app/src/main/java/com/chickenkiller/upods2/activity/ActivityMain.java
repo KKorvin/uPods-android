@@ -14,7 +14,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.chickenkiller.upods2.R;
-import com.chickenkiller.upods2.controllers.ProfileManager;
+import com.chickenkiller.upods2.controllers.app.ProfileManager;
 import com.chickenkiller.upods2.interfaces.ICustumziedBackPress;
 import com.chickenkiller.upods2.interfaces.IOverlayable;
 import com.chickenkiller.upods2.interfaces.IPlayableMediaItem;
@@ -24,10 +24,10 @@ import com.chickenkiller.upods2.models.Podcast;
 import com.chickenkiller.upods2.utils.ContextMenuHelper;
 import com.chickenkiller.upods2.utils.ContextMenuType;
 import com.chickenkiller.upods2.utils.UIHelper;
-import com.chickenkiller.upods2.view.controller.FragmentMainFeatured;
-import com.chickenkiller.upods2.view.controller.FragmentSearch;
-import com.chickenkiller.upods2.view.controller.FragmentWellcome;
-import com.chickenkiller.upods2.view.controller.SlidingMenu;
+import com.chickenkiller.upods2.fragments.FragmentMainFeatured;
+import com.chickenkiller.upods2.fragments.FragmentSearch;
+import com.chickenkiller.upods2.fragments.FragmentWellcome;
+import com.chickenkiller.upods2.views.SlidingMenu;
 
 public class ActivityMain extends BasicActivity implements IOverlayable, IToolbarHolder, ISlidingMenuHolder{
 

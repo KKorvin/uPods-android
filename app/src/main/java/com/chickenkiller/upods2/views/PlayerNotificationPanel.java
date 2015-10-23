@@ -5,7 +5,7 @@ import android.content.Context;
 import android.support.v7.app.NotificationCompat;
 import android.widget.RemoteViews;
 
-import com.chickenkiller.upods2.controllers.UniversalPlayer;
+import com.chickenkiller.upods2.controllers.player.UniversalPlayer;
 import com.chickenkiller.upods2.models.MediaItem;
 
 /**

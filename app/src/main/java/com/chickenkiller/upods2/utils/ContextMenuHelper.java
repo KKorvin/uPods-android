@@ -6,13 +6,13 @@ import android.net.Uri;
 import android.view.View;
 
 import com.chickenkiller.upods2.R;
-import com.chickenkiller.upods2.controllers.ProfileManager;
+import com.chickenkiller.upods2.controllers.app.ProfileManager;
+import com.chickenkiller.upods2.dialogs.DialogFragmentConfarmation;
+import com.chickenkiller.upods2.dialogs.DialogFragmentMessage;
 import com.chickenkiller.upods2.interfaces.IFragmentsManager;
+import com.chickenkiller.upods2.interfaces.IOperationFinishCallback;
 import com.chickenkiller.upods2.interfaces.IPlayableMediaItem;
-import com.chickenkiller.upods2.interfaces.OnActionFinished;
 import com.chickenkiller.upods2.models.Podcast;
-import com.chickenkiller.upods2.view.controller.DialogFragmentConfarmation;
-import com.chickenkiller.upods2.view.controller.DialogFragmentMessage;
 
 import java.io.File;
 
@@ -37,7 +37,7 @@ public class ContextMenuHelper {
         activity.startActivity(intent);
     }
 
-    public static void removeAllDonwloadedEpisods(Activity activity, final Podcast podcast, final OnActionFinished contextItemSelected) {
+    public static void removeAllDonwloadedEpisods(Activity activity, final Podcast podcast, final IOperationFinishCallback contextItemSelected) {
         DialogFragmentConfarmation dialogFragmentConfarmation = new DialogFragmentConfarmation();
         dialogFragmentConfarmation.setTitle(podcast.getName());
         dialogFragmentConfarmation.setMessage(activity.getString(R.string.remove_podcast_conformation));
@@ -47,7 +47,7 @@ public class ContextMenuHelper {
                 String path = ProfileManager.getInstance().getDownloadedMediaItemPath(podcast);
                 GlobalUtils.deleteDirectory(new File(path));
                 ProfileManager.getInstance().removeDownloadedMediaItem(podcast);
-                contextItemSelected.onActionFinished();
+                contextItemSelected.operationFinished();
             }
         });
         ((IFragmentsManager) activity).showDialogFragment(dialogFragmentConfarmation);

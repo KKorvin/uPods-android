@@ -1,6 +1,6 @@
 package com.chickenkiller.upods2.interfaces;
 
-import com.chickenkiller.upods2.controllers.UniversalPlayer;
+import com.chickenkiller.upods2.controllers.player.UniversalPlayer;
 
 /**
  * Created by alonzilberman on 7/31/15.
