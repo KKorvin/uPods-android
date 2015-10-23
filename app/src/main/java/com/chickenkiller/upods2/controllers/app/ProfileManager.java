@@ -155,7 +155,21 @@ public class ProfileManager {
             if (Podcast.hasPodcastWithName(downloadedPodcasts, (Podcast) mediaItem)) {
                 Podcast podcast = Podcast.getPodcastByName(downloadedPodcasts, (Podcast) mediaItem);
                 for (Episod episod : podcast.getEpisods()) {
-                    return episod.getAudeoUrl().replaceFirst("/.[^/]+mp3$","");
+                    return episod.getAudeoUrl().replaceFirst("/.[^/]+mp3$", "");
+                }
+            }
+        }
+        return "";
+    }
+
+    public String getDownloadedTrackPath(IPlayableMediaItem mediaItem, Track track) {
+        if (mediaItem instanceof Podcast && track instanceof Episod) {
+            if (Podcast.hasPodcastWithName(downloadedPodcasts, (Podcast) mediaItem)) {
+                Podcast podcast = Podcast.getPodcastByName(downloadedPodcasts, (Podcast) mediaItem);
+                for (Episod episod : podcast.getEpisods()) {
+                    if (episod.getTitle().equals(track.getTitle())) {
+                        return episod.getAudeoUrl();
+                    }
                 }
             }
         }
