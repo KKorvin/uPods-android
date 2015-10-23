@@ -34,8 +34,8 @@ public class ContextMenuHelper {
     public static void showPodcastInFolder(IPlayableMediaItem mediaItemData, Activity activity) {
         String path = ProfileManager.getInstance().getDownloadedMediaItemPath(mediaItemData);
         Uri selectedUri = Uri.parse(path);
-        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-        intent.setDataAndType(selectedUri, "file/*");
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setDataAndType(selectedUri, "*/*");
         activity.startActivity(intent);
     }
 
