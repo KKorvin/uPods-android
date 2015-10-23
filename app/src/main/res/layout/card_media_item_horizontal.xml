@@ -11,10 +11,10 @@
     card_view:cardCornerRadius="@dimen/default_card_corner_radius">
 
     <RelativeLayout
-        android:padding="5dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="?android:attr/selectableItemBackground">
+        android:background="?android:attr/selectableItemBackground"
+        android:padding="5dp">
 
         <com.chickenkiller.upods2.views.ImageViewSquare
             android:id="@+id/imgSquare"
@@ -79,5 +79,13 @@
             android:paddingRight="7dp"
             android:text="DOWNLOADED"
             android:textColor="@color/black" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/rbMediaItem"
+            android:layout_toLeftOf="@+id/tvItemStatus"
+            android:src="@drawable/ic_help_circle_pink" />
+
     </RelativeLayout>
 </android.support.v7.widget.CardView>

@@ -171,7 +171,7 @@ public class Podcast extends MediaItem implements IPlayableMediaItem, ITrackable
 
     @Override
     public String getSubHeader() {
-        return this.genre;
+        return this.artistName;
     }
 
     @Override
