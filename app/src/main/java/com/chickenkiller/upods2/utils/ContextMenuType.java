@@ -5,5 +5,5 @@ package com.chickenkiller.upods2.utils;
  */
 public enum ContextMenuType {
 
-    CARD_DEFAULT, PODCAST_MIDDLE_SCREEN
+    CARD_DEFAULT, EPISOD_MIDDLE_SCREEN, PODCAST_MIDDLE_SCREEN
 }

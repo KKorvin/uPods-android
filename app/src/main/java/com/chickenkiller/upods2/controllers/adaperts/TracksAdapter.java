@@ -17,11 +17,15 @@ import com.chickenkiller.upods2.controllers.internet.DownloadMaster;
 import com.chickenkiller.upods2.controllers.player.UniversalPlayer;
 import com.chickenkiller.upods2.dialogs.DialogFragmentTrackInfo;
 import com.chickenkiller.upods2.interfaces.IContentLoadListener;
+import com.chickenkiller.upods2.interfaces.IContextMenuManager;
 import com.chickenkiller.upods2.interfaces.IFragmentsManager;
+import com.chickenkiller.upods2.interfaces.IOperationFinishCallback;
 import com.chickenkiller.upods2.interfaces.IPlayableMediaItem;
 import com.chickenkiller.upods2.interfaces.ITrackable;
 import com.chickenkiller.upods2.interfaces.IUIProgressUpdater;
+import com.chickenkiller.upods2.models.MediaItem;
 import com.chickenkiller.upods2.models.Track;
+import com.chickenkiller.upods2.utils.ContextMenuType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -64,10 +68,10 @@ public class TracksAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             rootView.setOnClickListener(clickListner);
         }
 
-
-        public void setDownloadBtnClickListener(View.OnClickListener clickListner) {
-            btnDownload.setOnClickListener(clickListner);
+        public void setLongClickListner(View.OnLongClickListener clickListner) {
+            rootView.setOnLongClickListener(clickListner);
         }
+
     }
 
 
@@ -99,6 +103,7 @@ public class TracksAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             ((ViewHolderTrack) holder).tvSubTitle.setText(currentTrack.getSubTitle());
             ((ViewHolderTrack) holder).tvDate.setText(currentTrack.getDate());
             ((ViewHolderTrack) holder).setClickListner(getShowInfoClick(fragmentsManager, currentTrack, position));
+            ((ViewHolderTrack) holder).setLongClickListner(getTrackLongClickListener(currentTrack));
             initDownloadBtn(holder, currentTrack, position);
             holder.itemView.setTag(currentTrack);
         }
@@ -211,6 +216,26 @@ public class TracksAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 dialogFragmentTrackInfo.setTrack(track);
                 dialogFragmentTrackInfo.setStreamClickListener(getPlayClickListener(position));
                 fragmentsManager.showDialogFragment(dialogFragmentTrackInfo);
+            }
+        };
+    }
+
+    private View.OnLongClickListener getTrackLongClickListener(final Track currentTrack) {
+        return new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                IOperationFinishCallback operationFinishCallback = new IOperationFinishCallback() {
+                    @Override
+                    public void operationFinished() {
+                        notifyDataSetChanged();
+                    }
+                };
+                MediaItem.MediaItemBucket bucket = new MediaItem.MediaItemBucket();
+                bucket.mediaItem = (MediaItem) iPlayableMediaItem;
+                bucket.track = (Track) currentTrack;
+                ((IContextMenuManager) mContext).openContextMenu(v, ContextMenuType.EPISOD_MIDDLE_SCREEN,
+                        bucket, operationFinishCallback);
+                return true;
             }
         };
     }

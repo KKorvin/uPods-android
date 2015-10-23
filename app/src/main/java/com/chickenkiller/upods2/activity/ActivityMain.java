@@ -15,21 +15,23 @@ import android.widget.Toast;
 
 import com.chickenkiller.upods2.R;
 import com.chickenkiller.upods2.controllers.app.ProfileManager;
+import com.chickenkiller.upods2.fragments.FragmentMainFeatured;
+import com.chickenkiller.upods2.fragments.FragmentSearch;
+import com.chickenkiller.upods2.fragments.FragmentWellcome;
 import com.chickenkiller.upods2.interfaces.ICustumziedBackPress;
 import com.chickenkiller.upods2.interfaces.IOverlayable;
 import com.chickenkiller.upods2.interfaces.IPlayableMediaItem;
 import com.chickenkiller.upods2.interfaces.ISlidingMenuHolder;
 import com.chickenkiller.upods2.interfaces.IToolbarHolder;
+import com.chickenkiller.upods2.models.MediaItem;
 import com.chickenkiller.upods2.models.Podcast;
+import com.chickenkiller.upods2.models.Track;
 import com.chickenkiller.upods2.utils.ContextMenuHelper;
 import com.chickenkiller.upods2.utils.ContextMenuType;
 import com.chickenkiller.upods2.utils.UIHelper;
-import com.chickenkiller.upods2.fragments.FragmentMainFeatured;
-import com.chickenkiller.upods2.fragments.FragmentSearch;
-import com.chickenkiller.upods2.fragments.FragmentWellcome;
 import com.chickenkiller.upods2.views.SlidingMenu;
 
-public class ActivityMain extends BasicActivity implements IOverlayable, IToolbarHolder, ISlidingMenuHolder{
+public class ActivityMain extends BasicActivity implements IOverlayable, IToolbarHolder, ISlidingMenuHolder {
 
 
     private static final float MAX_OVERLAY_LEVEL = 0.8f;
@@ -151,7 +153,6 @@ public class ActivityMain extends BasicActivity implements IOverlayable, IToolba
     }
 
 
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
@@ -164,15 +165,23 @@ public class ActivityMain extends BasicActivity implements IOverlayable, IToolba
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
+        MenuInflater inflater = getMenuInflater();
         if (contextMenuType == ContextMenuType.PODCAST_MIDDLE_SCREEN) {
-            MenuInflater inflater = getMenuInflater();
-            inflater.inflate(R.menu.menu_podcast_middle_screen, menu);
+            inflater.inflate(R.menu.menu_basic_sceleton, menu);
+            menu.add(getString(R.string.about_podcast));
             if (ProfileManager.getInstance().isDownloaded((Podcast) currentContextMenuData)) {
                 menu.add(getString(R.string.open_on_disk));
                 menu.add(getString(R.string.remove_all_episods));
             }
+        } else if (contextMenuType == ContextMenuType.EPISOD_MIDDLE_SCREEN) {
+            inflater.inflate(R.menu.menu_basic_sceleton, menu);
+            menu.add(getString(R.string.marks_as_played));
+            MediaItem mediaItem = ((MediaItem.MediaItemBucket) currentContextMenuData).mediaItem;
+            Track track = ((MediaItem.MediaItemBucket) currentContextMenuData).track;
+            if (ProfileManager.getInstance().isDownloaded((IPlayableMediaItem) mediaItem, track)) {
+                menu.add(getString(R.string.delete));
+            }
         } else {
-            MenuInflater inflater = getMenuInflater();
             inflater.inflate(R.menu.menu_media_item_feature, menu);
         }
     }
@@ -180,7 +189,8 @@ public class ActivityMain extends BasicActivity implements IOverlayable, IToolba
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if (currentContextMenuData != null && currentContextMenuData instanceof Podcast && id == R.id.about_podcast) {
+        if (currentContextMenuData != null && currentContextMenuData instanceof Podcast
+                && item.getTitle().equals(getString(R.string.about_podcast))) {
             ContextMenuHelper.showAboutPodcastDialog((Podcast) currentContextMenuData, this);
         } else if (currentContextMenuData != null && currentContextMenuData instanceof Podcast
                 && item.getTitle().equals(getString(R.string.open_on_disk))) {
@@ -188,6 +198,11 @@ public class ActivityMain extends BasicActivity implements IOverlayable, IToolba
         } else if (currentContextMenuData != null && currentContextMenuData instanceof Podcast
                 && item.getTitle().equals(getString(R.string.remove_all_episods))) {
             ContextMenuHelper.removeAllDonwloadedEpisods(this, (Podcast) currentContextMenuData, onContextItemSelected);
+        } else if (currentContextMenuData != null && currentContextMenuData instanceof MediaItem.MediaItemBucket
+                && item.getTitle().equals(getString(R.string.delete))) {
+            MediaItem mediaItem = ((MediaItem.MediaItemBucket) currentContextMenuData).mediaItem;
+            Track track = ((MediaItem.MediaItemBucket) currentContextMenuData).track;
+            ContextMenuHelper.removeDonwloadedTrack(this, track, (IPlayableMediaItem) mediaItem, onContextItemSelected);
         }
         return super.onContextItemSelected(item);
     }

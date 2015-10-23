@@ -3,6 +3,7 @@
     xmlns:CircleProgressView="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="90dp"
+    android:background="?android:attr/selectableItemBackground"
     android:orientation="vertical">
 
     <TextView
@@ -57,38 +58,37 @@
         android:layout_marginRight="10dp"
         android:backgroundTint="@color/green_600"
         android:text="@string/download"
-        android:visibility="gone"
         android:textColor="@color/white_material"
-        android:textSize="@dimen/default_text_size_10" />
+        android:textSize="@dimen/default_text_size_10"
+        android:visibility="gone" />
 
     <at.grabner.circleprogress.CircleProgressView
         android:id="@+id/cvDownloadProgress"
 
         android:layout_width="48dp"
         android:layout_height="48dp"
-        android:layout_marginRight="29dp"
-        android:clickable="true"
-
-        android:visibility="visible"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
 
+        android:layout_marginRight="29dp"
+        android:clickable="true"
+        android:visibility="visible"
+
         CircleProgressView:cpv_barColor="#00796B"
         CircleProgressView:cpv_barWidth="5dp"
-        CircleProgressView:cpv_rimWidth="5dp"
-
         CircleProgressView:cpv_contourSize="0dp"
 
-        CircleProgressView:cpv_textSize="12dp"
-        CircleProgressView:cpv_unitSize="12dp"
-
-        CircleProgressView:cpv_showUnit="true"
         CircleProgressView:cpv_maxValue="100"
+
         CircleProgressView:cpv_rimColor="#B2DFDB"
+        CircleProgressView:cpv_rimWidth="5dp"
+
         CircleProgressView:cpv_seekMode="false"
+        CircleProgressView:cpv_showUnit="true"
         CircleProgressView:cpv_textColor="#00796B"
+        CircleProgressView:cpv_textSize="12dp"
         CircleProgressView:cpv_unit="%"
         CircleProgressView:cpv_unitColor="#009688"
-        />
+        CircleProgressView:cpv_unitSize="12dp" />
 
 </RelativeLayout>

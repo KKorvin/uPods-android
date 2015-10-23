@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.view.View;
+import android.widget.Toast;
 
 import com.chickenkiller.upods2.R;
 import com.chickenkiller.upods2.controllers.app.ProfileManager;
@@ -13,6 +14,7 @@ import com.chickenkiller.upods2.interfaces.IFragmentsManager;
 import com.chickenkiller.upods2.interfaces.IOperationFinishCallback;
 import com.chickenkiller.upods2.interfaces.IPlayableMediaItem;
 import com.chickenkiller.upods2.models.Podcast;
+import com.chickenkiller.upods2.models.Track;
 
 import java.io.File;
 
@@ -53,4 +55,10 @@ public class ContextMenuHelper {
         ((IFragmentsManager) activity).showDialogFragment(dialogFragmentConfarmation);
     }
 
+    public static void removeDonwloadedTrack(Activity activity, Track track, IPlayableMediaItem mediaItem,
+                                             final IOperationFinishCallback contextItemSelected) {
+        ProfileManager.getInstance().removeDownloadedTrack(mediaItem, track);
+        contextItemSelected.operationFinished();
+        Toast.makeText(activity, R.string.episod_removed, Toast.LENGTH_SHORT).show();
+    }
 }
