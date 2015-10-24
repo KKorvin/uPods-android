@@ -3,6 +3,7 @@ package com.chickenkiller.upods2.controllers.player;
 import android.media.MediaPlayer;
 import android.util.Log;
 
+import com.chickenkiller.upods2.controllers.app.ProfileManager;
 import com.chickenkiller.upods2.controllers.app.UpodsApplication;
 import com.chickenkiller.upods2.interfaces.IPlayableMediaItem;
 import com.chickenkiller.upods2.interfaces.IPlayerStateListener;
@@ -74,6 +75,9 @@ public class UniversalPlayer implements MediaPlayer.OnPreparedListener {
         prepare();
     }
 
+    /**
+     * Main prepare method. Prepares media item to be played.
+     */
     public void prepare() {
         if (mediaItem == null) {
             throw new RuntimeException("MediaItem is not set. Call setMediaItem before prepare.");
@@ -188,6 +192,7 @@ public class UniversalPlayer implements MediaPlayer.OnPreparedListener {
                 notificationPanel.notificationCancel();
             }
             notificationPanel = new RadioNotificationPanel(UpodsApplication.getContext(), (RadioItem) mediaItem);
+            ProfileManager.getInstance().addRecentMediaItem(mediaItem);
         }
         if (preparedListener != null) {
             preparedListener.onPrepared(mediaPlayer);

@@ -15,7 +15,6 @@ import android.widget.Toast;
 
 import com.chickenkiller.upods2.R;
 import com.chickenkiller.upods2.controllers.app.ProfileManager;
-import com.chickenkiller.upods2.fragments.FragmentMainFeatured;
 import com.chickenkiller.upods2.fragments.FragmentMediaItemsGrid;
 import com.chickenkiller.upods2.fragments.FragmentSearch;
 import com.chickenkiller.upods2.fragments.FragmentWellcome;
@@ -74,7 +73,9 @@ public class ActivityMain extends BasicActivity implements IOverlayable, IToolba
             }, WELLCOME_SCREEN_TIME);
         } else {
             toolbar.setVisibility(View.VISIBLE);
-            showFragment(R.id.fl_content, new FragmentMainFeatured(), FragmentMainFeatured.TAG);
+            FragmentMediaItemsGrid fragmentMediaItemsGrid = new FragmentMediaItemsGrid();
+            fragmentMediaItemsGrid.setMediaItemType(MediaItemType.RADIO);
+            showFragment(R.id.fl_content, fragmentMediaItemsGrid, FragmentMediaItemsGrid.TAG);
         }
         isFirstRun = false;
     }

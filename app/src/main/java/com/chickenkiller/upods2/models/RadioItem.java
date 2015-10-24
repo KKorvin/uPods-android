@@ -58,18 +58,27 @@ public class RadioItem extends MediaItem implements IPlayableMediaItem {
             this.facebook = jsonItem.has("facebook") ? jsonItem.getString("facebook") : "";
             this.twitter = jsonItem.has("twitter") ? jsonItem.getString("twitter") : "";
             this.country = jsonItem.has("country") ? jsonItem.getString("country") : "";
-            if (jsonItem.has("covers") && jsonItem.getJSONArray("covers").length() > 0) {
-                this.coverImageUrl = jsonItem.getJSONArray("covers").getString(0);
+
+            if(jsonItem.has("stream_url")){//from profiel
+                this.coverImageUrl = jsonItem.has("cover_image_url") ? jsonItem.getString("cover_image_url") : "";
+                this.bannerImageUrl = jsonItem.has("banner_image_url") ? jsonItem.getString("banner_image_url") : "";
+                this.streamUrl = jsonItem.has("stream_url") ? jsonItem.getString("stream_url") : "";
+                this.genre = jsonItem.has("genre") ? jsonItem.getString("genre") : "";
+            }else{//from backend
+                if (jsonItem.has("covers") && jsonItem.getJSONArray("covers").length() > 0) {
+                    this.coverImageUrl = jsonItem.getJSONArray("covers").getString(0);
+                }
+                if (jsonItem.has("banners") && jsonItem.getJSONArray("banners").length() > 0) {
+                    this.bannerImageUrl = jsonItem.getJSONArray("banners").getString(0);
+                }
+                if (jsonItem.has("streamUrls") && jsonItem.getJSONArray("streamUrls").length() > 0) {
+                    this.streamUrl = GlobalUtils.getBestStreamUrl(jsonItem.getJSONArray("streamUrls"));
+                }
+                if (jsonItem.has("genres") && jsonItem.getJSONArray("genres").length() > 0) {
+                    this.genre = jsonItem.getJSONArray("genres").getString(0);
+                }
             }
-            if (jsonItem.has("banners") && jsonItem.getJSONArray("banners").length() > 0) {
-                this.bannerImageUrl = jsonItem.getJSONArray("banners").getString(0);
-            }
-            if (jsonItem.has("streamUrls") && jsonItem.getJSONArray("streamUrls").length() > 0) {
-                this.streamUrl = GlobalUtils.getBestStreamUrl(jsonItem.getJSONArray("streamUrls"));
-            }
-            if (jsonItem.has("genres") && jsonItem.getJSONArray("genres").length() > 0) {
-                this.genre = jsonItem.getJSONArray("genres").getString(0);
-            }
+
         } catch (Exception e) {
             e.printStackTrace();
         }

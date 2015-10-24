@@ -29,6 +29,7 @@ public class ProfileManager {
 
     private static final String PROFILE_PREF = "profile_pref";
     private static final String PROFILE = "PROFILE";
+    private static final int RECTNT_RADIO_STATIONS_LIMIT = 10;
 
     public enum ProfileItem {DOWNLOADED_PODCASTS, SUBSCRIBDED_PODCASTS, SUBSCRIBDED_RADIO, RECENT_RADIO, SUBSCRIBED_STATIONS}
 
@@ -167,7 +168,10 @@ public class ProfileManager {
     public void addRecentMediaItem(IPlayableMediaItem mediaItem) {
         if (mediaItem instanceof RadioItem) {
             if (!MediaItem.hasMediaItemWithName(recentRadioItems, mediaItem)) {
-                recentRadioItems.add((RadioItem) mediaItem);
+                if (recentRadioItems.size() == RECTNT_RADIO_STATIONS_LIMIT) {
+                    recentRadioItems.remove(recentRadioItems.size() - 1);
+                }
+                recentRadioItems.add(0, (RadioItem) mediaItem);
                 saveChanges(ProfileItem.RECENT_RADIO);
             }
         }

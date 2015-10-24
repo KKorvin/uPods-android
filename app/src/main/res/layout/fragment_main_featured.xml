@@ -17,5 +17,4 @@
         android:clipToPadding="true"
         android:columnWidth="@dimen/rv_cards_column_width" />
 
-    <include layout="@layout/small_player"></include>
 </RelativeLayout>

@@ -12,7 +12,6 @@ import android.widget.ProgressBar;
 import com.chickenkiller.upods2.R;
 import com.chickenkiller.upods2.controllers.adaperts.MediaItemsAdapter;
 import com.chickenkiller.upods2.controllers.internet.BackendManager;
-import com.chickenkiller.upods2.controllers.player.SmallPlayer;
 import com.chickenkiller.upods2.interfaces.IContentLoadListener;
 import com.chickenkiller.upods2.interfaces.IFragmentsManager;
 import com.chickenkiller.upods2.interfaces.IRequestCallback;
@@ -40,7 +39,6 @@ public class FragmentMainFeatured extends Fragment implements IContentLoadListen
 
 
     private AutofitRecyclerView rvMain;
-    private SmallPlayer smallPlayer;
     private MediaItemsAdapter mediaItemsAdapter;
     private ProgressBar pbLoadingFeatured;
 
@@ -52,7 +50,6 @@ public class FragmentMainFeatured extends Fragment implements IContentLoadListen
         View view = inflater.inflate(R.layout.fragment_main_featured, container, false);
         pbLoadingFeatured = (ProgressBar) view.findViewById(R.id.pbLoadingFeatured);
         rvMain = (AutofitRecyclerView) view.findViewById(R.id.rvMain);
-        smallPlayer = new SmallPlayer(view, getActivity());
 
         //Toolbar
         if (getActivity() instanceof IToolbarHolder) {
@@ -133,7 +130,6 @@ public class FragmentMainFeatured extends Fragment implements IContentLoadListen
     @Override
     public void onDestroy() {
         mediaItemsAdapter.destroy();
-        smallPlayer.destroy();
         super.onDestroy();
     }
 

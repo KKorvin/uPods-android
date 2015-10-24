@@ -105,17 +105,6 @@
         </RelativeLayout>
 
 
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fbDetailsPlay"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="20dp"
-            android:layout_marginTop="125dp"
-            android:src="@drawable/ic_play_white_24dp"
-            app:backgroundTint="@color/pink_A400"
-            app:elevation="4dp" />
-
         <com.chickenkiller.upods2.views.DetailsScrollView
             android:id="@+id/svDetails"
             android:layout_width="fill_parent"
@@ -170,5 +159,18 @@
             android:layout_below="@+id/rlDetailsHeaderContainer"
             android:clipToPadding="true"
             android:visibility="visible" />
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fbDetailsPlay"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginRight="20dp"
+            android:layout_marginBottom="20dp"
+            android:src="@drawable/ic_play_white_24dp"
+            app:backgroundTint="@color/pink_A400"
+            app:elevation="8dp" />
+
     </RelativeLayout>
 </LinearLayout>

@@ -120,6 +120,8 @@ public class FragmentMediaItemDetails extends Fragment implements View.OnTouchLi
             tvDetailedHeader.setText(playableItem.getName());
             tvDetailedSubHeader.setText(playableItem.getSubHeader());
             tvBottomHeader.setText(playableItem.getBottomHeader());
+            btnSubscribe.setText(ProfileManager.getInstance().isSubscribedToMediaItem(playableItem) ? getString(R.string.unsubscribe) : getString(R.string.subscribe));
+            initSubscribeBtn();
 
             if (playableItem.hasTracks()) {
                 initTrackable();
@@ -154,24 +156,10 @@ public class FragmentMediaItemDetails extends Fragment implements View.OnTouchLi
         loadTracks();
 
         if (playableItem instanceof Podcast) {
-            btnSubscribe.setText(ProfileManager.getInstance().isSubscribedToMediaItem((Podcast) playableItem) ? getString(R.string.unsubscribe) : getString(R.string.subscribe));
-            btnSubscribe.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if (ProfileManager.getInstance().isSubscribedToMediaItem((Podcast) playableItem)) {
-                        ProfileManager.getInstance().removeSubscribedMediaItem((Podcast) playableItem);
-                        btnSubscribe.setText(getString(R.string.subscribe));
-                    } else {
-                        ProfileManager.getInstance().addSubscribedMediaItem((Podcast) playableItem);
-                        btnSubscribe.setText(getString(R.string.unsubscribe));
-                    }
-                }
-            });
-
             imgMediaMore.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ((IContextMenuManager) getActivity()).openContextMenu(v, ContextMenuType.PODCAST_MIDDLE_SCREEN, (Podcast) playableItem, new IOperationFinishCallback() {
+                    ((IContextMenuManager) getActivity()).openContextMenu(v, ContextMenuType.PODCAST_MIDDLE_SCREEN, playableItem, new IOperationFinishCallback() {
                         @Override
                         public void operationFinished() {
                             tracksAdapter.notifyDataSetChanged();
@@ -190,7 +178,6 @@ public class FragmentMediaItemDetails extends Fragment implements View.OnTouchLi
         svDetails.setVisibility(View.VISIBLE);
         svDetails.setEnabled(false);
         svDetails.setIMovable(this);
-        btnSubscribe.setVisibility(View.GONE);
         tvDetailedDescription.setText(playableItem.getDescription());
         fbDetailsPlay.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -220,6 +207,22 @@ public class FragmentMediaItemDetails extends Fragment implements View.OnTouchLi
             }
         });
     }
+
+    private void initSubscribeBtn() {
+        btnSubscribe.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (ProfileManager.getInstance().isSubscribedToMediaItem(playableItem)) {
+                    ProfileManager.getInstance().removeSubscribedMediaItem(playableItem);
+                    btnSubscribe.setText(getString(R.string.subscribe));
+                } else {
+                    ProfileManager.getInstance().addSubscribedMediaItem(playableItem);
+                    btnSubscribe.setText(getString(R.string.unsubscribe));
+                }
+            }
+        });
+    }
+
 
     private void initFragmentScrollConstants() {
         DisplayMetrics displaymetrics = new DisplayMetrics();
