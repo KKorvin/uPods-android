@@ -111,6 +111,13 @@ public class BackendManager {
 
     private void sendRequest(final Request request, final ISimpleRequestCallback uiUpdater) {
         try {
+            String fromCache = SimpleCacheManager.getInstance().readFromCache(request.urlString());
+            uiUpdater.onRequestSuccessed(fromCache);
+        } catch (Exception e) {
+            Log.i(TAG, "Can't restore cache for url: " + request.urlString());
+            e.printStackTrace();
+        }
+        try {
             client.newCall(request).enqueue(new Callback() {
                 @Override
                 public void onFailure(Request request, IOException e) {
@@ -122,6 +129,7 @@ public class BackendManager {
                 public void onResponse(Response response) throws IOException {
                     try {
                         uiUpdater.onRequestSuccessed(response.body().string());
+                        SimpleCacheManager.getInstance().cacheUrlOutput(request.urlString(), response.body().string());
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
