@@ -1,7 +1,10 @@
 package com.chickenkiller.upods2.controllers.internet;
 
-import com.chickenkiller.upods2.interfaces.ISimpleRequestCallback;
+import android.util.Log;
+
+import com.chickenkiller.upods2.controllers.app.SimpleCacheManager;
 import com.chickenkiller.upods2.interfaces.IRequestCallback;
+import com.chickenkiller.upods2.interfaces.ISimpleRequestCallback;
 import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
@@ -32,6 +35,7 @@ public class BackendManager {
         }
     }
 
+    private static final String TAG = "BackendManager";
     private final OkHttpClient client;
     private final int MAX_RETRY = 5;
     private static BackendManager backendManager;
@@ -68,6 +72,16 @@ public class BackendManager {
      */
     private void sendRequest(final Request request, final IRequestCallback uiUpdater) {
         try {
+            String fromCache = SimpleCacheManager.getInstance().readFromCache(request.urlString());
+            if (fromCache != null) {
+                final JSONObject jResponse = new JSONObject(fromCache);
+                uiUpdater.onRequestSuccessed(jResponse);
+            }
+        } catch (Exception e) {
+            Log.i(TAG, "Can't restore cache for url: " + request.urlString());
+            e.printStackTrace();
+        }
+        try {
             client.newCall(request).enqueue(new Callback() {
                 @Override
                 public void onFailure(Request request, IOException e) {
@@ -81,6 +95,7 @@ public class BackendManager {
                     try {
                         final JSONObject jResponse = new JSONObject(response.body().string());
                         uiUpdater.onRequestSuccessed(jResponse);
+                        SimpleCacheManager.getInstance().cacheUrlOutput(request.urlString(), jResponse.toString());
                         searchQueueNextStep();
                     } catch (Exception e) {
                         e.printStackTrace();

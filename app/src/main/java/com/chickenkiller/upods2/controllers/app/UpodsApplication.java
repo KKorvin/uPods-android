@@ -24,6 +24,7 @@ public class UpodsApplication extends Application {
                 .setUseDefaultSharedPreference(true)
                 .build();
         Category.initCatrgories();
+        SimpleCacheManager.getInstance().removeExpiredCache();
         super.onCreate();
     }
 
