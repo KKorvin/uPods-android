@@ -110,7 +110,6 @@ public class FragmentMainFeatured extends Fragment implements IContentLoadListen
                                     gridSpacingItemDecoration.setGridItemType(MediaItemsAdapter.ITEM);
                                     gridSpacingItemDecoration.setItemsTypesCount(MEDIA_ITEMS_TYPES_COUNT);
                                     rvMain.addItemDecoration(gridSpacingItemDecoration);
-                                    rvMain.notifyAll();
                                     mediaItemsAdapter.notifyContentLoadingStatus();
                                 } catch (JSONException e) {
                                     e.printStackTrace();
