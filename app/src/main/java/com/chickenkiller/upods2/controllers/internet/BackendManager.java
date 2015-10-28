@@ -72,6 +72,18 @@ public class BackendManager {
      */
     private void sendRequest(final Request request, final IRequestCallback uiUpdater) {
         try {
+            String fromCache = SimpleCacheManager.getInstance().readFromCache(request.urlString());
+            if (fromCache != null) {
+                final JSONObject jResponse = new JSONObject(fromCache);
+                uiUpdater.onRequestSuccessed(jResponse);
+                searchQueueNextStep();
+                return;
+            }
+        } catch (Exception e) {
+            Log.i(TAG, "Can't restore cache for url: " + request.urlString());
+            e.printStackTrace();
+        }
+        try {
             client.newCall(request).enqueue(new Callback() {
                 @Override
                 public void onFailure(Request request, IOException e) {
@@ -100,6 +112,14 @@ public class BackendManager {
     }
 
     private void sendRequest(final Request request, final ISimpleRequestCallback uiUpdater) {
+        try {
+            String fromCache = SimpleCacheManager.getInstance().readFromCache(request.urlString());
+            uiUpdater.onRequestSuccessed(fromCache);
+            return;
+        } catch (Exception e) {
+            Log.i(TAG, "Can't restore cache for url: " + request.urlString());
+            e.printStackTrace();
+        }
         try {
             client.newCall(request).enqueue(new Callback() {
                 @Override
@@ -161,27 +181,10 @@ public class BackendManager {
     }
 
     public void loadTops(TopType topType, String topLink, final IRequestCallback uiUpdater) {
-        final Request request = new Request.Builder()
+        Request request = new Request.Builder()
                 .url(topLink + topType.getStringValue())
                 .build();
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    String fromCache = SimpleCacheManager.getInstance().readFromCache(request.urlString());
-                    if (fromCache != null) {
-                        final JSONObject jResponse = new JSONObject(fromCache);
-                        uiUpdater.onRequestSuccessed(jResponse);
-                    } else {
-                        sendRequest(request, uiUpdater);
-                    }
-                } catch (Exception e) {
-                    Log.i(TAG, "Can't restore cache for url: " + request.urlString());
-                    e.printStackTrace();
-                    sendRequest(request, uiUpdater);
-                }
-            }
-        }).run();
+        sendRequest(request, uiUpdater);
     }
 
     public void doSearch(String query, final IRequestCallback uiUpdater) {

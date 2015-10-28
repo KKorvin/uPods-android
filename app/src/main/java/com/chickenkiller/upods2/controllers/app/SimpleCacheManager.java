@@ -50,9 +50,9 @@ public class SimpleCacheManager {
     }
 
     public void cacheUrlOutput(String url, String output, long cachePeriod) {
-        if (existsInCache(output)) {
-            return;
-        }
+        //if (existsInCache(output)) {
+        //    return;
+       // }
         String fileName = shortifyFileName(url);
         fileName += FILE_NAME_SEPARATOR + String.valueOf(cachePeriod) + FILE_NAME_SEPARATOR + System.currentTimeMillis();
         FileOutputStream outputStream;
