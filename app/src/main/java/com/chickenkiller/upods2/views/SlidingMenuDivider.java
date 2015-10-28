@@ -1,4 +1,4 @@
-package com.chickenkiller.upods2.controllers.app;
+package com.chickenkiller.upods2.views;
 
 import android.content.Context;
 import android.graphics.Canvas;

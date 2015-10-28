@@ -12,7 +12,6 @@ import android.view.View;
 
 import com.chickenkiller.upods2.R;
 import com.chickenkiller.upods2.controllers.adaperts.SlidingMenuAdapter;
-import com.chickenkiller.upods2.controllers.app.SlidingMenuDivider;
 import com.chickenkiller.upods2.interfaces.IFragmentsManager;
 import com.chickenkiller.upods2.interfaces.ISlidingMenuManager;
 import com.chickenkiller.upods2.models.SlidingMenuHeader;
