@@ -108,11 +108,16 @@ public class FragmentPodcastFeatured extends Fragment implements IContentLoadLis
                                     topPodcasts.add(mediaItemTitle);
                                     topPodcasts.addAll(Podcast.withJsonArray(jResponse.getJSONArray("result")));
                                     mediaItemsAdapter.addItems(topPodcasts);
-                                    GridSpacingItemDecoration gridSpacingItemDecoration = new GridSpacingItemDecoration(rvMain.getSpanCount(), FragmentMainFeatured.MEDIA_ITEMS_CARDS_MARGIN, true);
-                                    gridSpacingItemDecoration.setGridItemType(MediaItemsAdapter.ITEM);
-                                    gridSpacingItemDecoration.setItemsTypesCount(MEDIA_ITEMS_TYPES_COUNT);
-                                    rvMain.addItemDecoration(gridSpacingItemDecoration);
-                                    mediaItemsAdapter.notifyContentLoadingStatus();
+                                    rvMain.post(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            GridSpacingItemDecoration gridSpacingItemDecoration = new GridSpacingItemDecoration(rvMain.getSpanCount(), FragmentMainFeatured.MEDIA_ITEMS_CARDS_MARGIN, true);
+                                            gridSpacingItemDecoration.setGridItemType(MediaItemsAdapter.ITEM);
+                                            gridSpacingItemDecoration.setItemsTypesCount(MEDIA_ITEMS_TYPES_COUNT);
+                                            rvMain.addItemDecoration(gridSpacingItemDecoration);
+                                            mediaItemsAdapter.notifyContentLoadingStatus();
+                                        }
+                                    });
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }

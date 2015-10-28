@@ -106,11 +106,16 @@ public class FragmentMainFeatured extends Fragment implements IContentLoadListen
                                     topRadioStations.add(mediaItemTitle);
                                     topRadioStations.addAll(RadioItem.withJsonArray(jResponse.getJSONArray("result"), getActivity()));
                                     mediaItemsAdapter.addItems(topRadioStations);
-                                    GridSpacingItemDecoration gridSpacingItemDecoration = new GridSpacingItemDecoration(rvMain.getSpanCount(), MEDIA_ITEMS_CARDS_MARGIN, true);
-                                    gridSpacingItemDecoration.setGridItemType(MediaItemsAdapter.ITEM);
-                                    gridSpacingItemDecoration.setItemsTypesCount(MEDIA_ITEMS_TYPES_COUNT);
-                                    rvMain.addItemDecoration(gridSpacingItemDecoration);
                                     mediaItemsAdapter.notifyContentLoadingStatus();
+                                    rvMain.post(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            GridSpacingItemDecoration gridSpacingItemDecoration = new GridSpacingItemDecoration(rvMain.getSpanCount(), MEDIA_ITEMS_CARDS_MARGIN, true);
+                                            gridSpacingItemDecoration.setGridItemType(MediaItemsAdapter.ITEM);
+                                            gridSpacingItemDecoration.setItemsTypesCount(MEDIA_ITEMS_TYPES_COUNT);
+                                            rvMain.addItemDecoration(gridSpacingItemDecoration);
+                                        }
+                                    });
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
