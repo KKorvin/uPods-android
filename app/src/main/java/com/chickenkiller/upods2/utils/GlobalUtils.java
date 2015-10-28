@@ -1,5 +1,10 @@
 package com.chickenkiller.upods2.utils;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+
+import com.chickenkiller.upods2.controllers.app.UpodsApplication;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 
@@ -79,5 +84,10 @@ public class GlobalUtils {
             }
         }
         return( path.delete() );
+    }
+
+    public static boolean isInternetConnected() {
+        ConnectivityManager cm = (ConnectivityManager) UpodsApplication.getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        return cm.getActiveNetworkInfo() != null;
     }
 }

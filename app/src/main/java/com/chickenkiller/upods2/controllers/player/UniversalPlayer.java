@@ -9,13 +9,20 @@ import com.chickenkiller.upods2.interfaces.IPlayableMediaItem;
 import com.chickenkiller.upods2.interfaces.IPlayerStateListener;
 import com.chickenkiller.upods2.models.Podcast;
 import com.chickenkiller.upods2.models.RadioItem;
+import com.chickenkiller.upods2.utils.GlobalUtils;
 import com.chickenkiller.upods2.views.PlayerNotificationPanel;
 import com.chickenkiller.upods2.views.RadioNotificationPanel;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * Created by alonzilberman on 7/29/15.
  */
-public class UniversalPlayer implements MediaPlayer.OnPreparedListener {
+public class UniversalPlayer implements MediaPlayer.OnPreparedListener, MediaPlayer.OnErrorListener, MediaPlayer.OnInfoListener, MediaPlayer.OnBufferingUpdateListener {
+
+
+    private static final long RECONNECT_RATE = 5000;
 
     public enum State {PLAYING, PAUSED}
 
@@ -29,6 +36,8 @@ public class UniversalPlayer implements MediaPlayer.OnPreparedListener {
     private IPlayerStateListener playerStateListener;
     private IPlayableMediaItem mediaItem;
     private PlayerNotificationPanel notificationPanel;
+
+    private TimerTask autoReconector;
 
     public boolean isPrepaired;
 
@@ -90,6 +99,9 @@ public class UniversalPlayer implements MediaPlayer.OnPreparedListener {
                 Log.i(PLAYER_LOG, "Trying to play: " + mediaItem.getAudeoLink());
                 mediaPlayer.setDataSource(mediaItem.getAudeoLink());
                 mediaPlayer.setOnPreparedListener(this);
+                mediaPlayer.setOnErrorListener(this);
+                mediaPlayer.setOnInfoListener(this);
+                mediaPlayer.setOnBufferingUpdateListener(this);
                 mediaPlayer.prepareAsync();
             } catch (Exception e) {
                 e.printStackTrace();
@@ -137,6 +149,16 @@ public class UniversalPlayer implements MediaPlayer.OnPreparedListener {
         return false;
     }
 
+
+    /**
+     * Restarts player in the soft way (didn't release all resorce and callbacks)
+     */
+    public void softRestart() {
+        if (mediaPlayer != null) {
+            resetPlayer();
+            prepare();
+        }
+    }
 
     public void releasePlayer() {
         if (mediaPlayer != null) {
@@ -197,5 +219,44 @@ public class UniversalPlayer implements MediaPlayer.OnPreparedListener {
         if (preparedListener != null) {
             preparedListener.onPrepared(mediaPlayer);
         }
+    }
+
+    @Override
+    public boolean onError(MediaPlayer mp, int what, int extra) {
+        Log.i(PLAYER_LOG, "Error code: " + String.valueOf(what));
+        return false;
+    }
+
+    @Override
+    public boolean onInfo(MediaPlayer mp, int what, int extra) {
+        Log.i(PLAYER_LOG, "Info code: " + String.valueOf(what));
+        if (what == MediaPlayer.MEDIA_INFO_BUFFERING_START && !GlobalUtils.isInternetConnected()) {
+            runReconnectTask();
+        }
+        return false;
+    }
+
+    private void runReconnectTask() {
+        if (autoReconector == null) {
+            autoReconector = new TimerTask() {
+                @Override
+                public void run() {
+                    if (GlobalUtils.isInternetConnected()) {
+                        Log.i(PLAYER_LOG, "Reconnector -> got internet connection -> restarting player...");
+                        softRestart();
+                        autoReconector.cancel();
+                        autoReconector = null;
+                    } else {
+                        Log.i(PLAYER_LOG, "Reconnector -> no internet connection -> will try again later...");
+                    }
+                }
+            };
+        }
+        new Timer().scheduleAtFixedRate(autoReconector, 0, RECONNECT_RATE);
+    }
+
+    @Override
+    public void onBufferingUpdate(MediaPlayer mp, int percent) {
+        //Log.i(PLAYER_LOG, "Player buffer: " + String.valueOf(percent));
     }
 }
