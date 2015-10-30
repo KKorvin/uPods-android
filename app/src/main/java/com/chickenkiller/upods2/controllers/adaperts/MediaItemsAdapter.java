@@ -175,7 +175,9 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             if (currentItem.getSubTitle().isEmpty()) {
                 ((ViewHolderMediaItemTitle) holder).tvMediaCardSubTitle.setVisibility(View.GONE);
                 RelativeLayout.LayoutParams llp = (RelativeLayout.LayoutParams) ((ViewHolderMediaItemTitle) holder).tvMediaCardTitle.getLayoutParams();
-                llp.setMargins(UIHelper.pixelsToDp(15), UIHelper.pixelsToDp(15), UIHelper.pixelsToDp(15), UIHelper.pixelsToDp(10));
+
+                // Left // Top // Right // Bottom
+                llp.setMargins(UIHelper.pixelsToDp(15), UIHelper.pixelsToDp(10), UIHelper.pixelsToDp(15), UIHelper.pixelsToDp(3));
                 ((ViewHolderMediaItemTitle) holder).tvMediaCardTitle.setLayoutParams(llp);
             } else {
                 ((ViewHolderMediaItemTitle) holder).tvMediaCardSubTitle.setVisibility(View.VISIBLE);

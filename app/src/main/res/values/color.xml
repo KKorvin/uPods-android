@@ -9,6 +9,7 @@
     <color name="white">#FFFFFF</color>
     <color name="black">#000000</color>
     <color name="global_background">#EEEEEE</color>
+    <color name="card_pressed_background">#EAEAEA</color>
 
     <!-- Devider color -->
     <color name="sliding_menu_devider_color">#dcdcdc</color>
