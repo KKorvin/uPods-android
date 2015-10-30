@@ -98,16 +98,17 @@ public class GlobalUtils {
      * Returns a list with all links contained in the input
      */
     public static List<String> extractUrls(String text) {
+        String lines[] = text.split("\\s+");
         List<String> containedUrls = new ArrayList<String>();
         String urlRegex = "((https?|ftp|gopher|telnet|file):((//)|(\\\\))+[\\w\\d:#@%/;$()~_?\\+-=\\\\\\.&]*)";
         Pattern pattern = Pattern.compile(urlRegex, Pattern.CASE_INSENSITIVE);
-        Matcher urlMatcher = pattern.matcher(text);
 
-        while (urlMatcher.find()) {
-            containedUrls.add(text.substring(urlMatcher.start(0),
-                    urlMatcher.end(0)));
+        for (String line : lines) {
+            Matcher urlMatcher = pattern.matcher(line);
+            while (urlMatcher.find()) {
+                containedUrls.add(line.substring(urlMatcher.start(0), urlMatcher.end(0)));
+            }
         }
-
         return containedUrls;
     }
 }
