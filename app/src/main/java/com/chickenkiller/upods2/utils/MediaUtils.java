@@ -15,13 +15,13 @@ public class MediaUtils {
 
     private static final String LOG_TAG = "MediaUtils";
 
-    public static String extractMp3FromM3u(final String m3uUrl, final IOperationFinishWithDataCallback mp3Extracted) {
+    public static String extractMp3FromFile(final String m3uUrl, final IOperationFinishWithDataCallback mp3Extracted) {
         BackendManager.getInstance().sendRequest(m3uUrl, new ISimpleRequestCallback() {
             @Override
             public void onRequestSuccessed(String response) {
                 List<String> allURls = GlobalUtils.extractUrls(response);
                 String mp3Url = allURls.size() > 0 ? allURls.get(0) : "";
-                Log.i(LOG_TAG, "Extracted from m3u urls: " + allURls.toString());
+                Log.i(LOG_TAG, "Extracted from file urls: " + allURls.toString());
                 mp3Extracted.operationFinished(mp3Url);
             }
 

@@ -115,13 +115,13 @@ public class UniversalPlayer implements MediaPlayer.OnPreparedListener, MediaPla
     }
 
     /**
-     * Call it to manage differents media formats, will try to convert format to mp3 if it is not supported
+     * Call it to manage different media formats, will try to convert format to mp3 if it is not supported
      *
      * @return true - if prepare should continues, false if it will call atomatycly bac callback
      */
     private boolean menageAudeoFormats() {
-        if (mediaItem.getAudeoLink().matches(".+\\.m3u$")) {
-            MediaUtils.extractMp3FromM3u(mediaItem.getAudeoLink(), new IOperationFinishWithDataCallback() {
+        if (mediaItem.getAudeoLink().matches("(.+\\.m3u$)|(.+\\.pls$)")) {
+            MediaUtils.extractMp3FromFile(mediaItem.getAudeoLink(), new IOperationFinishWithDataCallback() {
                 @Override
                 public void operationFinished(Object data) {
                     mediaItem.setAudeoLink((String) data);
