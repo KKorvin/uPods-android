@@ -3,7 +3,6 @@ package com.chickenkiller.upods2.fragments;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
-import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +16,7 @@ import com.chickenkiller.upods2.interfaces.IOperationFinishCallback;
 import com.chickenkiller.upods2.interfaces.ISlidingMenuHolder;
 import com.chickenkiller.upods2.interfaces.IToolbarHolder;
 import com.chickenkiller.upods2.utils.MediaItemType;
+import com.chickenkiller.upods2.views.MediaViewpager;
 
 import java.util.Calendar;
 
@@ -27,7 +27,7 @@ public class FragmentMediaItemsGrid extends Fragment implements ICustumziedBackP
 
     public static final String TAG;
     private static final int CATEGORIES_FRAGMENT_POSITION = 3;
-    private ViewPager vpMedia;
+    private MediaViewpager vpMedia;
     private MediaPagesAdapter mediaPagesAdapter;
     private TabLayout vpMediaTabs;
     private SmallPlayer smallPlayer;
@@ -40,13 +40,18 @@ public class FragmentMediaItemsGrid extends Fragment implements ICustumziedBackP
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_podcasts, container, false);
+        View view = inflater.inflate(R.layout.fragment_media_grid, container, false);
         mediaPagesAdapter = new MediaPagesAdapter(getFragmentManager(), mediaItemType);
-        vpMedia = (ViewPager) view.findViewById(R.id.vpMedia);
+        vpMedia = (MediaViewpager) view.findViewById(R.id.vpMedia);
         vpMedia.setAdapter(mediaPagesAdapter);
 
         vpMediaTabs = (TabLayout) view.findViewById(R.id.tlMediaTabs);
         vpMediaTabs.setBackgroundResource(R.color.color_primary);
+
+        if (mediaItemType == MediaItemType.RADIO) {
+            vpMediaTabs.setTabMode(TabLayout.MODE_FIXED);
+            vpMedia.setPagingEnabled(false);
+        }
 
         //Tabs color
         //tlPodcastsTabs.setTabTextColors(R.color.white_material, R.color.viewPagerNotSelectedWhite);
@@ -68,7 +73,6 @@ public class FragmentMediaItemsGrid extends Fragment implements ICustumziedBackP
             ((IToolbarHolder) getActivity()).getToolbar().setTitle(R.string.radio_main);
             ((ISlidingMenuHolder) getActivity()).setSlidingMenuHeader(getString(R.string.radio_main));
         }
-
 
         smallPlayer = new SmallPlayer(view, getActivity());
 
