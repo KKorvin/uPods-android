@@ -5,11 +5,13 @@ import android.util.Log;
 
 import com.chickenkiller.upods2.controllers.app.ProfileManager;
 import com.chickenkiller.upods2.controllers.app.UpodsApplication;
+import com.chickenkiller.upods2.interfaces.IOperationFinishWithDataCallback;
 import com.chickenkiller.upods2.interfaces.IPlayableMediaItem;
 import com.chickenkiller.upods2.interfaces.IPlayerStateListener;
 import com.chickenkiller.upods2.models.Podcast;
 import com.chickenkiller.upods2.models.RadioItem;
 import com.chickenkiller.upods2.utils.GlobalUtils;
+import com.chickenkiller.upods2.utils.MediaUtils;
 import com.chickenkiller.upods2.views.PlayerNotificationPanel;
 import com.chickenkiller.upods2.views.RadioNotificationPanel;
 
@@ -93,10 +95,13 @@ public class UniversalPlayer implements MediaPlayer.OnPreparedListener, MediaPla
         }
         if (!isPrepaired) {
             try {
+                Log.i(PLAYER_LOG, "Trying to play: " + mediaItem.getAudeoLink());
+                if (!menageAudeoFormats()) {
+                    return;
+                }
                 if (mediaPlayer == null) {
                     mediaPlayer = new MediaPlayer();
                 }
-                Log.i(PLAYER_LOG, "Trying to play: " + mediaItem.getAudeoLink());
                 mediaPlayer.setDataSource(mediaItem.getAudeoLink());
                 mediaPlayer.setOnPreparedListener(this);
                 mediaPlayer.setOnErrorListener(this);
@@ -107,6 +112,25 @@ public class UniversalPlayer implements MediaPlayer.OnPreparedListener, MediaPla
                 e.printStackTrace();
             }
         }
+    }
+
+    /**
+     * Call it to manage differents media formats, will try to convert format to mp3 if it is not supported
+     *
+     * @return true - if prepare should continues, false if it will call atomatycly bac callback
+     */
+    private boolean menageAudeoFormats() {
+        if (mediaItem.getAudeoLink().matches(".+\\.m3u$")) {
+            MediaUtils.extractMp3FromM3u(mediaItem.getAudeoLink(), new IOperationFinishWithDataCallback() {
+                @Override
+                public void operationFinished(Object data) {
+                    mediaItem.setAudeoLink((String) data);
+                    prepare();
+                }
+            });
+            return false;
+        }
+        return true;
     }
 
     public void start() {

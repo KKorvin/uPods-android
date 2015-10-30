@@ -11,7 +11,11 @@ import org.json.JSONException;
 import java.io.File;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by alonzilberman on 8/14/15.
@@ -63,31 +67,47 @@ public class GlobalUtils {
         return date;
     }
 
-    public static String getCleanFileName(String str){
+    public static String getCleanFileName(String str) {
         str = str.toLowerCase();
-        return str.replaceAll("[^a-zA-Z0-9]+","_");
+        return str.replaceAll("[^a-zA-Z0-9]+", "_");
     }
 
     public static boolean deleteDirectory(File path) {
-        if( path.exists() ) {
+        if (path.exists()) {
             File[] files = path.listFiles();
             if (files == null) {
                 return true;
             }
-            for(int i=0; i<files.length; i++) {
-                if(files[i].isDirectory()) {
+            for (int i = 0; i < files.length; i++) {
+                if (files[i].isDirectory()) {
                     deleteDirectory(files[i]);
-                }
-                else {
+                } else {
                     files[i].delete();
                 }
             }
         }
-        return( path.delete() );
+        return (path.delete());
     }
 
     public static boolean isInternetConnected() {
         ConnectivityManager cm = (ConnectivityManager) UpodsApplication.getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
         return cm.getActiveNetworkInfo() != null;
+    }
+
+    /**
+     * Returns a list with all links contained in the input
+     */
+    public static List<String> extractUrls(String text) {
+        List<String> containedUrls = new ArrayList<String>();
+        String urlRegex = "((https?|ftp|gopher|telnet|file):((//)|(\\\\))+[\\w\\d:#@%/;$()~_?\\+-=\\\\\\.&]*)";
+        Pattern pattern = Pattern.compile(urlRegex, Pattern.CASE_INSENSITIVE);
+        Matcher urlMatcher = pattern.matcher(text);
+
+        while (urlMatcher.find()) {
+            containedUrls.add(text.substring(urlMatcher.start(0),
+                    urlMatcher.end(0)));
+        }
+
+        return containedUrls;
     }
 }
