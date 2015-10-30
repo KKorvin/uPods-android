@@ -18,7 +18,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="?android:attr/selectableItemBackground"
+        android:background="@drawable/card_media_item_bckg"
         android:padding="5dp">
 
         <com.chickenkiller.upods2.views.ImageViewSquare
