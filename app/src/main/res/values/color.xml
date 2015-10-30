@@ -8,6 +8,7 @@
     <color name="viewPagerNotSelectedWhite">#E8EAF6</color>
     <color name="white">#FFFFFF</color>
     <color name="black">#000000</color>
+    <color name="global_background">#EEEEEE</color>
 
     <!-- Devider color -->
     <color name="sliding_menu_devider_color">#dcdcdc</color>
