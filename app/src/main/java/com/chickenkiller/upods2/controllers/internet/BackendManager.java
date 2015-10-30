@@ -133,8 +133,9 @@ public class BackendManager {
                 @Override
                 public void onResponse(Response response) throws IOException {
                     try {
-                        SimpleCacheManager.getInstance().cacheUrlOutput(request.urlString(), new String(response.body().string()));
-                        uiUpdater.onRequestSuccessed(response.body().string());
+                        String strResponse = response.body().string();
+                        SimpleCacheManager.getInstance().cacheUrlOutput(request.urlString(), strResponse);
+                        uiUpdater.onRequestSuccessed(strResponse);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
