@@ -19,6 +19,7 @@ import com.chickenkiller.upods2.interfaces.IToolbarHolder;
 import com.chickenkiller.upods2.models.MediaItem;
 import com.chickenkiller.upods2.models.MediaItemTitle;
 import com.chickenkiller.upods2.models.RadioItem;
+import com.chickenkiller.upods2.utils.MediaItemType;
 import com.chickenkiller.upods2.utils.ServerApi;
 import com.chickenkiller.upods2.views.AutofitRecyclerView;
 import com.chickenkiller.upods2.views.GridSpacingItemDecoration;
@@ -58,7 +59,7 @@ public class FragmentMainFeatured extends Fragment implements IContentLoadListen
                 @Override
                 public boolean onMenuItemClick(MenuItem menuItem) {
                     FragmentSearch fragmentSearch = new FragmentSearch();
-                    fragmentSearch.setSearchType(FragmentSearch.SearchType.RADIO);
+                    fragmentSearch.setSearchType(MediaItemType.RADIO);
                     ((IFragmentsManager) getActivity()).showFragment(R.id.fl_content, fragmentSearch, FragmentSearch.TAG);
                     return false;
                 }

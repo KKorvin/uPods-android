@@ -1,6 +1,7 @@
 package com.chickenkiller.upods2.controllers.adaperts;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.LayerDrawable;
 import android.support.v7.widget.CardView;
@@ -27,6 +28,7 @@ import com.chickenkiller.upods2.models.MediaItem;
 import com.chickenkiller.upods2.models.MediaItemTitle;
 import com.chickenkiller.upods2.models.ViewHolderBannersLayout;
 import com.chickenkiller.upods2.utils.ContextMenuType;
+import com.chickenkiller.upods2.utils.LetterBitmap;
 import com.chickenkiller.upods2.utils.UIHelper;
 import com.chickenkiller.upods2.views.ImageViewSquare;
 
@@ -43,6 +45,7 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     public static final int ITEM = 2;
     public static final int BANNERS_LAYOUT = 3;
     private static final int MAX_CONTENT_LEVEL = 2; //count of items to load (banner, main cards)
+    private static final int COVER_IMAGE_SIZE = 80;
 
     private int itemLayout;
     private int titleLayout;
@@ -53,6 +56,7 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     private Context mContext;
     private IFragmentsManager fragmentsManager;
     private IContentLoadListener iContentLoadListener;
+
 
     private static class ViewHolderCardItem extends RecyclerView.ViewHolder {
         public ImageViewSquare imgSquare;
@@ -156,8 +160,14 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         if (holder instanceof ViewHolderCardItem) {//Card
             IPlayableMediaItem currentItem = (IPlayableMediaItem) items.get(position);
-            Glide.with(mContext).load(currentItem.getCoverImageUrl()).centerCrop()
-                    .crossFade().into(((ViewHolderCardItem) holder).imgSquare);
+            if (currentItem.getCoverImageUrl() == null) {
+                final LetterBitmap letterBitmap = new LetterBitmap(mContext);
+                Bitmap letterTile = letterBitmap.getLetterTile(currentItem.getName(), currentItem.getName(), COVER_IMAGE_SIZE, COVER_IMAGE_SIZE);
+                ((ViewHolderCardItem) holder).imgSquare.setImageBitmap(letterTile);
+            } else {
+                Glide.with(mContext).load(currentItem.getCoverImageUrl()).centerCrop()
+                        .crossFade().into(((ViewHolderCardItem) holder).imgSquare);
+            }
             ((ViewHolderCardItem) holder).tvSquareTitle.setText(currentItem.getName());
             if (((ViewHolderCardItem) holder).tvSquareSubTitle != null) {
                 ((ViewHolderCardItem) holder).tvSquareSubTitle.setText(currentItem.getSubHeader());
@@ -177,7 +187,7 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                 RelativeLayout.LayoutParams llp = (RelativeLayout.LayoutParams) ((ViewHolderMediaItemTitle) holder).tvMediaCardTitle.getLayoutParams();
 
                 // Left // Top // Right // Bottom
-                llp.setMargins(UIHelper.pixelsToDp(15), UIHelper.pixelsToDp(10), UIHelper.pixelsToDp(15), UIHelper.pixelsToDp(3));
+                llp.setMargins(UIHelper.dpToPixels(15), UIHelper.dpToPixels(10), UIHelper.dpToPixels(15), UIHelper.dpToPixels(3));
                 ((ViewHolderMediaItemTitle) holder).tvMediaCardTitle.setLayoutParams(llp);
             } else {
                 ((ViewHolderMediaItemTitle) holder).tvMediaCardSubTitle.setVisibility(View.VISIBLE);
@@ -191,15 +201,15 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     }
 
     private void initStatusBlock(ViewHolderCardItem holder, IPlayableMediaItem currentItem) {
-        if(ProfileManager.getInstance().isDownloaded(currentItem)){
+        if (ProfileManager.getInstance().isDownloaded(currentItem)) {
             holder.tvItemStatus.setText(R.string.downloaded);
             holder.tvItemStatus.setVisibility(View.VISIBLE);
-            if(holder.imgCardStatusIcon!=null){
+            if (holder.imgCardStatusIcon != null) {
                 holder.imgCardStatusIcon.setVisibility(View.VISIBLE);
             }
-        }else{
+        } else {
             holder.tvItemStatus.setVisibility(View.GONE);
-            if(holder.imgCardStatusIcon!=null){
+            if (holder.imgCardStatusIcon != null) {
                 holder.imgCardStatusIcon.setVisibility(View.GONE);
             }
         }

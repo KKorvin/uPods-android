@@ -62,7 +62,7 @@ public class UIHelper {
         }
     }
 
-    public static int pixelsToDp(int value) {
+    public static int dpToPixels(int value) {
         float d = UpodsApplication.getContext().getResources().getDisplayMetrics().density;
         int margin = (int) (value * d);
         return margin;

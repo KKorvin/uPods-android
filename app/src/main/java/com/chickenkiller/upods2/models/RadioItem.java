@@ -120,9 +120,6 @@ public class RadioItem extends MediaItem implements IPlayableMediaItem {
 
     @Override
     public String getCoverImageUrl() {
-        if (coverImageUrl == null || coverImageUrl.isEmpty()) {
-            return DEFAULT_IMAGE;
-        }
         return coverImageUrl;
     }
 

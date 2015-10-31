@@ -16,7 +16,6 @@ public class SlidingMenuDivider extends RecyclerView.ItemDecoration {
 
     private final int DEVIDER_SIZE = 2;
     private Drawable mDivider;
-
     public SlidingMenuDivider(Context mContext, int drawable) {
         mDivider = mContext.getResources().getDrawable(drawable);
     }

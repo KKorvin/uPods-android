@@ -14,8 +14,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.chickenkiller.upods2.R;
+import com.chickenkiller.upods2.controllers.adaperts.MediaItemsAdapter;
 import com.chickenkiller.upods2.controllers.internet.BackendManager;
-import com.chickenkiller.upods2.controllers.adaperts.SearchResultsAdapter;
 import com.chickenkiller.upods2.controllers.player.SmallPlayer;
 import com.chickenkiller.upods2.interfaces.IFragmentsManager;
 import com.chickenkiller.upods2.interfaces.IRequestCallback;
@@ -24,6 +24,7 @@ import com.chickenkiller.upods2.interfaces.IToolbarHolder;
 import com.chickenkiller.upods2.models.MediaItem;
 import com.chickenkiller.upods2.models.Podcast;
 import com.chickenkiller.upods2.models.RadioItem;
+import com.chickenkiller.upods2.utils.MediaItemType;
 import com.chickenkiller.upods2.utils.ServerApi;
 
 import org.json.JSONException;
@@ -36,20 +37,17 @@ import java.util.ArrayList;
  */
 public class FragmentSearch extends Fragment implements SearchView.OnQueryTextListener {
 
-    public enum SearchType {RADIO, PODCAST}
-
-    ;
 
     public static final String TAG = "search_results";
 
     private RecyclerView rvSearchResults;
     private SmallPlayer smallPlayer;
-    private SearchResultsAdapter searchResultsAdapter;
+    private MediaItemsAdapter mediaItemsAdapter;
     private ProgressBar pbLoadingSearch;
     private TextView tvSearchNoResults;
     private TextView tvStartTyping;
     private String lastQuery = "";
-    private SearchType searchType;
+    private MediaItemType mediaItemType;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -74,13 +72,13 @@ public class FragmentSearch extends Fragment implements SearchView.OnQueryTextLi
         ((ISlidingMenuHolder) getActivity()).setSlidingMenuHeader(getString(R.string.radio_main));
 
         //Featured adapter
-        searchResultsAdapter = new SearchResultsAdapter(getActivity(), R.layout.radio_search_results_item);
+        mediaItemsAdapter = new MediaItemsAdapter(getActivity(), R.layout.card_media_item_horizontal, R.layout.media_item_title);
         if (getActivity() instanceof IFragmentsManager) {
-            searchResultsAdapter.setFragmentsManager((IFragmentsManager) getActivity());
+            mediaItemsAdapter.setFragmentsManager((IFragmentsManager) getActivity());
         }
 
         //Featured recycle view
-        rvSearchResults.setAdapter(searchResultsAdapter);
+        rvSearchResults.setAdapter(mediaItemsAdapter);
         rvSearchResults.setLayoutManager(layoutManager);
         rvSearchResults.setVisibility(View.INVISIBLE);
         tvStartTyping.setVisibility(View.VISIBLE);
@@ -88,15 +86,15 @@ public class FragmentSearch extends Fragment implements SearchView.OnQueryTextLi
         return view;
     }
 
-    public void setSearchType(SearchType searchType) {
-        this.searchType = searchType;
+    public void setSearchType(MediaItemType mediaItemType) {
+        this.mediaItemType = mediaItemType;
     }
 
     private void loadSearchResults(String query) {
         lastQuery = query;
         rvSearchResults.setVisibility(View.GONE);
         pbLoadingSearch.setVisibility(View.VISIBLE);
-        if (searchType == SearchType.RADIO) {
+        if (mediaItemType == MediaItemType.RADIO) {
             query = ServerApi.RADIO_SEARCH + query;
         } else {
             query = ServerApi.PODCAST_SEARCH + query + ServerApi.PODCAST_SEARCH_PARAM;
@@ -109,13 +107,13 @@ public class FragmentSearch extends Fragment implements SearchView.OnQueryTextLi
                             public void run() {
                                 try {
                                     ArrayList<MediaItem> resultMediaItems = new ArrayList<MediaItem>();
-                                    if (searchType == SearchType.RADIO) {
+                                    if (mediaItemType == MediaItemType.RADIO) {
                                         resultMediaItems.addAll(RadioItem.withJsonArray(jResponse.getJSONArray("result"), getActivity()));
-                                    }else{
+                                    } else {
                                         resultMediaItems.addAll(Podcast.withJsonArray(jResponse.getJSONArray("results")));
                                     }
-                                    searchResultsAdapter.clear();
-                                    searchResultsAdapter.addItems(resultMediaItems);
+                                    mediaItemsAdapter.clearItems();
+                                    mediaItemsAdapter.addItems(resultMediaItems);
                                     pbLoadingSearch.setVisibility(View.GONE);
                                     rvSearchResults.setVisibility(View.VISIBLE);
                                     if (resultMediaItems.size() == 0) {

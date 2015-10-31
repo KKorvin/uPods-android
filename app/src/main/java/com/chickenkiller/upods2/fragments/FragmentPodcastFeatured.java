@@ -11,6 +11,7 @@ import android.widget.ProgressBar;
 
 import com.chickenkiller.upods2.R;
 import com.chickenkiller.upods2.controllers.internet.BackendManager;
+import com.chickenkiller.upods2.utils.MediaItemType;
 import com.chickenkiller.upods2.views.GridSpacingItemDecoration;
 import com.chickenkiller.upods2.controllers.adaperts.MediaItemsAdapter;
 import com.chickenkiller.upods2.interfaces.IContentLoadListener;
@@ -57,7 +58,7 @@ public class FragmentPodcastFeatured extends Fragment implements IContentLoadLis
                 @Override
                 public boolean onMenuItemClick(MenuItem menuItem) {
                     FragmentSearch fragmentSearch = new FragmentSearch();
-                    fragmentSearch.setSearchType(FragmentSearch.SearchType.PODCAST);
+                    fragmentSearch.setSearchType(MediaItemType.PODCAST);
                     ((IFragmentsManager) getActivity()).showFragment(R.id.fl_content, fragmentSearch, FragmentSearch.TAG);
                     return false;
                 }
