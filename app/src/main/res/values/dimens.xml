@@ -42,5 +42,9 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="horizontal_card_side_margin">5dp</dimen>
     <dimen name="horizantal_card_top_margin">2.5dp</dimen>
-    
+
+    <!-- LetterBitmap-->
+    <dimen name="tile_letter_font_size">33sp</dimen>
+    <dimen name="letter_tile_size">64dp</dimen>
+
 </resources>

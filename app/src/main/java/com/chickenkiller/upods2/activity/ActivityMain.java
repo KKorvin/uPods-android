@@ -61,20 +61,24 @@ public class ActivityMain extends BasicActivity implements IOverlayable, IToolba
         slidingMenu = new SlidingMenu(this, toolbar);
         showFragment(R.id.fl_content, new FragmentWellcome(), FragmentWellcome.TAG);
 
+        final Bundle arguments = new Bundle();
+
         if (isFirstRun) {
             toolbar.setVisibility(View.GONE);
             new Handler().postDelayed(new Runnable() {
                 public void run() {
                     toolbar.setVisibility(View.VISIBLE);
                     FragmentMediaItemsGrid fragmentMediaItemsGrid = new FragmentMediaItemsGrid();
-                    fragmentMediaItemsGrid.setMediaItemType(MediaItemType.RADIO);
+                    arguments.putInt(FragmentMediaItemsGrid.MEDIA_TYPE_KEY, MediaItemType.RADIO.ordinal());
+                    fragmentMediaItemsGrid.setArguments(arguments);
                     showFragment(R.id.fl_content, fragmentMediaItemsGrid, FragmentMediaItemsGrid.TAG);
                 }
             }, WELLCOME_SCREEN_TIME);
         } else {
             toolbar.setVisibility(View.VISIBLE);
             FragmentMediaItemsGrid fragmentMediaItemsGrid = new FragmentMediaItemsGrid();
-            fragmentMediaItemsGrid.setMediaItemType(MediaItemType.RADIO);
+            arguments.putInt(FragmentMediaItemsGrid.MEDIA_TYPE_KEY, MediaItemType.RADIO.ordinal());
+            fragmentMediaItemsGrid.setArguments(arguments);
             showFragment(R.id.fl_content, fragmentMediaItemsGrid, FragmentMediaItemsGrid.TAG);
         }
         isFirstRun = false;

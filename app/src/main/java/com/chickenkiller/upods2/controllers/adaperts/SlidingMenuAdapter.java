@@ -1,6 +1,7 @@
 package com.chickenkiller.upods2.controllers.adaperts;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -144,11 +145,15 @@ public class SlidingMenuAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                         fragmentsManager.showFragment(R.id.fl_content, settingsFragment, FragmentSettings.TAG);
                     } else if (clickedMenuItem.getTitle().equals(context.getString(R.string.podcasts_main))) {
                         FragmentMediaItemsGrid fragmentMediaItemsGrid = new FragmentMediaItemsGrid();
-                        fragmentMediaItemsGrid.setMediaItemType(MediaItemType.PODCAST);
+                        final Bundle arguments = new Bundle();
+                        arguments.putInt(FragmentMediaItemsGrid.MEDIA_TYPE_KEY, MediaItemType.PODCAST.ordinal());
+                        fragmentMediaItemsGrid.setArguments(arguments);
                         fragmentsManager.showFragment(R.id.fl_content, fragmentMediaItemsGrid, FragmentMediaItemsGrid.TAG);
                     } else if (clickedMenuItem.getTitle().equals(context.getString(R.string.radio_main))) {
                         FragmentMediaItemsGrid fragmentMediaItemsGrid = new FragmentMediaItemsGrid();
-                        fragmentMediaItemsGrid.setMediaItemType(MediaItemType.RADIO);
+                        final Bundle arguments = new Bundle();
+                        arguments.putInt(FragmentMediaItemsGrid.MEDIA_TYPE_KEY, MediaItemType.RADIO.ordinal());
+                        fragmentMediaItemsGrid.setArguments(arguments);
                         fragmentsManager.showFragment(R.id.fl_content, fragmentMediaItemsGrid, FragmentMediaItemsGrid.TAG);
                     } else {
                         Toast.makeText(context, "TEST" + clickedMenuItem.getTitle(), Toast.LENGTH_SHORT).show();
