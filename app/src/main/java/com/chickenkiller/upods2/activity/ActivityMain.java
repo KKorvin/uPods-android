@@ -1,12 +1,12 @@
 package com.chickenkiller.upods2.activity;
 
 import android.animation.ObjectAnimator;
-import android.app.FragmentManager;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -34,8 +34,7 @@ import com.chickenkiller.upods2.views.SlidingMenu;
 
 public class ActivityMain extends BasicActivity implements IOverlayable, IToolbarHolder, ISlidingMenuHolder {
 
-    public static boolean isFirstRun = true;
-
+    private static final int MIN_NUMBER_FRAGMENTS_IN_STACK = 2;
     private static final float MAX_OVERLAY_LEVEL = 0.8f;
     private static final int FRAGMENT_TRANSACTION_TIME = 300;
     private static final int WELLCOME_SCREEN_TIME = 2000;
@@ -43,7 +42,8 @@ public class ActivityMain extends BasicActivity implements IOverlayable, IToolba
     private SlidingMenu slidingMenu;
     private View vOverlay;
 
-
+    public static boolean isFirstRun = true;
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -97,7 +97,8 @@ public class ActivityMain extends BasicActivity implements IOverlayable, IToolba
         //TODO change
         slidingMenu.getAdapter().clearRowSelections();
         slidingMenu.getAdapter().notifyDataSetChanged();
-        if (getFragmentManager().getBackStackEntryCount() > 0) {
+        Log.i(LOG_TAG, "Number fragments in stack: " + String.valueOf(getFragmentManager().getBackStackEntryCount()));
+        if (getFragmentManager().getBackStackEntryCount() > MIN_NUMBER_FRAGMENTS_IN_STACK) {
             if (getLatestFragmentTag().equals(FragmentSearch.TAG)) {
                 toolbar.getMenu().findItem(R.id.action_search).collapseActionView();
                 getFragmentManager().popBackStack();
@@ -108,8 +109,7 @@ public class ActivityMain extends BasicActivity implements IOverlayable, IToolba
                 getFragmentManager().popBackStack();
             }
         } else {
-            getFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-            super.onBackPressed();
+            finish();
         }
 
     }

@@ -24,6 +24,8 @@ import java.util.Calendar;
  */
 public class BasicActivity extends Activity implements IFragmentsManager, IContextMenuManager {
 
+    protected final static String LOG_TAG = "BasicActivity";
+
     //For context menus
     protected Object currentContextMenuData;
     protected ContextMenuType contextMenuType;
