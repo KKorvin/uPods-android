@@ -10,6 +10,9 @@
     <color name="black">#000000</color>
     <color name="global_background">#EEEEEE</color>
     <color name="card_pressed_background">#EAEAEA</color>
+    <color name="notification_grey">#878787</color>
+    <color name="notification_background">#393631</color>
+
 
     <!-- Devider color -->
     <color name="sliding_menu_devider_color">#dcdcdc</color>

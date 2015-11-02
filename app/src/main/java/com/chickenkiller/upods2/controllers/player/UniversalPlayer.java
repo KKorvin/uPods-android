@@ -13,7 +13,7 @@ import com.chickenkiller.upods2.models.RadioItem;
 import com.chickenkiller.upods2.utils.GlobalUtils;
 import com.chickenkiller.upods2.utils.MediaUtils;
 import com.chickenkiller.upods2.views.PlayerNotificationPanel;
-import com.chickenkiller.upods2.views.RadioNotificationPanel;
+import com.chickenkiller.upods2.views.DefaultNotificationPanel;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -237,7 +237,7 @@ public class UniversalPlayer implements MediaPlayer.OnPreparedListener, MediaPla
             if (notificationPanel != null) {
                 notificationPanel.notificationCancel();
             }
-            notificationPanel = new RadioNotificationPanel(UpodsApplication.getContext(), (RadioItem) mediaItem);
+            notificationPanel = new DefaultNotificationPanel(UpodsApplication.getContext(), (RadioItem) mediaItem);
             ProfileManager.getInstance().addRecentMediaItem(mediaItem);
         }
         if (preparedListener != null) {

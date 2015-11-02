@@ -3,13 +3,15 @@
     android:id="@+id/rlNotification"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
+    android:background="@color/notification_background"
+    android:gravity="center"
     android:padding="10dp">
 
     <ImageView
         android:id="@+id/imgPlayerNtBar"
         android:layout_width="50dp"
         android:layout_height="50dp"
+        android:layout_marginRight="5dp"
         android:src="@drawable/ic_temp" />
 
     <TextView
@@ -17,16 +19,53 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
+        android:layout_toLeftOf="@+id/lnNtButtons"
         android:layout_toRightOf="@+id/imgPlayerNtBar"
         android:text="Textc"
-        android:textColor="@color/gray_202020" />
+        android:textColor="@color/white" />
 
-    <Button
-        android:id="@+id/btnPlayNtBar"
+    <TextView
+        android:id="@+id/tvPlayerSubTitleNtBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
-        android:layout_toRightOf="@id/tvPlayerTitleNtBar"
-        android:text="Stop" />
+        android:layout_below="@+id/tvPlayerTitleNtBar"
+        android:layout_marginTop="2dp"
+        android:layout_toLeftOf="@+id/lnNtButtons"
+        android:layout_toRightOf="@+id/imgPlayerNtBar"
+        android:textColor="@color/notification_grey" />
 
+    <LinearLayout
+        android:id="@+id/lnNtButtons"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignParentRight="true"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/BtnRewindLeftNtBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:background="@android:color/transparent"
+            android:src="@drawable/ic_rewind_white_left" />
+
+        <ImageButton
+            android:id="@+id/btnPlayNtBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:background="@android:color/transparent"
+            android:src="@drawable/ic_pause_white" />
+
+        <ImageButton
+            android:id="@+id/BtnRewindRightNtBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:background="@android:color/transparent"
+            android:src="@drawable/ic_rewind_white_right" />
+    </LinearLayout>
 </RelativeLayout>

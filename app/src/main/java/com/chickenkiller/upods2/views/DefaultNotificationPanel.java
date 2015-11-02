@@ -14,45 +14,45 @@ import com.chickenkiller.upods2.R;
 import com.chickenkiller.upods2.activity.ActivityPlayer;
 import com.chickenkiller.upods2.controllers.app.MainBroadcastRecivier;
 import com.chickenkiller.upods2.controllers.player.UniversalPlayer;
-import com.chickenkiller.upods2.models.RadioItem;
+import com.chickenkiller.upods2.interfaces.IPlayableMediaItem;
 
 /**
  * Created by alonzilberman on 7/31/15.
  */
-public class RadioNotificationPanel extends PlayerNotificationPanel {
+public class DefaultNotificationPanel extends PlayerNotificationPanel {
     private static int NOTIFICATION_ID = 12;
     private PendingIntent playIntent;
     private PendingIntent pauseIntent;
 
-    public RadioNotificationPanel(Context mContext, RadioItem radioItem) {
-        super(mContext, radioItem);
+    public DefaultNotificationPanel(Context mContext, IPlayableMediaItem playableMediaItem) {
+        super(mContext, playableMediaItem);
         this.nBuilder = new NotificationCompat.Builder(mContext);
-        this.nBuilder.setContentTitle(radioItem.getName());
-        this.nBuilder.setContentInfo(radioItem.getName());
-        this.nBuilder.setContentText(radioItem.getName());
+        this.nBuilder.setContentTitle(playableMediaItem.getName());
+        this.nBuilder.setContentInfo(playableMediaItem.getName());
+        this.nBuilder.setContentText(playableMediaItem.getName());
         this.nBuilder.setSmallIcon(R.drawable.ic_play_white_24dp);
         this.nBuilder.setAutoCancel(false);
-        this.nBuilder.setOngoing(false);
+        this.nBuilder.setOngoing(true);
 
         Intent intentOpen = new Intent(mContext, ActivityPlayer.class);
         intentOpen.putExtra(ActivityPlayer.MEDIA_ITEM_EXTRA, UniversalPlayer.getInstance().getPlayingMediaItem());
         PendingIntent piOpen = PendingIntent.getActivity(mContext, 0, intentOpen, 0);
 
         this.nBuilder.setContentIntent(piOpen);
+        this.nBuilder.setOngoing(false);
 
         this.remoteView = new RemoteViews(mContext.getPackageName(), R.layout.player_notification);
-        this.remoteView.setTextViewText(R.id.tvPlayerTitleNtBar, radioItem.getName());
-
+        this.remoteView.setTextViewText(R.id.tvPlayerTitleNtBar, playableMediaItem.getName());
+        this.remoteView.setTextViewText(R.id.tvPlayerSubTitleNtBar, playableMediaItem.getSubHeader());
         setListeners();
 
         this.nBuilder.setContent(remoteView);
         Notification notification = nBuilder.build();
-
         this.nManager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
         this.nManager.notify(NOTIFICATION_ID, notification);
 
         Glide.with(mContext)
-                .load(radioItem.getCoverImageUrl())
+                .load(playableMediaItem.getCoverImageUrl())
                 .asBitmap()
                 .into(new NotificationTarget(
                         mContext,
@@ -78,8 +78,13 @@ public class RadioNotificationPanel extends PlayerNotificationPanel {
 
     @Override
     public void updateNotificationStatus(UniversalPlayer.State state) {
-        String text = (state == UniversalPlayer.State.PLAYING ? "Stop" : "Play");
-        remoteView.setTextViewText(R.id.btnPlayNtBar, text);
+        if (state == UniversalPlayer.State.PLAYING) {
+            remoteView.setImageViewResource(R.id.btnPlayNtBar, R.drawable.ic_pause_white);
+            nBuilder.setOngoing(true);
+        } else {
+            remoteView.setImageViewResource(R.id.btnPlayNtBar, R.drawable.ic_play_white);
+            nBuilder.setOngoing(false);
+        }
         remoteView.setOnClickPendingIntent(R.id.btnPlayNtBar, state == UniversalPlayer.State.PLAYING ? pauseIntent : playIntent);
         nBuilder.setSmallIcon(state == UniversalPlayer.State.PLAYING ? R.drawable.ic_play_white_24dp : R.drawable.ic_pause_white);
         nManager.notify(NOTIFICATION_ID, nBuilder.build());
