@@ -44,12 +44,10 @@ public class FragmentMediaItemsGrid extends Fragment implements ICustumziedBackP
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Bundle bundle = this.getArguments();
         mediaItemType = MediaItemType.values()[bundle.getInt(MEDIA_TYPE_KEY)];
-
         View view = inflater.inflate(R.layout.fragment_media_grid, container, false);
-        mediaPagesAdapter = new MediaPagesAdapter(getFragmentManager(), mediaItemType);
+        mediaPagesAdapter = new MediaPagesAdapter(getChildFragmentManager(), mediaItemType);
         vpMedia = (MediaViewpager) view.findViewById(R.id.vpMedia);
         vpMedia.setAdapter(mediaPagesAdapter);
-
         vpMediaTabs = (TabLayout) view.findViewById(R.id.tlMediaTabs);
         vpMediaTabs.setBackgroundResource(R.color.color_primary);
 
