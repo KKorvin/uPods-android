@@ -1,9 +1,9 @@
 package com.chickenkiller.upods2.models;
 
 import android.text.format.Formatter;
-import android.util.Log;
 
 import com.chickenkiller.upods2.controllers.app.UpodsApplication;
+import com.chickenkiller.upods2.utils.Logger;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -44,7 +44,7 @@ public class Episod extends Track {
             this.pathOnDisk = jsonItem.has("pathOnDisk") ? jsonItem.getString("pathOnDisk") : "";
             this.audeoUrl = jsonItem.has("audeoUrl") ? jsonItem.getString("audeoUrl") : "";
         } catch (JSONException e) {
-            Log.e(EPISOD_LOG, "Can't parse episod from json");
+            Logger.printError(EPISOD_LOG, "Can't parse episod from json");
             e.printStackTrace();
         }
 
@@ -79,7 +79,7 @@ public class Episod extends Track {
             jsonEpisod.put("pathOnDisk", this.pathOnDisk);
             jsonEpisod.put("audeoUrl", this.audeoUrl);
         } catch (JSONException e) {
-            Log.e(EPISOD_LOG, "Can't save episod to json");
+            Logger.printError(EPISOD_LOG, "Can't save episod to json");
             e.printStackTrace();
         }
         return jsonEpisod;

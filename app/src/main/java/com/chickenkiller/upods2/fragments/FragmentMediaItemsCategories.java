@@ -3,7 +3,6 @@ package com.chickenkiller.upods2.fragments;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,10 +12,9 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.chickenkiller.upods2.R;
-import com.chickenkiller.upods2.controllers.internet.BackendManager;
 import com.chickenkiller.upods2.controllers.adaperts.CategoriesAdapter;
-import com.chickenkiller.upods2.views.GridSpacingItemDecoration;
 import com.chickenkiller.upods2.controllers.adaperts.MediaItemsAdapter;
+import com.chickenkiller.upods2.controllers.internet.BackendManager;
 import com.chickenkiller.upods2.interfaces.ICustumziedBackPress;
 import com.chickenkiller.upods2.interfaces.IFragmentsManager;
 import com.chickenkiller.upods2.interfaces.IRequestCallback;
@@ -24,9 +22,11 @@ import com.chickenkiller.upods2.models.Category;
 import com.chickenkiller.upods2.models.MediaItem;
 import com.chickenkiller.upods2.models.MediaItemTitle;
 import com.chickenkiller.upods2.models.Podcast;
-import com.chickenkiller.upods2.utils.MediaItemType;
+import com.chickenkiller.upods2.utils.Logger;
+import com.chickenkiller.upods2.utils.enums.MediaItemType;
 import com.chickenkiller.upods2.utils.ServerApi;
 import com.chickenkiller.upods2.views.AutofitRecyclerView;
+import com.chickenkiller.upods2.views.GridSpacingItemDecoration;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -149,7 +149,7 @@ public class FragmentMediaItemsCategories extends Fragment implements AdapterVie
 
                                     pbLoadingMediaItems.setVisibility(View.GONE);
                                     rvMain.setVisibility(View.VISIBLE);
-                                    Log.i(LOG_TAG, "Loaded " + podcastsByCategory.size() + "podcasts for " + category.getName());
+                                    Logger.printInfo(LOG_TAG, "Loaded " + podcastsByCategory.size() + "podcasts for " + category.getName());
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }

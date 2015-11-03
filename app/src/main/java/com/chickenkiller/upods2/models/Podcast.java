@@ -1,9 +1,8 @@
 package com.chickenkiller.upods2.models;
 
-import android.util.Log;
-
 import com.chickenkiller.upods2.interfaces.IPlayableMediaItem;
 import com.chickenkiller.upods2.interfaces.ITrackable;
+import com.chickenkiller.upods2.utils.Logger;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -76,7 +75,7 @@ public class Podcast extends MediaItem implements IPlayableMediaItem, ITrackable
                 }
             }
         } catch (Exception e) {
-            Log.e(PODCAST_LOG, "Can't parse podcast from json");
+            Logger.printError(PODCAST_LOG, "Can't parse podcast from json");
             e.printStackTrace();
         }
     }
@@ -100,7 +99,7 @@ public class Podcast extends MediaItem implements IPlayableMediaItem, ITrackable
                 podcast.put("episods", Episod.toJSONArray(this.episods));
             }
         } catch (JSONException e) {
-            Log.e(PODCAST_LOG, "Can't convert podcast to json");
+            Logger.printError(PODCAST_LOG, "Can't convert podcast to json");
             e.printStackTrace();
         }
         return podcast;

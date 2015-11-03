@@ -1,10 +1,10 @@
 package com.chickenkiller.upods2.models;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.chickenkiller.upods2.interfaces.IPlayableMediaItem;
 import com.chickenkiller.upods2.utils.GlobalUtils;
+import com.chickenkiller.upods2.utils.Logger;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -138,7 +138,7 @@ public class RadioItem extends MediaItem implements IPlayableMediaItem {
             radioItem.put("country", this.country);
             radioItem.put("genre", this.genre);
         } catch (JSONException e) {
-            Log.e(RADIO_LOG, "Can't convert radio to json");
+            Logger.printError(RADIO_LOG, "Can't convert radio to json");
             e.printStackTrace();
         }
         return radioItem;

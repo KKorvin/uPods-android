@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.ContextMenu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -27,8 +26,9 @@ import com.chickenkiller.upods2.models.MediaItem;
 import com.chickenkiller.upods2.models.Podcast;
 import com.chickenkiller.upods2.models.Track;
 import com.chickenkiller.upods2.utils.ContextMenuHelper;
-import com.chickenkiller.upods2.utils.ContextMenuType;
-import com.chickenkiller.upods2.utils.MediaItemType;
+import com.chickenkiller.upods2.utils.enums.ContextMenuType;
+import com.chickenkiller.upods2.utils.Logger;
+import com.chickenkiller.upods2.utils.enums.MediaItemType;
 import com.chickenkiller.upods2.utils.UIHelper;
 import com.chickenkiller.upods2.views.SlidingMenu;
 
@@ -43,7 +43,7 @@ public class ActivityMain extends BasicActivity implements IOverlayable, IToolba
     private View vOverlay;
 
     public static boolean isFirstRun = true;
-    
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,24 +61,20 @@ public class ActivityMain extends BasicActivity implements IOverlayable, IToolba
         slidingMenu = new SlidingMenu(this, toolbar);
         showFragment(R.id.fl_content, new FragmentWellcome(), FragmentWellcome.TAG);
 
-        final Bundle arguments = new Bundle();
-
         if (isFirstRun) {
             toolbar.setVisibility(View.GONE);
             new Handler().postDelayed(new Runnable() {
                 public void run() {
                     toolbar.setVisibility(View.VISIBLE);
                     FragmentMediaItemsGrid fragmentMediaItemsGrid = new FragmentMediaItemsGrid();
-                    arguments.putInt(FragmentMediaItemsGrid.MEDIA_TYPE_KEY, MediaItemType.RADIO.ordinal());
-                    fragmentMediaItemsGrid.setArguments(arguments);
+                    fragmentMediaItemsGrid.setMediaItemType(MediaItemType.PODCAST);
                     showFragment(R.id.fl_content, fragmentMediaItemsGrid, FragmentMediaItemsGrid.TAG);
                 }
             }, WELLCOME_SCREEN_TIME);
         } else {
             toolbar.setVisibility(View.VISIBLE);
             FragmentMediaItemsGrid fragmentMediaItemsGrid = new FragmentMediaItemsGrid();
-            arguments.putInt(FragmentMediaItemsGrid.MEDIA_TYPE_KEY, MediaItemType.RADIO.ordinal());
-            fragmentMediaItemsGrid.setArguments(arguments);
+            fragmentMediaItemsGrid.setMediaItemType(MediaItemType.PODCAST);
             showFragment(R.id.fl_content, fragmentMediaItemsGrid, FragmentMediaItemsGrid.TAG);
         }
         isFirstRun = false;
@@ -97,7 +93,7 @@ public class ActivityMain extends BasicActivity implements IOverlayable, IToolba
         //TODO change
         slidingMenu.getAdapter().clearRowSelections();
         slidingMenu.getAdapter().notifyDataSetChanged();
-        Log.i(LOG_TAG, "Number fragments in stack: " + String.valueOf(getFragmentManager().getBackStackEntryCount()));
+        Logger.printInfo(LOG_TAG, "Number fragments in stack: " + String.valueOf(getFragmentManager().getBackStackEntryCount()));
         if (getFragmentManager().getBackStackEntryCount() > MIN_NUMBER_FRAGMENTS_IN_STACK) {
             if (getLatestFragmentTag().equals(FragmentSearch.TAG)) {
                 toolbar.getMenu().findItem(R.id.action_search).collapseActionView();

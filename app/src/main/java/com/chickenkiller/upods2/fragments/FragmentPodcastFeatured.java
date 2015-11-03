@@ -11,7 +11,7 @@ import android.widget.ProgressBar;
 
 import com.chickenkiller.upods2.R;
 import com.chickenkiller.upods2.controllers.internet.BackendManager;
-import com.chickenkiller.upods2.utils.MediaItemType;
+import com.chickenkiller.upods2.utils.enums.MediaItemType;
 import com.chickenkiller.upods2.views.GridSpacingItemDecoration;
 import com.chickenkiller.upods2.controllers.adaperts.MediaItemsAdapter;
 import com.chickenkiller.upods2.interfaces.IContentLoadListener;

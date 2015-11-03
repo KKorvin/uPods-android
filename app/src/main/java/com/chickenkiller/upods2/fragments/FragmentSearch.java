@@ -24,7 +24,7 @@ import com.chickenkiller.upods2.interfaces.IToolbarHolder;
 import com.chickenkiller.upods2.models.MediaItem;
 import com.chickenkiller.upods2.models.Podcast;
 import com.chickenkiller.upods2.models.RadioItem;
-import com.chickenkiller.upods2.utils.MediaItemType;
+import com.chickenkiller.upods2.utils.enums.MediaItemType;
 import com.chickenkiller.upods2.utils.ServerApi;
 
 import org.json.JSONException;

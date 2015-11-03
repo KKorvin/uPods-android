@@ -1,10 +1,9 @@
 package com.chickenkiller.upods2.controllers.internet;
 
-import android.util.Log;
-
 import com.chickenkiller.upods2.controllers.app.SimpleCacheManager;
 import com.chickenkiller.upods2.interfaces.IRequestCallback;
 import com.chickenkiller.upods2.interfaces.ISimpleRequestCallback;
+import com.chickenkiller.upods2.utils.Logger;
 import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
@@ -80,7 +79,7 @@ public class BackendManager {
                 return;
             }
         } catch (Exception e) {
-            Log.i(TAG, "Can't restore cache for url: " + request.urlString());
+            Logger.printInfo(TAG, "Can't restore cache for url: " + request.urlString());
             e.printStackTrace();
         }
         try {
@@ -119,7 +118,7 @@ public class BackendManager {
                 return;
             }
         } catch (Exception e) {
-            Log.i(TAG, "Can't restore cache for url: " + request.urlString());
+            Logger.printInfo(TAG, "Can't restore cache for url: " + request.urlString());
             e.printStackTrace();
         }
         try {

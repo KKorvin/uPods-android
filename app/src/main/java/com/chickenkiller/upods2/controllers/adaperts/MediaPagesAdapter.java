@@ -12,7 +12,7 @@ import com.chickenkiller.upods2.fragments.FragmentMediaItemsCategories;
 import com.chickenkiller.upods2.fragments.FragmentMediaItemsList;
 import com.chickenkiller.upods2.fragments.FragmentPodcastFeatured;
 import com.chickenkiller.upods2.interfaces.IUpdateableFragment;
-import com.chickenkiller.upods2.utils.MediaItemType;
+import com.chickenkiller.upods2.utils.enums.MediaItemType;
 
 /**
  * Created by alonzilberman on 8/14/15.

@@ -6,7 +6,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Environment;
-import android.util.Log;
 
 import com.chickenkiller.upods2.controllers.app.ProfileManager;
 import com.chickenkiller.upods2.controllers.app.UpodsApplication;
@@ -15,6 +14,7 @@ import com.chickenkiller.upods2.interfaces.IPlayableMediaItem;
 import com.chickenkiller.upods2.interfaces.IUIProgressUpdater;
 import com.chickenkiller.upods2.models.Track;
 import com.chickenkiller.upods2.utils.GlobalUtils;
+import com.chickenkiller.upods2.utils.Logger;
 
 import java.util.ArrayList;
 import java.util.Timer;
@@ -79,7 +79,7 @@ public class DownloadMaster {
         task.downloadId = downloadManager.enqueue(request);
         task.filePath = Environment.getExternalStoragePublicDirectory(finalPath) + "/" + trackName;
         allTasks.add(task);
-        Log.i(DM_LOG, "Starting download episod " + trackName + " to " + finalPath);
+        Logger.printInfo(DM_LOG, "Starting download episod " + trackName + " to " + finalPath);
         runProgressUpdater();
     }
 
@@ -164,7 +164,7 @@ public class DownloadMaster {
         task.progressUpdater = null;
         downloadManager.remove(task.downloadId);
         allTasks.remove(task);
-        Log.i(DM_LOG, "Task for item name: " + itemName + " canceled ");
+        Logger.printInfo(DM_LOG, "Task for item name: " + itemName + " canceled ");
     }
 
     /**

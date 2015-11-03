@@ -25,7 +25,7 @@ import com.chickenkiller.upods2.interfaces.ITrackable;
 import com.chickenkiller.upods2.interfaces.IUIProgressUpdater;
 import com.chickenkiller.upods2.models.MediaItem;
 import com.chickenkiller.upods2.models.Track;
-import com.chickenkiller.upods2.utils.ContextMenuType;
+import com.chickenkiller.upods2.utils.enums.ContextMenuType;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,7 +1,5 @@
 package com.chickenkiller.upods2.controllers.app;
 
-import android.util.Log;
-
 import com.chickenkiller.upods2.interfaces.IOperationFinishCallback;
 import com.chickenkiller.upods2.interfaces.IPlayableMediaItem;
 import com.chickenkiller.upods2.models.Episod;
@@ -9,6 +7,7 @@ import com.chickenkiller.upods2.models.MediaItem;
 import com.chickenkiller.upods2.models.Podcast;
 import com.chickenkiller.upods2.models.RadioItem;
 import com.chickenkiller.upods2.models.Track;
+import com.chickenkiller.upods2.utils.Logger;
 import com.pixplicity.easyprefs.library.Prefs;
 
 import org.json.JSONArray;
@@ -59,7 +58,7 @@ public class ProfileManager {
                 rootProfile.put(JS_SUBSCRIBED_STATIONS, subscribedRadioStations);
                 rootProfile.put(JS_RECENT_STATIONS, recentRadioStations);
             } catch (JSONException e) {
-                Log.e(PROFILE, "Can't create empty profile object");
+                Logger.printError(PROFILE, "Can't create empty profile object");
                 e.printStackTrace();
             }
             profileJsonStr = rootProfile.toString();
@@ -72,7 +71,7 @@ public class ProfileManager {
             initProfileRadioItems(rootProfile.getJSONArray(JS_SUBSCRIBED_STATIONS), ProfileItem.SUBSCRIBDED_RADIO);
             initProfileRadioItems(rootProfile.getJSONArray(JS_RECENT_STATIONS), ProfileItem.RECENT_RADIO);
         } catch (JSONException e) {
-            Log.e(PROFILE, "Can't parse profile string to json: " + profileJsonStr);
+            Logger.printError(PROFILE, "Can't parse profile string to json: " + profileJsonStr);
             e.printStackTrace();
         }
     }
@@ -115,7 +114,7 @@ public class ProfileManager {
                     subscribedPodcasts.add(podcast);
                 }
             } catch (JSONException e) {
-                Log.e(PROFILE, "Can't fetch podcast from json object at index" + String.valueOf(i));
+                Logger.printError(PROFILE, "Can't fetch podcast from json object at index" + String.valueOf(i));
                 e.printStackTrace();
             }
         }
@@ -125,7 +124,7 @@ public class ProfileManager {
         } else if (profileItem == ProfileItem.SUBSCRIBDED_PODCASTS) {
             podcastType = " subscribded ";
         }
-        Log.i(PROFILE, "Fetcheed " + String.valueOf(podcasts.length()) + podcastType + "podcasts from json profile");
+        Logger.printInfo(PROFILE, "Fetcheed " + String.valueOf(podcasts.length()) + podcastType + "podcasts from json profile");
     }
 
     private void initProfileRadioItems(JSONArray radioItems, ProfileItem profileItem) {
@@ -138,7 +137,7 @@ public class ProfileManager {
                     recentRadioItems.add(radioItem);
                 }
             } catch (JSONException e) {
-                Log.e(PROFILE, "Can't fetch radio item from json object at index" + String.valueOf(i));
+                Logger.printError(PROFILE, "Can't fetch radio item from json object at index" + String.valueOf(i));
                 e.printStackTrace();
             }
         }
@@ -148,7 +147,7 @@ public class ProfileManager {
         } else if (profileItem == ProfileItem.RECENT_RADIO) {
             podcastType = " recent ";
         }
-        Log.i(PROFILE, "Fetcheed " + String.valueOf(radioItems.length()) + podcastType + "radio items from json profile");
+        Logger.printInfo(PROFILE, "Fetcheed " + String.valueOf(radioItems.length()) + podcastType + "radio items from json profile");
     }
 
     public void addSubscribedMediaItem(IPlayableMediaItem mediaItem) {
@@ -317,9 +316,9 @@ public class ProfileManager {
                     rootProfile.put(JS_RECENT_STATIONS, RadioItem.toJsonArray(recentRadioItems));
                 }
                 Prefs.putString(PROFILE_PREF, rootProfile.toString());
-                Log.i(PROFILE_PREF, rootProfile.toString());
+                Logger.printInfo(PROFILE_PREF, rootProfile.toString());
             } catch (JSONException e) {
-                Log.e(PROFILE, "Can't parse profile string to json: " + profileJsonStr);
+                Logger.printInfo(PROFILE, "Can't parse profile string to json: " + profileJsonStr);
                 e.printStackTrace();
             }
             if (profileSavedCallback != null) {

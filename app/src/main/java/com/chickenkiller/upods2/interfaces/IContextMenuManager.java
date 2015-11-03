@@ -2,7 +2,7 @@ package com.chickenkiller.upods2.interfaces;
 
 import android.view.View;
 
-import com.chickenkiller.upods2.utils.ContextMenuType;
+import com.chickenkiller.upods2.utils.enums.ContextMenuType;
 
 /**
  * Implement it on activity for costumizing work with different sliding menus

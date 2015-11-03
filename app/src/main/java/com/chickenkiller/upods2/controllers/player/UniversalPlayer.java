@@ -1,7 +1,6 @@
 package com.chickenkiller.upods2.controllers.player;
 
 import android.media.MediaPlayer;
-import android.util.Log;
 
 import com.chickenkiller.upods2.controllers.app.ProfileManager;
 import com.chickenkiller.upods2.controllers.app.UpodsApplication;
@@ -11,6 +10,7 @@ import com.chickenkiller.upods2.interfaces.IPlayerStateListener;
 import com.chickenkiller.upods2.models.Podcast;
 import com.chickenkiller.upods2.models.RadioItem;
 import com.chickenkiller.upods2.utils.GlobalUtils;
+import com.chickenkiller.upods2.utils.Logger;
 import com.chickenkiller.upods2.utils.MediaUtils;
 import com.chickenkiller.upods2.views.DefaultNotificationPanel;
 import com.chickenkiller.upods2.views.PlayerNotificationPanel;
@@ -95,7 +95,7 @@ public class UniversalPlayer implements MediaPlayer.OnPreparedListener, MediaPla
         }
         if (!isPrepaired) {
             try {
-                Log.i(PLAYER_LOG, "Trying to play: " + mediaItem.getAudeoLink());
+                Logger.printInfo(PLAYER_LOG, "Trying to play: " + mediaItem.getAudeoLink());
                 if (!menageAudeoFormats()) {
                     return;
                 }
@@ -248,13 +248,13 @@ public class UniversalPlayer implements MediaPlayer.OnPreparedListener, MediaPla
 
     @Override
     public boolean onError(MediaPlayer mp, int what, int extra) {
-        Log.i(PLAYER_LOG, "Error code: " + String.valueOf(what));
+        Logger.printInfo(PLAYER_LOG, "Error code: " + String.valueOf(what));
         return false;
     }
 
     @Override
     public boolean onInfo(MediaPlayer mp, int what, int extra) {
-        Log.i(PLAYER_LOG, "Info code: " + String.valueOf(what));
+        Logger.printInfo(PLAYER_LOG, "Info code: " + String.valueOf(what));
         if (what == MediaPlayer.MEDIA_INFO_BUFFERING_START && !GlobalUtils.isInternetConnected()) {
             runReconnectTask();
         }
@@ -267,12 +267,12 @@ public class UniversalPlayer implements MediaPlayer.OnPreparedListener, MediaPla
                 @Override
                 public void run() {
                     if (GlobalUtils.isInternetConnected()) {
-                        Log.i(PLAYER_LOG, "Reconnector -> got internet connection -> restarting player...");
+                        Logger.printInfo(PLAYER_LOG, "Reconnector -> got internet connection -> restarting player...");
                         softRestart();
                         autoReconector.cancel();
                         autoReconector = null;
                     } else {
-                        Log.i(PLAYER_LOG, "Reconnector -> no internet connection -> will try again later...");
+                        Logger.printInfo(PLAYER_LOG, "Reconnector -> no internet connection -> will try again later...");
                     }
                 }
             };

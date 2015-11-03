@@ -1,6 +1,6 @@
 package com.chickenkiller.upods2.controllers.app;
 
-import android.util.Log;
+import com.chickenkiller.upods2.utils.Logger;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -26,10 +26,10 @@ public class SimpleCacheManager {
         try {
             if (!cacheFolder.exists()) {
                 cacheFolder.mkdirs();
-                Log.i(LOG_TAG, "Cache folder created: " + cacheFolder.getAbsolutePath());
+                Logger.printInfo(LOG_TAG, "Cache folder created: " + cacheFolder.getAbsolutePath());
             }
         } catch (Exception e) {
-            Log.i(LOG_TAG, "Can't create cache folder");
+            Logger.printInfo(LOG_TAG, "Can't create cache folder");
             e.printStackTrace();
         }
     }
@@ -63,11 +63,11 @@ public class SimpleCacheManager {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        Log.i(LOG_TAG, "Url: " + url + " cached to file: " + fileName);
+        Logger.printInfo(LOG_TAG, "Url: " + url + " cached to file: " + fileName);
     }
 
     public String readFromCache(String url) {
-        Log.i(LOG_TAG, "Looking for url: " + url + " in cache...");
+        Logger.printInfo(LOG_TAG, "Looking for url: " + url + " in cache...");
         url = url.replaceAll(FILE_NAME_SHORTIFY_REGEX, "");
         File cacheStorage = new File(UpodsApplication.getContext().getFilesDir() + CACHE_FOLDER);
         if (cacheStorage != null && cacheStorage.list() != null) {
@@ -88,7 +88,7 @@ public class SimpleCacheManager {
                     } catch (IOException e) {
                         //You'll need to add proper error handling here
                     }
-                    Log.i(LOG_TAG, "Found cache!");
+                    Logger.printInfo(LOG_TAG, "Found cache!");
                     return text.toString();
                 }
             }
@@ -132,7 +132,7 @@ public class SimpleCacheManager {
                     }
                 }
             }
-            Log.i(LOG_TAG, "Removed " + count + " expired cache files ");
+            Logger.printInfo(LOG_TAG, "Removed " + count + " expired cache files ");
         } catch (Exception e) {
             e.printStackTrace();
         }

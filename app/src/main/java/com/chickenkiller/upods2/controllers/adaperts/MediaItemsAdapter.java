@@ -27,7 +27,7 @@ import com.chickenkiller.upods2.models.BannersLayoutItem;
 import com.chickenkiller.upods2.models.MediaItem;
 import com.chickenkiller.upods2.models.MediaItemTitle;
 import com.chickenkiller.upods2.models.ViewHolderBannersLayout;
-import com.chickenkiller.upods2.utils.ContextMenuType;
+import com.chickenkiller.upods2.utils.enums.ContextMenuType;
 import com.chickenkiller.upods2.utils.LetterBitmap;
 import com.chickenkiller.upods2.utils.UIHelper;
 import com.chickenkiller.upods2.views.ImageViewSquare;

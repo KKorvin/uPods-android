@@ -18,7 +18,7 @@ import com.chickenkiller.upods2.models.MediaItem;
 import com.chickenkiller.upods2.models.MediaItemTitle;
 import com.chickenkiller.upods2.models.Podcast;
 import com.chickenkiller.upods2.models.RadioItem;
-import com.chickenkiller.upods2.utils.MediaItemType;
+import com.chickenkiller.upods2.utils.enums.MediaItemType;
 
 import java.util.ArrayList;
 import java.util.Calendar;

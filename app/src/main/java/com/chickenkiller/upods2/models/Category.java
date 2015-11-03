@@ -1,9 +1,8 @@
 package com.chickenkiller.upods2.models;
 
-import android.util.Log;
-
 import com.chickenkiller.upods2.controllers.internet.BackendManager;
 import com.chickenkiller.upods2.interfaces.IRequestCallback;
+import com.chickenkiller.upods2.utils.Logger;
 import com.chickenkiller.upods2.utils.ServerApi;
 import com.pixplicity.easyprefs.library.Prefs;
 
@@ -44,7 +43,7 @@ public class Category {
                         jsonCategories.getJSONObject(i).getInt("id")));
             }
         } catch (JSONException e) {
-            Log.i(CATEGORIES_LOG, "Can't get podcasts categories from shared prefs");
+            Logger.printInfo(CATEGORIES_LOG, "Can't get podcasts categories from shared prefs");
             e.printStackTrace();
         }
         return podcastsCategories;
@@ -70,9 +69,9 @@ public class Category {
                     try {
                         JSONArray result = jResponse.getJSONArray("result");
                         Prefs.putString(CATEGORIES_PREF, result.toString());
-                        Log.i(CATEGORIES_LOG, "Got " + String.valueOf(result.length()) + " podcasts categories from server");
+                        Logger.printInfo(CATEGORIES_LOG, "Got " + String.valueOf(result.length()) + " podcasts categories from server");
                     } catch (JSONException e) {
-                        Log.i(CATEGORIES_LOG, "Can't get podcasts categories from server");
+                        Logger.printInfo(CATEGORIES_LOG, "Can't get podcasts categories from server");
                         e.printStackTrace();
                     }
                 }

@@ -1,7 +1,5 @@
 package com.chickenkiller.upods2.utils;
 
-import android.util.Log;
-
 import com.chickenkiller.upods2.controllers.internet.BackendManager;
 import com.chickenkiller.upods2.interfaces.IOperationFinishWithDataCallback;
 import com.chickenkiller.upods2.interfaces.ISimpleRequestCallback;
@@ -21,7 +19,7 @@ public class MediaUtils {
             public void onRequestSuccessed(String response) {
                 List<String> allURls = GlobalUtils.extractUrls(response);
                 String mp3Url = allURls.size() > 0 ? allURls.get(0) : "";
-                Log.i(LOG_TAG, "Extracted from file urls: " + allURls.toString());
+                Logger.printInfo(LOG_TAG, "Extracted from file urls: " + allURls.toString());
                 mp3Extracted.operationFinished(mp3Url);
             }
 

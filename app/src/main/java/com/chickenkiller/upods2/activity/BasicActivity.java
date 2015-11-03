@@ -14,7 +14,7 @@ import com.chickenkiller.upods2.interfaces.IContextMenuManager;
 import com.chickenkiller.upods2.interfaces.IFragmentsManager;
 import com.chickenkiller.upods2.interfaces.IOperationFinishCallback;
 import com.chickenkiller.upods2.interfaces.IOverlayable;
-import com.chickenkiller.upods2.utils.ContextMenuType;
+import com.chickenkiller.upods2.utils.enums.ContextMenuType;
 
 import java.util.Calendar;
 

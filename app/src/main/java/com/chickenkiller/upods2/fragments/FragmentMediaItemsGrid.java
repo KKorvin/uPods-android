@@ -15,7 +15,7 @@ import com.chickenkiller.upods2.interfaces.ICustumziedBackPress;
 import com.chickenkiller.upods2.interfaces.IOperationFinishCallback;
 import com.chickenkiller.upods2.interfaces.ISlidingMenuHolder;
 import com.chickenkiller.upods2.interfaces.IToolbarHolder;
-import com.chickenkiller.upods2.utils.MediaItemType;
+import com.chickenkiller.upods2.utils.enums.MediaItemType;
 import com.chickenkiller.upods2.views.MediaViewpager;
 
 import java.util.Calendar;
@@ -28,7 +28,6 @@ public class FragmentMediaItemsGrid extends Fragment implements ICustumziedBackP
     private static final int CATEGORIES_FRAGMENT_POSITION = 3;
 
     public static final String TAG;
-    public static String MEDIA_TYPE_KEY = "media_type_key";
     private MediaViewpager vpMedia;
     private MediaPagesAdapter mediaPagesAdapter;
     private TabLayout vpMediaTabs;
@@ -42,8 +41,6 @@ public class FragmentMediaItemsGrid extends Fragment implements ICustumziedBackP
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        Bundle bundle = this.getArguments();
-        mediaItemType = MediaItemType.values()[bundle.getInt(MEDIA_TYPE_KEY)];
         View view = inflater.inflate(R.layout.fragment_media_grid, container, false);
         mediaPagesAdapter = new MediaPagesAdapter(getChildFragmentManager(), mediaItemType);
         vpMedia = (MediaViewpager) view.findViewById(R.id.vpMedia);
@@ -90,9 +87,9 @@ public class FragmentMediaItemsGrid extends Fragment implements ICustumziedBackP
         return view;
     }
 
-    //public void setMediaItemType(MediaItemType mediaItemType) {
-    //    this.mediaItemType = mediaItemType;
-    //}
+    public void setMediaItemType(MediaItemType mediaItemType) {
+        this.mediaItemType = mediaItemType;
+    }
 
     @Override
     public void onDestroy() {

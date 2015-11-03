@@ -1,7 +1,6 @@
 package com.chickenkiller.upods2.controllers.adaperts;
 
 import android.content.Context;
-import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,7 +18,7 @@ import com.chickenkiller.upods2.interfaces.ISlidingMenuManager;
 import com.chickenkiller.upods2.models.SlidingMenuHeader;
 import com.chickenkiller.upods2.models.SlidingMenuItem;
 import com.chickenkiller.upods2.models.SlidingMenuRow;
-import com.chickenkiller.upods2.utils.MediaItemType;
+import com.chickenkiller.upods2.utils.enums.MediaItemType;
 
 import java.util.List;
 
@@ -145,15 +144,11 @@ public class SlidingMenuAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                         fragmentsManager.showFragment(R.id.fl_content, settingsFragment, FragmentSettings.TAG);
                     } else if (clickedMenuItem.getTitle().equals(context.getString(R.string.podcasts_main))) {
                         FragmentMediaItemsGrid fragmentMediaItemsGrid = new FragmentMediaItemsGrid();
-                        final Bundle arguments = new Bundle();
-                        arguments.putInt(FragmentMediaItemsGrid.MEDIA_TYPE_KEY, MediaItemType.PODCAST.ordinal());
-                        fragmentMediaItemsGrid.setArguments(arguments);
+                        fragmentMediaItemsGrid.setMediaItemType(MediaItemType.PODCAST);
                         fragmentsManager.showFragment(R.id.fl_content, fragmentMediaItemsGrid, FragmentMediaItemsGrid.TAG);
                     } else if (clickedMenuItem.getTitle().equals(context.getString(R.string.radio_main))) {
                         FragmentMediaItemsGrid fragmentMediaItemsGrid = new FragmentMediaItemsGrid();
-                        final Bundle arguments = new Bundle();
-                        arguments.putInt(FragmentMediaItemsGrid.MEDIA_TYPE_KEY, MediaItemType.RADIO.ordinal());
-                        fragmentMediaItemsGrid.setArguments(arguments);
+                        fragmentMediaItemsGrid.setMediaItemType(MediaItemType.RADIO);
                         fragmentsManager.showFragment(R.id.fl_content, fragmentMediaItemsGrid, FragmentMediaItemsGrid.TAG);
                     } else {
                         Toast.makeText(context, "TEST" + clickedMenuItem.getTitle(), Toast.LENGTH_SHORT).show();

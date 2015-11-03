@@ -19,7 +19,7 @@ import com.chickenkiller.upods2.interfaces.IToolbarHolder;
 import com.chickenkiller.upods2.models.MediaItem;
 import com.chickenkiller.upods2.models.MediaItemTitle;
 import com.chickenkiller.upods2.models.RadioItem;
-import com.chickenkiller.upods2.utils.MediaItemType;
+import com.chickenkiller.upods2.utils.enums.MediaItemType;
 import com.chickenkiller.upods2.utils.ServerApi;
 import com.chickenkiller.upods2.views.AutofitRecyclerView;
 import com.chickenkiller.upods2.views.GridSpacingItemDecoration;
