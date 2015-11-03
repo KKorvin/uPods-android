@@ -36,7 +36,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Can be used for any layout which shows MediaItems (or only cards with IPlayableMediaItem)
+ * Can be used for any layout which shows MediaItems (or only cards with IPlayableMediaItem). Supports synchronise content loading.
  * Created by alonzilberman on 7/2/15.
  */
 public class MediaItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -159,45 +159,52 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         if (holder instanceof ViewHolderCardItem) {//Card
-            IPlayableMediaItem currentItem = (IPlayableMediaItem) items.get(position);
-            if (currentItem.getCoverImageUrl() == null) {
-                final LetterBitmap letterBitmap = new LetterBitmap(mContext);
-                Bitmap letterTile = letterBitmap.getLetterTile(currentItem.getName(), currentItem.getName(), COVER_IMAGE_SIZE, COVER_IMAGE_SIZE);
-                ((ViewHolderCardItem) holder).imgSquare.setImageBitmap(letterTile);
-            } else {
-                Glide.with(mContext).load(currentItem.getCoverImageUrl()).centerCrop()
-                        .crossFade().into(((ViewHolderCardItem) holder).imgSquare);
-            }
-            ((ViewHolderCardItem) holder).tvSquareTitle.setText(currentItem.getName());
-            if (((ViewHolderCardItem) holder).tvSquareSubTitle != null) {
-                ((ViewHolderCardItem) holder).tvSquareSubTitle.setText(currentItem.getSubHeader());
-            }
-            if (((ViewHolderCardItem) holder).tvItemStatus != null) {
-                initStatusBlock((ViewHolderCardItem) holder, currentItem);
-            }
-
-            holder.itemView.setTag(currentItem);
-            ((ViewHolderCardItem) holder).setCardClickListener(getCardClickListener(position));
-            ((ViewHolderCardItem) holder).setCardMenuClickListener(getCardMenuClickListener(position));
+            bindCardViewHolder(holder, position);
         } else if (holder instanceof ViewHolderMediaItemTitle) {//Title
-            MediaItemTitle currentItem = (MediaItemTitle) items.get(position);
-            ((ViewHolderMediaItemTitle) holder).tvMediaCardTitle.setText(currentItem.getTitle());
-            if (currentItem.getSubTitle().isEmpty()) {
-                ((ViewHolderMediaItemTitle) holder).tvMediaCardSubTitle.setVisibility(View.GONE);
-                RelativeLayout.LayoutParams llp = (RelativeLayout.LayoutParams) ((ViewHolderMediaItemTitle) holder).tvMediaCardTitle.getLayoutParams();
-
-                // Left // Top // Right // Bottom
-                llp.setMargins(UIHelper.dpToPixels(15), UIHelper.dpToPixels(10), UIHelper.dpToPixels(15), UIHelper.dpToPixels(3));
-                ((ViewHolderMediaItemTitle) holder).tvMediaCardTitle.setLayoutParams(llp);
-            } else {
-                ((ViewHolderMediaItemTitle) holder).tvMediaCardSubTitle.setVisibility(View.VISIBLE);
-                ((ViewHolderMediaItemTitle) holder).tvMediaCardSubTitle.setText(currentItem.getSubTitle());
-            }
-            if (!currentItem.showButton) {
-                ((ViewHolderMediaItemTitle) holder).btnMediaTitleMore.setVisibility(View.GONE);
-            }
-            holder.itemView.setTag(currentItem);
+            bindTitleViewHolder(holder, position);
         }
+    }
+
+    private void bindTitleViewHolder(RecyclerView.ViewHolder holder, int position) {
+        MediaItemTitle currentItem = (MediaItemTitle) items.get(position);
+        ((ViewHolderMediaItemTitle) holder).tvMediaCardTitle.setText(currentItem.getTitle());
+        if (currentItem.getSubTitle().isEmpty()) {
+            ((ViewHolderMediaItemTitle) holder).tvMediaCardSubTitle.setVisibility(View.GONE);
+            RelativeLayout.LayoutParams llp = (RelativeLayout.LayoutParams) ((ViewHolderMediaItemTitle) holder).tvMediaCardTitle.getLayoutParams();
+            // Left // Top // Right // Bottom
+            llp.setMargins(UIHelper.dpToPixels(15), UIHelper.dpToPixels(10), UIHelper.dpToPixels(15), UIHelper.dpToPixels(3));
+            ((ViewHolderMediaItemTitle) holder).tvMediaCardTitle.setLayoutParams(llp);
+        } else {
+            ((ViewHolderMediaItemTitle) holder).tvMediaCardSubTitle.setVisibility(View.VISIBLE);
+            ((ViewHolderMediaItemTitle) holder).tvMediaCardSubTitle.setText(currentItem.getSubTitle());
+        }
+        if (!currentItem.showButton) {
+            ((ViewHolderMediaItemTitle) holder).btnMediaTitleMore.setVisibility(View.GONE);
+        }
+        holder.itemView.setTag(currentItem);
+    }
+
+    private void bindCardViewHolder(RecyclerView.ViewHolder holder, int position) {
+        IPlayableMediaItem currentItem = (IPlayableMediaItem) items.get(position);
+        if (currentItem.getCoverImageUrl() == null) {
+            final LetterBitmap letterBitmap = new LetterBitmap(mContext);
+            Bitmap letterTile = letterBitmap.getLetterTile(currentItem.getName(), currentItem.getName(), COVER_IMAGE_SIZE, COVER_IMAGE_SIZE);
+            ((ViewHolderCardItem) holder).imgSquare.setImageBitmap(letterTile);
+        } else {
+            Glide.with(mContext).load(currentItem.getCoverImageUrl()).centerCrop()
+                    .crossFade().into(((ViewHolderCardItem) holder).imgSquare);
+        }
+        ((ViewHolderCardItem) holder).tvSquareTitle.setText(currentItem.getName());
+        if (((ViewHolderCardItem) holder).tvSquareSubTitle != null) {
+            ((ViewHolderCardItem) holder).tvSquareSubTitle.setText(currentItem.getSubHeader());
+        }
+        if (((ViewHolderCardItem) holder).tvItemStatus != null) {
+            initStatusBlock((ViewHolderCardItem) holder, currentItem);
+        }
+
+        holder.itemView.setTag(currentItem);
+        ((ViewHolderCardItem) holder).setCardClickListener(getCardClickListener(position));
+        ((ViewHolderCardItem) holder).setCardMenuClickListener(getCardMenuClickListener(position));
     }
 
     private void initStatusBlock(ViewHolderCardItem holder, IPlayableMediaItem currentItem) {

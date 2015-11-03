@@ -67,14 +67,14 @@ public class ActivityMain extends BasicActivity implements IOverlayable, IToolba
                 public void run() {
                     toolbar.setVisibility(View.VISIBLE);
                     FragmentMediaItemsGrid fragmentMediaItemsGrid = new FragmentMediaItemsGrid();
-                    fragmentMediaItemsGrid.setMediaItemType(MediaItemType.PODCAST);
+                    fragmentMediaItemsGrid.setMediaItemType(MediaItemType.RADIO);
                     showFragment(R.id.fl_content, fragmentMediaItemsGrid, FragmentMediaItemsGrid.TAG);
                 }
             }, WELLCOME_SCREEN_TIME);
         } else {
             toolbar.setVisibility(View.VISIBLE);
             FragmentMediaItemsGrid fragmentMediaItemsGrid = new FragmentMediaItemsGrid();
-            fragmentMediaItemsGrid.setMediaItemType(MediaItemType.PODCAST);
+            fragmentMediaItemsGrid.setMediaItemType(MediaItemType.RADIO);
             showFragment(R.id.fl_content, fragmentMediaItemsGrid, FragmentMediaItemsGrid.TAG);
         }
         isFirstRun = false;
