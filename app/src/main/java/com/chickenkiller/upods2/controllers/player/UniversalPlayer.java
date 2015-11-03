@@ -12,8 +12,8 @@ import com.chickenkiller.upods2.models.Podcast;
 import com.chickenkiller.upods2.models.RadioItem;
 import com.chickenkiller.upods2.utils.GlobalUtils;
 import com.chickenkiller.upods2.utils.MediaUtils;
-import com.chickenkiller.upods2.views.PlayerNotificationPanel;
 import com.chickenkiller.upods2.views.DefaultNotificationPanel;
+import com.chickenkiller.upods2.views.PlayerNotificationPanel;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -222,7 +222,8 @@ public class UniversalPlayer implements MediaPlayer.OnPreparedListener, MediaPla
         if (this.mediaItem == null) {
             return false;
         }
-        if (this.mediaItem.equals(mediaItem)) {
+
+        if (this.mediaItem.getAudeoLink().equals(mediaItem.getAudeoLink())) {
             return this.mediaItem.getAudeoLink().equals(mediaItem.getAudeoLink());
         }
         return false;

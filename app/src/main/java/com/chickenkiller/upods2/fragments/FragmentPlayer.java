@@ -109,13 +109,14 @@ public class FragmentPlayer extends Fragment implements MediaPlayer.OnPreparedLi
         if (universalPlayer.isPlaying() && universalPlayer.isCurrentMediaItem(playableMediaItem)) {
             btnPlay.setBackgroundResource(R.drawable.ic_pause_white);
             return;
-        } else if (universalPlayer.isPlaying()) {
-            universalPlayer.resetPlayer();
+        } else if (universalPlayer.isCurrentMediaItem(playableMediaItem)) {
+            btnPlay.setBackgroundResource(R.drawable.ic_play_white);
+            return;
         }
+        universalPlayer.resetPlayer();
         universalPlayer.setMediaItem(playableMediaItem);
         universalPlayer.prepare();
         btnPlay.setBackgroundResource(R.drawable.ic_play_white);
-        //btnPlay.setText("Fetching...");
     }
 
     @Override
