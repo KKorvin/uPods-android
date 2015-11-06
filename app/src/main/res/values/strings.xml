@@ -87,6 +87,8 @@
     <string name="page_subscribed">Subscribed</string>
     <string name="page_recent">Recent</string>
     <string name="recently_played">Recently played</string>
+    <string name="now_paying">Now playing</string>
+    <string name="buffering">Buffering...</string>
 
 
 </resources>

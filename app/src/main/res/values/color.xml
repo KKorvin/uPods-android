@@ -50,7 +50,8 @@
     <color name="light_blue_900">#01579B</color>
 
     <!-- Material Blue Gray -->
-    <color name="blue_grey_900">#263238</color>
+    <color name="blue_grey_1000">#1D262A</color>
+    <color name="blue_grey_900">#2B3239</color>
     <color name="blue_grey_800">#37474F</color>
     <color name="blue_grey_700">#455A64</color>
     <color name="blue_grey_600">#546E7A</color>

@@ -22,6 +22,7 @@ import com.chickenkiller.upods2.activity.ActivityPlayer;
 import com.chickenkiller.upods2.controllers.player.UniversalPlayer;
 import com.chickenkiller.upods2.interfaces.IPlayableMediaItem;
 import com.chickenkiller.upods2.interfaces.IPlayerStateListener;
+import com.chickenkiller.upods2.interfaces.IToolbarHolder;
 import com.chickenkiller.upods2.utils.UIHelper;
 
 
@@ -34,7 +35,6 @@ public class FragmentPlayer extends Fragment implements MediaPlayer.OnPreparedLi
     private ImageButton btnPlay;
     private IPlayableMediaItem playableMediaItem;
     private ImageView imgPlayerCover;
-    private ImageView imgClosePlayer;
     private RelativeLayout rlTopSectionBckg;
     private UniversalPlayer universalPlayer;
     private TextView tvPlayserSubtitle;
@@ -45,7 +45,7 @@ public class FragmentPlayer extends Fragment implements MediaPlayer.OnPreparedLi
         public void onClick(View view) {
             if (universalPlayer.isPrepaired) {
                 universalPlayer.toggle();
-                btnPlay.setBackgroundResource(universalPlayer.isPlaying() ? R.drawable.ic_pause_white : R.drawable.ic_play_white);
+                btnPlay.setImageResource(universalPlayer.isPlaying() ? R.drawable.ic_pause_white : R.drawable.ic_play_white);
             } else {
                 runPlayer();
             }
@@ -65,8 +65,6 @@ public class FragmentPlayer extends Fragment implements MediaPlayer.OnPreparedLi
         super.onCreate(savedInstanceState);
         View view = inflater.inflate(R.layout.fragment_player, container, false);
         btnPlay = (ImageButton) view.findViewById(R.id.btnPlay);
-        imgClosePlayer = (ImageView) view.findViewById(R.id.imgClosePlayer);
-        imgClosePlayer.setOnClickListener(imgClosePlayerClickListener);
         btnPlay.setOnClickListener(btnPlayStopClickListener);
         rlTopSectionBckg = (RelativeLayout) view.findViewById(R.id.rlTopSectionBckg);
         imgPlayerCover = (ImageView) view.findViewById(R.id.imgPlayerCover);
@@ -81,6 +79,9 @@ public class FragmentPlayer extends Fragment implements MediaPlayer.OnPreparedLi
             universalPlayer = UniversalPlayer.getInstance();
             runPlayer();
         }
+
+        ((IToolbarHolder) getActivity()).getToolbar().setTitle(R.string.buffering);
+
         return view;
     }
 
@@ -107,21 +108,22 @@ public class FragmentPlayer extends Fragment implements MediaPlayer.OnPreparedLi
         universalPlayer.setPreparedListener(this);
         universalPlayer.setPlayerStateListener(this);
         if (universalPlayer.isPlaying() && universalPlayer.isCurrentMediaItem(playableMediaItem)) {
-            btnPlay.setBackgroundResource(R.drawable.ic_pause_white);
+            btnPlay.setImageResource(R.drawable.ic_pause_white);
             return;
         } else if (universalPlayer.isCurrentMediaItem(playableMediaItem)) {
-            btnPlay.setBackgroundResource(R.drawable.ic_play_white);
+            btnPlay.setImageResource(R.drawable.ic_play_white);
             return;
         }
         universalPlayer.resetPlayer();
         universalPlayer.setMediaItem(playableMediaItem);
         universalPlayer.prepare();
-        btnPlay.setBackgroundResource(R.drawable.ic_play_white);
+        btnPlay.setImageResource(R.drawable.ic_play_white);
     }
 
     @Override
     public void onPrepared(MediaPlayer mediaPlayer) {
-        btnPlay.setBackgroundResource(R.drawable.ic_pause_white);
+        btnPlay.setImageResource(R.drawable.ic_pause_white);
+        ((IToolbarHolder) getActivity()).getToolbar().setTitle(R.string.now_paying);
     }
 
     @Override
@@ -140,6 +142,6 @@ public class FragmentPlayer extends Fragment implements MediaPlayer.OnPreparedLi
 
     @Override
     public void onStateChanged(UniversalPlayer.State state) {
-        btnPlay.setBackgroundResource(state == UniversalPlayer.State.PLAYING ? R.drawable.ic_pause_white : R.drawable.ic_play_white);
+        btnPlay.setImageResource(state == UniversalPlayer.State.PLAYING ? R.drawable.ic_pause_white : R.drawable.ic_play_white);
     }
 }

@@ -3,22 +3,30 @@ package com.chickenkiller.upods2.activity;
 import android.app.FragmentManager;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 
 import com.chickenkiller.upods2.R;
 import com.chickenkiller.upods2.controllers.player.UniversalPlayer;
 import com.chickenkiller.upods2.interfaces.IPlayableMediaItem;
 import com.chickenkiller.upods2.fragments.FragmentMainFeatured;
 import com.chickenkiller.upods2.fragments.FragmentPlayer;
+import com.chickenkiller.upods2.interfaces.IToolbarHolder;
 
-public class ActivityPlayer extends BasicActivity {
+public class ActivityPlayer extends BasicActivity implements IToolbarHolder {
 
     public static final String MEDIA_ITEM_EXTRA = "mediaItem";
     private IPlayableMediaItem currentMediaItem;
+    private Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_player);
+
+        toolbar = (Toolbar) findViewById(R.id.toolbar_player);
+        toolbar.setTitleTextColor(getResources().getColor(R.color.white));
+        toolbar.inflateMenu(R.menu.menu_activity_player);
+
         if (getIntent().hasExtra(MEDIA_ITEM_EXTRA)) {
             currentMediaItem = (IPlayableMediaItem) getIntent().getExtras().get(MEDIA_ITEM_EXTRA);
         } else if (savedInstanceState != null && savedInstanceState.getParcelable(MEDIA_ITEM_EXTRA) != null) {
@@ -59,5 +67,10 @@ public class ActivityPlayer extends BasicActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+    }
+
+    @Override
+    public Toolbar getToolbar() {
+        return toolbar;
     }
 }
