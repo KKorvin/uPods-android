@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -24,6 +25,7 @@ import com.chickenkiller.upods2.interfaces.IPlayableMediaItem;
 import com.chickenkiller.upods2.interfaces.IPlayerStateListener;
 import com.chickenkiller.upods2.interfaces.IToolbarHolder;
 import com.chickenkiller.upods2.utils.UIHelper;
+import com.chickenkiller.upods2.views.Playlist;
 
 
 /**
@@ -39,6 +41,8 @@ public class FragmentPlayer extends Fragment implements MediaPlayer.OnPreparedLi
     private UniversalPlayer universalPlayer;
     private TextView tvPlayserSubtitle;
     private TextView tvPlayerTitle;
+    private LinearLayout lnPlayerinfo;
+    private Playlist playlist;
 
     private View.OnClickListener btnPlayStopClickListener = new View.OnClickListener() {
         @Override
@@ -70,6 +74,7 @@ public class FragmentPlayer extends Fragment implements MediaPlayer.OnPreparedLi
         imgPlayerCover = (ImageView) view.findViewById(R.id.imgPlayerCover);
         tvPlayerTitle = (TextView) view.findViewById(R.id.tvPlayerTitle);
         tvPlayserSubtitle = (TextView) view.findViewById(R.id.tvPlayserSubtitle);
+        lnPlayerinfo = (LinearLayout) view.findViewById(R.id.lnPlayerInfo);
 
         if (playableMediaItem == null) {
             playableMediaItem = (IPlayableMediaItem) savedInstanceState.get(ActivityPlayer.MEDIA_ITEM_EXTRA);
@@ -82,8 +87,13 @@ public class FragmentPlayer extends Fragment implements MediaPlayer.OnPreparedLi
 
         ((IToolbarHolder) getActivity()).getToolbar().setTitle(R.string.buffering);
 
+        //Playlist
+        playlist = new Playlist(getActivity(), view);
+        lnPlayerinfo.setOnClickListener(playlist.getPlaylistOpenClickListener());
+
         return view;
     }
+
 
     public void initPlayerUI(View view) {
         tvPlayerTitle.setText(playableMediaItem.getName());
