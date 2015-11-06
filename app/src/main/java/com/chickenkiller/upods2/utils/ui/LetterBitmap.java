@@ -1,4 +1,4 @@
-package com.chickenkiller.upods2.utils;
+package com.chickenkiller.upods2.utils.ui;
 
 import android.content.Context;
 import android.content.res.Resources;

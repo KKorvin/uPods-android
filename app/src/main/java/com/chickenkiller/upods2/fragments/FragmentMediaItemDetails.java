@@ -42,7 +42,7 @@ import com.chickenkiller.upods2.interfaces.ITrackable;
 import com.chickenkiller.upods2.models.Episod;
 import com.chickenkiller.upods2.models.Podcast;
 import com.chickenkiller.upods2.utils.enums.ContextMenuType;
-import com.chickenkiller.upods2.utils.UIHelper;
+import com.chickenkiller.upods2.utils.ui.UIHelper;
 import com.chickenkiller.upods2.views.DetailsScrollView;
 
 import org.xml.sax.InputSource;

@@ -24,7 +24,7 @@ import com.chickenkiller.upods2.controllers.player.UniversalPlayer;
 import com.chickenkiller.upods2.interfaces.IPlayableMediaItem;
 import com.chickenkiller.upods2.interfaces.IPlayerStateListener;
 import com.chickenkiller.upods2.interfaces.IToolbarHolder;
-import com.chickenkiller.upods2.utils.UIHelper;
+import com.chickenkiller.upods2.utils.ui.UIHelper;
 import com.chickenkiller.upods2.views.Playlist;
 
 
@@ -87,13 +87,16 @@ public class FragmentPlayer extends Fragment implements MediaPlayer.OnPreparedLi
 
         ((IToolbarHolder) getActivity()).getToolbar().setTitle(R.string.buffering);
 
-        //Playlist
-        playlist = new Playlist(getActivity(), view);
-        lnPlayerinfo.setOnClickListener(playlist.getPlaylistOpenClickListener());
-
         return view;
     }
 
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        //Playlist
+        playlist = new Playlist(getActivity(), view);
+        lnPlayerinfo.setOnClickListener(playlist.getPlaylistOpenClickListener());
+        super.onViewCreated(view, savedInstanceState);
+    }
 
     public void initPlayerUI(View view) {
         tvPlayerTitle.setText(playableMediaItem.getName());

@@ -29,7 +29,7 @@ import com.chickenkiller.upods2.utils.ContextMenuHelper;
 import com.chickenkiller.upods2.utils.enums.ContextMenuType;
 import com.chickenkiller.upods2.utils.Logger;
 import com.chickenkiller.upods2.utils.enums.MediaItemType;
-import com.chickenkiller.upods2.utils.UIHelper;
+import com.chickenkiller.upods2.utils.ui.UIHelper;
 import com.chickenkiller.upods2.views.SlidingMenu;
 
 public class ActivityMain extends BasicActivity implements IOverlayable, IToolbarHolder, ISlidingMenuHolder {

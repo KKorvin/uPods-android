@@ -71,6 +71,7 @@
                 android:textSize="@dimen/default_text_size_18" />
 
             <SeekBar
+                android:id="@+id/sbPlayerProgress"
                 android:layout_width="fill_parent"
                 android:layout_height="6dp"
                 android:max="100"
@@ -82,6 +83,7 @@
         </LinearLayout>
 
         <RelativeLayout
+            android:id="@+id/rlPlayerUnderbar"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_gravity="center_vertical"
@@ -118,6 +120,7 @@
         </RelativeLayout>
 
         <LinearLayout
+            android:id="@+id/lnPlayerContorls"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="15"

@@ -1,4 +1,4 @@
-package com.chickenkiller.upods2.utils;
+package com.chickenkiller.upods2.utils.ui;
 
 import android.graphics.Bitmap;
 import android.graphics.Matrix;

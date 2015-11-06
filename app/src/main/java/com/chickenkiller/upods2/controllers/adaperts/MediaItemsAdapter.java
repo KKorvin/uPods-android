@@ -28,8 +28,8 @@ import com.chickenkiller.upods2.models.MediaItem;
 import com.chickenkiller.upods2.models.MediaItemTitle;
 import com.chickenkiller.upods2.models.ViewHolderBannersLayout;
 import com.chickenkiller.upods2.utils.enums.ContextMenuType;
-import com.chickenkiller.upods2.utils.LetterBitmap;
-import com.chickenkiller.upods2.utils.UIHelper;
+import com.chickenkiller.upods2.utils.ui.LetterBitmap;
+import com.chickenkiller.upods2.utils.ui.UIHelper;
 import com.chickenkiller.upods2.views.ImageViewSquare;
 
 import java.util.ArrayList;
