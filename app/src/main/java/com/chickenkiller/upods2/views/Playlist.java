@@ -58,7 +58,6 @@ public class Playlist {
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                isInfoAnimationStarted = false;
                 if (isOpen) {
                     runCloseAnimation();
                 } else {
