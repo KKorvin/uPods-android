@@ -14,14 +14,16 @@ import com.chickenkiller.upods2.R;
  */
 public class Playlist {
 
+    private static final long PLAYLIST_ANIMATION_DURATION = 300;
     private LinearLayout lnPlaylist;
-    private ImageButton imgPlaybutton;
+    private ImageButton btnPlay;
     private Context mContext;
 
 
     public Playlist(Context mContext, View rootView) {
         this.mContext = mContext;
         this.lnPlaylist = (LinearLayout) rootView.findViewById(R.id.lnPlaylist);
+        this.btnPlay = (ImageButton) rootView.findViewById(R.id.btnPlay);
     }
 
     public View.OnClickListener getPlaylistOpenClickListener() {
@@ -37,7 +39,7 @@ public class Playlist {
                         lnPlaylist.requestLayout();
                     }
                 });
-                animator.setDuration(300);
+                animator.setDuration(PLAYLIST_ANIMATION_DURATION);
                 animator.start();
             }
         };
