@@ -9,7 +9,6 @@ import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 
 import com.chickenkiller.upods2.R;
-import com.chickenkiller.upods2.utils.Logger;
 import com.chickenkiller.upods2.utils.ui.ArcTranslateAnimation;
 
 /**
@@ -34,7 +33,6 @@ public class Playlist {
     private SeekBar sbPlayerProgress;
     private ImageButton btnPlay;
     private Context mContext;
-    private boolean isInfoAnimationStarted;
     private boolean isOpen;
 
     private int initialPlayListMargin;
@@ -92,14 +90,11 @@ public class Playlist {
                 int currentValue = (Integer) valueAnimator.getAnimatedValue();
                 params.bottomMargin = currentValue;
                 lnPlaylist.requestLayout();
-                if (!isInfoAnimationStarted && Math.abs(currentValue) <= pInfoAnimationStartPoint) {
-                    runOpenInfoSectionAnimation(PLAYLIST_ANIMATION_DURATION - animator.getCurrentPlayTime());
-                    isInfoAnimationStarted = true;
-                }
             }
         });
         animator.setDuration(PLAYLIST_ANIMATION_DURATION);
         animator.start();
+        runOpenInfoSectionAnimation(PLAYLIST_ANIMATION_DURATION);
 
         //Button animation
         ArcTranslateAnimation anim = new ArcTranslateAnimation(0, btnFinalX, 0, btnFinalY);
@@ -140,10 +135,6 @@ public class Playlist {
                 int currentValue = (Integer) valueAnimator.getAnimatedValue();
                 params.bottomMargin = currentValue;
                 lnPlaylist.requestLayout();
-                Logger.printInfo("abv:", String.valueOf(currentValue));
-                if (!isInfoAnimationStarted && Math.abs(currentValue) >= pInfoAnimationStartPoint) {
-                    isInfoAnimationStarted = true;
-                }
             }
         });
         animator.setDuration(PLAYLIST_ANIMATION_DURATION);
