@@ -75,6 +75,9 @@
     <color name="gray_202020">#212121</color>
     <color name="mini_player_blue">#0C424E</color>
 
+    <!-- MultiMedia Player -->
+    <color name="whiteGray">#A9B0B8</color>
+
     <!-- Color for button in cards -->
     <color name="green_800">#2E7D32</color>
     <color name="green_700">#388E3C</color>
