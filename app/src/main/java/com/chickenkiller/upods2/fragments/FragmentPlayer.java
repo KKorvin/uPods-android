@@ -141,9 +141,7 @@ public class FragmentPlayer extends Fragment implements MediaPlayer.OnPreparedLi
             @Override
             public void operationFinished(Object data) {
                 MetaDataFetcher.MetaData metaData = (MetaDataFetcher.MetaData) data;
-                if (metaData.bitrate.matches("000")) {
-                    metaData.bitrate.replace("000", "");
-                }
+                metaData.bitrate = metaData.bitrate.replace("000", "");
                 metaData.bitrate += getString(R.string.kbps);
                 tvTrackInfo.setText(metaData.bitrate);
             }

@@ -1,5 +1,6 @@
 package com.chickenkiller.upods2.controllers.player;
 
+import android.media.AudioManager;
 import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
 
@@ -107,9 +108,14 @@ public class UniversalPlayer implements MediaPlayer.OnPreparedListener, MediaPla
                 if (!menageAudeoFormats()) {
                     return;
                 }
+                if (onMetaDataFetchedCallback != null) {
+                    MetaDataFetcher metaDataFetcher = new MetaDataFetcher(onMetaDataFetchedCallback, mediaItem.getAudeoLink());
+                    metaDataFetcher.execute();
+                }
                 if (mediaPlayer == null) {
                     mediaPlayer = new MediaPlayer();
                 }
+                mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
                 mediaPlayer.setDataSource(mediaItem.getAudeoLink());
                 mediaPlayer.setOnPreparedListener(this);
                 mediaPlayer.setOnErrorListener(this);
@@ -257,10 +263,6 @@ public class UniversalPlayer implements MediaPlayer.OnPreparedListener, MediaPla
         }
         if (preparedListener != null) {
             preparedListener.onPrepared(mediaPlayer);
-        }
-        if (onMetaDataFetchedCallback != null) {
-            MetaDataFetcher metaDataFetcher = new MetaDataFetcher(onMetaDataFetchedCallback, mediaItem.getAudeoLink());
-            metaDataFetcher.execute();
         }
     }
 
