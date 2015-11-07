@@ -49,7 +49,8 @@
                 android:paddingLeft="12dp"
                 android:text="BBC Radio One"
                 android:textColor="@color/white"
-                android:textSize="@dimen/default_text_size_26" />
+                android:layout_marginBottom="5dp"
+                android:textSize="@dimen/default_text_size_22" />
 
             <TextView
                 android:id="@+id/tvPlayserSubtitle"
@@ -58,17 +59,18 @@
                 android:paddingLeft="12dp"
                 android:text="Most popular Internet radio"
                 android:textColor="@color/white"
-                android:textSize="@dimen/default_text_size_18" />
+                android:layout_marginBottom="5dp"
+                android:textSize="@dimen/default_text_size_16" />
 
             <TextView
                 android:id="@+id/tvTrackNumbers"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
+                android:layout_marginBottom="7dp"
                 android:paddingLeft="12dp"
                 android:text="1/12"
-                android:textColor="@color/white"
-                android:textSize="@dimen/default_text_size_18" />
+                android:textColor="@color/whiteGray"
+                android:textSize="@dimen/default_text_size_10" />
 
             <SeekBar
                 android:id="@+id/sbPlayerProgress"
@@ -90,8 +92,8 @@
             android:layout_weight="5"
             android:background="@color/blue_grey_1000"
             android:orientation="horizontal"
-            android:paddingLeft="5dp"
-            android:paddingRight="5dp">
+            android:paddingLeft="12dp"
+            android:paddingRight="12dp">
 
             <TextView
                 android:id="@+id/tvTrackCurrentTime"
@@ -99,15 +101,17 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:text="05:00"
-                android:textColor="@color/white" />
+                android:textSize="@dimen/default_text_size_10"
+                android:textColor="@color/whiteGray" />
 
             <TextView
                 android:id="@+id/tvTrackInfo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:text="some info"
-                android:textColor="@color/white" />
+                android:text="256 Kbs / 256 Kbs"
+                android:textSize="@dimen/default_text_size_10"
+                android:textColor="@color/whiteGray" />
 
             <TextView
                 android:id="@+id/tvTrackDuration"
@@ -116,7 +120,8 @@
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:text="05:00"
-                android:textColor="@color/white" />
+                android:textSize="@dimen/default_text_size_10"
+                android:textColor="@color/whiteGray" />
         </RelativeLayout>
 
         <LinearLayout
@@ -150,13 +155,13 @@
 
     <ImageButton
         android:id="@+id/btnPlay"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
+        android:layout_width="65dp"
+        android:layout_height="65dp"
         android:layout_alignParentBottom="true"
         android:layout_centerInParent="true"
         android:layout_marginBottom="13dp"
         android:background="@drawable/play_btn_bckg"
-        android:elevation="5dp"
+        android:elevation="20dp"
         android:src="@drawable/ic_play_white"
         android:text="Play" />
 
