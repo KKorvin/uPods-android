@@ -37,4 +37,5 @@ dependencies {
     compile 'com.github.traex.rippleeffect:library:+'
     compile 'com.pixplicity.easyprefs:library:+'
     compile 'com.github.jakob-grabner:Circle-Progress-View:v1.2.3+'
+    compile 'com.github.wseemann:FFmpegMediaMetadataRetriever:1.0.1+'
 }

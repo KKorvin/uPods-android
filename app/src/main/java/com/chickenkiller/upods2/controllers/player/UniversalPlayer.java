@@ -249,6 +249,8 @@ public class UniversalPlayer implements MediaPlayer.OnPreparedListener, MediaPla
         if (preparedListener != null) {
             preparedListener.onPrepared(mediaPlayer);
         }
+        MetaDataFetcher metaDataFetcher = new MetaDataFetcher(null, mediaItem.getAudeoLink());
+        metaDataFetcher.execute();
     }
 
     @Override
