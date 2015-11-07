@@ -4,12 +4,14 @@ import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.graphics.RectF;
 import android.support.v7.graphics.Palette;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.chickenkiller.upods2.controllers.app.UpodsApplication;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -66,5 +68,19 @@ public class UIHelper {
         float d = UpodsApplication.getContext().getResources().getDisplayMetrics().density;
         int margin = (int) (value * d);
         return margin;
+    }
+
+    public static TextView getToolbarTextView(Toolbar toolbar) {
+        TextView titleTextView = null;
+
+        try {
+            Field f = toolbar.getClass().getDeclaredField("mTitleTextView");
+            f.setAccessible(true);
+            titleTextView = (TextView) f.get(toolbar);
+        } catch (NoSuchFieldException e) {
+        } catch (IllegalAccessException e) {
+        }
+        return titleTextView;
+
     }
 }

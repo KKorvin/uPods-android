@@ -1,5 +1,6 @@
 package com.chickenkiller.upods2.controllers.player;
 
+import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
 
 import com.chickenkiller.upods2.controllers.app.ProfileManager;
@@ -211,6 +212,10 @@ public class UniversalPlayer implements MediaPlayer.OnPreparedListener, MediaPla
     public void removeListeners() {
         preparedListener = null;
         playerStateListener = null;
+    }
+
+    public void getTrackInfo(){
+        MediaMetadataRetriever mmr = new MediaMetadataRetriever();
     }
 
     public IPlayableMediaItem getPlayingMediaItem() {

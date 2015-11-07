@@ -2,6 +2,7 @@ package com.chickenkiller.upods2.fragments;
 
 import android.app.Fragment;
 import android.graphics.Bitmap;
+import android.graphics.Typeface;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -33,6 +34,7 @@ import com.chickenkiller.upods2.views.Playlist;
  */
 public class FragmentPlayer extends Fragment implements MediaPlayer.OnPreparedListener, IPlayerStateListener {
     public static String TAG = "fragmentPlayer";
+    private static final float TOOLBAR_TEXT_SIZE = 20f;
 
     private ImageButton btnPlay;
     private IPlayableMediaItem playableMediaItem;
@@ -86,7 +88,9 @@ public class FragmentPlayer extends Fragment implements MediaPlayer.OnPreparedLi
         }
 
         ((IToolbarHolder) getActivity()).getToolbar().setTitle(R.string.buffering);
-
+        TextView toolbarTitle = UIHelper.getToolbarTextView(((IToolbarHolder) getActivity()).getToolbar());
+        toolbarTitle.setTextSize(TOOLBAR_TEXT_SIZE);
+        toolbarTitle.setTypeface(null, Typeface.NORMAL);
         return view;
     }
 

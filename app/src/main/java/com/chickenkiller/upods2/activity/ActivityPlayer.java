@@ -7,9 +7,9 @@ import android.support.v7.widget.Toolbar;
 
 import com.chickenkiller.upods2.R;
 import com.chickenkiller.upods2.controllers.player.UniversalPlayer;
-import com.chickenkiller.upods2.interfaces.IPlayableMediaItem;
 import com.chickenkiller.upods2.fragments.FragmentMainFeatured;
 import com.chickenkiller.upods2.fragments.FragmentPlayer;
+import com.chickenkiller.upods2.interfaces.IPlayableMediaItem;
 import com.chickenkiller.upods2.interfaces.IToolbarHolder;
 
 public class ActivityPlayer extends BasicActivity implements IToolbarHolder {
@@ -26,6 +26,7 @@ public class ActivityPlayer extends BasicActivity implements IToolbarHolder {
         toolbar = (Toolbar) findViewById(R.id.toolbar_player);
         toolbar.setTitleTextColor(getResources().getColor(R.color.white));
         toolbar.inflateMenu(R.menu.menu_activity_player);
+
 
         if (getIntent().hasExtra(MEDIA_ITEM_EXTRA)) {
             currentMediaItem = (IPlayableMediaItem) getIntent().getExtras().get(MEDIA_ITEM_EXTRA);
