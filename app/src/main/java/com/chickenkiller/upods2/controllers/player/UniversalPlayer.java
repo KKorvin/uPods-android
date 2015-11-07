@@ -22,7 +22,8 @@ import java.util.TimerTask;
 /**
  * Created by alonzilberman on 7/29/15.
  */
-public class UniversalPlayer implements MediaPlayer.OnPreparedListener, MediaPlayer.OnErrorListener, MediaPlayer.OnInfoListener, MediaPlayer.OnBufferingUpdateListener {
+public class UniversalPlayer implements MediaPlayer.OnPreparedListener, MediaPlayer.OnErrorListener,
+        MediaPlayer.OnInfoListener, MediaPlayer.OnBufferingUpdateListener,MediaPlayer.OnCompletionListener {
 
 
     private static final long RECONNECT_RATE = 5000;
@@ -36,6 +37,7 @@ public class UniversalPlayer implements MediaPlayer.OnPreparedListener, MediaPla
     public static UniversalPlayer universalPlayer;
     private MediaPlayer mediaPlayer;
     private MediaPlayer.OnPreparedListener preparedListener;
+    private IOperationFinishWithDataCallback onMetaDataFetchedCallback;
     private IPlayerStateListener playerStateListener;
     private IPlayableMediaItem mediaItem;
     private PlayerNotificationPanel notificationPanel;
@@ -73,6 +75,11 @@ public class UniversalPlayer implements MediaPlayer.OnPreparedListener, MediaPla
         }
     }
 
+    public void setOnMetaDataFetchedCallback(IOperationFinishWithDataCallback onMetaDataFetchedCallback) {
+        this.onMetaDataFetchedCallback = onMetaDataFetchedCallback;
+    }
+
+
     public void setPreparedListener(MediaPlayer.OnPreparedListener preparedListener) {
         this.preparedListener = preparedListener;
     }
@@ -108,6 +115,7 @@ public class UniversalPlayer implements MediaPlayer.OnPreparedListener, MediaPla
                 mediaPlayer.setOnErrorListener(this);
                 mediaPlayer.setOnInfoListener(this);
                 mediaPlayer.setOnBufferingUpdateListener(this);
+                mediaPlayer.setOnCompletionListener(this);
                 mediaPlayer.prepareAsync();
             } catch (Exception e) {
                 e.printStackTrace();
@@ -192,6 +200,7 @@ public class UniversalPlayer implements MediaPlayer.OnPreparedListener, MediaPla
             mediaItem = null;
             preparedListener = null;
             playerStateListener = null;
+            onMetaDataFetchedCallback = null;
             isPrepaired = false;
         }
         if (notificationPanel != null) {
@@ -214,7 +223,7 @@ public class UniversalPlayer implements MediaPlayer.OnPreparedListener, MediaPla
         playerStateListener = null;
     }
 
-    public void getTrackInfo(){
+    public void getTrackInfo() {
         MediaMetadataRetriever mmr = new MediaMetadataRetriever();
     }
 
@@ -249,8 +258,10 @@ public class UniversalPlayer implements MediaPlayer.OnPreparedListener, MediaPla
         if (preparedListener != null) {
             preparedListener.onPrepared(mediaPlayer);
         }
-        MetaDataFetcher metaDataFetcher = new MetaDataFetcher(null, mediaItem.getAudeoLink());
-        metaDataFetcher.execute();
+        if (onMetaDataFetchedCallback != null) {
+            MetaDataFetcher metaDataFetcher = new MetaDataFetcher(onMetaDataFetchedCallback, mediaItem.getAudeoLink());
+            metaDataFetcher.execute();
+        }
     }
 
     @Override
@@ -290,5 +301,10 @@ public class UniversalPlayer implements MediaPlayer.OnPreparedListener, MediaPla
     @Override
     public void onBufferingUpdate(MediaPlayer mp, int percent) {
         //Log.i(PLAYER_LOG, "Player buffer: " + String.valueOf(percent));
+    }
+
+    @Override
+    public void onCompletion(MediaPlayer mp) {
+        Logger.printInfo(PLAYER_LOG, "COMPLITED!!!");
     }
 }

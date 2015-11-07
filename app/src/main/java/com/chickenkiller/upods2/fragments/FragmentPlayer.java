@@ -21,7 +21,9 @@ import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
 import com.chickenkiller.upods2.R;
 import com.chickenkiller.upods2.activity.ActivityPlayer;
+import com.chickenkiller.upods2.controllers.player.MetaDataFetcher;
 import com.chickenkiller.upods2.controllers.player.UniversalPlayer;
+import com.chickenkiller.upods2.interfaces.IOperationFinishWithDataCallback;
 import com.chickenkiller.upods2.interfaces.IPlayableMediaItem;
 import com.chickenkiller.upods2.interfaces.IPlayerStateListener;
 import com.chickenkiller.upods2.interfaces.IToolbarHolder;
@@ -43,6 +45,7 @@ public class FragmentPlayer extends Fragment implements MediaPlayer.OnPreparedLi
     private UniversalPlayer universalPlayer;
     private TextView tvPlayserSubtitle;
     private TextView tvPlayerTitle;
+    private TextView tvTrackInfo;
     private LinearLayout lnPlayerinfo;
     private Playlist playlist;
 
@@ -76,6 +79,7 @@ public class FragmentPlayer extends Fragment implements MediaPlayer.OnPreparedLi
         imgPlayerCover = (ImageView) view.findViewById(R.id.imgPlayerCover);
         tvPlayerTitle = (TextView) view.findViewById(R.id.tvPlayerTitle);
         tvPlayserSubtitle = (TextView) view.findViewById(R.id.tvPlayserSubtitle);
+        tvTrackInfo = (TextView) view.findViewById(R.id.tvTrackInfo);
         lnPlayerinfo = (LinearLayout) view.findViewById(R.id.lnPlayerInfo);
 
         if (playableMediaItem == null) {
@@ -133,6 +137,17 @@ public class FragmentPlayer extends Fragment implements MediaPlayer.OnPreparedLi
         }
         universalPlayer.resetPlayer();
         universalPlayer.setMediaItem(playableMediaItem);
+        universalPlayer.setOnMetaDataFetchedCallback(new IOperationFinishWithDataCallback() {
+            @Override
+            public void operationFinished(Object data) {
+                MetaDataFetcher.MetaData metaData = (MetaDataFetcher.MetaData) data;
+                if (metaData.bitrate.matches("000")) {
+                    metaData.bitrate.replace("000", "");
+                }
+                metaData.bitrate += getString(R.string.kbps);
+                tvTrackInfo.setText(metaData.bitrate);
+            }
+        });
         universalPlayer.prepare();
         btnPlay.setImageResource(R.drawable.ic_play_white);
     }

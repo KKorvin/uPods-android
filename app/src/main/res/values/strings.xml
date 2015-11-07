@@ -89,6 +89,7 @@
     <string name="recently_played">Recently played</string>
     <string name="now_paying">Now playing</string>
     <string name="buffering">Buffering...</string>
+    <string name="kbps">" KBPS"</string>
 
 
 </resources>
