@@ -115,7 +115,6 @@ public class UniversalPlayer implements MediaPlayer.OnPreparedListener, MediaPla
                 if (mediaPlayer == null) {
                     mediaPlayer = new MediaPlayer();
                 }
-                mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
                 mediaPlayer.setDataSource(mediaItem.getAudeoLink());
                 mediaPlayer.setOnPreparedListener(this);
                 mediaPlayer.setOnErrorListener(this);
