@@ -46,20 +46,20 @@
                 android:id="@+id/tvPlayerTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
                 android:paddingLeft="12dp"
                 android:text="BBC Radio One"
                 android:textColor="@color/white"
-                android:layout_marginBottom="5dp"
                 android:textSize="@dimen/default_text_size_22" />
 
             <TextView
                 android:id="@+id/tvPlayserSubtitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
                 android:paddingLeft="12dp"
                 android:text="Most popular Internet radio"
                 android:textColor="@color/white"
-                android:layout_marginBottom="5dp"
                 android:textSize="@dimen/default_text_size_16" />
 
             <TextView
@@ -101,8 +101,8 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:text="05:00"
-                android:textSize="@dimen/default_text_size_10"
-                android:textColor="@color/whiteGray" />
+                android:textColor="@color/whiteGray"
+                android:textSize="@dimen/default_text_size_10" />
 
             <TextView
                 android:id="@+id/tvTrackInfo"
@@ -110,8 +110,8 @@
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
                 android:text=""
-                android:textSize="@dimen/default_text_size_10"
-                android:textColor="@color/whiteGray" />
+                android:textColor="@color/whiteGray"
+                android:textSize="@dimen/default_text_size_10" />
 
             <TextView
                 android:id="@+id/tvTrackDuration"
@@ -120,8 +120,8 @@
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:text="05:00"
-                android:textSize="@dimen/default_text_size_10"
-                android:textColor="@color/whiteGray" />
+                android:textColor="@color/whiteGray"
+                android:textSize="@dimen/default_text_size_10" />
         </RelativeLayout>
 
         <LinearLayout
@@ -170,12 +170,15 @@
         android:layout_width="wrap_content"
         android:layout_height="250dp"
         android:layout_alignParentBottom="true"
+
         android:layout_marginBottom="-255dp"
-        android:background="@color/red_500">
+        android:background="@color/blue_grey_1000">
 
         <ListView
+            android:id="@+id/lvPlaylist"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"></ListView>
+            android:layout_height="match_parent"
+            android:background="@color/blue_grey_1000"></ListView>
 
     </LinearLayout>
 </RelativeLayout>

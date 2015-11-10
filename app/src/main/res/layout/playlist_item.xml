@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/blue_grey_1000">
+
+    <ImageButton
+        android:id="@+id/btnPlPlay"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/transparent"
+        android:padding="15dp"
+        android:src="@drawable/ic_play_white" />
+
+    <TextView
+        android:id="@+id/tvPlTrackTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="25dp"
+        android:layout_marginTop="15dp"
+        android:layout_toLeftOf="@+id/tvPlTrackDuration"
+        android:layout_toRightOf="@+id/btnPlPlay"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:text="daskclascksalcasklc"
+        android:textColor="@color/white" />
+
+    <TextView
+        android:id="@+id/tvPlTrackSubTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvPlTrackTitle"
+        android:layout_marginRight="25dp"
+        android:layout_marginTop="5dp"
+        android:layout_toLeftOf="@+id/tvPlTrackDuration"
+        android:layout_toRightOf="@+id/btnPlPlay"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:text="daskclascksalcasklc"
+        android:textColor="@color/whiteGray" />
+
+    <TextView
+        android:id="@+id/tvPlTrackDuration"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="25dp"
+        android:text="20:00"
+        android:textColor="@color/whiteGray" />
+</RelativeLayout>

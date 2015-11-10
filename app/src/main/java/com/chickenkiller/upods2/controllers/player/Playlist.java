@@ -1,15 +1,26 @@
-package com.chickenkiller.upods2.views;
+package com.chickenkiller.upods2.controllers.player;
 
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 
 import com.chickenkiller.upods2.R;
+import com.chickenkiller.upods2.controllers.adaperts.PlaylistMediaItemsAdapter;
+import com.chickenkiller.upods2.controllers.adaperts.PlaylistTracksAdapter;
+import com.chickenkiller.upods2.controllers.app.ProfileManager;
+import com.chickenkiller.upods2.interfaces.IPlayableMediaItem;
+import com.chickenkiller.upods2.interfaces.ITrackable;
+import com.chickenkiller.upods2.models.RadioItem;
+import com.chickenkiller.upods2.models.Track;
 import com.chickenkiller.upods2.utils.ui.ArcTranslateAnimation;
+
+import java.util.List;
 
 /**
  * Created by alonzilberman on 11/6/15.
@@ -29,11 +40,12 @@ public class Playlist {
     private LinearLayout lnPlaylist;
     private LinearLayout lnPlayerContorls;
     private LinearLayout lnPlayerInfo;
+    private ListView lvPlaylist;
     private RelativeLayout rlPlayerUnderbar;
     private SeekBar sbPlayerProgress;
     private ImageButton btnPlay;
     private Context mContext;
-    private boolean isOpen;
+    private ArrayAdapter playlistAdapter;
 
     private int initialPlayListMargin;
     private int pInfoAnimationMargin;
@@ -41,6 +53,7 @@ public class Playlist {
     private float btnFinalY;
     private float btnFinalX;
     private boolean animationFirstRun;
+    private boolean isOpen;
 
     public Playlist(Context mContext, View rootView) {
         this.mContext = mContext;
@@ -50,7 +63,9 @@ public class Playlist {
         this.rlPlayerUnderbar = (RelativeLayout) rootView.findViewById(R.id.rlPlayerUnderbar);
         this.sbPlayerProgress = (SeekBar) rootView.findViewById(R.id.sbPlayerProgress);
         this.lnPlayerInfo = (LinearLayout) rootView.findViewById(R.id.lnPlayerInfo);
+        this.lvPlaylist = (ListView) rootView.findViewById(R.id.lvPlaylist);
         this.animationFirstRun = true;
+        initPlaylist();
     }
 
     public View.OnClickListener getPlaylistOpenClickListener() {
@@ -66,6 +81,19 @@ public class Playlist {
                 isOpen = !isOpen;
             }
         };
+    }
+
+    private void initPlaylist() {
+        UniversalPlayer universalPlayer = UniversalPlayer.getInstance();
+        if (universalPlayer.getPlayingMediaItem() instanceof ITrackable) {
+            List<Track> tracks = (List<Track>) ((ITrackable) universalPlayer.getPlayingMediaItem()).getTracks();
+            playlistAdapter = new PlaylistTracksAdapter(mContext, R.layout.playlist_item, tracks);
+
+        } else if (universalPlayer.getPlayingMediaItem() instanceof RadioItem) {
+            List<? extends IPlayableMediaItem> mediaItems = ProfileManager.getInstance().getRecentRadioItems();
+            playlistAdapter = new PlaylistMediaItemsAdapter(mContext, R.layout.playlist_item, (List<IPlayableMediaItem>) mediaItems);
+        }
+        lvPlaylist.setAdapter(playlistAdapter);
     }
 
     private void runOpenPlaylistAnimation() {
@@ -160,4 +188,11 @@ public class Playlist {
         animator.setDuration(duration);
         animator.start();
     }
+
+    public void updateTracks() {
+        if (playlistAdapter != null) {
+            playlistAdapter.notifyDataSetChanged();
+        }
+    }
+
 }

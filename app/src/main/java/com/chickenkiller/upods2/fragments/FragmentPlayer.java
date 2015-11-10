@@ -28,7 +28,7 @@ import com.chickenkiller.upods2.interfaces.IPlayableMediaItem;
 import com.chickenkiller.upods2.interfaces.IPlayerStateListener;
 import com.chickenkiller.upods2.interfaces.IToolbarHolder;
 import com.chickenkiller.upods2.utils.ui.UIHelper;
-import com.chickenkiller.upods2.views.Playlist;
+import com.chickenkiller.upods2.controllers.player.Playlist;
 
 
 /**
@@ -154,6 +154,7 @@ public class FragmentPlayer extends Fragment implements MediaPlayer.OnPreparedLi
     public void onPrepared(MediaPlayer mediaPlayer) {
         btnPlay.setImageResource(R.drawable.ic_pause_white);
         ((IToolbarHolder) getActivity()).getToolbar().setTitle(R.string.now_paying);
+        playlist.updateTracks();
     }
 
     @Override

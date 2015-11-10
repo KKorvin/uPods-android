@@ -1,6 +1,5 @@
 package com.chickenkiller.upods2.controllers.player;
 
-import android.media.AudioManager;
 import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
 
@@ -9,8 +8,10 @@ import com.chickenkiller.upods2.controllers.app.UpodsApplication;
 import com.chickenkiller.upods2.interfaces.IOperationFinishWithDataCallback;
 import com.chickenkiller.upods2.interfaces.IPlayableMediaItem;
 import com.chickenkiller.upods2.interfaces.IPlayerStateListener;
+import com.chickenkiller.upods2.interfaces.ITrackable;
 import com.chickenkiller.upods2.models.Podcast;
 import com.chickenkiller.upods2.models.RadioItem;
+import com.chickenkiller.upods2.models.Track;
 import com.chickenkiller.upods2.utils.GlobalUtils;
 import com.chickenkiller.upods2.utils.Logger;
 import com.chickenkiller.upods2.utils.MediaUtils;
@@ -24,7 +25,7 @@ import java.util.TimerTask;
  * Created by alonzilberman on 7/29/15.
  */
 public class UniversalPlayer implements MediaPlayer.OnPreparedListener, MediaPlayer.OnErrorListener,
-        MediaPlayer.OnInfoListener, MediaPlayer.OnBufferingUpdateListener,MediaPlayer.OnCompletionListener {
+        MediaPlayer.OnInfoListener, MediaPlayer.OnBufferingUpdateListener, MediaPlayer.OnCompletionListener {
 
 
     private static final long RECONNECT_RATE = 5000;
@@ -241,13 +242,20 @@ public class UniversalPlayer implements MediaPlayer.OnPreparedListener, MediaPla
         if (this.mediaItem == null) {
             return false;
         }
-
-        if (this.mediaItem.getAudeoLink().equals(mediaItem.getAudeoLink())) {
-            return this.mediaItem.getAudeoLink().equals(mediaItem.getAudeoLink());
+        if (this.mediaItem instanceof ITrackable && mediaItem instanceof ITrackable) {
+            return ((ITrackable) this.mediaItem).getSelectedTrack().getTitle().equals(((ITrackable) mediaItem).getSelectedTrack().getTitle());
         }
-        return false;
+
+        return this.mediaItem.getName().equals(mediaItem.getName());
+
     }
 
+    public boolean isCurrentTrack(Track track) {
+        if (this.mediaItem == null || !(this.mediaItem instanceof ITrackable)) {
+            return false;
+        }
+        return ((ITrackable) this.mediaItem).getSelectedTrack().getTitle().equals(track.getTitle());
+    }
 
     @Override
     public void onPrepared(MediaPlayer mediaPlayer) {

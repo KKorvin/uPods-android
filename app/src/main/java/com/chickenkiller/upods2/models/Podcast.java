@@ -281,6 +281,16 @@ public class Podcast extends MediaItem implements IPlayableMediaItem, ITrackable
     }
 
     @Override
+    public Track getSelectedTrack() {
+        for (Episod episod : episods) {
+            if (episod.isSelected) {
+                return episod;
+            }
+        }
+        return null;
+    }
+
+    @Override
     public void selectTrack(Track track) {
         for (Episod episod : episods) {
             episod.isSelected = episod.equals(track) ? true : false;
