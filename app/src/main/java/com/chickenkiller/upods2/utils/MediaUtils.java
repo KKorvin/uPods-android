@@ -5,6 +5,7 @@ import com.chickenkiller.upods2.interfaces.IOperationFinishWithDataCallback;
 import com.chickenkiller.upods2.interfaces.ISimpleRequestCallback;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by alonzilberman on 10/30/15.
@@ -30,4 +31,13 @@ public class MediaUtils {
         });
         return "";
     }
+
+    public static String formatMsToTimeString(int millis) {
+        return String.format("%02d:%02d",
+                TimeUnit.MILLISECONDS.toMinutes(millis),
+                TimeUnit.MILLISECONDS.toSeconds(millis) -
+                        TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millis))
+        );
+    }
+
 }

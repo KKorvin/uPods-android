@@ -52,6 +52,7 @@ public class PlaylistTracksAdapter extends ArrayAdapter<Track> {
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
+        viewHolder.tvPlTrackDuration.setText(track.getDuration());
         viewHolder.tvPlTrackTitle.setText(track.getTitle());
         viewHolder.tvPlTrackSubTitle.setText(track.getSubTitle());
         if (universalPlayer.isPlaying() && universalPlayer.isCurrentTrack(track)) {

@@ -100,7 +100,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:text="05:00"
+                android:text="00:00"
                 android:textColor="@color/whiteGray"
                 android:textSize="@dimen/default_text_size_10" />
 
@@ -119,7 +119,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
-                android:text="05:00"
+                android:text="00:00"
                 android:textColor="@color/whiteGray"
                 android:textSize="@dimen/default_text_size_10" />
         </RelativeLayout>

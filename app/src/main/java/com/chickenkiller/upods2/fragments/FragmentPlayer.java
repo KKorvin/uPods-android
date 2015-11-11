@@ -22,13 +22,17 @@ import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
 import com.chickenkiller.upods2.R;
 import com.chickenkiller.upods2.activity.ActivityPlayer;
 import com.chickenkiller.upods2.controllers.player.MetaDataFetcher;
+import com.chickenkiller.upods2.controllers.player.Playlist;
 import com.chickenkiller.upods2.controllers.player.UniversalPlayer;
+import com.chickenkiller.upods2.interfaces.IOnPositionUpdatedCallback;
 import com.chickenkiller.upods2.interfaces.IOperationFinishWithDataCallback;
 import com.chickenkiller.upods2.interfaces.IPlayableMediaItem;
 import com.chickenkiller.upods2.interfaces.IPlayerStateListener;
 import com.chickenkiller.upods2.interfaces.IToolbarHolder;
+import com.chickenkiller.upods2.interfaces.ITrackable;
+import com.chickenkiller.upods2.models.Track;
+import com.chickenkiller.upods2.utils.MediaUtils;
 import com.chickenkiller.upods2.utils.ui.UIHelper;
-import com.chickenkiller.upods2.controllers.player.Playlist;
 
 
 /**
@@ -46,8 +50,11 @@ public class FragmentPlayer extends Fragment implements MediaPlayer.OnPreparedLi
     private TextView tvPlayserSubtitle;
     private TextView tvPlayerTitle;
     private TextView tvTrackInfo;
+    private TextView tvTrackCurrentTime;
+    private TextView tvTrackDuration;
     private LinearLayout lnPlayerinfo;
     private Playlist playlist;
+
 
     private View.OnClickListener btnPlayStopClickListener = new View.OnClickListener() {
         @Override
@@ -80,6 +87,8 @@ public class FragmentPlayer extends Fragment implements MediaPlayer.OnPreparedLi
         tvPlayerTitle = (TextView) view.findViewById(R.id.tvPlayerTitle);
         tvPlayserSubtitle = (TextView) view.findViewById(R.id.tvPlayserSubtitle);
         tvTrackInfo = (TextView) view.findViewById(R.id.tvTrackInfo);
+        tvTrackDuration = (TextView) view.findViewById(R.id.tvTrackDuration);
+        tvTrackCurrentTime = (TextView) view.findViewById(R.id.tvTrackCurrentTime);
         lnPlayerinfo = (LinearLayout) view.findViewById(R.id.lnPlayerInfo);
 
         if (playableMediaItem == null) {
@@ -118,7 +127,10 @@ public class FragmentPlayer extends Fragment implements MediaPlayer.OnPreparedLi
                 rlTopSectionBckg.setBackgroundColor(dominantColor);
             }
         });
-
+        if (playableMediaItem instanceof ITrackable) {
+            Track selectedTrack = ((ITrackable) playableMediaItem).getSelectedTrack();
+            tvTrackDuration.setText(selectedTrack.getDuration());
+        }
     }
 
     public void setPlayableItem(IPlayableMediaItem iPlayableMediaItem) {
@@ -128,11 +140,13 @@ public class FragmentPlayer extends Fragment implements MediaPlayer.OnPreparedLi
     private void runPlayer() {
         universalPlayer.setPreparedListener(this);
         universalPlayer.setPlayerStateListener(this);
-        if (universalPlayer.isPlaying() && universalPlayer.isCurrentMediaItem(playableMediaItem)) {
-            btnPlay.setImageResource(R.drawable.ic_pause_white);
-            return;
-        } else if (universalPlayer.isCurrentMediaItem(playableMediaItem)) {
-            btnPlay.setImageResource(R.drawable.ic_play_white);
+
+        //Player already running
+        if (universalPlayer.isPrepaired && universalPlayer.isCurrentMediaItem(playableMediaItem)) {
+            ((IToolbarHolder) getActivity()).getToolbar().setTitle(R.string.now_paying);
+            btnPlay.setImageResource(universalPlayer.isPlaying() ? R.drawable.ic_pause_white : R.drawable.ic_play_white);
+            ((IToolbarHolder) getActivity()).getToolbar().setTitle(R.string.now_paying);
+            setPositionUpdateCallback();
             return;
         }
         universalPlayer.resetPlayer();
@@ -150,11 +164,26 @@ public class FragmentPlayer extends Fragment implements MediaPlayer.OnPreparedLi
         btnPlay.setImageResource(R.drawable.ic_play_white);
     }
 
+    private void setPositionUpdateCallback() {
+        universalPlayer.setPositionUpdatedCallback(new IOnPositionUpdatedCallback() {
+            @Override
+            public void poistionUpdated(final int currentPoistion) {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        tvTrackCurrentTime.setText(MediaUtils.formatMsToTimeString(currentPoistion));
+                    }
+                });
+            }
+        });
+    }
+
     @Override
     public void onPrepared(MediaPlayer mediaPlayer) {
         btnPlay.setImageResource(R.drawable.ic_pause_white);
         ((IToolbarHolder) getActivity()).getToolbar().setTitle(R.string.now_paying);
         playlist.updateTracks();
+        setPositionUpdateCallback();
     }
 
     @Override

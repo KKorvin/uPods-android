@@ -17,6 +17,8 @@ public abstract class Track implements Serializable {
         this.isSelected = false;
     }
 
+    public abstract String getDuration();
+
     public abstract String getDate();
 
     public abstract String getTitle();

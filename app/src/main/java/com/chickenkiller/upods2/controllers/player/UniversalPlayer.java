@@ -5,6 +5,7 @@ import android.media.MediaPlayer;
 
 import com.chickenkiller.upods2.controllers.app.ProfileManager;
 import com.chickenkiller.upods2.controllers.app.UpodsApplication;
+import com.chickenkiller.upods2.interfaces.IOnPositionUpdatedCallback;
 import com.chickenkiller.upods2.interfaces.IOperationFinishWithDataCallback;
 import com.chickenkiller.upods2.interfaces.IPlayableMediaItem;
 import com.chickenkiller.upods2.interfaces.IPlayerStateListener;
@@ -29,6 +30,7 @@ public class UniversalPlayer implements MediaPlayer.OnPreparedListener, MediaPla
 
 
     private static final long RECONNECT_RATE = 5000;
+    private static final long POSITION_UPDATE_RATE = 1000;
 
     public enum State {PLAYING, PAUSED}
 
@@ -42,9 +44,11 @@ public class UniversalPlayer implements MediaPlayer.OnPreparedListener, MediaPla
     private IOperationFinishWithDataCallback onMetaDataFetchedCallback;
     private IPlayerStateListener playerStateListener;
     private IPlayableMediaItem mediaItem;
+    private IOnPositionUpdatedCallback positionUpdatedCallback;
     private PlayerNotificationPanel notificationPanel;
 
     private TimerTask autoReconector;
+    private TimerTask positionUpdateTask;
 
     public boolean isPrepaired;
 
@@ -88,6 +92,10 @@ public class UniversalPlayer implements MediaPlayer.OnPreparedListener, MediaPla
 
     public void setPlayerStateListener(IPlayerStateListener playerStateListener) {
         this.playerStateListener = playerStateListener;
+    }
+
+    public void setPositionUpdatedCallback(IOnPositionUpdatedCallback positionUpdatedCallback) {
+        this.positionUpdatedCallback = positionUpdatedCallback;
     }
 
     public void prepare(IPlayableMediaItem mediaItem, MediaPlayer.OnPreparedListener preparedListener) {
@@ -207,6 +215,7 @@ public class UniversalPlayer implements MediaPlayer.OnPreparedListener, MediaPla
             preparedListener = null;
             playerStateListener = null;
             onMetaDataFetchedCallback = null;
+            positionUpdatedCallback = null;
             isPrepaired = false;
         }
         if (notificationPanel != null) {
@@ -227,6 +236,7 @@ public class UniversalPlayer implements MediaPlayer.OnPreparedListener, MediaPla
     public void removeListeners() {
         preparedListener = null;
         playerStateListener = null;
+        positionUpdatedCallback = null;
     }
 
     public void getTrackInfo() {
@@ -257,6 +267,24 @@ public class UniversalPlayer implements MediaPlayer.OnPreparedListener, MediaPla
         return ((ITrackable) this.mediaItem).getSelectedTrack().getTitle().equals(track.getTitle());
     }
 
+
+    private void runPositionUpdater() {
+        if (mediaPlayer != null && isPrepaired && positionUpdatedCallback != null) {
+            positionUpdateTask = new TimerTask() {
+                @Override
+                public void run() {
+                    if(positionUpdatedCallback!=null) {
+                        positionUpdatedCallback.poistionUpdated(mediaPlayer.getCurrentPosition());
+                    }
+                }
+            };
+            new Timer().scheduleAtFixedRate(positionUpdateTask, 0, POSITION_UPDATE_RATE);
+        } else if (positionUpdateTask != null) {
+            positionUpdateTask.cancel();
+        }
+
+    }
+
     @Override
     public void onPrepared(MediaPlayer mediaPlayer) {
         isPrepaired = true;
@@ -271,6 +299,7 @@ public class UniversalPlayer implements MediaPlayer.OnPreparedListener, MediaPla
         if (preparedListener != null) {
             preparedListener.onPrepared(mediaPlayer);
         }
+        runPositionUpdater();
     }
 
     @Override
