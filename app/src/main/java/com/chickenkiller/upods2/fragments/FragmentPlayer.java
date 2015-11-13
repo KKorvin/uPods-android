@@ -8,10 +8,12 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -41,6 +43,8 @@ import com.chickenkiller.upods2.utils.ui.UIHelper;
 public class FragmentPlayer extends Fragment implements MediaPlayer.OnPreparedListener, IPlayerStateListener {
     public static String TAG = "fragmentPlayer";
     private static final float TOOLBAR_TEXT_SIZE = 20f;
+    private static final long DEFAULT_RADIO_DURATIO = 100000;
+    private static final int SB_PROGRESS_TOP_MARGIN_CORECTOR = 20;
 
     private ImageButton btnPlay;
     private IPlayableMediaItem playableMediaItem;
@@ -52,9 +56,11 @@ public class FragmentPlayer extends Fragment implements MediaPlayer.OnPreparedLi
     private TextView tvTrackInfo;
     private TextView tvTrackCurrentTime;
     private TextView tvTrackDuration;
+    private SeekBar sbPlayerProgress;
     private LinearLayout lnPlayerinfo;
     private Playlist playlist;
 
+    private long maxDuration = -1;
 
     private View.OnClickListener btnPlayStopClickListener = new View.OnClickListener() {
         @Override
@@ -90,7 +96,7 @@ public class FragmentPlayer extends Fragment implements MediaPlayer.OnPreparedLi
         tvTrackDuration = (TextView) view.findViewById(R.id.tvTrackDuration);
         tvTrackCurrentTime = (TextView) view.findViewById(R.id.tvTrackCurrentTime);
         lnPlayerinfo = (LinearLayout) view.findViewById(R.id.lnPlayerInfo);
-
+        sbPlayerProgress = (SeekBar) view.findViewById(R.id.sbPlayerProgress);
         if (playableMediaItem == null) {
             playableMediaItem = (IPlayableMediaItem) savedInstanceState.get(ActivityPlayer.MEDIA_ITEM_EXTRA);
         }
@@ -113,6 +119,19 @@ public class FragmentPlayer extends Fragment implements MediaPlayer.OnPreparedLi
         playlist = new Playlist(getActivity(), view);
         lnPlayerinfo.setOnClickListener(playlist.getPlaylistOpenClickListener());
         super.onViewCreated(view, savedInstanceState);
+        setSeekbarPosition(view);
+    }
+
+    private void setSeekbarPosition(final View root) {
+        final ViewTreeObserver observer = root.getViewTreeObserver();
+        observer.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            public void onGlobalLayout() {
+                final RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) sbPlayerProgress.getLayoutParams();
+                RelativeLayout rlPlayerUnderbar = (RelativeLayout) root.findViewById(R.id.rlPlayerUnderbar);
+                params.bottomMargin = rlPlayerUnderbar.getHeight() - SB_PROGRESS_TOP_MARGIN_CORECTOR;
+                sbPlayerProgress.requestLayout();
+            }
+        });
     }
 
     public void initPlayerUI(View view) {
@@ -172,6 +191,12 @@ public class FragmentPlayer extends Fragment implements MediaPlayer.OnPreparedLi
                     @Override
                     public void run() {
                         tvTrackCurrentTime.setText(MediaUtils.formatMsToTimeString(currentPoistion));
+                        if (maxDuration < 0) {
+                            maxDuration = MediaUtils.timeStringToLong(tvTrackDuration.getText().toString());
+                            maxDuration = maxDuration > 0 ? maxDuration : DEFAULT_RADIO_DURATIO;
+                        }
+                        int progress = (int) (currentPoistion * 100 / maxDuration);
+                        sbPlayerProgress.setProgress(progress);
                     }
                 });
             }

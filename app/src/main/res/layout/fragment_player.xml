@@ -31,97 +31,106 @@
 
         </RelativeLayout>
 
-        <LinearLayout
-            android:id="@+id/lnPlayerInfo"
-            android:layout_width="match_parent"
+        <RelativeLayout
+            android:id="@+id/rlPlayerInfoSection"
+            android:layout_width="wrap_content"
             android:layout_height="0dp"
-            android:layout_weight="20"
-            android:background="@color/blue_grey_900"
-            android:clickable="true"
-            android:elevation="0dp"
-            android:gravity="bottom"
-            android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/tvPlayerTitle"
+            android:layout_weight="25">
+
+            <LinearLayout
+                android:id="@+id/lnPlayerInfo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
-                android:paddingLeft="12dp"
-                android:text="BBC Radio One"
-                android:textColor="@color/white"
-                android:textSize="@dimen/default_text_size_22" />
+                android:layout_alignParentTop="true"
+                android:background="@color/blue_grey_900"
+                android:clickable="true"
+                android:orientation="vertical"
+                android:paddingBottom="5dp">
 
-            <TextView
-                android:id="@+id/tvPlayserSubtitle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
-                android:paddingLeft="12dp"
-                android:text="Most popular Internet radio"
-                android:textColor="@color/white"
-                android:textSize="@dimen/default_text_size_16" />
+                <TextView
+                    android:id="@+id/tvPlayerTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginTop="10dp"
+                    android:paddingLeft="12dp"
+                    android:text="BBC Radio One"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/default_text_size_22" />
 
-            <TextView
-                android:id="@+id/tvTrackNumbers"
+                <TextView
+                    android:id="@+id/tvPlayserSubtitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    android:paddingLeft="12dp"
+                    android:text="Most popular Internet radio"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/default_text_size_16" />
+
+                <TextView
+                    android:id="@+id/tvTrackNumbers"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="7dp"
+                    android:paddingLeft="12dp"
+                    android:text="1/12"
+                    android:textColor="@color/whiteGray"
+                    android:textSize="@dimen/default_text_size_10" />
+            </LinearLayout>
+
+            <RelativeLayout
+                android:id="@+id/rlPlayerUnderbar"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="7dp"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/lnPlayerInfo"
+                android:layout_gravity="center_vertical"
+                android:background="@color/blue_grey_1000"
+                android:orientation="horizontal"
                 android:paddingLeft="12dp"
-                android:text="1/12"
-                android:textColor="@color/whiteGray"
-                android:textSize="@dimen/default_text_size_10" />
+                android:paddingRight="12dp">
+
+                <TextView
+                    android:id="@+id/tvTrackCurrentTime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:text="00:00"
+                    android:textColor="@color/whiteGray"
+                    android:textSize="@dimen/default_text_size_10" />
+
+                <TextView
+                    android:id="@+id/tvTrackInfo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:text=""
+                    android:textColor="@color/whiteGray"
+                    android:textSize="@dimen/default_text_size_10" />
+
+                <TextView
+                    android:id="@+id/tvTrackDuration"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:text="00:00"
+                    android:textColor="@color/whiteGray"
+                    android:textSize="@dimen/default_text_size_10" />
+            </RelativeLayout>
+
 
             <SeekBar
                 android:id="@+id/sbPlayerProgress"
                 android:layout_width="fill_parent"
-                android:layout_height="6dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="0dp"
                 android:max="100"
                 android:padding="0px"
-                android:progress="50"
-                android:progressDrawable="@drawable/seek_bar_bckg"
-                android:thumb="@drawable/seek_bar_thumb" />
-
-        </LinearLayout>
-
-        <RelativeLayout
-            android:id="@+id/rlPlayerUnderbar"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_gravity="center_vertical"
-            android:layout_weight="5"
-            android:background="@color/blue_grey_1000"
-            android:orientation="horizontal"
-            android:paddingLeft="12dp"
-            android:paddingRight="12dp">
-
-            <TextView
-                android:id="@+id/tvTrackCurrentTime"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:text="00:00"
-                android:textColor="@color/whiteGray"
-                android:textSize="@dimen/default_text_size_10" />
-
-            <TextView
-                android:id="@+id/tvTrackInfo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:text=""
-                android:textColor="@color/whiteGray"
-                android:textSize="@dimen/default_text_size_10" />
-
-            <TextView
-                android:id="@+id/tvTrackDuration"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:text="00:00"
-                android:textColor="@color/whiteGray"
-                android:textSize="@dimen/default_text_size_10" />
+                android:progress="0"
+                android:thumbOffset="2dp" />
         </RelativeLayout>
 
         <LinearLayout
@@ -151,7 +160,6 @@
                 android:background="@drawable/ic_rewind_white_right" />
         </LinearLayout>
     </LinearLayout>
-
 
     <ImageButton
         android:id="@+id/btnPlay"

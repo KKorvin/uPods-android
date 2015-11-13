@@ -4,6 +4,7 @@ import com.chickenkiller.upods2.controllers.internet.BackendManager;
 import com.chickenkiller.upods2.interfaces.IOperationFinishWithDataCallback;
 import com.chickenkiller.upods2.interfaces.ISimpleRequestCallback;
 
+import java.sql.Time;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -38,6 +39,15 @@ public class MediaUtils {
                 TimeUnit.MILLISECONDS.toSeconds(millis) -
                         TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millis))
         );
+    }
+
+    public static long timeStringToLong(String timeString) {
+        if(timeString.matches("[0-9]{2}:[0-9]{2}")){
+            timeString = "00:" + timeString;
+        }
+        Time t = Time.valueOf(timeString);
+        long l = t.getTime();
+        return l;
     }
 
 }

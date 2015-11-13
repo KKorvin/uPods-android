@@ -39,7 +39,7 @@ public class Playlist {
 
     private LinearLayout lnPlaylist;
     private LinearLayout lnPlayerContorls;
-    private LinearLayout lnPlayerInfo;
+    private RelativeLayout rlPlayerInfoSection;
     private ListView lvPlaylist;
     private RelativeLayout rlPlayerUnderbar;
     private SeekBar sbPlayerProgress;
@@ -62,7 +62,7 @@ public class Playlist {
         this.lnPlayerContorls = (LinearLayout) rootView.findViewById(R.id.lnPlayerContorls);
         this.rlPlayerUnderbar = (RelativeLayout) rootView.findViewById(R.id.rlPlayerUnderbar);
         this.sbPlayerProgress = (SeekBar) rootView.findViewById(R.id.sbPlayerProgress);
-        this.lnPlayerInfo = (LinearLayout) rootView.findViewById(R.id.lnPlayerInfo);
+        this.rlPlayerInfoSection = (RelativeLayout) rootView.findViewById(R.id.rlPlayerInfoSection);
         this.lvPlaylist = (ListView) rootView.findViewById(R.id.lvPlaylist);
         this.animationFirstRun = true;
         initPlaylist();
@@ -131,7 +131,7 @@ public class Playlist {
     }
 
     private void runOpenInfoSectionAnimation(long duration) {
-        final LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) lnPlayerInfo.getLayoutParams();
+        final LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) rlPlayerInfoSection.getLayoutParams();
 
         if (animationFirstRun) {
             initialPlayPInfo = params.topMargin;
@@ -145,7 +145,7 @@ public class Playlist {
             @Override
             public void onAnimationUpdate(ValueAnimator valueAnimator) {
                 params.topMargin = (Integer) valueAnimator.getAnimatedValue();
-                lnPlayerInfo.requestLayout();
+                rlPlayerInfoSection.requestLayout();
             }
         });
         animator.setDuration(duration);
@@ -176,13 +176,13 @@ public class Playlist {
     }
 
     private void runCloseInfoSectionAnimation(long duration) {
-        final LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) lnPlayerInfo.getLayoutParams();
+        final RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) rlPlayerInfoSection.getLayoutParams();
         ValueAnimator animator = ValueAnimator.ofInt(pInfoAnimationMargin, initialPlayPInfo);
         animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator valueAnimator) {
                 params.topMargin = (Integer) valueAnimator.getAnimatedValue();
-                lnPlayerInfo.requestLayout();
+                rlPlayerInfoSection.requestLayout();
             }
         });
         animator.setDuration(duration);
