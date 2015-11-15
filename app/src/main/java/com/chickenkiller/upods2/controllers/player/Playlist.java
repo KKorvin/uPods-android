@@ -3,6 +3,7 @@ package com.chickenkiller.upods2.controllers.player;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -14,10 +15,12 @@ import com.chickenkiller.upods2.R;
 import com.chickenkiller.upods2.controllers.adaperts.PlaylistMediaItemsAdapter;
 import com.chickenkiller.upods2.controllers.adaperts.PlaylistTracksAdapter;
 import com.chickenkiller.upods2.controllers.app.ProfileManager;
+import com.chickenkiller.upods2.interfaces.IOperationFinishCallback;
 import com.chickenkiller.upods2.interfaces.IPlayableMediaItem;
 import com.chickenkiller.upods2.interfaces.ITrackable;
 import com.chickenkiller.upods2.models.RadioItem;
 import com.chickenkiller.upods2.models.Track;
+import com.chickenkiller.upods2.utils.Logger;
 import com.chickenkiller.upods2.utils.ui.ArcTranslateAnimation;
 
 import java.util.List;
@@ -25,17 +28,17 @@ import java.util.List;
 /**
  * Created by alonzilberman on 11/6/15.
  */
-public class Playlist {
+public class Playlist implements AdapterView.OnItemClickListener {
 
+    private static final String LOG_TAG = "Playlist";
+    private static final int BTN_Y_POISTION_CORRECTOR = 40;
     private static final long PLAYLIST_ANIMATION_DURATION = 400;
     private static final long BUTTON_ANIMATION_DURATION = 400;
     private static final float BTN_POSITION_MULTIPLYER = 0.82f;
-    private static final int BTN_Y_POISTION_CORRECTOR = 40;
     private static final float INFO_START_POINT_CORRECTOR = 1.4f;
     private static final float INFO_ANIMATION_MARGIN_CORECTOR = 0.92f;
 
-    private int pInfoAnimationStartPoint; //When start to animate player info section
-
+    private IOperationFinishCallback playlistTrackSelected;
 
     private LinearLayout lnPlaylist;
     private LinearLayout lnPlayerContorls;
@@ -47,6 +50,7 @@ public class Playlist {
     private Context mContext;
     private ArrayAdapter playlistAdapter;
 
+    private int pInfoAnimationStartPoint; //When start to animate player info section
     private int initialPlayListMargin;
     private int pInfoAnimationMargin;
     private int initialPlayPInfo;
@@ -55,7 +59,7 @@ public class Playlist {
     private boolean animationFirstRun;
     private boolean isOpen;
 
-    public Playlist(Context mContext, View rootView) {
+    public Playlist(Context mContext, View rootView, IOperationFinishCallback playlistTrackSelected) {
         this.mContext = mContext;
         this.lnPlaylist = (LinearLayout) rootView.findViewById(R.id.lnPlaylist);
         this.btnPlay = (ImageButton) rootView.findViewById(R.id.btnPlay);
@@ -65,6 +69,7 @@ public class Playlist {
         this.rlPlayerInfoSection = (RelativeLayout) rootView.findViewById(R.id.rlPlayerInfoSection);
         this.lvPlaylist = (ListView) rootView.findViewById(R.id.lvPlaylist);
         this.animationFirstRun = true;
+        this.playlistTrackSelected = playlistTrackSelected;
         initPlaylist();
     }
 
@@ -94,6 +99,7 @@ public class Playlist {
             playlistAdapter = new PlaylistMediaItemsAdapter(mContext, R.layout.playlist_item, (List<IPlayableMediaItem>) mediaItems);
         }
         lvPlaylist.setAdapter(playlistAdapter);
+        lvPlaylist.setOnItemClickListener(this);
     }
 
     private void runOpenPlaylistAnimation() {
@@ -195,4 +201,41 @@ public class Playlist {
         }
     }
 
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        UniversalPlayer universalPlayer = UniversalPlayer.getInstance();
+        if (playlistAdapter instanceof PlaylistMediaItemsAdapter) {
+            IPlayableMediaItem clickedIPlayableMediaItem = ((PlaylistMediaItemsAdapter) playlistAdapter).getItem(position);
+            if (universalPlayer.isCurrentMediaItem(clickedIPlayableMediaItem)) {
+                if (!universalPlayer.isPlaying()) {
+                    universalPlayer.toggle();
+                }
+                Logger.printInfo(LOG_TAG, "Clicked on current trcack -> playing it");
+            } else {
+                universalPlayer.setMediaItem(clickedIPlayableMediaItem);
+                universalPlayer.softRestart();
+                Logger.printInfo(LOG_TAG, "Track switched to: " + clickedIPlayableMediaItem.getName());
+            }
+        } else if (playlistAdapter instanceof PlaylistTracksAdapter) {
+            Track clieckedTrack = ((PlaylistTracksAdapter) playlistAdapter).getItem(position);
+            if (universalPlayer.isCurrentTrack(clieckedTrack)) {
+                if (!universalPlayer.isPlaying()) {
+                    universalPlayer.toggle();
+                }
+                Logger.printInfo(LOG_TAG, "Clicked on current trcack -> playing it");
+            } else {
+                ITrackable trackable = (ITrackable) universalPlayer.getPlayingMediaItem();
+                trackable.selectTrack(clieckedTrack);
+                universalPlayer.softRestart();
+                Logger.printInfo(LOG_TAG, "Track switched to: " + clieckedTrack.getTitle());
+            }
+        }
+        if (playlistTrackSelected == null) {
+            Logger.printError(LOG_TAG, "Attention! Playlist callback not set, UI will not be updated");
+        } else {
+            playlistTrackSelected.operationFinished();
+        }
+        runCloseAnimation();
+        isOpen = false;
+    }
 }

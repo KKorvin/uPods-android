@@ -28,6 +28,7 @@ import com.chickenkiller.upods2.controllers.player.MetaDataFetcher;
 import com.chickenkiller.upods2.controllers.player.Playlist;
 import com.chickenkiller.upods2.controllers.player.UniversalPlayer;
 import com.chickenkiller.upods2.interfaces.IOnPositionUpdatedCallback;
+import com.chickenkiller.upods2.interfaces.IOperationFinishCallback;
 import com.chickenkiller.upods2.interfaces.IOperationFinishWithDataCallback;
 import com.chickenkiller.upods2.interfaces.IPlayableMediaItem;
 import com.chickenkiller.upods2.interfaces.IPlayerStateListener;
@@ -35,6 +36,7 @@ import com.chickenkiller.upods2.interfaces.IToolbarHolder;
 import com.chickenkiller.upods2.interfaces.ITrackable;
 import com.chickenkiller.upods2.models.RadioItem;
 import com.chickenkiller.upods2.models.Track;
+import com.chickenkiller.upods2.utils.Logger;
 import com.chickenkiller.upods2.utils.MediaUtils;
 import com.chickenkiller.upods2.utils.ui.UIHelper;
 
@@ -44,15 +46,18 @@ import com.chickenkiller.upods2.utils.ui.UIHelper;
  */
 public class FragmentPlayer extends Fragment implements MediaPlayer.OnPreparedListener, IPlayerStateListener {
     public static String TAG = "fragmentPlayer";
-    private static final float TOOLBAR_TEXT_SIZE = 20f;
     public static final long DEFAULT_RADIO_DURATIO = 1000000;
     private static final int SB_PROGRESS_TOP_MARGIN_CORECTOR = 20;
+    private static final float TOOLBAR_TEXT_SIZE = 20f;
+
+    private IPlayableMediaItem playableMediaItem;
+    private IOperationFinishCallback playlistTrackSelected;
+    private UniversalPlayer universalPlayer;
+    private Playlist playlist;
 
     private ImageButton btnPlay;
-    private IPlayableMediaItem playableMediaItem;
     private ImageView imgPlayerCover;
     private RelativeLayout rlTopSectionBckg;
-    private UniversalPlayer universalPlayer;
     private TextView tvPlayserSubtitle;
     private TextView tvPlayerTitle;
     private TextView tvTrackInfo;
@@ -60,7 +65,6 @@ public class FragmentPlayer extends Fragment implements MediaPlayer.OnPreparedLi
     private TextView tvTrackDuration;
     private SeekBar sbPlayerProgress;
     private LinearLayout lnPlayerinfo;
-    private Playlist playlist;
 
     private long maxDuration = -1;
     private boolean isChangingProgress = false;
@@ -71,6 +75,7 @@ public class FragmentPlayer extends Fragment implements MediaPlayer.OnPreparedLi
             if (universalPlayer.isPrepaired) {
                 universalPlayer.toggle();
                 btnPlay.setImageResource(universalPlayer.isPlaying() ? R.drawable.ic_pause_white : R.drawable.ic_play_white);
+                playlist.updateTracks();
             } else {
                 runPlayer();
             }
@@ -107,7 +112,7 @@ public class FragmentPlayer extends Fragment implements MediaPlayer.OnPreparedLi
             playableMediaItem = (IPlayableMediaItem) savedInstanceState.get(ActivityPlayer.MEDIA_ITEM_EXTRA);
         }
         if (playableMediaItem != null) {
-            initPlayerUI(view);
+            initPlayerUI();
             universalPlayer = UniversalPlayer.getInstance();
             runPlayer();
         }
@@ -121,7 +126,15 @@ public class FragmentPlayer extends Fragment implements MediaPlayer.OnPreparedLi
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         //Playlist
-        playlist = new Playlist(getActivity(), view);
+        playlist = new Playlist(getActivity(), view, new IOperationFinishCallback() {
+            @Override
+            public void operationFinished() {
+                playableMediaItem = universalPlayer.getPlayingMediaItem();
+                initPlayerUI();
+                btnPlay.setImageResource(R.drawable.ic_pause_white);
+                playlist.updateTracks();
+            }
+        });
         lnPlayerinfo.setOnClickListener(playlist.getPlaylistOpenClickListener());
         super.onViewCreated(view, savedInstanceState);
         setSeekbarPosition(view);
@@ -139,7 +152,7 @@ public class FragmentPlayer extends Fragment implements MediaPlayer.OnPreparedLi
         });
     }
 
-    public void initPlayerUI(View view) {
+    public void initPlayerUI() {
         tvPlayerTitle.setText(playableMediaItem.getName());
         tvPlayserSubtitle.setText(playableMediaItem.getSubHeader());
         Glide.with(getActivity()).load(playableMediaItem.getCoverImageUrl()).crossFade().into(new GlideDrawableImageViewTarget(imgPlayerCover) {
@@ -175,7 +188,7 @@ public class FragmentPlayer extends Fragment implements MediaPlayer.OnPreparedLi
 
         //Player already running
         if (universalPlayer.isPrepaired && universalPlayer.isCurrentMediaItem(playableMediaItem)) {
-            ((IToolbarHolder) getActivity()).getToolbar().setTitle(R.string.now_paying);
+            Logger.printInfo(TAG, "Already playing");
             btnPlay.setImageResource(universalPlayer.isPlaying() ? R.drawable.ic_pause_white : R.drawable.ic_play_white);
             ((IToolbarHolder) getActivity()).getToolbar().setTitle(R.string.now_paying);
             setPositionUpdateCallback();

@@ -74,7 +74,6 @@ public class UniversalPlayer implements MediaPlayer.OnPreparedListener, MediaPla
         if (isCurrentMediaItem(mediaItem)) {
             return;
         }
-        releasePlayer(); //always release player before changing media item
         if (mediaItem instanceof RadioItem) {
             this.mediaItem = new RadioItem((RadioItem) mediaItem);
         } else if (mediaItem instanceof Podcast) {
@@ -201,7 +200,7 @@ public class UniversalPlayer implements MediaPlayer.OnPreparedListener, MediaPla
 
 
     /**
-     * Restarts player in the soft way (didn't release all resorce and callbacks)
+     * Restarts player in the soft way (didn't release all resurces and callbacks)
      */
     public void softRestart() {
         if (mediaPlayer != null) {
@@ -215,12 +214,9 @@ public class UniversalPlayer implements MediaPlayer.OnPreparedListener, MediaPla
             mediaPlayer.release();
             mediaPlayer = null;
             mediaItem = null;
-            preparedListener = null;
-            playerStateListener = null;
-            onMetaDataFetchedCallback = null;
-            positionUpdatedCallback = null;
             isPrepaired = false;
             positionOffset = 0;
+            removeListeners();
         }
         if (notificationPanel != null) {
             notificationPanel.notificationCancel();
@@ -241,6 +237,7 @@ public class UniversalPlayer implements MediaPlayer.OnPreparedListener, MediaPla
         preparedListener = null;
         playerStateListener = null;
         positionUpdatedCallback = null;
+        onMetaDataFetchedCallback = null;
     }
 
     public void getTrackInfo() {

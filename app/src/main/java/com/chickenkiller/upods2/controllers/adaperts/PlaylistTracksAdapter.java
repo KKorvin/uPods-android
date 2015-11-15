@@ -62,4 +62,5 @@ public class PlaylistTracksAdapter extends ArrayAdapter<Track> {
         }
         return convertView;
     }
+
 }
