@@ -1,11 +1,15 @@
 package com.chickenkiller.upods2.utils;
 
 import com.chickenkiller.upods2.controllers.internet.BackendManager;
+import com.chickenkiller.upods2.fragments.FragmentPlayer;
 import com.chickenkiller.upods2.interfaces.IOperationFinishWithDataCallback;
 import com.chickenkiller.upods2.interfaces.ISimpleRequestCallback;
 
-import java.sql.Time;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -42,12 +46,21 @@ public class MediaUtils {
     }
 
     public static long timeStringToLong(String timeString) {
-        if(timeString.matches("[0-9]{2}:[0-9]{2}")){
+        if (timeString.matches("[0-9]{2}:[0-9]{2}")) {
             timeString = "00:" + timeString;
         }
-        Time t = Time.valueOf(timeString);
-        long l = t.getTime();
-        return l;
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
+        Date date = null;
+        long ms;
+        try {
+            date = sdf.parse("1970-01-01 " + timeString);
+            ms = date.getTime();
+        } catch (ParseException e) {
+            ms = FragmentPlayer.DEFAULT_RADIO_DURATIO;
+            e.printStackTrace();
+        }
+        return ms;
     }
 
 }

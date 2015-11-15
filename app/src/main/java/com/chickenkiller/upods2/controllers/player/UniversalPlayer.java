@@ -72,6 +72,7 @@ public class UniversalPlayer implements MediaPlayer.OnPreparedListener, MediaPla
         if (isCurrentMediaItem(mediaItem)) {
             return;
         }
+        releasePlayer(); //always release player before changing media item
         if (mediaItem instanceof RadioItem) {
             this.mediaItem = new RadioItem((RadioItem) mediaItem);
         } else if (mediaItem instanceof Podcast) {

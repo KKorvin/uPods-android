@@ -43,7 +43,7 @@ import com.chickenkiller.upods2.utils.ui.UIHelper;
 public class FragmentPlayer extends Fragment implements MediaPlayer.OnPreparedListener, IPlayerStateListener {
     public static String TAG = "fragmentPlayer";
     private static final float TOOLBAR_TEXT_SIZE = 20f;
-    private static final long DEFAULT_RADIO_DURATIO = 100000;
+    public static final long DEFAULT_RADIO_DURATIO = 100000;
     private static final int SB_PROGRESS_TOP_MARGIN_CORECTOR = 20;
 
     private ImageButton btnPlay;
@@ -97,6 +97,9 @@ public class FragmentPlayer extends Fragment implements MediaPlayer.OnPreparedLi
         tvTrackCurrentTime = (TextView) view.findViewById(R.id.tvTrackCurrentTime);
         lnPlayerinfo = (LinearLayout) view.findViewById(R.id.lnPlayerInfo);
         sbPlayerProgress = (SeekBar) view.findViewById(R.id.sbPlayerProgress);
+
+        ((IToolbarHolder) getActivity()).getToolbar().setTitle(R.string.buffering);
+
         if (playableMediaItem == null) {
             playableMediaItem = (IPlayableMediaItem) savedInstanceState.get(ActivityPlayer.MEDIA_ITEM_EXTRA);
         }
@@ -106,7 +109,6 @@ public class FragmentPlayer extends Fragment implements MediaPlayer.OnPreparedLi
             runPlayer();
         }
 
-        ((IToolbarHolder) getActivity()).getToolbar().setTitle(R.string.buffering);
         TextView toolbarTitle = UIHelper.getToolbarTextView(((IToolbarHolder) getActivity()).getToolbar());
         toolbarTitle.setTextSize(TOOLBAR_TEXT_SIZE);
         toolbarTitle.setTypeface(null, Typeface.NORMAL);
