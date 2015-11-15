@@ -268,13 +268,18 @@ public class UniversalPlayer implements MediaPlayer.OnPreparedListener, MediaPla
         return ((ITrackable) this.mediaItem).getSelectedTrack().getTitle().equals(track.getTitle());
     }
 
+    public void seekTo(int ms) {
+        if (isPrepaired && ms >= 0) {
+            mediaPlayer.seekTo(ms);
+        }
+    }
 
     private void runPositionUpdater() {
         if (mediaPlayer != null && isPrepaired && positionUpdatedCallback != null) {
             positionUpdateTask = new TimerTask() {
                 @Override
                 public void run() {
-                    if(positionUpdatedCallback!=null) {
+                    if (positionUpdatedCallback != null) {
                         positionUpdatedCallback.poistionUpdated(mediaPlayer.getCurrentPosition());
                     }
                 }

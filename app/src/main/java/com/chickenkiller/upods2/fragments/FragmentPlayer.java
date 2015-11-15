@@ -6,6 +6,7 @@ import android.graphics.Typeface;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
@@ -32,6 +33,7 @@ import com.chickenkiller.upods2.interfaces.IPlayableMediaItem;
 import com.chickenkiller.upods2.interfaces.IPlayerStateListener;
 import com.chickenkiller.upods2.interfaces.IToolbarHolder;
 import com.chickenkiller.upods2.interfaces.ITrackable;
+import com.chickenkiller.upods2.models.RadioItem;
 import com.chickenkiller.upods2.models.Track;
 import com.chickenkiller.upods2.utils.MediaUtils;
 import com.chickenkiller.upods2.utils.ui.UIHelper;
@@ -61,6 +63,7 @@ public class FragmentPlayer extends Fragment implements MediaPlayer.OnPreparedLi
     private Playlist playlist;
 
     private long maxDuration = -1;
+    private boolean isChangingProgress = false;
 
     private View.OnClickListener btnPlayStopClickListener = new View.OnClickListener() {
         @Override
@@ -152,6 +155,14 @@ public class FragmentPlayer extends Fragment implements MediaPlayer.OnPreparedLi
             Track selectedTrack = ((ITrackable) playableMediaItem).getSelectedTrack();
             tvTrackDuration.setText(selectedTrack.getDuration());
         }
+        if (playableMediaItem instanceof RadioItem) {
+            sbPlayerProgress.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    return true;
+                }
+            });
+        }
     }
 
     public void setPlayableItem(IPlayableMediaItem iPlayableMediaItem) {
@@ -193,14 +204,37 @@ public class FragmentPlayer extends Fragment implements MediaPlayer.OnPreparedLi
                     @Override
                     public void run() {
                         tvTrackCurrentTime.setText(MediaUtils.formatMsToTimeString(currentPoistion));
-                        if (maxDuration < 0) {
-                            maxDuration = MediaUtils.timeStringToLong(tvTrackDuration.getText().toString());
-                            maxDuration = maxDuration > 0 ? maxDuration : DEFAULT_RADIO_DURATIO;
+                        if (!isChangingProgress) {
+                            if (maxDuration < 0) {
+                                maxDuration = MediaUtils.timeStringToLong(tvTrackDuration.getText().toString());
+                                maxDuration = maxDuration > 0 ? maxDuration : DEFAULT_RADIO_DURATIO;
+                            }
+                            int progress = (int) (currentPoistion * 100 / maxDuration);
+                            sbPlayerProgress.setProgress(progress);
                         }
-                        int progress = (int) (currentPoistion * 100 / maxDuration);
-                        sbPlayerProgress.setProgress(progress);
                     }
                 });
+            }
+        });
+
+        sbPlayerProgress.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                isChangingProgress = true;
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                isChangingProgress = false;
+                int progress = seekBar.getProgress();
+                int position = (int) ((maxDuration * progress) / 100);
+                seekBar.setProgress(progress);
+                universalPlayer.seekTo(position);
             }
         });
     }
