@@ -176,7 +176,7 @@ public class Playlist {
     }
 
     private void runCloseInfoSectionAnimation(long duration) {
-        final RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) rlPlayerInfoSection.getLayoutParams();
+        final LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) rlPlayerInfoSection.getLayoutParams();
         ValueAnimator animator = ValueAnimator.ofInt(pInfoAnimationMargin, initialPlayPInfo);
         animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
