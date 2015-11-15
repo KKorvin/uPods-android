@@ -5,6 +5,7 @@ import android.media.MediaPlayer;
 
 import com.chickenkiller.upods2.controllers.app.ProfileManager;
 import com.chickenkiller.upods2.controllers.app.UpodsApplication;
+import com.chickenkiller.upods2.fragments.FragmentPlayer;
 import com.chickenkiller.upods2.interfaces.IOnPositionUpdatedCallback;
 import com.chickenkiller.upods2.interfaces.IOperationFinishWithDataCallback;
 import com.chickenkiller.upods2.interfaces.IPlayableMediaItem;
@@ -31,6 +32,7 @@ public class UniversalPlayer implements MediaPlayer.OnPreparedListener, MediaPla
 
     private static final long RECONNECT_RATE = 5000;
     private static final long POSITION_UPDATE_RATE = 1000;
+    private int positionOffset = 0;
 
     public enum State {PLAYING, PAUSED}
 
@@ -218,6 +220,7 @@ public class UniversalPlayer implements MediaPlayer.OnPreparedListener, MediaPla
             onMetaDataFetchedCallback = null;
             positionUpdatedCallback = null;
             isPrepaired = false;
+            positionOffset = 0;
         }
         if (notificationPanel != null) {
             notificationPanel.notificationCancel();
@@ -280,7 +283,12 @@ public class UniversalPlayer implements MediaPlayer.OnPreparedListener, MediaPla
                 @Override
                 public void run() {
                     if (positionUpdatedCallback != null) {
-                        positionUpdatedCallback.poistionUpdated(mediaPlayer.getCurrentPosition());
+                        int position = mediaPlayer.getCurrentPosition();
+                        if (position >= FragmentPlayer.DEFAULT_RADIO_DURATIO && mediaItem instanceof RadioItem) {
+                            positionOffset = position;
+                            position -= positionOffset;
+                        }
+                        positionUpdatedCallback.poistionUpdated(position);
                     }
                 }
             };

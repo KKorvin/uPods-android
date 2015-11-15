@@ -6,14 +6,20 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
 import com.chickenkiller.upods2.R;
 import com.chickenkiller.upods2.activity.ActivityPlayer;
+import com.chickenkiller.upods2.fragments.FragmentPlayer;
+import com.chickenkiller.upods2.interfaces.IOnPositionUpdatedCallback;
+import com.chickenkiller.upods2.interfaces.IPlayableMediaItem;
 import com.chickenkiller.upods2.interfaces.IPlayerStateListener;
-import com.chickenkiller.upods2.models.RadioItem;
+import com.chickenkiller.upods2.models.Podcast;
+import com.chickenkiller.upods2.models.Track;
+import com.chickenkiller.upods2.utils.MediaUtils;
 
 /**
  * Created by alonzilberman on 8/5/15.
@@ -22,9 +28,13 @@ public class SmallPlayer implements IPlayerStateListener, View.OnClickListener {
 
     private ImageView imgCover;
     private TextView tvTitle;
+    private TextView tvSubTtitle;
+    private SeekBar sbSmallPlayer;
     private ImageButton btnPlay;
     private RelativeLayout rlSmallPLayer;
     private Activity mActivity;
+
+    private long maxDuration = -1;
 
     private View.OnClickListener btnPlayOnClickListener = new View.OnClickListener() {
         @Override
@@ -45,19 +55,44 @@ public class SmallPlayer implements IPlayerStateListener, View.OnClickListener {
         if (UniversalPlayer.getInstance().isPrepaired) {
             this.imgCover = (ImageView) parentView.findViewById(R.id.imgSmallPlayerCover);
             this.tvTitle = (TextView) parentView.findViewById(R.id.tvSmallPlayerTitle);
+            this.tvSubTtitle = (TextView) parentView.findViewById(R.id.tvSmallPlayerSubTtile);
             this.btnPlay = (ImageButton) parentView.findViewById(R.id.btnSmallPlayerPlay);
             this.btnPlay.setOnClickListener(btnPlayOnClickListener);
             this.btnPlay.setBackgroundResource(UniversalPlayer.getInstance().isPlaying() ? R.drawable.ic_pause_white : R.drawable.ic_play_white);
             this.rlSmallPLayer.setVisibility(View.VISIBLE);
-            if (UniversalPlayer.getInstance().getPlayingMediaItem() instanceof RadioItem) {
-                RadioItem radioItem = (RadioItem) UniversalPlayer.getInstance().getPlayingMediaItem();
-                this.tvTitle.setText(radioItem.getName());
-                Glide.with(parentView.getContext()).load(radioItem.getCoverImageUrl()).crossFade().into(new GlideDrawableImageViewTarget(imgCover));
-            }
+            this.sbSmallPlayer = (SeekBar) parentView.findViewById(R.id.sbSmallPlayer);
+            IPlayableMediaItem playingMediaItem = UniversalPlayer.getInstance().getPlayingMediaItem();
+            this.tvTitle.setText(playingMediaItem.getName());
+            this.tvSubTtitle.setText(playingMediaItem.getSubHeader());
+            Glide.with(parentView.getContext()).load(playingMediaItem.getCoverImageUrl()).crossFade().into(new GlideDrawableImageViewTarget(imgCover));
             UniversalPlayer.getInstance().setPlayerStateListener(this);
+            setPositionUpdateCallback();
         } else {
             this.rlSmallPLayer.setVisibility(View.GONE);
         }
+    }
+
+    private void setPositionUpdateCallback() {
+        UniversalPlayer.getInstance().setPositionUpdatedCallback(new IOnPositionUpdatedCallback() {
+            @Override
+            public void poistionUpdated(final int currentPoistion) {
+                mActivity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (maxDuration < 0) {
+                            IPlayableMediaItem playingMediaItem = UniversalPlayer.getInstance().getPlayingMediaItem();
+                            if (playingMediaItem instanceof Podcast) {
+                                Track track = ((Podcast) playingMediaItem).getSelectedTrack();
+                                maxDuration = MediaUtils.timeStringToLong(track.getDuration());
+                            }
+                            maxDuration = maxDuration > 0 ? maxDuration : FragmentPlayer.DEFAULT_RADIO_DURATIO;
+                        }
+                        int progress = (int) (currentPoistion * 100 / maxDuration);
+                        sbSmallPlayer.setProgress(progress);
+                    }
+                });
+            }
+        });
     }
 
     @Override
@@ -66,7 +101,7 @@ public class SmallPlayer implements IPlayerStateListener, View.OnClickListener {
     }
 
     public void destroy() {
-        UniversalPlayer.getInstance().setPlayerStateListener(null);
+        UniversalPlayer.getInstance().removeListeners();
         mActivity = null;
     }
 

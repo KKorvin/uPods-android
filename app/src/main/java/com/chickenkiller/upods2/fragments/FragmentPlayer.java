@@ -45,7 +45,7 @@ import com.chickenkiller.upods2.utils.ui.UIHelper;
 public class FragmentPlayer extends Fragment implements MediaPlayer.OnPreparedListener, IPlayerStateListener {
     public static String TAG = "fragmentPlayer";
     private static final float TOOLBAR_TEXT_SIZE = 20f;
-    public static final long DEFAULT_RADIO_DURATIO = 100000;
+    public static final long DEFAULT_RADIO_DURATIO = 1000000;
     private static final int SB_PROGRESS_TOP_MARGIN_CORECTOR = 20;
 
     private ImageButton btnPlay;

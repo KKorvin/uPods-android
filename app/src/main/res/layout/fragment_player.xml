@@ -46,7 +46,9 @@
                 android:background="@color/blue_grey_900"
                 android:clickable="true"
                 android:orientation="vertical"
-                android:paddingBottom="5dp">
+                android:paddingBottom="5dp"
+                android:paddingLeft="12dp"
+                android:paddingRight="12dp">
 
                 <TextView
                     android:id="@+id/tvPlayerTitle"
@@ -54,7 +56,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="5dp"
                     android:layout_marginTop="10dp"
-                    android:paddingLeft="12dp"
+                    android:ellipsize="end"
+                    android:maxLines="1"
                     android:text="BBC Radio One"
                     android:textColor="@color/white"
                     android:textSize="@dimen/default_text_size_22" />
@@ -64,7 +67,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="5dp"
-                    android:paddingLeft="12dp"
+                    android:ellipsize="end"
+                    android:maxLines="1"
                     android:text="Most popular Internet radio"
                     android:textColor="@color/white"
                     android:textSize="@dimen/default_text_size_16" />
@@ -74,7 +78,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="7dp"
-                    android:paddingLeft="12dp"
                     android:text="1/12"
                     android:textColor="@color/whiteGray"
                     android:textSize="@dimen/default_text_size_10" />
