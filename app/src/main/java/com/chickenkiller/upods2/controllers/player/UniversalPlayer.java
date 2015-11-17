@@ -2,6 +2,7 @@ package com.chickenkiller.upods2.controllers.player;
 
 import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
+import android.os.AsyncTask;
 
 import com.chickenkiller.upods2.controllers.app.ProfileManager;
 import com.chickenkiller.upods2.controllers.app.UpodsApplication;
@@ -121,7 +122,7 @@ public class UniversalPlayer implements MediaPlayer.OnPreparedListener, MediaPla
                 }
                 if (onMetaDataFetchedCallback != null) {
                     MetaDataFetcher metaDataFetcher = new MetaDataFetcher(onMetaDataFetchedCallback, mediaItem.getAudeoLink());
-                    metaDataFetcher.execute();
+                    metaDataFetcher.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                 }
                 if (mediaPlayer == null) {
                     mediaPlayer = new MediaPlayer();
@@ -221,6 +222,9 @@ public class UniversalPlayer implements MediaPlayer.OnPreparedListener, MediaPla
         if (notificationPanel != null) {
             notificationPanel.notificationCancel();
         }
+        if (positionUpdateTask != null) {
+            positionUpdateTask.cancel();
+        }
     }
 
     public void resetPlayer() {
@@ -290,7 +294,7 @@ public class UniversalPlayer implements MediaPlayer.OnPreparedListener, MediaPla
                 }
             };
             new Timer().scheduleAtFixedRate(positionUpdateTask, 0, POSITION_UPDATE_RATE);
-        } else if (positionUpdateTask != null) {
+        } else if (positionUpdateTask != null && positionUpdatedCallback == null) {
             positionUpdateTask.cancel();
         }
 

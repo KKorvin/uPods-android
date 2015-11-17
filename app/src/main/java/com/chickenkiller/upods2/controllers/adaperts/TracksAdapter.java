@@ -190,9 +190,12 @@ public class TracksAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                     track.setAudeoUrl(ProfileManager.getInstance().getDownloadedTrackPath(iPlayableMediaItem, track));
                 }
                 Intent myIntent = new Intent(mContext, ActivityPlayer.class);
-                if (UniversalPlayer.getInstance().isPrepaired && !UniversalPlayer.getInstance().isCurrentMediaItem(iPlayableMediaItem)) {
+                if (!UniversalPlayer.getInstance().isPrepaired) {
+                    UniversalPlayer.getInstance().setMediaItem(iPlayableMediaItem);
+                } else if (UniversalPlayer.getInstance().isPrepaired && !UniversalPlayer.getInstance().isCurrentMediaItem(iPlayableMediaItem)) {
                     UniversalPlayer.getInstance().releasePlayer();
                     UniversalPlayer.getInstance().setMediaItem(iPlayableMediaItem);
+                    UniversalPlayer.getInstance().prepare();
                 }
                 mContext.startActivity(myIntent);
                 ((Activity) mContext).finish();

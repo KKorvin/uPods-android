@@ -212,8 +212,8 @@ public class Playlist implements AdapterView.OnItemClickListener {
                 }
                 Logger.printInfo(LOG_TAG, "Clicked on current trcack -> playing it");
             } else {
+                universalPlayer.releasePlayer();
                 universalPlayer.setMediaItem(clickedIPlayableMediaItem);
-                universalPlayer.softRestart();
                 Logger.printInfo(LOG_TAG, "Track switched to: " + clickedIPlayableMediaItem.getName());
             }
         } else if (playlistAdapter instanceof PlaylistTracksAdapter) {
@@ -226,7 +226,8 @@ public class Playlist implements AdapterView.OnItemClickListener {
             } else {
                 ITrackable trackable = (ITrackable) universalPlayer.getPlayingMediaItem();
                 trackable.selectTrack(clieckedTrack);
-                universalPlayer.softRestart();
+                universalPlayer.releasePlayer();
+                universalPlayer.setMediaItem((IPlayableMediaItem) trackable);
                 Logger.printInfo(LOG_TAG, "Track switched to: " + clieckedTrack.getTitle());
             }
         }

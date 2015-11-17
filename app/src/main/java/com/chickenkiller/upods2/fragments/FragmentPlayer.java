@@ -76,17 +76,7 @@ public class FragmentPlayer extends Fragment implements MediaPlayer.OnPreparedLi
                 universalPlayer.toggle();
                 btnPlay.setImageResource(universalPlayer.isPlaying() ? R.drawable.ic_pause_white : R.drawable.ic_play_white);
                 playlist.updateTracks();
-            } else {
-                runPlayer();
             }
-        }
-    };
-
-    private View.OnClickListener imgClosePlayerClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            universalPlayer.releasePlayer();
-            getActivity().onBackPressed();
         }
     };
 
@@ -105,21 +95,22 @@ public class FragmentPlayer extends Fragment implements MediaPlayer.OnPreparedLi
         tvTrackCurrentTime = (TextView) view.findViewById(R.id.tvTrackCurrentTime);
         lnPlayerinfo = (LinearLayout) view.findViewById(R.id.lnPlayerInfo);
         sbPlayerProgress = (SeekBar) view.findViewById(R.id.sbPlayerProgress);
+        universalPlayer = UniversalPlayer.getInstance();
 
         ((IToolbarHolder) getActivity()).getToolbar().setTitle(R.string.buffering);
+        TextView toolbarTitle = UIHelper.getToolbarTextView(((IToolbarHolder) getActivity()).getToolbar());
+        toolbarTitle.setTextSize(TOOLBAR_TEXT_SIZE);
+        toolbarTitle.setTypeface(null, Typeface.NORMAL);
 
         if (playableMediaItem == null) {
             playableMediaItem = (IPlayableMediaItem) savedInstanceState.get(ActivityPlayer.MEDIA_ITEM_EXTRA);
         }
+
         if (playableMediaItem != null) {
             initPlayerUI();
-            universalPlayer = UniversalPlayer.getInstance();
             runPlayer();
         }
 
-        TextView toolbarTitle = UIHelper.getToolbarTextView(((IToolbarHolder) getActivity()).getToolbar());
-        toolbarTitle.setTextSize(TOOLBAR_TEXT_SIZE);
-        toolbarTitle.setTypeface(null, Typeface.NORMAL);
         return view;
     }
 
@@ -131,25 +122,28 @@ public class FragmentPlayer extends Fragment implements MediaPlayer.OnPreparedLi
             public void operationFinished() {
                 playableMediaItem = universalPlayer.getPlayingMediaItem();
                 initPlayerUI();
-                btnPlay.setImageResource(R.drawable.ic_pause_white);
+                runPlayer();
                 playlist.updateTracks();
             }
         });
-        lnPlayerinfo.setOnClickListener(playlist.getPlaylistOpenClickListener());
+
         super.onViewCreated(view, savedInstanceState);
+        lnPlayerinfo.setOnClickListener(playlist.getPlaylistOpenClickListener());
         setSeekbarPosition(view);
     }
 
-    private void setSeekbarPosition(final View root) {
-        final ViewTreeObserver observer = root.getViewTreeObserver();
-        observer.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            public void onGlobalLayout() {
-                final RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) sbPlayerProgress.getLayoutParams();
-                RelativeLayout rlPlayerUnderbar = (RelativeLayout) root.findViewById(R.id.rlPlayerUnderbar);
-                params.bottomMargin = rlPlayerUnderbar.getHeight() - SB_PROGRESS_TOP_MARGIN_CORECTOR;
-                sbPlayerProgress.requestLayout();
-            }
-        });
+    @Override
+    public void onDestroy() {
+        if (universalPlayer != null) {
+            universalPlayer.removeListeners();
+        }
+        super.onDestroy();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putSerializable(ActivityPlayer.MEDIA_ITEM_EXTRA, playableMediaItem);
+        super.onSaveInstanceState(outState);
     }
 
     public void initPlayerUI() {
@@ -176,26 +170,30 @@ public class FragmentPlayer extends Fragment implements MediaPlayer.OnPreparedLi
                 }
             });
         }
-    }
 
-    public void setPlayableItem(IPlayableMediaItem iPlayableMediaItem) {
-        this.playableMediaItem = iPlayableMediaItem;
+        if (universalPlayer.isPrepaired && universalPlayer.isPlaying()) {
+            ((IToolbarHolder) getActivity()).getToolbar().setTitle(R.string.now_paying);
+            btnPlay.setImageResource(R.drawable.ic_pause_white);
+
+        } else {
+            ((IToolbarHolder) getActivity()).getToolbar().setTitle(R.string.buffering);
+            btnPlay.setImageResource(R.drawable.ic_play_white);
+        }
     }
 
     private void runPlayer() {
-        universalPlayer.setPreparedListener(this);
-        universalPlayer.setPlayerStateListener(this);
-
-        //Player already running
-        if (universalPlayer.isPrepaired && universalPlayer.isCurrentMediaItem(playableMediaItem)) {
+        if (universalPlayer.isPrepaired && universalPlayer.isCurrentMediaItem(playableMediaItem)) { //Player already running
             Logger.printInfo(TAG, "Already playing");
-            btnPlay.setImageResource(universalPlayer.isPlaying() ? R.drawable.ic_pause_white : R.drawable.ic_play_white);
-            ((IToolbarHolder) getActivity()).getToolbar().setTitle(R.string.now_paying);
             setPositionUpdateCallback();
-            return;
+            universalPlayer.setPreparedListener(this);
+        } else {
+            universalPlayer.releasePlayer();
+            universalPlayer.setMediaItem(playableMediaItem);
+            universalPlayer.setPreparedListener(this);
+            universalPlayer.prepare();
         }
-        universalPlayer.resetPlayer();
-        universalPlayer.setMediaItem(playableMediaItem);
+
+        universalPlayer.setPlayerStateListener(this);
         universalPlayer.setOnMetaDataFetchedCallback(new IOperationFinishWithDataCallback() {
             @Override
             public void operationFinished(Object data) {
@@ -205,8 +203,23 @@ public class FragmentPlayer extends Fragment implements MediaPlayer.OnPreparedLi
                 tvTrackInfo.setText(metaData.bitrate);
             }
         });
-        universalPlayer.prepare();
-        btnPlay.setImageResource(R.drawable.ic_play_white);
+
+    }
+
+    public void setPlayableItem(IPlayableMediaItem iPlayableMediaItem) {
+        this.playableMediaItem = iPlayableMediaItem;
+    }
+
+    private void setSeekbarPosition(final View root) {
+        final ViewTreeObserver observer = root.getViewTreeObserver();
+        observer.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            public void onGlobalLayout() {
+                final RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) sbPlayerProgress.getLayoutParams();
+                RelativeLayout rlPlayerUnderbar = (RelativeLayout) root.findViewById(R.id.rlPlayerUnderbar);
+                params.bottomMargin = rlPlayerUnderbar.getHeight() - SB_PROGRESS_TOP_MARGIN_CORECTOR;
+                sbPlayerProgress.requestLayout();
+            }
+        });
     }
 
     private void setPositionUpdateCallback() {
@@ -219,8 +232,8 @@ public class FragmentPlayer extends Fragment implements MediaPlayer.OnPreparedLi
                         tvTrackCurrentTime.setText(MediaUtils.formatMsToTimeString(currentPoistion));
                         if (!isChangingProgress) {
                             if (maxDuration < 0) {
-                                maxDuration = MediaUtils.timeStringToLong(tvTrackDuration.getText().toString());
-                                maxDuration = maxDuration > 0 ? maxDuration : DEFAULT_RADIO_DURATIO;
+                                maxDuration = playableMediaItem instanceof RadioItem ? DEFAULT_RADIO_DURATIO
+                                        : MediaUtils.timeStringToLong(tvTrackDuration.getText().toString());
                             }
                             int progress = (int) (currentPoistion * 100 / maxDuration);
                             sbPlayerProgress.setProgress(progress);
@@ -256,22 +269,8 @@ public class FragmentPlayer extends Fragment implements MediaPlayer.OnPreparedLi
     public void onPrepared(MediaPlayer mediaPlayer) {
         btnPlay.setImageResource(R.drawable.ic_pause_white);
         ((IToolbarHolder) getActivity()).getToolbar().setTitle(R.string.now_paying);
-        playlist.updateTracks();
         setPositionUpdateCallback();
-    }
-
-    @Override
-    public void onDestroy() {
-        if (universalPlayer != null) {
-            universalPlayer.removeListeners();
-        }
-        super.onDestroy();
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        outState.putSerializable(ActivityPlayer.MEDIA_ITEM_EXTRA, playableMediaItem);
-        super.onSaveInstanceState(outState);
+        playlist.updateTracks();
     }
 
     @Override

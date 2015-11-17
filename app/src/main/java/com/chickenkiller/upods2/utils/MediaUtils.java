@@ -12,6 +12,8 @@ import java.util.List;
 import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 
+import static java.util.concurrent.TimeUnit.MILLISECONDS;
+
 /**
  * Created by alonzilberman on 10/30/15.
  */
@@ -39,13 +41,16 @@ public class MediaUtils {
 
     public static String formatMsToTimeString(int millis) {
         return String.format("%02d:%02d",
-                TimeUnit.MILLISECONDS.toMinutes(millis),
-                TimeUnit.MILLISECONDS.toSeconds(millis) -
-                        TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millis))
+                MILLISECONDS.toMinutes(millis),
+                MILLISECONDS.toSeconds(millis) -
+                        TimeUnit.MINUTES.toSeconds(MILLISECONDS.toMinutes(millis))
         );
     }
 
     public static long timeStringToLong(String timeString) {
+        if (timeString.matches("^[0-9]{3,5}$")) {//Time was given in seconds
+            return Long.valueOf(timeString) * 1000;
+        }
         if (timeString.matches("[0-9]{2}:[0-9]{2}")) {
             timeString = "00:" + timeString;
         }

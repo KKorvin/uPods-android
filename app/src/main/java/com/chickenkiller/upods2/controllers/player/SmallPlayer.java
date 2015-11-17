@@ -108,7 +108,6 @@ public class SmallPlayer implements IPlayerStateListener, View.OnClickListener {
     @Override
     public void onClick(View view) {
         Intent intentOpen = new Intent(mActivity, ActivityPlayer.class);
-        intentOpen.putExtra(ActivityPlayer.MEDIA_ITEM_EXTRA, UniversalPlayer.getInstance().getPlayingMediaItem());
         mActivity.startActivity(intentOpen);
         mActivity.finish();
     }
