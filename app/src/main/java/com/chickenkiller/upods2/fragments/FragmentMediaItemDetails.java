@@ -42,6 +42,7 @@ import com.chickenkiller.upods2.interfaces.ITrackable;
 import com.chickenkiller.upods2.models.Episod;
 import com.chickenkiller.upods2.models.Podcast;
 import com.chickenkiller.upods2.utils.enums.ContextMenuType;
+import com.chickenkiller.upods2.utils.enums.MediaItemType;
 import com.chickenkiller.upods2.utils.ui.UIHelper;
 import com.chickenkiller.upods2.views.DetailsScrollView;
 
@@ -183,6 +184,7 @@ public class FragmentMediaItemDetails extends Fragment implements View.OnTouchLi
             @Override
             public void onClick(View view) {
                 Intent myIntent = new Intent(getActivity(), ActivityPlayer.class);
+                myIntent.putExtra(ActivityPlayer.ACTIVITY_STARTED_FROM, MediaItemType.RADIO.ordinal());
                 myIntent.putExtra(ActivityPlayer.MEDIA_ITEM_EXTRA, playableItem);
                 getActivity().startActivity(myIntent);
                 getActivity().finish();

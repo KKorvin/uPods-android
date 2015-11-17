@@ -15,6 +15,9 @@ import com.chickenkiller.upods2.interfaces.IToolbarHolder;
 public class ActivityPlayer extends BasicActivity implements IToolbarHolder {
 
     public static final String MEDIA_ITEM_EXTRA = "mediaItem";
+    public static final String ACTIVITY_STARTED_FROM = "startedFrom";
+    public static final String ACTIVITY_STARTED_FRAGMENT_NUMBER = "fragment_number";
+
     private IPlayableMediaItem currentMediaItem;
     private Toolbar toolbar;
 
@@ -55,6 +58,9 @@ public class ActivityPlayer extends BasicActivity implements IToolbarHolder {
         } else {
             getFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
             Intent myIntent = new Intent(this, ActivityMain.class);
+            if (getIntent().hasExtra(ACTIVITY_STARTED_FROM)) {
+                myIntent.putExtra(ACTIVITY_STARTED_FROM, getIntent().getIntExtra(ACTIVITY_STARTED_FROM, -1));
+            }
             startActivity(myIntent);
             finish();
         }

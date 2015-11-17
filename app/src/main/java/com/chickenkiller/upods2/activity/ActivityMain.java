@@ -73,8 +73,15 @@ public class ActivityMain extends BasicActivity implements IOverlayable, IToolba
             }, WELLCOME_SCREEN_TIME);
         } else {
             toolbar.setVisibility(View.VISIBLE);
+
+            int startedFrom = getIntent().getExtras().getInt(ActivityPlayer.ACTIVITY_STARTED_FROM, -1);
+            int startedFragmentNumber = getIntent().getExtras().getInt(ActivityPlayer.ACTIVITY_STARTED_FRAGMENT_NUMBER, -1);
+
             FragmentMediaItemsGrid fragmentMediaItemsGrid = new FragmentMediaItemsGrid();
-            fragmentMediaItemsGrid.setMediaItemType(MediaItemType.RADIO);
+            fragmentMediaItemsGrid.setMediaItemType(startedFrom == MediaItemType.PODCAST.ordinal() ? MediaItemType.PODCAST : MediaItemType.RADIO);
+            if (startedFragmentNumber >= 0) {
+                fragmentMediaItemsGrid.setStartItemNumber(startedFragmentNumber);
+            }
             showFragment(R.id.fl_content, fragmentMediaItemsGrid, FragmentMediaItemsGrid.TAG);
         }
         isFirstRun = false;

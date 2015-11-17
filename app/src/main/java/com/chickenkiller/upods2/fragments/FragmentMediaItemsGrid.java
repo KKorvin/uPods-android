@@ -34,6 +34,8 @@ public class FragmentMediaItemsGrid extends Fragment implements ICustumziedBackP
     private SmallPlayer smallPlayer;
     private MediaItemType mediaItemType;
 
+    private int startItemNumber = 0;
+
     static {
         long time = Calendar.getInstance().get(Calendar.MILLISECOND);
         TAG = "f_media_grid" + String.valueOf(time);
@@ -84,11 +86,17 @@ public class FragmentMediaItemsGrid extends Fragment implements ICustumziedBackP
             }
         });
 
+        vpMedia.setCurrentItem(startItemNumber);
+
         return view;
     }
 
     public void setMediaItemType(MediaItemType mediaItemType) {
         this.mediaItemType = mediaItemType;
+    }
+
+    public void setStartItemNumber(int startItemNumber) {
+        this.startItemNumber = startItemNumber;
     }
 
     @Override

@@ -26,6 +26,7 @@ import com.chickenkiller.upods2.interfaces.IUIProgressUpdater;
 import com.chickenkiller.upods2.models.MediaItem;
 import com.chickenkiller.upods2.models.Track;
 import com.chickenkiller.upods2.utils.enums.ContextMenuType;
+import com.chickenkiller.upods2.utils.enums.MediaItemType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -190,6 +191,7 @@ public class TracksAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                     track.setAudeoUrl(ProfileManager.getInstance().getDownloadedTrackPath(iPlayableMediaItem, track));
                 }
                 Intent myIntent = new Intent(mContext, ActivityPlayer.class);
+                myIntent.putExtra(ActivityPlayer.ACTIVITY_STARTED_FROM, MediaItemType.PODCAST.ordinal());
                 if (!UniversalPlayer.getInstance().isPrepaired) {
                     UniversalPlayer.getInstance().setMediaItem(iPlayableMediaItem);
                 } else if (UniversalPlayer.getInstance().isPrepaired && !UniversalPlayer.getInstance().isCurrentMediaItem(iPlayableMediaItem)) {
