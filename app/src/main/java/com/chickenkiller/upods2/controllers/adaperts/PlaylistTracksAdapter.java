@@ -10,6 +10,8 @@ import android.widget.TextView;
 
 import com.chickenkiller.upods2.R;
 import com.chickenkiller.upods2.controllers.player.UniversalPlayer;
+import com.chickenkiller.upods2.interfaces.INowPlayingItemPosiontGetter;
+import com.chickenkiller.upods2.interfaces.ITrackable;
 import com.chickenkiller.upods2.models.Track;
 
 import java.util.List;
@@ -17,10 +19,11 @@ import java.util.List;
 /**
  * Created by alonzilberman on 10/7/15.
  */
-public class PlaylistTracksAdapter extends ArrayAdapter<Track> {
+public class PlaylistTracksAdapter extends ArrayAdapter<Track> implements INowPlayingItemPosiontGetter {
 
     private int layaoutId;
     private UniversalPlayer universalPlayer;
+    private List<Track> tracks;
 
     private static class ViewHolder {
         public ImageButton btnPlPlay;
@@ -29,9 +32,10 @@ public class PlaylistTracksAdapter extends ArrayAdapter<Track> {
         public TextView tvPlTrackDuration;
     }
 
-    public PlaylistTracksAdapter(Context context, int layaoutId, List<Track> categories) {
-        super(context, layaoutId, categories);
+    public PlaylistTracksAdapter(Context context, int layaoutId, List<Track> tracks) {
+        super(context, layaoutId, tracks);
         this.layaoutId = layaoutId;
+        this.tracks = tracks;
         this.universalPlayer = UniversalPlayer.getInstance();
     }
 
@@ -63,4 +67,14 @@ public class PlaylistTracksAdapter extends ArrayAdapter<Track> {
         return convertView;
     }
 
+    @Override
+    public int getNowPlayingItemPosition() {
+        Track currentTrack = ((ITrackable) universalPlayer.getPlayingMediaItem()).getSelectedTrack();
+        for (int i = 0; i < tracks.size(); i++) {
+            if(currentTrack.getTitle().equals(tracks.get(i).getTitle())){
+                return i;
+            }
+        }
+        return 0;
+    }
 }

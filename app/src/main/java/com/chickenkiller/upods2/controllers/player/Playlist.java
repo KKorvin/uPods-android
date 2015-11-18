@@ -15,6 +15,7 @@ import com.chickenkiller.upods2.R;
 import com.chickenkiller.upods2.controllers.adaperts.PlaylistMediaItemsAdapter;
 import com.chickenkiller.upods2.controllers.adaperts.PlaylistTracksAdapter;
 import com.chickenkiller.upods2.controllers.app.ProfileManager;
+import com.chickenkiller.upods2.interfaces.INowPlayingItemPosiontGetter;
 import com.chickenkiller.upods2.interfaces.IOperationFinishCallback;
 import com.chickenkiller.upods2.interfaces.IPlayableMediaItem;
 import com.chickenkiller.upods2.interfaces.ITrackable;
@@ -238,5 +239,16 @@ public class Playlist implements AdapterView.OnItemClickListener {
         }
         runCloseAnimation();
         isOpen = false;
+    }
+
+    public int getTracksCount() {
+        return playlistAdapter.getCount();
+    }
+
+    public int getCurrentTrackNumber() {
+        if (playlistAdapter instanceof INowPlayingItemPosiontGetter) {
+            return ((INowPlayingItemPosiontGetter) playlistAdapter).getNowPlayingItemPosition() + 1;
+        }
+        return 0;
     }
 }

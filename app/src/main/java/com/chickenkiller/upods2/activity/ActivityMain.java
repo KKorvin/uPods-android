@@ -74,8 +74,12 @@ public class ActivityMain extends BasicActivity implements IOverlayable, IToolba
         } else {
             toolbar.setVisibility(View.VISIBLE);
 
-            int startedFrom = getIntent().getExtras().getInt(ActivityPlayer.ACTIVITY_STARTED_FROM, -1);
-            int startedFragmentNumber = getIntent().getExtras().getInt(ActivityPlayer.ACTIVITY_STARTED_FRAGMENT_NUMBER, -1);
+            int startedFrom = -1;
+            int startedFragmentNumber = -1;
+            if (getIntent() != null && getIntent().getExtras() != null) {
+                startedFrom = getIntent().hasExtra(ActivityPlayer.ACTIVITY_STARTED_FROM) ? getIntent().getExtras().getInt(ActivityPlayer.ACTIVITY_STARTED_FROM, -1) : -1;
+                startedFragmentNumber = getIntent().hasExtra(ActivityPlayer.ACTIVITY_STARTED_FRAGMENT_NUMBER) ? getIntent().getExtras().getInt(ActivityPlayer.ACTIVITY_STARTED_FRAGMENT_NUMBER, -1) : -1;
+            }
 
             FragmentMediaItemsGrid fragmentMediaItemsGrid = new FragmentMediaItemsGrid();
             fragmentMediaItemsGrid.setMediaItemType(startedFrom == MediaItemType.PODCAST.ordinal() ? MediaItemType.PODCAST : MediaItemType.RADIO);

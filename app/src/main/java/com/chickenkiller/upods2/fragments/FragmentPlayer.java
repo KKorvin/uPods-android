@@ -47,7 +47,7 @@ import com.chickenkiller.upods2.utils.ui.UIHelper;
 public class FragmentPlayer extends Fragment implements MediaPlayer.OnPreparedListener, IPlayerStateListener {
     public static String TAG = "fragmentPlayer";
     public static final long DEFAULT_RADIO_DURATIO = 1000000;
-    private static final int SB_PROGRESS_TOP_MARGIN_CORECTOR = 20;
+    private static final int SB_PROGRESS_TOP_MARGIN_CORECTOR = 50;
     private static final float TOOLBAR_TEXT_SIZE = 20f;
 
     private IPlayableMediaItem playableMediaItem;
@@ -63,6 +63,7 @@ public class FragmentPlayer extends Fragment implements MediaPlayer.OnPreparedLi
     private TextView tvTrackInfo;
     private TextView tvTrackCurrentTime;
     private TextView tvTrackDuration;
+    private TextView tvTrackNumbers;
     private SeekBar sbPlayerProgress;
     private LinearLayout lnPlayerinfo;
 
@@ -93,6 +94,7 @@ public class FragmentPlayer extends Fragment implements MediaPlayer.OnPreparedLi
         tvTrackInfo = (TextView) view.findViewById(R.id.tvTrackInfo);
         tvTrackDuration = (TextView) view.findViewById(R.id.tvTrackDuration);
         tvTrackCurrentTime = (TextView) view.findViewById(R.id.tvTrackCurrentTime);
+        tvTrackNumbers = (TextView) view.findViewById(R.id.tvTrackNumbers);
         lnPlayerinfo = (LinearLayout) view.findViewById(R.id.lnPlayerInfo);
         sbPlayerProgress = (SeekBar) view.findViewById(R.id.sbPlayerProgress);
         universalPlayer = UniversalPlayer.getInstance();
@@ -124,11 +126,13 @@ public class FragmentPlayer extends Fragment implements MediaPlayer.OnPreparedLi
                 initPlayerUI();
                 runPlayer();
                 playlist.updateTracks();
+                initTrackNumbersSection();
             }
         });
 
         super.onViewCreated(view, savedInstanceState);
         lnPlayerinfo.setOnClickListener(playlist.getPlaylistOpenClickListener());
+        initTrackNumbersSection();
         setSeekbarPosition(view);
     }
 
@@ -146,7 +150,7 @@ public class FragmentPlayer extends Fragment implements MediaPlayer.OnPreparedLi
         super.onSaveInstanceState(outState);
     }
 
-    public void initPlayerUI() {
+    private void initPlayerUI() {
         tvPlayerTitle.setText(playableMediaItem.getName());
         tvPlayserSubtitle.setText(playableMediaItem.getSubHeader());
         Glide.with(getActivity()).load(playableMediaItem.getCoverImageUrl()).crossFade().into(new GlideDrawableImageViewTarget(imgPlayerCover) {
@@ -179,6 +183,14 @@ public class FragmentPlayer extends Fragment implements MediaPlayer.OnPreparedLi
             ((IToolbarHolder) getActivity()).getToolbar().setTitle(R.string.buffering);
             btnPlay.setImageResource(R.drawable.ic_play_white);
         }
+    }
+
+    private void initTrackNumbersSection() {
+        StringBuilder trackNumberString = new StringBuilder();
+        trackNumberString.append(playlist.getCurrentTrackNumber());
+        trackNumberString.append("/");
+        trackNumberString.append(playlist.getTracksCount());
+        tvTrackNumbers.setText(trackNumberString.toString());
     }
 
     private void runPlayer() {
@@ -276,5 +288,8 @@ public class FragmentPlayer extends Fragment implements MediaPlayer.OnPreparedLi
     @Override
     public void onStateChanged(UniversalPlayer.State state) {
         btnPlay.setImageResource(state == UniversalPlayer.State.PLAYING ? R.drawable.ic_pause_white : R.drawable.ic_play_white);
+        if(state == UniversalPlayer.State.PLAYING){
+            ((IToolbarHolder) getActivity()).getToolbar().setTitle(R.string.now_paying);
+        }
     }
 }

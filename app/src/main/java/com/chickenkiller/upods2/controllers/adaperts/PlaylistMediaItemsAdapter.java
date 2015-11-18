@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.chickenkiller.upods2.R;
 import com.chickenkiller.upods2.controllers.player.UniversalPlayer;
+import com.chickenkiller.upods2.interfaces.INowPlayingItemPosiontGetter;
 import com.chickenkiller.upods2.interfaces.IPlayableMediaItem;
 
 import java.util.List;
@@ -17,10 +18,12 @@ import java.util.List;
 /**
  * Created by alonzilberman on 10/7/15.
  */
-public class PlaylistMediaItemsAdapter extends ArrayAdapter<IPlayableMediaItem> {
+public class PlaylistMediaItemsAdapter extends ArrayAdapter<IPlayableMediaItem> implements INowPlayingItemPosiontGetter {
 
     private int layaoutId;
     private UniversalPlayer universalPlayer;
+    private List<IPlayableMediaItem> mediaItems;
+
 
     private static class ViewHolder {
         public ImageButton btnPlPlay;
@@ -33,6 +36,7 @@ public class PlaylistMediaItemsAdapter extends ArrayAdapter<IPlayableMediaItem> 
         super(context, layaoutId, mediaItems);
         this.layaoutId = layaoutId;
         this.universalPlayer = UniversalPlayer.getInstance();
+        this.mediaItems = mediaItems;
     }
 
     @Override
@@ -61,4 +65,16 @@ public class PlaylistMediaItemsAdapter extends ArrayAdapter<IPlayableMediaItem> 
         }
         return convertView;
     }
+
+    @Override
+    public int getNowPlayingItemPosition() {
+        for (int i = 0; i < mediaItems.size(); i++) {
+            IPlayableMediaItem iPlayableMediaItem = mediaItems.get(i);
+            if (iPlayableMediaItem.getName().equals(universalPlayer.getPlayingMediaItem().getName())) {
+                return i;
+            }
+        }
+        return 0;
+    }
+
 }
