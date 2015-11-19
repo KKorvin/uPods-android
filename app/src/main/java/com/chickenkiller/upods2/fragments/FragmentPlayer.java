@@ -47,7 +47,6 @@ import com.chickenkiller.upods2.utils.ui.UIHelper;
 public class FragmentPlayer extends Fragment implements MediaPlayer.OnPreparedListener, IPlayerStateListener {
     public static String TAG = "fragmentPlayer";
     public static final long DEFAULT_RADIO_DURATIO = 1000000;
-    private static final int SB_PROGRESS_TOP_MARGIN_CORECTOR = 50;
     private static final float TOOLBAR_TEXT_SIZE = 20f;
 
     private IPlayableMediaItem playableMediaItem;
@@ -228,7 +227,7 @@ public class FragmentPlayer extends Fragment implements MediaPlayer.OnPreparedLi
             public void onGlobalLayout() {
                 final RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) sbPlayerProgress.getLayoutParams();
                 RelativeLayout rlPlayerUnderbar = (RelativeLayout) root.findViewById(R.id.rlPlayerUnderbar);
-                params.bottomMargin = rlPlayerUnderbar.getHeight() - SB_PROGRESS_TOP_MARGIN_CORECTOR;
+                params.bottomMargin = rlPlayerUnderbar.getHeight() - sbPlayerProgress.getHeight() / 2;
                 sbPlayerProgress.requestLayout();
             }
         });
@@ -288,7 +287,7 @@ public class FragmentPlayer extends Fragment implements MediaPlayer.OnPreparedLi
     @Override
     public void onStateChanged(UniversalPlayer.State state) {
         btnPlay.setImageResource(state == UniversalPlayer.State.PLAYING ? R.drawable.ic_pause_white : R.drawable.ic_play_white);
-        if(state == UniversalPlayer.State.PLAYING){
+        if (state == UniversalPlayer.State.PLAYING) {
             ((IToolbarHolder) getActivity()).getToolbar().setTitle(R.string.now_paying);
         }
     }
