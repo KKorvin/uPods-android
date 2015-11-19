@@ -40,4 +40,5 @@ dependencies {
     compile 'com.pixplicity.easyprefs:library:+'
     compile 'com.github.jakob-grabner:Circle-Progress-View:v1.2.3+'
     compile 'com.github.wseemann:FFmpegMediaMetadataRetriever:1.0.1+'
+    compile 'com.github.asyl.animation:arcanimator:1.0.0'
 }

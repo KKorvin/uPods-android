@@ -1,7 +1,11 @@
 package com.chickenkiller.upods2.controllers.player;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
+import android.app.Activity;
 import android.content.Context;
+import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -10,6 +14,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
+import android.widget.TextView;
 
 import com.chickenkiller.upods2.R;
 import com.chickenkiller.upods2.controllers.adaperts.PlaylistMediaItemsAdapter;
@@ -22,9 +27,11 @@ import com.chickenkiller.upods2.interfaces.ITrackable;
 import com.chickenkiller.upods2.models.RadioItem;
 import com.chickenkiller.upods2.models.Track;
 import com.chickenkiller.upods2.utils.Logger;
-import com.chickenkiller.upods2.utils.ui.ArcTranslateAnimation;
 
 import java.util.List;
+
+import io.codetail.animation.arcanimator.ArcAnimator;
+import io.codetail.animation.arcanimator.Side;
 
 /**
  * Created by alonzilberman on 11/6/15.
@@ -32,10 +39,11 @@ import java.util.List;
 public class Playlist implements AdapterView.OnItemClickListener {
 
     private static final String LOG_TAG = "Playlist";
-    private static final int BTN_Y_POISTION_CORRECTOR = 40;
+    private static final int BTN_Y_POISTION_CORRECTOR = 20;
+    private static final int BTN_Y__INITIAL_POISTION_CORRECTOR = 35;
     private static final long PLAYLIST_ANIMATION_DURATION = 400;
     private static final long BUTTON_ANIMATION_DURATION = 400;
-    private static final float BTN_POSITION_MULTIPLYER = 0.82f;
+    private static final float BTN_POSITION_MULTIPLYER = 0.8f;
     private static final float INFO_START_POINT_CORRECTOR = 1.4f;
     private static final float INFO_ANIMATION_MARGIN_CORECTOR = 0.92f;
 
@@ -50,6 +58,8 @@ public class Playlist implements AdapterView.OnItemClickListener {
     private ImageButton btnPlay;
     private Context mContext;
     private ArrayAdapter playlistAdapter;
+    private TextView tvTrackCurrentTime;
+    private TextView tvTrackDuration;
 
     private int pInfoAnimationStartPoint; //When start to animate player info section
     private int initialPlayListMargin;
@@ -57,6 +67,8 @@ public class Playlist implements AdapterView.OnItemClickListener {
     private int initialPlayPInfo;
     private float btnFinalY;
     private float btnFinalX;
+    private float btnInitialX;
+    private float btnInitialY;
     private boolean animationFirstRun;
     private boolean isOpen;
 
@@ -68,10 +80,13 @@ public class Playlist implements AdapterView.OnItemClickListener {
         this.rlPlayerUnderbar = (RelativeLayout) rootView.findViewById(R.id.rlPlayerUnderbar);
         this.sbPlayerProgress = (SeekBar) rootView.findViewById(R.id.sbPlayerProgress);
         this.rlPlayerInfoSection = (RelativeLayout) rootView.findViewById(R.id.rlPlayerInfoSection);
+        this.tvTrackDuration = (TextView) rootView.findViewById(R.id.tvTrackDuration);
+        this.tvTrackCurrentTime = (TextView) rootView.findViewById(R.id.tvTrackCurrentTime);
         this.lvPlaylist = (ListView) rootView.findViewById(R.id.lvPlaylist);
         this.animationFirstRun = true;
         this.playlistTrackSelected = playlistTrackSelected;
         initPlaylist();
+
     }
 
     public View.OnClickListener getPlaylistOpenClickListener() {
@@ -104,6 +119,9 @@ public class Playlist implements AdapterView.OnItemClickListener {
     }
 
     private void runOpenPlaylistAnimation() {
+        sbPlayerProgress.setVisibility(View.INVISIBLE);
+        tvTrackDuration.setVisibility(View.INVISIBLE);
+        tvTrackCurrentTime.setVisibility(View.INVISIBLE);
         final RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) lnPlaylist.getLayoutParams();
 
         pInfoAnimationStartPoint = lnPlayerContorls.getHeight() + rlPlayerUnderbar.getHeight() + sbPlayerProgress.getHeight();
@@ -111,9 +129,21 @@ public class Playlist implements AdapterView.OnItemClickListener {
 
         if (animationFirstRun) {
             initialPlayListMargin = params.bottomMargin;
-            btnFinalY = Math.abs(params.bottomMargin) - btnPlay.getWidth();
-            btnFinalY = -btnFinalY - BTN_Y_POISTION_CORRECTOR;
-            btnFinalX = btnPlay.getX() * BTN_POSITION_MULTIPLYER;
+
+            int cords[] = new int[2];
+            btnPlay.getLocationOnScreen(cords);
+
+            btnInitialX = cords[0] + btnPlay.getWidth() / 2;
+            btnInitialY = cords[1] - btnPlay.getHeight() / 2 - BTN_Y__INITIAL_POISTION_CORRECTOR;
+
+            DisplayMetrics metrics = new DisplayMetrics();
+            ((Activity) mContext).getWindowManager().getDefaultDisplay().getMetrics(metrics);
+
+            btnFinalY = btnInitialY + lnPlayerContorls.getHeight() + rlPlayerInfoSection.getHeight() + (btnPlay.getHeight() / 2f);
+            btnFinalY += BTN_Y_POISTION_CORRECTOR;
+            btnFinalY = metrics.heightPixels - btnFinalY;
+
+            btnFinalX = metrics.widthPixels * BTN_POSITION_MULTIPLYER;
         }
 
         //Layout animation
@@ -131,10 +161,7 @@ public class Playlist implements AdapterView.OnItemClickListener {
         runOpenInfoSectionAnimation(PLAYLIST_ANIMATION_DURATION);
 
         //Button animation
-        ArcTranslateAnimation anim = new ArcTranslateAnimation(0, btnFinalX, 0, btnFinalY);
-        anim.setDuration(BUTTON_ANIMATION_DURATION);
-        anim.setFillAfter(true);
-        btnPlay.startAnimation(anim);
+        runPlayButtonAnimation(btnFinalX, btnFinalY);
     }
 
     private void runOpenInfoSectionAnimation(long duration) {
@@ -171,15 +198,26 @@ public class Playlist implements AdapterView.OnItemClickListener {
                 lnPlaylist.requestLayout();
             }
         });
+        animator.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                sbPlayerProgress.setVisibility(View.VISIBLE);
+                tvTrackDuration.setVisibility(View.VISIBLE);
+                tvTrackCurrentTime.setVisibility(View.VISIBLE);
+            }
+        });
         animator.setDuration(PLAYLIST_ANIMATION_DURATION);
         animator.start();
         runCloseInfoSectionAnimation(PLAYLIST_ANIMATION_DURATION);
 
         //Button animation
-        ArcTranslateAnimation anim = new ArcTranslateAnimation(btnFinalX, 0, btnFinalY, 0);
-        anim.setDuration(BUTTON_ANIMATION_DURATION);
-        anim.setFillAfter(true);
-        btnPlay.startAnimation(anim);
+        runPlayButtonAnimation(btnInitialX, btnInitialY);
+    }
+
+    private void runPlayButtonAnimation(float toXDelta, float toYDelta) {
+        ArcAnimator.createArcAnimator(btnPlay, toXDelta, Math.abs(toYDelta), 60f, Side.LEFT)
+                .setDuration(BUTTON_ANIMATION_DURATION)
+                .start();
     }
 
     private void runCloseInfoSectionAnimation(long duration) {

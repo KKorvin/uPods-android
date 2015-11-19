@@ -283,7 +283,7 @@ public class UniversalPlayer implements MediaPlayer.OnPreparedListener, MediaPla
             positionUpdateTask = new TimerTask() {
                 @Override
                 public void run() {
-                    if (positionUpdatedCallback != null) {
+                    if (positionUpdatedCallback != null && mediaPlayer!=null && isPrepaired) {
                         int position = mediaPlayer.getCurrentPosition();
                         if (position >= FragmentPlayer.DEFAULT_RADIO_DURATIO && mediaItem instanceof RadioItem) {
                             positionOffset = position;
