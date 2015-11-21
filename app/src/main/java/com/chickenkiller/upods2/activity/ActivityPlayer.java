@@ -11,12 +11,12 @@ import com.chickenkiller.upods2.fragments.FragmentMainFeatured;
 import com.chickenkiller.upods2.fragments.FragmentPlayer;
 import com.chickenkiller.upods2.interfaces.IPlayableMediaItem;
 import com.chickenkiller.upods2.interfaces.IToolbarHolder;
+import com.chickenkiller.upods2.utils.DataHolder;
 
 public class ActivityPlayer extends BasicActivity implements IToolbarHolder {
 
     public static final String MEDIA_ITEM_EXTRA = "mediaItem";
     public static final String ACTIVITY_STARTED_FROM = "startedFrom";
-    public static final String ACTIVITY_STARTED_FRAGMENT_NUMBER = "fragment_number";
 
     private IPlayableMediaItem currentMediaItem;
     private Toolbar toolbar;
@@ -30,8 +30,9 @@ public class ActivityPlayer extends BasicActivity implements IToolbarHolder {
         toolbar.setTitleTextColor(getResources().getColor(R.color.white));
         toolbar.inflateMenu(R.menu.menu_activity_player);
 
-
-        if (getIntent().hasExtra(MEDIA_ITEM_EXTRA)) {
+        if (DataHolder.getInstance().contains(MEDIA_ITEM_EXTRA)) {
+            currentMediaItem = (IPlayableMediaItem) DataHolder.getInstance().retrieve(MEDIA_ITEM_EXTRA);
+        } else if (getIntent().hasExtra(MEDIA_ITEM_EXTRA)) {
             currentMediaItem = (IPlayableMediaItem) getIntent().getExtras().get(MEDIA_ITEM_EXTRA);
         } else if (savedInstanceState != null && savedInstanceState.getParcelable(MEDIA_ITEM_EXTRA) != null) {
             currentMediaItem = (IPlayableMediaItem) savedInstanceState.getSerializable(MEDIA_ITEM_EXTRA);

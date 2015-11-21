@@ -15,6 +15,7 @@ import com.chickenkiller.upods2.interfaces.ICustumziedBackPress;
 import com.chickenkiller.upods2.interfaces.IOperationFinishCallback;
 import com.chickenkiller.upods2.interfaces.ISlidingMenuHolder;
 import com.chickenkiller.upods2.interfaces.IToolbarHolder;
+import com.chickenkiller.upods2.utils.DataHolder;
 import com.chickenkiller.upods2.utils.enums.MediaItemType;
 import com.chickenkiller.upods2.views.MediaViewpager;
 
@@ -26,6 +27,7 @@ import java.util.Calendar;
 public class FragmentMediaItemsGrid extends Fragment implements ICustumziedBackPress {
 
     private static final int CATEGORIES_FRAGMENT_POSITION = 3;
+    public static final String LAST_ITEM_POSITION = "vp_last_postion";
 
     public static final String TAG;
     private MediaViewpager vpMedia;
@@ -101,6 +103,7 @@ public class FragmentMediaItemsGrid extends Fragment implements ICustumziedBackP
 
     @Override
     public void onDestroy() {
+        DataHolder.getInstance().save(LAST_ITEM_POSITION, vpMedia.getCurrentItem());
         ProfileManager.getInstance().setOperationFinishCallback(null);
         smallPlayer.destroy();
         super.onDestroy();

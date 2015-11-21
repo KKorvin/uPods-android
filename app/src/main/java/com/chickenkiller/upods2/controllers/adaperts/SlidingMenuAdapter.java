@@ -6,10 +6,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.andexert.library.RippleView;
 import com.chickenkiller.upods2.R;
 import com.chickenkiller.upods2.fragments.FragmentMediaItemsGrid;
 import com.chickenkiller.upods2.fragments.FragmentSettings;
@@ -39,14 +39,14 @@ public class SlidingMenuAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     private static class ViewHolderItem extends RecyclerView.ViewHolder {
         public ImageView image;
         public TextView text;
-        public RippleView rpSlidingMenuItem;
+        public LinearLayout lnSlidingMenuItem;
         private View rootView;
 
         public ViewHolderItem(View itemView) {
             super(itemView);
             this.image = (ImageView) itemView.findViewById(R.id.imgSMenutIcon);
             this.text = (TextView) itemView.findViewById(R.id.tvSMenuTitle);
-            this.rpSlidingMenuItem = (RippleView) itemView.findViewById(R.id.rpSlidingMenuItem);
+            this.lnSlidingMenuItem = (LinearLayout) itemView.findViewById(R.id.lnSlidingMenuItem);
             this.rootView = itemView;
         }
 
@@ -112,15 +112,13 @@ public class SlidingMenuAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         if (holder instanceof ViewHolderItem) {
             Context mContext = ((ViewHolderItem) holder).text.getContext();
             ((ViewHolderItem) holder).text.setText(((SlidingMenuRow) item).getTitle());
-            ((ViewHolderItem) holder).rpSlidingMenuItem.setRippleDuration(200);
             if (((SlidingMenuRow) item).isSelected) {
                 ((ViewHolderItem) holder).text.setTextColor(mContext.getResources().getColor(R.color.pink_A400));
-                ((ViewHolderItem) holder).rpSlidingMenuItem.setBackgroundColor(mContext.getResources().getColor(R.color.fragment_deatils_opacity_bckg));
-                ((ViewHolderItem) holder).rpSlidingMenuItem.setRippleColor(R.color.grey_A200);
+                ((ViewHolderItem) holder).lnSlidingMenuItem.setBackgroundResource(R.drawable.selector_sliding_menu_selected_item);
                 ((ViewHolderItem) holder).image.setImageResource(((SlidingMenuRow) item).getPressedIconId());
             } else {
                 ((ViewHolderItem) holder).text.setTextColor(mContext.getResources().getColor(R.color.gray_202020));
-                ((ViewHolderItem) holder).rpSlidingMenuItem.setBackgroundColor(mContext.getResources().getColor(R.color.white));
+                ((ViewHolderItem) holder).lnSlidingMenuItem.setBackgroundResource(R.drawable.selector_sliding_menu_item);
                 ((ViewHolderItem) holder).image.setImageResource(((SlidingMenuRow) item).getMainIconId());
             }
             setSlidingMenuItemClick((ViewHolderItem) holder, position);

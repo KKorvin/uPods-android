@@ -17,6 +17,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.chickenkiller.upods2.R;
+import com.chickenkiller.upods2.activity.ActivityPlayer;
 import com.chickenkiller.upods2.controllers.adaperts.PlaylistMediaItemsAdapter;
 import com.chickenkiller.upods2.controllers.adaperts.PlaylistTracksAdapter;
 import com.chickenkiller.upods2.controllers.app.ProfileManager;
@@ -26,6 +27,7 @@ import com.chickenkiller.upods2.interfaces.IPlayableMediaItem;
 import com.chickenkiller.upods2.interfaces.ITrackable;
 import com.chickenkiller.upods2.models.RadioItem;
 import com.chickenkiller.upods2.models.Track;
+import com.chickenkiller.upods2.utils.DataHolder;
 import com.chickenkiller.upods2.utils.Logger;
 
 import java.util.List;
@@ -46,6 +48,7 @@ public class Playlist implements AdapterView.OnItemClickListener {
     private static final float BTN_POSITION_MULTIPLYER = 0.8f;
     private static final float INFO_START_POINT_CORRECTOR = 1.4f;
     private static final float INFO_ANIMATION_MARGIN_CORECTOR = 0.92f;
+    private static final float BUTTON_ANIMATION_ANGLE = 60f;
 
     private IOperationFinishCallback playlistTrackSelected;
 
@@ -215,7 +218,7 @@ public class Playlist implements AdapterView.OnItemClickListener {
     }
 
     private void runPlayButtonAnimation(float toXDelta, float toYDelta) {
-        ArcAnimator.createArcAnimator(btnPlay, toXDelta, Math.abs(toYDelta), 60f, Side.LEFT)
+        ArcAnimator.createArcAnimator(btnPlay, toXDelta, Math.abs(toYDelta), BUTTON_ANIMATION_ANGLE, Side.LEFT)
                 .setDuration(BUTTON_ANIMATION_DURATION)
                 .start();
     }
@@ -251,8 +254,7 @@ public class Playlist implements AdapterView.OnItemClickListener {
                 }
                 Logger.printInfo(LOG_TAG, "Clicked on current trcack -> playing it");
             } else {
-                universalPlayer.releasePlayer();
-                universalPlayer.setMediaItem(clickedIPlayableMediaItem);
+                DataHolder.getInstance().save(ActivityPlayer.MEDIA_ITEM_EXTRA, clickedIPlayableMediaItem);
                 Logger.printInfo(LOG_TAG, "Track switched to: " + clickedIPlayableMediaItem.getName());
             }
         } else if (playlistAdapter instanceof PlaylistTracksAdapter) {
@@ -266,7 +268,7 @@ public class Playlist implements AdapterView.OnItemClickListener {
                 ITrackable trackable = (ITrackable) universalPlayer.getPlayingMediaItem();
                 trackable.selectTrack(clieckedTrack);
                 universalPlayer.releasePlayer();
-                universalPlayer.setMediaItem((IPlayableMediaItem) trackable);
+                DataHolder.getInstance().save(ActivityPlayer.MEDIA_ITEM_EXTRA, trackable);
                 Logger.printInfo(LOG_TAG, "Track switched to: " + clieckedTrack.getTitle());
             }
         }

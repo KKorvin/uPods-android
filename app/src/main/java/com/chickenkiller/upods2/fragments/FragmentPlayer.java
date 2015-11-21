@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.Typeface;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -36,6 +37,7 @@ import com.chickenkiller.upods2.interfaces.IToolbarHolder;
 import com.chickenkiller.upods2.interfaces.ITrackable;
 import com.chickenkiller.upods2.models.RadioItem;
 import com.chickenkiller.upods2.models.Track;
+import com.chickenkiller.upods2.utils.DataHolder;
 import com.chickenkiller.upods2.utils.Logger;
 import com.chickenkiller.upods2.utils.MediaUtils;
 import com.chickenkiller.upods2.utils.ui.UIHelper;
@@ -121,7 +123,11 @@ public class FragmentPlayer extends Fragment implements MediaPlayer.OnPreparedLi
         playlist = new Playlist(getActivity(), view, new IOperationFinishCallback() {
             @Override
             public void operationFinished() {
-                playableMediaItem = universalPlayer.getPlayingMediaItem();
+                playableMediaItem = (IPlayableMediaItem) DataHolder.getInstance().retrieve(ActivityPlayer.MEDIA_ITEM_EXTRA);
+                if (playableMediaItem == null) {
+                    playableMediaItem = UniversalPlayer.getInstance().getPlayingMediaItem();
+                    Log.e(TAG, "Error! Playlist callback -> can't retrieve mediaItem from DataHolder -> getting it from Player");
+                }
                 initPlayerUI();
                 runPlayer();
                 playlist.updateTracks();

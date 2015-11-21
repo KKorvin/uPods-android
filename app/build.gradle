@@ -36,7 +36,6 @@ dependencies {
     compile 'com.github.bumptech.glide:glide:+'
     compile 'com.squareup.okhttp:mockwebserver:+'
     compile 'com.lsjwzh:recyclerviewpager:+'
-    compile 'com.github.traex.rippleeffect:library:+'
     compile 'com.pixplicity.easyprefs:library:+'
     compile 'com.github.jakob-grabner:Circle-Progress-View:v1.2.3+'
     compile 'com.github.wseemann:FFmpegMediaMetadataRetriever:1.0.1+'

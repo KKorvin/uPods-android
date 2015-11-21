@@ -1,35 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.andexert.library.RippleView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/rpSlidingMenuItem"
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/lnSlidingMenuItem"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@drawable/selector_sliding_menu_item"
+    android:clickable="true"
+    android:focusable="true"
+    android:orientation="horizontal"
+    android:padding="16dp">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="?android:attr/selectableItemBackground"
-        android:clickable="true"
-        android:focusable="true"
-        android:orientation="horizontal"
-        android:padding="16dp">
+    <ImageView
+        android:id="@+id/imgSMenutIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:src="@drawable/ic_account_circle_black_24dp" />
 
-        <ImageView
-            android:id="@+id/imgSMenutIcon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:src="@drawable/ic_account_circle_black_24dp" />
-
-        <TextView
-            android:id="@+id/tvSMenuTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginLeft="32dp"
-            android:fontFamily="sans-serif-medium"
-            android:text="test"
-            android:textColor="@color/gray_202020"
-            android:textSize="@dimen/default_text_size_14"
-            android:textStyle="normal" />
-    </LinearLayout>
-</com.andexert.library.RippleView>
+    <TextView
+        android:id="@+id/tvSMenuTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginLeft="32dp"
+        android:fontFamily="sans-serif-medium"
+        android:text="test"
+        android:textColor="@color/gray_202020"
+        android:textSize="@dimen/default_text_size_14"
+        android:textStyle="normal" />
+</LinearLayout>
