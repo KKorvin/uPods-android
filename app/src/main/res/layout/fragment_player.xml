@@ -151,7 +151,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
                 android:layout_marginRight="60dp"
-                android:background="@drawable/ic_rewind_white_left" />
+                android:background="@drawable/selector_rewind_left" />
 
 
             <ImageButton
@@ -160,7 +160,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
                 android:layout_marginLeft="60dp"
-                android:background="@drawable/ic_rewind_white_right" />
+                android:background="@drawable/selector_rewind_right" />
         </LinearLayout>
     </LinearLayout>
 
@@ -171,7 +171,7 @@
         android:layout_alignParentBottom="true"
         android:layout_centerInParent="true"
         android:layout_marginBottom="13dp"
-        android:background="@drawable/play_btn_bckg"
+        android:background="@drawable/selector_play_button"
         android:elevation="20dp"
         android:src="@drawable/ic_play_white"
         android:text="Play" />

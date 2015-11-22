@@ -245,6 +245,28 @@ public class Playlist implements AdapterView.OnItemClickListener {
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        changeTrack(position);
+    }
+
+    public void goForward() {
+        int currentTrack = getCurrentTrackNumber();
+        int changeTo = currentTrack + 1;
+        if (changeTo >= getTracksCount()) {
+            changeTo = 0;
+        }
+        changeTrack(changeTo);
+    }
+
+    public void goBackward() {
+        int currentTrack = getCurrentTrackNumber();
+        int changeTo = currentTrack - 1;
+        if (changeTo < 0) {
+            changeTo = getTracksCount() - 1;
+        }
+        changeTrack(changeTo);
+    }
+
+    private void changeTrack(int position) {
         UniversalPlayer universalPlayer = UniversalPlayer.getInstance();
         if (playlistAdapter instanceof PlaylistMediaItemsAdapter) {
             IPlayableMediaItem clickedIPlayableMediaItem = ((PlaylistMediaItemsAdapter) playlistAdapter).getItem(position);
@@ -277,8 +299,10 @@ public class Playlist implements AdapterView.OnItemClickListener {
         } else {
             playlistTrackSelected.operationFinished();
         }
-        runCloseAnimation();
-        isOpen = false;
+        if(isOpen) {
+            runCloseAnimation();
+            isOpen = false;
+        }
     }
 
     public int getTracksCount() {
@@ -287,7 +311,7 @@ public class Playlist implements AdapterView.OnItemClickListener {
 
     public int getCurrentTrackNumber() {
         if (playlistAdapter instanceof INowPlayingItemPosiontGetter) {
-            return ((INowPlayingItemPosiontGetter) playlistAdapter).getNowPlayingItemPosition() + 1;
+            return ((INowPlayingItemPosiontGetter) playlistAdapter).getNowPlayingItemPosition();
         }
         return 0;
     }

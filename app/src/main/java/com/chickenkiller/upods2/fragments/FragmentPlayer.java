@@ -57,6 +57,8 @@ public class FragmentPlayer extends Fragment implements MediaPlayer.OnPreparedLi
     private Playlist playlist;
 
     private ImageButton btnPlay;
+    private ImageButton btnRewindLeft;
+    private ImageButton btnRewindRight;
     private ImageView imgPlayerCover;
     private RelativeLayout rlTopSectionBckg;
     private TextView tvPlayserSubtitle;
@@ -82,12 +84,34 @@ public class FragmentPlayer extends Fragment implements MediaPlayer.OnPreparedLi
         }
     };
 
+    private View.OnClickListener btnForwardClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            if (universalPlayer.isPrepaired) {
+                playlist.goForward();
+            }
+        }
+    };
+
+    private View.OnClickListener btnBackwardClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            if (universalPlayer.isPrepaired) {
+                playlist.goBackward();
+            }
+        }
+    };
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         View view = inflater.inflate(R.layout.fragment_player, container, false);
         btnPlay = (ImageButton) view.findViewById(R.id.btnPlay);
+        btnRewindLeft = (ImageButton) view.findViewById(R.id.btnRewindLeft);
+        btnRewindRight = (ImageButton) view.findViewById(R.id.btnRewindRight);
         btnPlay.setOnClickListener(btnPlayStopClickListener);
+        btnRewindLeft.setOnClickListener(btnBackwardClickListener);
+        btnRewindRight.setOnClickListener(btnForwardClickListener);
         rlTopSectionBckg = (RelativeLayout) view.findViewById(R.id.rlTopSectionBckg);
         imgPlayerCover = (ImageView) view.findViewById(R.id.imgPlayerCover);
         tvPlayerTitle = (TextView) view.findViewById(R.id.tvPlayerTitle);
@@ -192,7 +216,7 @@ public class FragmentPlayer extends Fragment implements MediaPlayer.OnPreparedLi
 
     private void initTrackNumbersSection() {
         StringBuilder trackNumberString = new StringBuilder();
-        trackNumberString.append(playlist.getCurrentTrackNumber());
+        trackNumberString.append(playlist.getCurrentTrackNumber() + 1);
         trackNumberString.append("/");
         trackNumberString.append(playlist.getTracksCount());
         tvTrackNumbers.setText(trackNumberString.toString());
