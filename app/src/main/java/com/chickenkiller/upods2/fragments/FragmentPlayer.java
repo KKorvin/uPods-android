@@ -56,6 +56,7 @@ public class FragmentPlayer extends Fragment implements MediaPlayer.OnPreparedLi
     private UniversalPlayer universalPlayer;
     private Playlist playlist;
 
+    private View rootView;
     private ImageButton btnPlay;
     private ImageButton btnRewindLeft;
     private ImageButton btnRewindRight;
@@ -130,39 +131,28 @@ public class FragmentPlayer extends Fragment implements MediaPlayer.OnPreparedLi
         toolbarTitle.setTypeface(null, Typeface.NORMAL);
 
         if (playableMediaItem == null) {
-            playableMediaItem = (IPlayableMediaItem) savedInstanceState.get(ActivityPlayer.MEDIA_ITEM_EXTRA);
+            playableMediaItem = UniversalPlayer.getInstance().getPlayingMediaItem();
         }
 
-        if (playableMediaItem != null) {
-            initPlayerUI();
-            runPlayer();
-        }
+        initPlayerUI();
 
         return view;
     }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-        //Playlist
-        playlist = new Playlist(getActivity(), view, new IOperationFinishCallback() {
-            @Override
-            public void operationFinished() {
-                playableMediaItem = (IPlayableMediaItem) DataHolder.getInstance().retrieve(ActivityPlayer.MEDIA_ITEM_EXTRA);
-                if (playableMediaItem == null) {
-                    playableMediaItem = UniversalPlayer.getInstance().getPlayingMediaItem();
-                    Log.e(TAG, "Error! Playlist callback -> can't retrieve mediaItem from DataHolder -> getting it from Player");
-                }
-                initPlayerUI();
-                runPlayer();
-                playlist.updateTracks();
-                initTrackNumbersSection();
+        super.onViewCreated(view, savedInstanceState);
+        rootView = view;
+        final ViewTreeObserver observer = rootView.getViewTreeObserver();
+        observer.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            public void onGlobalLayout() {
+                final RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) sbPlayerProgress.getLayoutParams();
+                RelativeLayout rlPlayerUnderbar = (RelativeLayout) rootView.findViewById(R.id.rlPlayerUnderbar);
+                params.bottomMargin = rlPlayerUnderbar.getHeight() - sbPlayerProgress.getHeight() / 2;
+                sbPlayerProgress.requestLayout();
             }
         });
-
-        super.onViewCreated(view, savedInstanceState);
-        lnPlayerinfo.setOnClickListener(playlist.getPlaylistOpenClickListener());
-        initTrackNumbersSection();
-        setSeekbarPosition(view);
+        configurePlayer();
     }
 
     @Override
@@ -170,15 +160,17 @@ public class FragmentPlayer extends Fragment implements MediaPlayer.OnPreparedLi
         if (universalPlayer != null) {
             universalPlayer.removeListeners();
         }
+        DataHolder.getInstance().remove(ActivityPlayer.MEDIA_ITEM_EXTRA);
         super.onDestroy();
     }
 
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        outState.putSerializable(ActivityPlayer.MEDIA_ITEM_EXTRA, playableMediaItem);
-        super.onSaveInstanceState(outState);
+    public void setPlayableItem(IPlayableMediaItem iPlayableMediaItem) {
+        this.playableMediaItem = iPlayableMediaItem;
     }
 
+    /**
+     * Inits player UI accorfing to current MediaItem
+     */
     private void initPlayerUI() {
         tvPlayerTitle.setText(playableMediaItem.getName());
         tvPlayserSubtitle.setText(playableMediaItem.getSubHeader());
@@ -203,7 +195,13 @@ public class FragmentPlayer extends Fragment implements MediaPlayer.OnPreparedLi
                 }
             });
         }
+    }
 
+
+    /**
+     * Inits player UI accorfing to current player state, call it after configurePlayer().
+     */
+    private void initPlayerStateUI(){
         if (universalPlayer.isPrepaired && universalPlayer.isPlaying()) {
             ((IToolbarHolder) getActivity()).getToolbar().setTitle(R.string.now_paying);
             btnPlay.setImageResource(R.drawable.ic_pause_white);
@@ -222,18 +220,49 @@ public class FragmentPlayer extends Fragment implements MediaPlayer.OnPreparedLi
         tvTrackNumbers.setText(trackNumberString.toString());
     }
 
-    private void runPlayer() {
+    private void configurePlayer() {
         if (universalPlayer.isPrepaired && universalPlayer.isCurrentMediaItem(playableMediaItem)) { //Player already running
-            Logger.printInfo(TAG, "Already playing");
-            setPositionUpdateCallback();
-            universalPlayer.setPreparedListener(this);
+            Logger.printInfo(TAG, "Configured from playing MediaItem");
+            setPlayerCallbacks();
+            if (playlist == null) {
+                createPlaylist();
+            }
+            if (universalPlayer.isPrepaired) {
+                universalPlayer.restartPositionUpdater();
+            }
         } else {
+            Logger.printInfo(TAG, "Starting new MediaItem");
             universalPlayer.releasePlayer();
+            setPlayerCallbacks();
             universalPlayer.setMediaItem(playableMediaItem);
-            universalPlayer.setPreparedListener(this);
             universalPlayer.prepare();
+            createPlaylist();
         }
+        initPlayerStateUI();
+    }
 
+    private void createPlaylist() {
+        playlist = new Playlist(getActivity(), rootView, new IOperationFinishCallback() {
+            @Override
+            public void operationFinished() {
+                playableMediaItem = (IPlayableMediaItem) DataHolder.getInstance().retrieve(ActivityPlayer.MEDIA_ITEM_EXTRA);
+                if (playableMediaItem == null) {
+                    playableMediaItem = UniversalPlayer.getInstance().getPlayingMediaItem();
+                    Log.e(TAG, "Error! Playlist callback -> can't retrieve mediaItem from DataHolder -> getting it from Player");
+                }
+                initPlayerUI();
+                configurePlayer();
+                playlist.updateTracks();
+                initTrackNumbersSection();
+            }
+        });
+        lnPlayerinfo.setOnClickListener(playlist.getPlaylistOpenClickListener());
+        initTrackNumbersSection();
+    }
+
+    private void setPlayerCallbacks() {
+        //Sets all callback to player
+        universalPlayer.setPreparedListener(this);
         universalPlayer.setPlayerStateListener(this);
         universalPlayer.setOnMetaDataFetchedCallback(new IOperationFinishWithDataCallback() {
             @Override
@@ -245,22 +274,17 @@ public class FragmentPlayer extends Fragment implements MediaPlayer.OnPreparedLi
             }
         });
 
-    }
-
-    public void setPlayableItem(IPlayableMediaItem iPlayableMediaItem) {
-        this.playableMediaItem = iPlayableMediaItem;
-    }
-
-    private void setSeekbarPosition(final View root) {
-        final ViewTreeObserver observer = root.getViewTreeObserver();
-        observer.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            public void onGlobalLayout() {
-                final RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) sbPlayerProgress.getLayoutParams();
-                RelativeLayout rlPlayerUnderbar = (RelativeLayout) root.findViewById(R.id.rlPlayerUnderbar);
-                params.bottomMargin = rlPlayerUnderbar.getHeight() - sbPlayerProgress.getHeight() / 2;
-                sbPlayerProgress.requestLayout();
+        universalPlayer.setOnAutonomicTrackChangeCallback(new IOperationFinishCallback() {
+            @Override
+            public void operationFinished() {
+                playableMediaItem = UniversalPlayer.getInstance().getPlayingMediaItem();
+                initPlayerUI();
+                configurePlayer();
+                playlist.updateTracks();
+                initTrackNumbersSection();
             }
         });
+        setPositionUpdateCallback();
     }
 
     private void setPositionUpdateCallback() {
@@ -306,11 +330,12 @@ public class FragmentPlayer extends Fragment implements MediaPlayer.OnPreparedLi
         });
     }
 
+
     @Override
     public void onPrepared(MediaPlayer mediaPlayer) {
+        Logger.printInfo("onPrepared","!!!");
         btnPlay.setImageResource(R.drawable.ic_pause_white);
         ((IToolbarHolder) getActivity()).getToolbar().setTitle(R.string.now_paying);
-        setPositionUpdateCallback();
         playlist.updateTracks();
     }
 

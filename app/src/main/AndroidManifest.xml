@@ -36,6 +36,8 @@
             </intent-filter>
             <action android:name="com.chickenkiller.upods2.player.PLAY" />
             <action android:name="com.chickenkiller.upods2.player.PAUSE" />
+            <action android:name="com.chickenkiller.upods2.player.FORWARD" />
+            <action android:name="com.chickenkiller.upods2.player.BACKWARD" />
         </receiver>
     </application>
 

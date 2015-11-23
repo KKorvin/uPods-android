@@ -43,12 +43,12 @@
         android:orientation="horizontal">
 
         <ImageButton
-            android:id="@+id/BtnRewindLeftNtBar"
+            android:id="@+id/btnRewindLeftNtBar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:background="@android:color/transparent"
-            android:src="@drawable/ic_rewind_white_left" />
+            android:src="@drawable/selector_rewind_left" />
 
         <ImageButton
             android:id="@+id/btnPlayNtBar"
@@ -61,11 +61,11 @@
             android:src="@drawable/ic_pause_white" />
 
         <ImageButton
-            android:id="@+id/BtnRewindRightNtBar"
+            android:id="@+id/btnRewindRightNtBar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:background="@android:color/transparent"
-            android:src="@drawable/ic_rewind_white_right" />
+            android:src="@drawable/selector_rewind_right" />
     </LinearLayout>
 </RelativeLayout>

@@ -39,4 +39,10 @@ public class DataHolder {
             return null;
         }
     }
+
+    public void remove(String id) {
+        if (data.containsKey(id)) {
+            data.remove(id);
+        }
+    }
 }

@@ -29,6 +29,8 @@ import com.chickenkiller.upods2.models.RadioItem;
 import com.chickenkiller.upods2.models.Track;
 import com.chickenkiller.upods2.utils.DataHolder;
 import com.chickenkiller.upods2.utils.Logger;
+import com.chickenkiller.upods2.utils.MediaUtils;
+import com.chickenkiller.upods2.utils.enums.Direction;
 
 import java.util.List;
 
@@ -249,25 +251,21 @@ public class Playlist implements AdapterView.OnItemClickListener {
     }
 
     public void goForward() {
-        int currentTrack = getCurrentTrackNumber();
-        int changeTo = currentTrack + 1;
-        if (changeTo >= getTracksCount()) {
-            changeTo = 0;
-        }
+        int changeTo = MediaUtils.calculateNextTrackNumber(Direction.RIGHT, getCurrentTrackNumber(), getTracksCount() - 1);
         changeTrack(changeTo);
     }
 
     public void goBackward() {
-        int currentTrack = getCurrentTrackNumber();
-        int changeTo = currentTrack - 1;
-        if (changeTo < 0) {
-            changeTo = getTracksCount() - 1;
-        }
+        int changeTo = MediaUtils.calculateNextTrackNumber(Direction.LEFT, getCurrentTrackNumber(), getTracksCount() - 1);
         changeTrack(changeTo);
     }
 
     private void changeTrack(int position) {
         UniversalPlayer universalPlayer = UniversalPlayer.getInstance();
+        if (isOpen) {
+            runCloseAnimation();
+            isOpen = false;
+        }
         if (playlistAdapter instanceof PlaylistMediaItemsAdapter) {
             IPlayableMediaItem clickedIPlayableMediaItem = ((PlaylistMediaItemsAdapter) playlistAdapter).getItem(position);
             if (universalPlayer.isCurrentMediaItem(clickedIPlayableMediaItem)) {
@@ -289,7 +287,6 @@ public class Playlist implements AdapterView.OnItemClickListener {
             } else {
                 ITrackable trackable = (ITrackable) universalPlayer.getPlayingMediaItem();
                 trackable.selectTrack(clieckedTrack);
-                universalPlayer.releasePlayer();
                 DataHolder.getInstance().save(ActivityPlayer.MEDIA_ITEM_EXTRA, trackable);
                 Logger.printInfo(LOG_TAG, "Track switched to: " + clieckedTrack.getTitle());
             }
@@ -298,10 +295,6 @@ public class Playlist implements AdapterView.OnItemClickListener {
             Logger.printError(LOG_TAG, "Attention! Playlist callback not set, UI will not be updated");
         } else {
             playlistTrackSelected.operationFinished();
-        }
-        if(isOpen) {
-            runCloseAnimation();
-            isOpen = false;
         }
     }
 

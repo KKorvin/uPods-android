@@ -4,6 +4,7 @@ import com.chickenkiller.upods2.controllers.internet.BackendManager;
 import com.chickenkiller.upods2.fragments.FragmentPlayer;
 import com.chickenkiller.upods2.interfaces.IOperationFinishWithDataCallback;
 import com.chickenkiller.upods2.interfaces.ISimpleRequestCallback;
+import com.chickenkiller.upods2.utils.enums.Direction;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -66,6 +67,22 @@ public class MediaUtils {
             e.printStackTrace();
         }
         return ms;
+    }
+
+    public static int calculateNextTrackNumber(Direction direction, int currentTrackNumber, int tracksSize) {
+        int changeTo = 0;
+        if (direction == Direction.LEFT) {
+            changeTo = currentTrackNumber - 1;
+            if (changeTo < 0) {
+                changeTo = currentTrackNumber - 1;
+            }
+        } else {
+            changeTo = currentTrackNumber + 1;
+            if (changeTo >= tracksSize) {
+                changeTo = 0;
+            }
+        }
+        return changeTo;
     }
 
 }

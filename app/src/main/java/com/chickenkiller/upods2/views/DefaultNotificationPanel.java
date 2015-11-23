@@ -23,6 +23,8 @@ public class DefaultNotificationPanel extends PlayerNotificationPanel {
     private static int NOTIFICATION_ID = 12;
     private PendingIntent playIntent;
     private PendingIntent pauseIntent;
+    private PendingIntent forwardIntent;
+    private PendingIntent backwardIntent;
 
     public DefaultNotificationPanel(Context mContext, IPlayableMediaItem playableMediaItem) {
         super(mContext, playableMediaItem);
@@ -71,7 +73,17 @@ public class DefaultNotificationPanel extends PlayerNotificationPanel {
         pIntent.setAction(UniversalPlayer.INTENT_ACTION_PAUSE);
         pauseIntent = PendingIntent.getBroadcast(mContext, 0, pIntent, 0);
 
+        Intent fIntent = new Intent(mContext, MainBroadcastRecivier.class);
+        fIntent.setAction(UniversalPlayer.INTENT_ACTION_FORWARD);
+        forwardIntent = PendingIntent.getBroadcast(mContext, 0, fIntent, 0);
+
+        Intent bIntent = new Intent(mContext, MainBroadcastRecivier.class);
+        bIntent.setAction(UniversalPlayer.INTENT_ACTION_BACKWARD);
+        backwardIntent = PendingIntent.getBroadcast(mContext, 0, bIntent, 0);
+
         remoteView.setOnClickPendingIntent(R.id.btnPlayNtBar, pauseIntent);
+        remoteView.setOnClickPendingIntent(R.id.btnRewindLeftNtBar, backwardIntent);
+        remoteView.setOnClickPendingIntent(R.id.btnRewindRightNtBar, forwardIntent);
         super.setListeners();
     }
 
@@ -85,7 +97,9 @@ public class DefaultNotificationPanel extends PlayerNotificationPanel {
             nBuilder.setOngoing(false);
         }
         remoteView.setOnClickPendingIntent(R.id.btnPlayNtBar, state == UniversalPlayer.State.PLAYING ? pauseIntent : playIntent);
-        nBuilder.setSmallIcon(state == UniversalPlayer.State.PLAYING ? R.drawable.ic_play_white_24dp : R.drawable.ic_pause_white);
+        remoteView.setOnClickPendingIntent(R.id.btnRewindLeftNtBar, backwardIntent);
+        remoteView.setOnClickPendingIntent(R.id.btnRewindRightNtBar, forwardIntent);
+        nBuilder.setSmallIcon(state == UniversalPlayer.State.PLAYING ? R.drawable.ic_pause_white : R.drawable.ic_play_white_24dp);
         nManager.notify(NOTIFICATION_ID, nBuilder.build());
         super.updateNotificationStatus(state);
     }
