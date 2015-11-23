@@ -278,9 +278,9 @@ public class FragmentPlayer extends Fragment implements MediaPlayer.OnPreparedLi
             @Override
             public void operationFinished() {
                 playableMediaItem = UniversalPlayer.getInstance().getPlayingMediaItem();
+                playlist.updateTracks();
                 initPlayerUI();
                 configurePlayer();
-                playlist.updateTracks();
                 initTrackNumbersSection();
             }
         });

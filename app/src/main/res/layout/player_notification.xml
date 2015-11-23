@@ -21,6 +21,8 @@
         android:layout_alignParentTop="true"
         android:layout_toLeftOf="@+id/lnNtButtons"
         android:layout_toRightOf="@+id/imgPlayerNtBar"
+        android:ellipsize="end"
+        android:singleLine="true"
         android:text="Textc"
         android:textColor="@color/white" />
 
@@ -32,6 +34,8 @@
         android:layout_marginTop="2dp"
         android:layout_toLeftOf="@+id/lnNtButtons"
         android:layout_toRightOf="@+id/imgPlayerNtBar"
+        android:ellipsize="end"
+        android:singleLine="true"
         android:textColor="@color/notification_grey" />
 
     <LinearLayout
