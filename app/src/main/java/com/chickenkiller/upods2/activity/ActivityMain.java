@@ -77,14 +77,10 @@ public class ActivityMain extends BasicActivity implements IOverlayable, IToolba
 
             int startedFrom = -1;
             int startedFragmentNumber = -1;
-            if (getIntent() != null && getIntent().getExtras() != null) {
-                //In order to return to fragment from which leaved activity
-                startedFrom = getIntent().hasExtra(ActivityPlayer.ACTIVITY_STARTED_FROM) ?
-                        getIntent().getExtras().getInt(ActivityPlayer.ACTIVITY_STARTED_FROM, -1) : -1;
-                //In order to return to fragment inside view pager which leaved activity
-                startedFragmentNumber = DataHolder.getInstance().contains(FragmentMediaItemsGrid.LAST_ITEM_POSITION) ?
+
+            //In order to return to fragment inside view pager which leaved activity
+            startedFragmentNumber = DataHolder.getInstance().contains(FragmentMediaItemsGrid.LAST_ITEM_POSITION) ?
                         (int) DataHolder.getInstance().retrieve(FragmentMediaItemsGrid.LAST_ITEM_POSITION) : -1;
-            }
 
             FragmentMediaItemsGrid fragmentMediaItemsGrid = new FragmentMediaItemsGrid();
             fragmentMediaItemsGrid.setMediaItemType(startedFrom == MediaItemType.PODCAST.ordinal() ? MediaItemType.PODCAST : MediaItemType.RADIO);
