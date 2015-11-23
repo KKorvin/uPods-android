@@ -4,6 +4,7 @@ import android.text.format.Formatter;
 
 import com.chickenkiller.upods2.controllers.app.UpodsApplication;
 import com.chickenkiller.upods2.utils.Logger;
+import com.chickenkiller.upods2.utils.MediaUtils;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -93,6 +94,46 @@ public class Episod extends Track {
         return episodsJson;
     }
 
+
+    public String getBtnDownloadText() {
+        return btnDownloadText;
+    }
+
+    public void setBtnDownloadText(String btnDownloadText) {
+        this.btnDownloadText = btnDownloadText;
+    }
+
+    public String getDuration() {
+        return duration;
+    }
+
+    public void setDuration(String duration) {
+        if (duration.matches("^[0-9]{3,5}$")) {//Time was given in seconds
+            duration = MediaUtils.formatMsToTimeString(Integer.valueOf(duration) * 1000);
+        }
+        this.duration = duration;
+    }
+
+    public String getLength() {
+        return length;
+    }
+
+    public void setLength(String length) {
+        this.length = length;
+    }
+
+    public String getSummary() {
+        return summary;
+    }
+
+    public void setSummary(String summary) {
+        this.summary = summary;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
     @Override
     public String getTitle() {
         return title;
@@ -115,42 +156,6 @@ public class Episod extends Track {
             return pathOnDisk;
         }
         return audeoUrl;
-    }
-
-    public String getBtnDownloadText() {
-        return btnDownloadText;
-    }
-
-    public void setBtnDownloadText(String btnDownloadText) {
-        this.btnDownloadText = btnDownloadText;
-    }
-
-    public String getDuration() {
-        return duration;
-    }
-
-    public void setDuration(String duration) {
-        this.duration = duration;
-    }
-
-    public String getLength() {
-        return length;
-    }
-
-    public void setLength(String length) {
-        this.length = length;
-    }
-
-    public String getSummary() {
-        return summary;
-    }
-
-    public void setSummary(String summary) {
-        this.summary = summary;
-    }
-
-    public void setDate(String date) {
-        this.date = date;
     }
 
     @Override

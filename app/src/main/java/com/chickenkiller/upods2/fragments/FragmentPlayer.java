@@ -333,7 +333,6 @@ public class FragmentPlayer extends Fragment implements MediaPlayer.OnPreparedLi
 
     @Override
     public void onPrepared(MediaPlayer mediaPlayer) {
-        Logger.printInfo("onPrepared","!!!");
         btnPlay.setImageResource(R.drawable.ic_pause_white);
         ((IToolbarHolder) getActivity()).getToolbar().setTitle(R.string.now_paying);
         playlist.updateTracks();

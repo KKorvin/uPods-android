@@ -22,7 +22,7 @@
         android:layout_toLeftOf="@+id/tvPlTrackDuration"
         android:layout_toRightOf="@+id/btnPlPlay"
         android:ellipsize="end"
-        android:maxLines="1"
+        android:singleLine="true"
         android:text="daskclascksalcasklc"
         android:textColor="@color/white" />
 
@@ -36,7 +36,7 @@
         android:layout_toLeftOf="@+id/tvPlTrackDuration"
         android:layout_toRightOf="@+id/btnPlPlay"
         android:ellipsize="end"
-        android:maxLines="1"
+        android:singleLine="true"
         android:text="daskclascksalcasklc"
         android:textColor="@color/whiteGray" />
 

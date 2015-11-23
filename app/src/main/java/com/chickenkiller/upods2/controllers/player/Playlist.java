@@ -288,6 +288,7 @@ public class Playlist implements AdapterView.OnItemClickListener {
                 ITrackable trackable = (ITrackable) universalPlayer.getPlayingMediaItem();
                 trackable.selectTrack(clieckedTrack);
                 DataHolder.getInstance().save(ActivityPlayer.MEDIA_ITEM_EXTRA, trackable);
+                universalPlayer.resetPlayer();
                 Logger.printInfo(LOG_TAG, "Track switched to: " + clieckedTrack.getTitle());
             }
         }
