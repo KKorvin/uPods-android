@@ -74,7 +74,7 @@ public class MediaUtils {
         if (direction == Direction.LEFT) {
             changeTo = currentTrackNumber - 1;
             if (changeTo < 0) {
-                changeTo = currentTrackNumber - 1;
+                changeTo = tracksSize - 1;
             }
         } else {
             changeTo = currentTrackNumber + 1;
