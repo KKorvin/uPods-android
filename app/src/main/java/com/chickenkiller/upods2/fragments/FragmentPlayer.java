@@ -160,9 +160,6 @@ public class FragmentPlayer extends Fragment implements MediaPlayer.OnPreparedLi
 
     @Override
     public void onDestroy() {
-        if (universalPlayer != null) {
-            universalPlayer.removeListeners();
-        }
         if (playerPositionUpdater != null) {
             playerPositionUpdater.cancel(false);
         }
@@ -178,7 +175,11 @@ public class FragmentPlayer extends Fragment implements MediaPlayer.OnPreparedLi
      * Inits player UI accorfing to current MediaItem
      */
     private void initPlayerUI() {
-        tvPlayerTitle.setText(playableMediaItem.getName());
+        if (playableMediaItem instanceof ITrackable) {
+            tvPlayerTitle.setText(((ITrackable) playableMediaItem).getSelectedTrack().getTitle());
+        } else {
+            tvPlayerTitle.setText(playableMediaItem.getName());
+        }
         tvPlayserSubtitle.setText(playableMediaItem.getSubHeader());
         Glide.with(getActivity()).load(playableMediaItem.getCoverImageUrl()).crossFade().into(new GlideDrawableImageViewTarget(imgPlayerCover) {
             @Override

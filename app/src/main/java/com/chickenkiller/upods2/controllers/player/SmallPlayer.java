@@ -18,6 +18,7 @@ import com.chickenkiller.upods2.fragments.FragmentPlayer;
 import com.chickenkiller.upods2.interfaces.IOnPositionUpdatedCallback;
 import com.chickenkiller.upods2.interfaces.IPlayableMediaItem;
 import com.chickenkiller.upods2.interfaces.IPlayerStateListener;
+import com.chickenkiller.upods2.interfaces.ITrackable;
 import com.chickenkiller.upods2.models.Podcast;
 import com.chickenkiller.upods2.models.Track;
 import com.chickenkiller.upods2.utils.MediaUtils;
@@ -65,7 +66,11 @@ public class SmallPlayer implements IPlayerStateListener, View.OnClickListener {
             this.rlSmallPLayer.setVisibility(View.VISIBLE);
             this.sbSmallPlayer = (SeekBar) parentView.findViewById(R.id.sbSmallPlayer);
             IPlayableMediaItem playingMediaItem = UniversalPlayer.getInstance().getPlayingMediaItem();
-            this.tvTitle.setText(playingMediaItem.getName());
+            if (playingMediaItem instanceof ITrackable) {
+                tvTitle.setText(((ITrackable) playingMediaItem).getSelectedTrack().getTitle());
+            } else {
+                tvTitle.setText(playingMediaItem.getName());
+            }
             this.tvSubTtitle.setText(playingMediaItem.getSubHeader());
             Glide.with(parentView.getContext()).load(playingMediaItem.getCoverImageUrl()).crossFade().into(new GlideDrawableImageViewTarget(imgCover));
             UniversalPlayer.getInstance().setPlayerStateListener(this);
@@ -104,7 +109,6 @@ public class SmallPlayer implements IPlayerStateListener, View.OnClickListener {
     }
 
     public void destroy() {
-        UniversalPlayer.getInstance().removeListeners();
         if (playerPositionUpdater != null) {
             playerPositionUpdater.cancel(false);
         }

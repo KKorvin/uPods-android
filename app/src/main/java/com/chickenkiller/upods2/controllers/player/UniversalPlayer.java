@@ -43,17 +43,18 @@ public class UniversalPlayer implements MediaPlayer.OnPreparedListener, MediaPla
     public static final String INTENT_ACTION_BACKWARD = "com.chickenkiller.upods2.player.BACKWARD";
     private static final String PLAYER_LOG = "UniversalPlayer";
 
-    public static UniversalPlayer universalPlayer;
+    private static UniversalPlayer universalPlayer;
     private MediaPlayer mediaPlayer;
+
     private MediaPlayer.OnPreparedListener preparedListener;
     private IOperationFinishWithDataCallback onMetaDataFetchedCallback;
     private IOperationFinishCallback onAutonomicTrackChangeCallback;
     private IPlayerStateListener playerStateListener;
+
     private IPlayableMediaItem mediaItem;
     private PlayerNotificationPanel notificationPanel;
 
     private TimerTask autoReconector;
-    private Thread positionUpdater;
 
     public boolean isPrepaired;
 
@@ -219,12 +220,11 @@ public class UniversalPlayer implements MediaPlayer.OnPreparedListener, MediaPla
             mediaItem = null;
             isPrepaired = false;
             positionOffset = 0;
-            removeListeners();
         }
         if (notificationPanel != null) {
             notificationPanel.notificationCancel();
         }
-
+        removeListeners();
     }
 
     public void resetPlayer() {
@@ -237,7 +237,8 @@ public class UniversalPlayer implements MediaPlayer.OnPreparedListener, MediaPla
         }
     }
 
-    public void removeListeners() {
+    private void removeListeners() {
+        //TODO Looks like function shouldn't be call directly
         preparedListener = null;
         playerStateListener = null;
         onMetaDataFetchedCallback = null;
@@ -281,6 +282,9 @@ public class UniversalPlayer implements MediaPlayer.OnPreparedListener, MediaPla
         } else if (universalPlayer.getPlayingMediaItem() instanceof RadioItem) {
             changeTrackToDirectionRadio(direction);
         }
+        if (onAutonomicTrackChangeCallback != null) {
+            onAutonomicTrackChangeCallback.operationFinished();
+        }
     }
 
     private void changeTrackToDirectionTrackable(Direction direction) {
@@ -307,9 +311,6 @@ public class UniversalPlayer implements MediaPlayer.OnPreparedListener, MediaPla
                 resetPlayer();
                 setMediaItem(mediaItems.get(changeTo));
                 prepare();
-                if (onAutonomicTrackChangeCallback != null) {
-                    onAutonomicTrackChangeCallback.operationFinished();
-                }
                 break;
             }
         }
@@ -379,6 +380,7 @@ public class UniversalPlayer implements MediaPlayer.OnPreparedListener, MediaPla
 
     @Override
     public void onCompletion(MediaPlayer mp) {
-        Logger.printInfo(PLAYER_LOG, "COMPLITED!!!");
+        Logger.printInfo(PLAYER_LOG, "Completed current track, switchin to nex in playlit");
+        changeTrackToDirection(Direction.RIGHT);
     }
 }

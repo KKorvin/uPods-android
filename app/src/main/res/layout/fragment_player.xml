@@ -59,7 +59,7 @@
                     android:layout_marginBottom="5dp"
                     android:layout_marginTop="10dp"
                     android:ellipsize="end"
-                    android:maxLines="1"
+                    android:singleLine="true"
                     android:text="BBC Radio One"
                     android:textColor="@color/white"
                     android:textSize="@dimen/default_text_size_22" />
@@ -70,7 +70,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="5dp"
                     android:ellipsize="end"
-                    android:maxLines="1"
+                    android:singleLine="true"
                     android:text="Most popular Internet radio"
                     android:textColor="@color/white"
                     android:textSize="@dimen/default_text_size_16" />
