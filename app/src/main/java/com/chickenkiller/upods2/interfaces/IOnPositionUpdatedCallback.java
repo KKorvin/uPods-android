@@ -6,4 +6,6 @@ package com.chickenkiller.upods2.interfaces;
 public interface IOnPositionUpdatedCallback {
 
     void poistionUpdated(int currentPoistion);
+
+    void poistionUpdaterStoped();
 }

@@ -5,8 +5,6 @@ import android.os.AsyncTask;
 
 import com.chickenkiller.upods2.controllers.app.ProfileManager;
 import com.chickenkiller.upods2.controllers.app.UpodsApplication;
-import com.chickenkiller.upods2.fragments.FragmentPlayer;
-import com.chickenkiller.upods2.interfaces.IOnPositionUpdatedCallback;
 import com.chickenkiller.upods2.interfaces.IOperationFinishCallback;
 import com.chickenkiller.upods2.interfaces.IOperationFinishWithDataCallback;
 import com.chickenkiller.upods2.interfaces.IPlayableMediaItem;
@@ -35,7 +33,6 @@ public class UniversalPlayer implements MediaPlayer.OnPreparedListener, MediaPla
 
 
     private static final long RECONNECT_RATE = 5000;
-    private static final long POSITION_UPDATE_RATE = 1000;
     private int positionOffset = 0;
 
     public enum State {PLAYING, PAUSED}
@@ -53,11 +50,10 @@ public class UniversalPlayer implements MediaPlayer.OnPreparedListener, MediaPla
     private IOperationFinishCallback onAutonomicTrackChangeCallback;
     private IPlayerStateListener playerStateListener;
     private IPlayableMediaItem mediaItem;
-    private IOnPositionUpdatedCallback positionUpdatedCallback;
     private PlayerNotificationPanel notificationPanel;
 
     private TimerTask autoReconector;
-    private TimerTask positionUpdateTask;
+    private Thread positionUpdater;
 
     public boolean isPrepaired;
 
@@ -101,10 +97,6 @@ public class UniversalPlayer implements MediaPlayer.OnPreparedListener, MediaPla
 
     public void setPlayerStateListener(IPlayerStateListener playerStateListener) {
         this.playerStateListener = playerStateListener;
-    }
-
-    public void setPositionUpdatedCallback(IOnPositionUpdatedCallback positionUpdatedCallback) {
-        this.positionUpdatedCallback = positionUpdatedCallback;
     }
 
     public void setOnAutonomicTrackChangeCallback(IOperationFinishCallback onAutonomicTrackChangeCallback) {
@@ -232,9 +224,7 @@ public class UniversalPlayer implements MediaPlayer.OnPreparedListener, MediaPla
         if (notificationPanel != null) {
             notificationPanel.notificationCancel();
         }
-        if (positionUpdateTask != null) {
-            positionUpdateTask.cancel();
-        }
+
     }
 
     public void resetPlayer() {
@@ -250,7 +240,6 @@ public class UniversalPlayer implements MediaPlayer.OnPreparedListener, MediaPla
     public void removeListeners() {
         preparedListener = null;
         playerStateListener = null;
-        positionUpdatedCallback = null;
         onMetaDataFetchedCallback = null;
         onAutonomicTrackChangeCallback = null;
     }
@@ -326,33 +315,10 @@ public class UniversalPlayer implements MediaPlayer.OnPreparedListener, MediaPla
         }
     }
 
-    public void restartPositionUpdater() {
-        positionUpdateTask.cancel();
-        positionUpdateTask = null;
-        runPositionUpdater();
+    public int getCurrentPosition() {
+        return isPrepaired && mediaPlayer != null ? mediaPlayer.getCurrentPosition() : 0;
     }
 
-    private void runPositionUpdater() {
-        if (mediaPlayer != null && isPrepaired && positionUpdatedCallback != null) {
-            positionUpdateTask = new TimerTask() {
-                @Override
-                public void run() {
-                    if (positionUpdatedCallback != null && mediaPlayer != null && isPrepaired) {
-                        int position = mediaPlayer.getCurrentPosition();
-                        if (position >= FragmentPlayer.DEFAULT_RADIO_DURATIO && mediaItem instanceof RadioItem) {
-                            positionOffset = position;
-                            position -= positionOffset;
-                        }
-                        positionUpdatedCallback.poistionUpdated(position);
-                    }
-                }
-            };
-            new Timer().scheduleAtFixedRate(positionUpdateTask, 0, POSITION_UPDATE_RATE);
-        } else if (positionUpdateTask != null && positionUpdatedCallback == null) {
-            positionUpdateTask.cancel();
-        }
-
-    }
 
     private void runReconnectTask() {
         if (autoReconector == null) {
@@ -389,7 +355,6 @@ public class UniversalPlayer implements MediaPlayer.OnPreparedListener, MediaPla
         if (preparedListener != null) {
             preparedListener.onPrepared(mediaPlayer);
         }
-        runPositionUpdater();
     }
 
     @Override

@@ -4,6 +4,7 @@ import android.app.Fragment;
 import android.graphics.Bitmap;
 import android.graphics.Typeface;
 import android.media.MediaPlayer;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -26,6 +27,7 @@ import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
 import com.chickenkiller.upods2.R;
 import com.chickenkiller.upods2.activity.ActivityPlayer;
 import com.chickenkiller.upods2.controllers.player.MetaDataFetcher;
+import com.chickenkiller.upods2.controllers.player.PlayerPositionUpdater;
 import com.chickenkiller.upods2.controllers.player.Playlist;
 import com.chickenkiller.upods2.controllers.player.UniversalPlayer;
 import com.chickenkiller.upods2.interfaces.IOnPositionUpdatedCallback;
@@ -52,9 +54,9 @@ public class FragmentPlayer extends Fragment implements MediaPlayer.OnPreparedLi
     private static final float TOOLBAR_TEXT_SIZE = 20f;
 
     private IPlayableMediaItem playableMediaItem;
-    private IOperationFinishCallback playlistTrackSelected;
     private UniversalPlayer universalPlayer;
     private Playlist playlist;
+    private PlayerPositionUpdater playerPositionUpdater;
 
     private View rootView;
     private ImageButton btnPlay;
@@ -153,12 +155,16 @@ public class FragmentPlayer extends Fragment implements MediaPlayer.OnPreparedLi
             }
         });
         configurePlayer();
+        runPositionUpdater();
     }
 
     @Override
     public void onDestroy() {
         if (universalPlayer != null) {
             universalPlayer.removeListeners();
+        }
+        if (playerPositionUpdater != null) {
+            playerPositionUpdater.cancel(false);
         }
         DataHolder.getInstance().remove(ActivityPlayer.MEDIA_ITEM_EXTRA);
         super.onDestroy();
@@ -186,6 +192,26 @@ public class FragmentPlayer extends Fragment implements MediaPlayer.OnPreparedLi
         if (playableMediaItem instanceof ITrackable) {
             Track selectedTrack = ((ITrackable) playableMediaItem).getSelectedTrack();
             tvTrackDuration.setText(selectedTrack.getDuration());
+            sbPlayerProgress.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+                @Override
+                public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+
+                }
+
+                @Override
+                public void onStartTrackingTouch(SeekBar seekBar) {
+                    isChangingProgress = true;
+                }
+
+                @Override
+                public void onStopTrackingTouch(SeekBar seekBar) {
+                    isChangingProgress = false;
+                    int progress = seekBar.getProgress();
+                    int position = (int) ((maxDuration * progress) / 100);
+                    seekBar.setProgress(progress);
+                    universalPlayer.seekTo(position);
+                }
+            });
         }
         if (playableMediaItem instanceof RadioItem) {
             sbPlayerProgress.setOnTouchListener(new View.OnTouchListener() {
@@ -201,7 +227,7 @@ public class FragmentPlayer extends Fragment implements MediaPlayer.OnPreparedLi
     /**
      * Inits player UI accorfing to current player state, call it after configurePlayer().
      */
-    private void initPlayerStateUI(){
+    private void initPlayerStateUI() {
         if (universalPlayer.isPrepaired && universalPlayer.isPlaying()) {
             ((IToolbarHolder) getActivity()).getToolbar().setTitle(R.string.now_paying);
             btnPlay.setImageResource(R.drawable.ic_pause_white);
@@ -226,9 +252,6 @@ public class FragmentPlayer extends Fragment implements MediaPlayer.OnPreparedLi
             setPlayerCallbacks();
             if (playlist == null) {
                 createPlaylist();
-            }
-            if (universalPlayer.isPrepaired) {
-                universalPlayer.restartPositionUpdater();
             }
         } else {
             Logger.printInfo(TAG, "Starting new MediaItem");
@@ -284,50 +307,28 @@ public class FragmentPlayer extends Fragment implements MediaPlayer.OnPreparedLi
                 initTrackNumbersSection();
             }
         });
-        setPositionUpdateCallback();
     }
 
-    private void setPositionUpdateCallback() {
-        universalPlayer.setPositionUpdatedCallback(new IOnPositionUpdatedCallback() {
+    private void runPositionUpdater() {
+        playerPositionUpdater = (PlayerPositionUpdater) new PlayerPositionUpdater(new IOnPositionUpdatedCallback() {
             @Override
-            public void poistionUpdated(final int currentPoistion) {
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        tvTrackCurrentTime.setText(MediaUtils.formatMsToTimeString(currentPoistion));
-                        if (!isChangingProgress) {
-                            if (maxDuration < 0) {
-                                maxDuration = playableMediaItem instanceof RadioItem ? DEFAULT_RADIO_DURATIO
-                                        : MediaUtils.timeStringToLong(tvTrackDuration.getText().toString());
-                            }
-                            int progress = (int) (currentPoistion * 100 / maxDuration);
-                            sbPlayerProgress.setProgress(progress);
-                        }
+            public void poistionUpdated(int currentPoistion) {
+                tvTrackCurrentTime.setText(MediaUtils.formatMsToTimeString(currentPoistion));
+                if (!isChangingProgress) {
+                    if (maxDuration < 0) {
+                        maxDuration = playableMediaItem instanceof RadioItem ? DEFAULT_RADIO_DURATIO
+                                : MediaUtils.timeStringToLong(tvTrackDuration.getText().toString());
                     }
-                });
-            }
-        });
-
-        sbPlayerProgress.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-
+                    int progress = (int) (currentPoistion * 100 / maxDuration);
+                    sbPlayerProgress.setProgress(progress);
+                }
             }
 
             @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-                isChangingProgress = true;
-            }
+            public void poistionUpdaterStoped() {
 
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-                isChangingProgress = false;
-                int progress = seekBar.getProgress();
-                int position = (int) ((maxDuration * progress) / 100);
-                seekBar.setProgress(progress);
-                universalPlayer.seekTo(position);
             }
-        });
+        }).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
 

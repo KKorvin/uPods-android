@@ -2,6 +2,7 @@ package com.chickenkiller.upods2.controllers.player;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -33,6 +34,8 @@ public class SmallPlayer implements IPlayerStateListener, View.OnClickListener {
     private ImageButton btnPlay;
     private RelativeLayout rlSmallPLayer;
     private Activity mActivity;
+
+    private PlayerPositionUpdater playerPositionUpdater;
 
     private long maxDuration = -1;
 
@@ -66,33 +69,33 @@ public class SmallPlayer implements IPlayerStateListener, View.OnClickListener {
             this.tvSubTtitle.setText(playingMediaItem.getSubHeader());
             Glide.with(parentView.getContext()).load(playingMediaItem.getCoverImageUrl()).crossFade().into(new GlideDrawableImageViewTarget(imgCover));
             UniversalPlayer.getInstance().setPlayerStateListener(this);
-            setPositionUpdateCallback();
+            runPositionUpdater();
         } else {
             this.rlSmallPLayer.setVisibility(View.GONE);
         }
     }
 
-    private void setPositionUpdateCallback() {
-        UniversalPlayer.getInstance().setPositionUpdatedCallback(new IOnPositionUpdatedCallback() {
+    private void runPositionUpdater() {
+        playerPositionUpdater = (PlayerPositionUpdater) new PlayerPositionUpdater(new IOnPositionUpdatedCallback() {
             @Override
-            public void poistionUpdated(final int currentPoistion) {
-                mActivity.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (maxDuration < 0) {
-                            IPlayableMediaItem playingMediaItem = UniversalPlayer.getInstance().getPlayingMediaItem();
-                            if (playingMediaItem instanceof Podcast) {
-                                Track track = ((Podcast) playingMediaItem).getSelectedTrack();
-                                maxDuration = MediaUtils.timeStringToLong(track.getDuration());
-                            }
-                            maxDuration = maxDuration > 0 ? maxDuration : FragmentPlayer.DEFAULT_RADIO_DURATIO;
-                        }
-                        int progress = (int) (currentPoistion * 100 / maxDuration);
-                        sbSmallPlayer.setProgress(progress);
+            public void poistionUpdated(int currentPoistion) {
+                if (maxDuration < 0) {
+                    IPlayableMediaItem playingMediaItem = UniversalPlayer.getInstance().getPlayingMediaItem();
+                    if (playingMediaItem instanceof Podcast) {
+                        Track track = ((Podcast) playingMediaItem).getSelectedTrack();
+                        maxDuration = MediaUtils.timeStringToLong(track.getDuration());
                     }
-                });
+                    maxDuration = maxDuration > 0 ? maxDuration : FragmentPlayer.DEFAULT_RADIO_DURATIO;
+                }
+                int progress = (int) (currentPoistion * 100 / maxDuration);
+                sbSmallPlayer.setProgress(progress);
             }
-        });
+
+            @Override
+            public void poistionUpdaterStoped() {
+
+            }
+        }).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
     @Override
@@ -102,6 +105,9 @@ public class SmallPlayer implements IPlayerStateListener, View.OnClickListener {
 
     public void destroy() {
         UniversalPlayer.getInstance().removeListeners();
+        if (playerPositionUpdater != null) {
+            playerPositionUpdater.cancel(false);
+        }
         mActivity = null;
     }
 
