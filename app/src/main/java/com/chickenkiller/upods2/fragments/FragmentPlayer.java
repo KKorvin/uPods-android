@@ -229,6 +229,13 @@ public class FragmentPlayer extends Fragment implements MediaPlayer.OnPreparedLi
      */
     private void initPlayerStateUI() {
         if (universalPlayer.isPrepaired && universalPlayer.isPlaying()) {
+            btnPlay.setImageResource(R.drawable.ic_pause_white);
+
+        } else {
+            btnPlay.setImageResource(R.drawable.ic_play_white);
+        }
+
+        if (universalPlayer.isPrepaired) {
             ((IToolbarHolder) getActivity()).getToolbar().setTitle(R.string.now_paying);
             btnPlay.setImageResource(R.drawable.ic_pause_white);
 
@@ -342,8 +349,5 @@ public class FragmentPlayer extends Fragment implements MediaPlayer.OnPreparedLi
     @Override
     public void onStateChanged(UniversalPlayer.State state) {
         btnPlay.setImageResource(state == UniversalPlayer.State.PLAYING ? R.drawable.ic_pause_white : R.drawable.ic_play_white);
-        if (state == UniversalPlayer.State.PLAYING) {
-            ((IToolbarHolder) getActivity()).getToolbar().setTitle(R.string.now_paying);
-        }
     }
 }
