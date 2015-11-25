@@ -30,7 +30,7 @@ public class PlayerPositionUpdater extends AsyncTask<Void, Integer, Void> {
             while (!isCancelled() && positionUpdatedCallback != null) {
                 if (universalPlayer.isPrepaired) {
                     int position = universalPlayer.getCurrentPosition();
-                    if (position >= FragmentPlayer.DEFAULT_RADIO_DURATIO && universalPlayer.getPlayingMediaItem() instanceof RadioItem) {
+                    if (position >= FragmentPlayer.DEFAULT_RADIO_DURATIO + radioOfset && universalPlayer.getPlayingMediaItem() instanceof RadioItem) {
                         radioOfset += FragmentPlayer.DEFAULT_RADIO_DURATIO;
                         position -= radioOfset;
                     }
