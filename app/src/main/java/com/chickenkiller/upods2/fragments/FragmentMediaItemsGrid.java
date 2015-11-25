@@ -80,16 +80,6 @@ public class FragmentMediaItemsGrid extends Fragment implements ICustumziedBackP
 
         smallPlayer = new SmallPlayer(view, getActivity());
 
-        //Set callback for ProviderProfileManager
-        ProfileManager.getInstance().setOperationFinishCallback(new IOperationFinishCallback() {
-            @Override
-            public void operationFinished() {
-                if (isAdded() && mediaPagesAdapter != null) {
-                    mediaPagesAdapter.notifyDataSetChanged();
-                }
-            }
-        });
-
         vpMedia.setCurrentItem(startItemNumber);
 
         return view;
@@ -105,12 +95,34 @@ public class FragmentMediaItemsGrid extends Fragment implements ICustumziedBackP
 
     @Override
     public void onDestroy() {
-        smallPlayer.destroy();
+        if (smallPlayer != null) {
+            smallPlayer.destroy();
+        }
         super.onDestroy();
     }
 
     @Override
+    public void onResume() {
+        //Set callback for ProviderProfileManager
+        ProfileManager.getInstance().setOperationFinishCallback(new IOperationFinishCallback() {
+            @Override
+            public void operationFinished() {
+                if (isAdded() && mediaPagesAdapter != null) {
+                    mediaPagesAdapter.notifyDataSetChanged();
+                }
+            }
+        });
+        if (smallPlayer != null) {
+            smallPlayer.onResume();
+        }
+        super.onResume();
+    }
+
+    @Override
     public void onPause() {
+        if (smallPlayer != null) {
+            smallPlayer.onPause();
+        }
         DataHolder.getInstance().save(LAST_ITEM_POSITION, vpMedia.getCurrentItem());
         super.onPause();
     }

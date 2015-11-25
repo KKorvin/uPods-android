@@ -224,7 +224,6 @@ public class UniversalPlayer implements MediaPlayer.OnPreparedListener, MediaPla
         if (notificationPanel != null) {
             notificationPanel.notificationCancel();
         }
-        removeListeners();
     }
 
     public void resetPlayer() {

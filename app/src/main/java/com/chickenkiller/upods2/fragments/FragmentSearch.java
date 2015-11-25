@@ -136,8 +136,26 @@ public class FragmentSearch extends Fragment implements SearchView.OnQueryTextLi
     }
 
     @Override
+    public void onResume() {
+        if (smallPlayer != null) {
+            smallPlayer.onResume();
+        }
+        super.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        if (smallPlayer != null) {
+            smallPlayer.onPause();
+        }
+        super.onPause();
+    }
+
+    @Override
     public void onDestroy() {
-        smallPlayer.destroy();
+        if (smallPlayer != null) {
+            smallPlayer.destroy();
+        }
         BackendManager.getInstance().clearSearchQueue();
         super.onDestroy();
     }

@@ -2,6 +2,7 @@ package com.chickenkiller.upods2.controllers.player;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.AsyncTask;
 import android.view.View;
 import android.widget.ImageButton;
@@ -16,6 +17,7 @@ import com.chickenkiller.upods2.R;
 import com.chickenkiller.upods2.activity.ActivityPlayer;
 import com.chickenkiller.upods2.fragments.FragmentPlayer;
 import com.chickenkiller.upods2.interfaces.IOnPositionUpdatedCallback;
+import com.chickenkiller.upods2.interfaces.IOperationFinishCallback;
 import com.chickenkiller.upods2.interfaces.IPlayableMediaItem;
 import com.chickenkiller.upods2.interfaces.IPlayerStateListener;
 import com.chickenkiller.upods2.interfaces.ITrackable;
@@ -26,7 +28,7 @@ import com.chickenkiller.upods2.utils.MediaUtils;
 /**
  * Created by alonzilberman on 8/5/15.
  */
-public class SmallPlayer implements IPlayerStateListener, View.OnClickListener {
+public class SmallPlayer implements IPlayerStateListener, View.OnClickListener, MediaPlayer.OnPreparedListener {
 
     private ImageView imgCover;
     private TextView tvTitle;
@@ -35,6 +37,7 @@ public class SmallPlayer implements IPlayerStateListener, View.OnClickListener {
     private ImageButton btnPlay;
     private RelativeLayout rlSmallPLayer;
     private Activity mActivity;
+    private UniversalPlayer universalPlayer;
 
     private PlayerPositionUpdater playerPositionUpdater;
 
@@ -51,33 +54,48 @@ public class SmallPlayer implements IPlayerStateListener, View.OnClickListener {
 
     public SmallPlayer(View parentView, Activity mActivity) {
         this.mActivity = mActivity;
+        this.universalPlayer = UniversalPlayer.getInstance();
         this.rlSmallPLayer = (RelativeLayout) parentView.findViewById(R.id.rlSmallPlayer);
-        if (this.rlSmallPLayer == null) {
-            return;
-        }
-        rlSmallPLayer.setOnClickListener(this);
-        if (UniversalPlayer.getInstance().isPrepaired) {
+        if (this.rlSmallPLayer != null) {
             this.imgCover = (ImageView) parentView.findViewById(R.id.imgSmallPlayerCover);
             this.tvTitle = (TextView) parentView.findViewById(R.id.tvSmallPlayerTitle);
             this.tvSubTtitle = (TextView) parentView.findViewById(R.id.tvSmallPlayerSubTtile);
             this.btnPlay = (ImageButton) parentView.findViewById(R.id.btnSmallPlayerPlay);
             this.btnPlay.setOnClickListener(btnPlayOnClickListener);
-            this.btnPlay.setBackgroundResource(UniversalPlayer.getInstance().isPlaying() ? R.drawable.ic_pause_white : R.drawable.ic_play_white);
-            this.rlSmallPLayer.setVisibility(View.VISIBLE);
             this.sbSmallPlayer = (SeekBar) parentView.findViewById(R.id.sbSmallPlayer);
-            IPlayableMediaItem playingMediaItem = UniversalPlayer.getInstance().getPlayingMediaItem();
+        }
+    }
+
+    private void initPlayerUI() {
+        if (this.rlSmallPLayer == null) {
+            return;
+        }
+        rlSmallPLayer.setOnClickListener(this);
+        if (universalPlayer.isPrepaired) {
+            this.rlSmallPLayer.setVisibility(View.VISIBLE);
+            this.btnPlay.setBackgroundResource(universalPlayer.isPlaying() ? R.drawable.ic_pause_white : R.drawable.ic_play_white);
+            IPlayableMediaItem playingMediaItem = universalPlayer.getPlayingMediaItem();
             if (playingMediaItem instanceof ITrackable) {
                 tvTitle.setText(((ITrackable) playingMediaItem).getSelectedTrack().getTitle());
             } else {
                 tvTitle.setText(playingMediaItem.getName());
             }
             this.tvSubTtitle.setText(playingMediaItem.getSubHeader());
-            Glide.with(parentView.getContext()).load(playingMediaItem.getCoverImageUrl()).crossFade().into(new GlideDrawableImageViewTarget(imgCover));
-            UniversalPlayer.getInstance().setPlayerStateListener(this);
-            runPositionUpdater();
+            Glide.with(mActivity).load(playingMediaItem.getCoverImageUrl()).crossFade().into(new GlideDrawableImageViewTarget(imgCover));
         } else {
             this.rlSmallPLayer.setVisibility(View.GONE);
         }
+    }
+
+    private void setPlayerCallbacks() {
+        universalPlayer.setPreparedListener(this);
+        universalPlayer.setPlayerStateListener(this);
+        universalPlayer.setOnAutonomicTrackChangeCallback(new IOperationFinishCallback() {
+            @Override
+            public void operationFinished() {
+                initPlayerUI();
+            }
+        });
     }
 
     private void runPositionUpdater() {
@@ -109,10 +127,20 @@ public class SmallPlayer implements IPlayerStateListener, View.OnClickListener {
     }
 
     public void destroy() {
+        mActivity = null;
+    }
+
+    public void onPause() {
         if (playerPositionUpdater != null) {
             playerPositionUpdater.cancel(false);
         }
-        mActivity = null;
+        UniversalPlayer.getInstance().removeListeners();
+    }
+
+    public void onResume() {
+        initPlayerUI();
+        setPlayerCallbacks();
+        runPositionUpdater();
     }
 
     @Override
@@ -120,5 +148,10 @@ public class SmallPlayer implements IPlayerStateListener, View.OnClickListener {
         Intent intentOpen = new Intent(mActivity, ActivityPlayer.class);
         mActivity.startActivity(intentOpen);
         mActivity.finish();
+    }
+
+    @Override
+    public void onPrepared(MediaPlayer mp) {
+        initPlayerUI();
     }
 }

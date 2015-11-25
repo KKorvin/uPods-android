@@ -125,6 +125,7 @@ public class FragmentPlayer extends Fragment implements MediaPlayer.OnPreparedLi
         tvTrackNumbers = (TextView) view.findViewById(R.id.tvTrackNumbers);
         lnPlayerinfo = (LinearLayout) view.findViewById(R.id.lnPlayerInfo);
         sbPlayerProgress = (SeekBar) view.findViewById(R.id.sbPlayerProgress);
+
         universalPlayer = UniversalPlayer.getInstance();
 
         ((IToolbarHolder) getActivity()).getToolbar().setTitle(R.string.buffering);
@@ -135,8 +136,6 @@ public class FragmentPlayer extends Fragment implements MediaPlayer.OnPreparedLi
         if (playableMediaItem == null) {
             playableMediaItem = UniversalPlayer.getInstance().getPlayingMediaItem();
         }
-
-        initPlayerUI();
 
         return view;
     }
@@ -154,16 +153,34 @@ public class FragmentPlayer extends Fragment implements MediaPlayer.OnPreparedLi
                 sbPlayerProgress.requestLayout();
             }
         });
+    }
+
+    @Override
+    public void onResume() {
+        //If playableMediaItem was changed when fragment was in backround, replace it.
+        if (universalPlayer.isPrepaired && universalPlayer.getPlayingMediaItem() != null &&
+                !universalPlayer.isCurrentMediaItem(playableMediaItem)) {
+            playableMediaItem = universalPlayer.getPlayingMediaItem();
+        }
+        initPlayerUI();
         configurePlayer();
+        setPlayerCallbacks();
         runPositionUpdater();
+        super.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        DataHolder.getInstance().remove(ActivityPlayer.MEDIA_ITEM_EXTRA);
+        if (playerPositionUpdater != null) {
+            playerPositionUpdater.cancel(false);
+        }
+        universalPlayer.removeListeners();
+        super.onPause();
     }
 
     @Override
     public void onDestroy() {
-        if (playerPositionUpdater != null) {
-            playerPositionUpdater.cancel(false);
-        }
-        DataHolder.getInstance().remove(ActivityPlayer.MEDIA_ITEM_EXTRA);
         super.onDestroy();
     }
 
@@ -257,19 +274,18 @@ public class FragmentPlayer extends Fragment implements MediaPlayer.OnPreparedLi
     private void configurePlayer() {
         if (universalPlayer.isPrepaired && universalPlayer.isCurrentMediaItem(playableMediaItem)) { //Player already running
             Logger.printInfo(TAG, "Configured from playing MediaItem");
-            setPlayerCallbacks();
             if (playlist == null) {
                 createPlaylist();
             }
         } else {
             Logger.printInfo(TAG, "Starting new MediaItem");
             universalPlayer.releasePlayer();
-            setPlayerCallbacks();
             universalPlayer.setMediaItem(playableMediaItem);
             universalPlayer.prepare();
             createPlaylist();
         }
         initPlayerStateUI();
+        playlist.updateTracks();
     }
 
     private void createPlaylist() {
@@ -283,7 +299,6 @@ public class FragmentPlayer extends Fragment implements MediaPlayer.OnPreparedLi
                 }
                 initPlayerUI();
                 configurePlayer();
-                playlist.updateTracks();
                 initTrackNumbersSection();
             }
         });
@@ -312,7 +327,6 @@ public class FragmentPlayer extends Fragment implements MediaPlayer.OnPreparedLi
             public void operationFinished() {
                 if (isAdded()) {
                     playableMediaItem = UniversalPlayer.getInstance().getPlayingMediaItem();
-                    playlist.updateTracks();
                     initPlayerUI();
                     configurePlayer();
                     initTrackNumbersSection();
