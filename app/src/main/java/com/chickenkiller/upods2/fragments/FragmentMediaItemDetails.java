@@ -186,6 +186,9 @@ public class FragmentMediaItemDetails extends Fragment implements View.OnTouchLi
             public void onClick(View view) {
                 Intent myIntent = new Intent(getActivity(), ActivityPlayer.class);
                 DataHolder.getInstance().save(ActivityPlayer.MEDIA_ITEM_EXTRA, playableItem);
+                if (FragmentSearch.isActive) {
+                    myIntent.putExtra(ActivityPlayer.ACTIVITY_STARTED_FROM_IN_DEPTH, MediaItemType.RADIO_SEARCH.ordinal());
+                }
                 myIntent.putExtra(ActivityPlayer.ACTIVITY_STARTED_FROM, MediaItemType.RADIO.ordinal());
                 getActivity().startActivity(myIntent);
                 getActivity().finish();

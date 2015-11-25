@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
 import com.chickenkiller.upods2.R;
+import com.chickenkiller.upods2.activity.ActivityPlayer;
 import com.chickenkiller.upods2.controllers.adaperts.MediaItemsAdapter;
 import com.chickenkiller.upods2.controllers.internet.BackendManager;
 import com.chickenkiller.upods2.interfaces.IContentLoadListener;
@@ -89,6 +90,17 @@ public class FragmentMainFeatured extends Fragment implements IContentLoadListen
 
         //Load tops from remote server
         showTops();
+
+        //Open search fragment backed from other activity which was started from search
+        if(getActivity().getIntent().hasExtra(ActivityPlayer.ACTIVITY_STARTED_FROM_IN_DEPTH)){
+            int startedFrom = getActivity().getIntent().getIntExtra(ActivityPlayer.ACTIVITY_STARTED_FROM_IN_DEPTH, -1);
+            if(startedFrom == MediaItemType.RADIO_SEARCH.ordinal()){
+                FragmentSearch fragmentSearch = new FragmentSearch();
+                fragmentSearch.setSearchType(MediaItemType.RADIO);
+                ((IFragmentsManager) getActivity()).showFragment(R.id.fl_content, fragmentSearch, FragmentSearch.TAG);
+                getActivity().getIntent().removeExtra(ActivityPlayer.ACTIVITY_STARTED_FROM_IN_DEPTH);
+            }
+        }
 
         return view;
     }

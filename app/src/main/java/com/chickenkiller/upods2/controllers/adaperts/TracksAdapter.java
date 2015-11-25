@@ -15,6 +15,7 @@ import com.chickenkiller.upods2.activity.ActivityPlayer;
 import com.chickenkiller.upods2.controllers.app.ProfileManager;
 import com.chickenkiller.upods2.controllers.internet.DownloadMaster;
 import com.chickenkiller.upods2.dialogs.DialogFragmentTrackInfo;
+import com.chickenkiller.upods2.fragments.FragmentSearch;
 import com.chickenkiller.upods2.interfaces.IContentLoadListener;
 import com.chickenkiller.upods2.interfaces.IContextMenuManager;
 import com.chickenkiller.upods2.interfaces.IFragmentsManager;
@@ -191,6 +192,9 @@ public class TracksAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                     track.setAudeoUrl(ProfileManager.getInstance().getDownloadedTrackPath(iPlayableMediaItem, track));
                 }
                 Intent myIntent = new Intent(mContext, ActivityPlayer.class);
+                if (FragmentSearch.isActive) {
+                    myIntent.putExtra(ActivityPlayer.ACTIVITY_STARTED_FROM_IN_DEPTH, MediaItemType.PODCAST_SEARCH.ordinal());
+                }
                 myIntent.putExtra(ActivityPlayer.ACTIVITY_STARTED_FROM, MediaItemType.PODCAST.ordinal());
                 DataHolder.getInstance().save(ActivityPlayer.MEDIA_ITEM_EXTRA, iPlayableMediaItem);
                 mContext.startActivity(myIntent);

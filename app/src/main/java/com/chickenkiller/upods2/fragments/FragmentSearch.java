@@ -39,6 +39,9 @@ public class FragmentSearch extends Fragment implements SearchView.OnQueryTextLi
 
 
     public static final String TAG = "search_results";
+    public static boolean isActive = false;
+
+    private static String lastQuery = "";
 
     private RecyclerView rvSearchResults;
     private SmallPlayer smallPlayer;
@@ -46,7 +49,6 @@ public class FragmentSearch extends Fragment implements SearchView.OnQueryTextLi
     private ProgressBar pbLoadingSearch;
     private TextView tvSearchNoResults;
     private TextView tvStartTyping;
-    private String lastQuery = "";
     private MediaItemType mediaItemType;
 
     @Override
@@ -83,6 +85,13 @@ public class FragmentSearch extends Fragment implements SearchView.OnQueryTextLi
         rvSearchResults.setVisibility(View.INVISIBLE);
         tvStartTyping.setVisibility(View.VISIBLE);
         pbLoadingSearch.setVisibility(View.GONE);
+
+        FragmentSearch.isActive = true;
+        if (lastQuery != null && !lastQuery.isEmpty()) {
+            tvSearchNoResults.setVisibility(View.GONE);
+            tvStartTyping.setVisibility(View.GONE);
+            loadSearchResults(lastQuery);
+        }
         return view;
     }
 
@@ -157,6 +166,7 @@ public class FragmentSearch extends Fragment implements SearchView.OnQueryTextLi
             smallPlayer.destroy();
         }
         BackendManager.getInstance().clearSearchQueue();
+        FragmentSearch.isActive = false;
         super.onDestroy();
     }
 

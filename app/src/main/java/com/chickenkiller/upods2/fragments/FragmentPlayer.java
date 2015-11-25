@@ -75,6 +75,7 @@ public class FragmentPlayer extends Fragment implements MediaPlayer.OnPreparedLi
 
     private long maxDuration = -1;
     private boolean isChangingProgress = false;
+    private boolean isFirstRun = true;
 
     private View.OnClickListener btnPlayStopClickListener = new View.OnClickListener() {
         @Override
@@ -158,10 +159,11 @@ public class FragmentPlayer extends Fragment implements MediaPlayer.OnPreparedLi
     @Override
     public void onResume() {
         //If playableMediaItem was changed when fragment was in backround, replace it.
-        if (universalPlayer.isPrepaired && universalPlayer.getPlayingMediaItem() != null &&
+        if (!isFirstRun && universalPlayer.isPrepaired && universalPlayer.getPlayingMediaItem() != null &&
                 !universalPlayer.isCurrentMediaItem(playableMediaItem)) {
             playableMediaItem = universalPlayer.getPlayingMediaItem();
         }
+        isFirstRun = false;
         initPlayerUI();
         configurePlayer();
         setPlayerCallbacks();

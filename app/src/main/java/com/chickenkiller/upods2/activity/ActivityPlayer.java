@@ -17,6 +17,7 @@ public class ActivityPlayer extends BasicActivity implements IToolbarHolder {
 
     public static final String MEDIA_ITEM_EXTRA = "mediaItem";
     public static final String ACTIVITY_STARTED_FROM = "startedFrom";
+    public static final String ACTIVITY_STARTED_FROM_IN_DEPTH = "startedFromDepth"; //used if activity was started from depth fragment i.e search
 
     private IPlayableMediaItem currentMediaItem;
     private Toolbar toolbar;
@@ -61,6 +62,7 @@ public class ActivityPlayer extends BasicActivity implements IToolbarHolder {
             Intent myIntent = new Intent(this, ActivityMain.class);
             if (getIntent().hasExtra(ACTIVITY_STARTED_FROM)) {
                 myIntent.putExtra(ACTIVITY_STARTED_FROM, getIntent().getIntExtra(ACTIVITY_STARTED_FROM, -1));
+                myIntent.putExtra(ACTIVITY_STARTED_FROM_IN_DEPTH, getIntent().getIntExtra(ACTIVITY_STARTED_FROM_IN_DEPTH, -1));
             }
             startActivity(myIntent);
             finish();
