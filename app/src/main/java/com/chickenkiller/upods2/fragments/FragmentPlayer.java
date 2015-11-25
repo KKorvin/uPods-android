@@ -298,21 +298,25 @@ public class FragmentPlayer extends Fragment implements MediaPlayer.OnPreparedLi
         universalPlayer.setOnMetaDataFetchedCallback(new IOperationFinishWithDataCallback() {
             @Override
             public void operationFinished(Object data) {
-                MetaDataFetcher.MetaData metaData = (MetaDataFetcher.MetaData) data;
-                metaData.bitrate = metaData.bitrate.replace("000", "");
-                metaData.bitrate += getString(R.string.kbps);
-                tvTrackInfo.setText(metaData.bitrate);
+                if (isAdded()) {
+                    MetaDataFetcher.MetaData metaData = (MetaDataFetcher.MetaData) data;
+                    metaData.bitrate = metaData.bitrate.replace("000", "");
+                    metaData.bitrate += getString(R.string.kbps);
+                    tvTrackInfo.setText(metaData.bitrate);
+                }
             }
         });
 
         universalPlayer.setOnAutonomicTrackChangeCallback(new IOperationFinishCallback() {
             @Override
             public void operationFinished() {
-                playableMediaItem = UniversalPlayer.getInstance().getPlayingMediaItem();
-                playlist.updateTracks();
-                initPlayerUI();
-                configurePlayer();
-                initTrackNumbersSection();
+                if (isAdded()) {
+                    playableMediaItem = UniversalPlayer.getInstance().getPlayingMediaItem();
+                    playlist.updateTracks();
+                    initPlayerUI();
+                    configurePlayer();
+                    initTrackNumbersSection();
+                }
             }
         });
     }
@@ -321,14 +325,16 @@ public class FragmentPlayer extends Fragment implements MediaPlayer.OnPreparedLi
         playerPositionUpdater = (PlayerPositionUpdater) new PlayerPositionUpdater(new IOnPositionUpdatedCallback() {
             @Override
             public void poistionUpdated(int currentPoistion) {
-                tvTrackCurrentTime.setText(MediaUtils.formatMsToTimeString(currentPoistion));
-                if (!isChangingProgress) {
-                    if (maxDuration < 0) {
-                        maxDuration = playableMediaItem instanceof RadioItem ? DEFAULT_RADIO_DURATIO
-                                : MediaUtils.timeStringToLong(tvTrackDuration.getText().toString());
+                if (isAdded()) {
+                    tvTrackCurrentTime.setText(MediaUtils.formatMsToTimeString(currentPoistion));
+                    if (!isChangingProgress) {
+                        if (maxDuration < 0) {
+                            maxDuration = playableMediaItem instanceof RadioItem ? DEFAULT_RADIO_DURATIO
+                                    : MediaUtils.timeStringToLong(tvTrackDuration.getText().toString());
+                        }
+                        int progress = (int) (currentPoistion * 100 / maxDuration);
+                        sbPlayerProgress.setProgress(progress);
                     }
-                    int progress = (int) (currentPoistion * 100 / maxDuration);
-                    sbPlayerProgress.setProgress(progress);
                 }
             }
 
@@ -342,13 +348,19 @@ public class FragmentPlayer extends Fragment implements MediaPlayer.OnPreparedLi
 
     @Override
     public void onPrepared(MediaPlayer mediaPlayer) {
-        btnPlay.setImageResource(R.drawable.ic_pause_white);
-        ((IToolbarHolder) getActivity()).getToolbar().setTitle(R.string.now_paying);
-        playlist.updateTracks();
+        if (isAdded()) {
+            if (((IToolbarHolder) getActivity()).getToolbar() != null) {
+                ((IToolbarHolder) getActivity()).getToolbar().setTitle(R.string.now_paying);
+            }
+            btnPlay.setImageResource(R.drawable.ic_pause_white);
+            playlist.updateTracks();
+        }
     }
 
     @Override
     public void onStateChanged(UniversalPlayer.State state) {
-        btnPlay.setImageResource(state == UniversalPlayer.State.PLAYING ? R.drawable.ic_pause_white : R.drawable.ic_play_white);
+        if (isAdded()) {
+            btnPlay.setImageResource(state == UniversalPlayer.State.PLAYING ? R.drawable.ic_pause_white : R.drawable.ic_play_white);
+        }
     }
 }

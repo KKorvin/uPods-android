@@ -237,8 +237,7 @@ public class UniversalPlayer implements MediaPlayer.OnPreparedListener, MediaPla
         }
     }
 
-    private void removeListeners() {
-        //TODO Looks like function shouldn't be call directly
+    public void removeListeners() {
         preparedListener = null;
         playerStateListener = null;
         onMetaDataFetchedCallback = null;

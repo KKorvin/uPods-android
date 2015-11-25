@@ -84,7 +84,9 @@ public class FragmentMediaItemsGrid extends Fragment implements ICustumziedBackP
         ProfileManager.getInstance().setOperationFinishCallback(new IOperationFinishCallback() {
             @Override
             public void operationFinished() {
-                mediaPagesAdapter.notifyDataSetChanged();
+                if (isAdded() && mediaPagesAdapter != null) {
+                    mediaPagesAdapter.notifyDataSetChanged();
+                }
             }
         });
 
@@ -103,10 +105,14 @@ public class FragmentMediaItemsGrid extends Fragment implements ICustumziedBackP
 
     @Override
     public void onDestroy() {
-        DataHolder.getInstance().save(LAST_ITEM_POSITION, vpMedia.getCurrentItem());
-        ProfileManager.getInstance().setOperationFinishCallback(null);
         smallPlayer.destroy();
         super.onDestroy();
+    }
+
+    @Override
+    public void onPause() {
+        DataHolder.getInstance().save(LAST_ITEM_POSITION, vpMedia.getCurrentItem());
+        super.onPause();
     }
 
     @Override

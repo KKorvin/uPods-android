@@ -27,7 +27,7 @@
         android:layout_toLeftOf="@+id/btnSmallPlayerPlay"
         android:layout_toRightOf="@+id/imgSmallPlayerCover"
         android:ellipsize="end"
-        android:maxLines="1"
+        android:singleLine="true"
         android:text="Some text Some text Some text Some text"
         android:textColor="@color/white_material"
         android:textSize="@dimen/default_text_size_18" />
@@ -43,7 +43,7 @@
         android:layout_toLeftOf="@+id/btnSmallPlayerPlay"
         android:layout_toRightOf="@+id/imgSmallPlayerCover"
         android:ellipsize="end"
-        android:maxLines="1"
+        android:singleLine="true"
         android:text="Some text Some text Some text Some text"
         android:textColor="@color/white_material"
         android:textSize="@dimen/default_text_size_14" />
