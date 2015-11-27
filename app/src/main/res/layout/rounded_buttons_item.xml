@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="80dp"
+    android:gravity="center"
+    android:orientation="horizontal">
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:background="@drawable/selector_btn_genres"
+        android:text="@string/genres"
+        android:textColor="@color/white" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:background="@drawable/selector_btn_countries"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:text="@string/categories"
+        android:textColor="@color/white" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:background="@drawable/selector_btn_languages"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:text="@string/languages"
+        android:textColor="@color/white" />
+</LinearLayout>

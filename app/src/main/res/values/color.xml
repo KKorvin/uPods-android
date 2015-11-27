@@ -93,5 +93,9 @@
     <color name="podcast_name_color">#1F1F1F</color>
     <color name="podcast_genre_color">#6D6D6D</color>
 
-
+    <!-- Orange material -->
+    <color name="orange_800">#FF8F00</color>
+    <color name="orange_700">#FFA000</color>
+    <color name="orange_600">#FFB300</color>
+    <color name="orange_500">#FFC107</color>
 </resources>
