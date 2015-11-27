@@ -26,6 +26,7 @@ import com.chickenkiller.upods2.interfaces.IPlayableMediaItem;
 import com.chickenkiller.upods2.models.BannersLayoutItem;
 import com.chickenkiller.upods2.models.MediaItem;
 import com.chickenkiller.upods2.models.MediaItemTitle;
+import com.chickenkiller.upods2.models.RoundedButtonsLayoutItem;
 import com.chickenkiller.upods2.models.ViewHolderBannersLayout;
 import com.chickenkiller.upods2.utils.enums.ContextMenuType;
 import com.chickenkiller.upods2.utils.ui.LetterBitmap;
@@ -44,11 +45,13 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     public static final int HEADER = 1;
     public static final int ITEM = 2;
     public static final int BANNERS_LAYOUT = 3;
+    public static final int ROUNDED_BUTTONS = 4;
     private static final int MAX_CONTENT_LEVEL = 2; //count of items to load (banner, main cards)
     private static final int COVER_IMAGE_SIZE = 80;
 
     private int itemLayout;
     private int titleLayout;
+    private int roundedButtonsLayout;
     private int currentContentLevel;
     private boolean needDestroy;
 
@@ -111,6 +114,13 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     }
 
+    private static class ViewHolderRoundedButtons extends RecyclerView.ViewHolder {
+
+        public ViewHolderRoundedButtons(View view) {
+            super(view);
+        }
+    }
+
     public MediaItemsAdapter(Context mContext, int itemLayout, List<MediaItem> items) {
         super();
         this.items = items;
@@ -126,6 +136,10 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     public MediaItemsAdapter(Context mContext, int itemLayout, int titleLayout) {
         this(mContext, itemLayout, new ArrayList<MediaItem>());
         this.titleLayout = titleLayout;
+    }
+
+    public void setRoundedButtonsLayout(int roundedButtonsLayout) {
+        this.roundedButtonsLayout = roundedButtonsLayout;
     }
 
     public void setFragmentsManager(IFragmentsManager fragmentsManager) {
@@ -149,6 +163,9 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         } else if (viewType == ITEM) {
             view = LayoutInflater.from(parent.getContext()).inflate(itemLayout, parent, false);
             viewHolder = new ViewHolderCardItem(view);
+        } else if (viewType == ROUNDED_BUTTONS) {
+            view = LayoutInflater.from(parent.getContext()).inflate(roundedButtonsLayout, parent, false);
+            viewHolder = new ViewHolderRoundedButtons(view);
         } else {
             view = LayoutInflater.from(parent.getContext()).inflate(titleLayout, parent, false);
             viewHolder = new ViewHolderMediaItemTitle(view);
@@ -255,7 +272,8 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             return BANNERS_LAYOUT;
         if (items.get(position) instanceof MediaItemTitle)
             return HEADER;
-
+        if (items.get(position) instanceof RoundedButtonsLayoutItem)
+            return ROUNDED_BUTTONS;
         return ITEM;
     }
 

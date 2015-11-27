@@ -20,6 +20,7 @@ import com.chickenkiller.upods2.interfaces.IToolbarHolder;
 import com.chickenkiller.upods2.models.MediaItem;
 import com.chickenkiller.upods2.models.MediaItemTitle;
 import com.chickenkiller.upods2.models.RadioItem;
+import com.chickenkiller.upods2.models.RoundedButtonsLayoutItem;
 import com.chickenkiller.upods2.utils.enums.MediaItemType;
 import com.chickenkiller.upods2.utils.ServerApi;
 import com.chickenkiller.upods2.views.AutofitRecyclerView;
@@ -37,7 +38,7 @@ public class FragmentMainFeatured extends Fragment implements IContentLoadListen
 
     public static final String TAG = "main_featured";
     public static final int MEDIA_ITEMS_CARDS_MARGIN = 25;
-    public static final int MEDIA_ITEMS_TYPES_COUNT = 3;
+    public static final int MEDIA_ITEMS_TYPES_COUNT = 4;
 
 
     private AutofitRecyclerView rvMain;
@@ -73,6 +74,7 @@ public class FragmentMainFeatured extends Fragment implements IContentLoadListen
         if (getActivity() instanceof IFragmentsManager) {
             mediaItemsAdapter.setFragmentsManager((IFragmentsManager) getActivity());
         }
+        mediaItemsAdapter.setRoundedButtonsLayout(R.layout.rounded_buttons_item);
         mediaItemsAdapter.setContentLoadListener(this);
 
         //Featured recycle view
@@ -82,8 +84,8 @@ public class FragmentMainFeatured extends Fragment implements IContentLoadListen
             @Override
             public int getSpanSize(int position) {
                 int viewType = mediaItemsAdapter.getItemViewType(position);
-                return (viewType != MediaItemsAdapter.HEADER && viewType != MediaItemsAdapter.BANNERS_LAYOUT) ?
-                        1 : rvMain.getSpanCount();
+                return (viewType != MediaItemsAdapter.HEADER && viewType != MediaItemsAdapter.BANNERS_LAYOUT
+                        && viewType != MediaItemsAdapter.ROUNDED_BUTTONS) ? 1 : rvMain.getSpanCount();
             }
         });
         rvMain.setVisibility(View.INVISIBLE);
@@ -92,9 +94,9 @@ public class FragmentMainFeatured extends Fragment implements IContentLoadListen
         showTops();
 
         //Open search fragment backed from other activity which was started from search
-        if(getActivity().getIntent().hasExtra(ActivityPlayer.ACTIVITY_STARTED_FROM_IN_DEPTH)){
+        if (getActivity().getIntent().hasExtra(ActivityPlayer.ACTIVITY_STARTED_FROM_IN_DEPTH)) {
             int startedFrom = getActivity().getIntent().getIntExtra(ActivityPlayer.ACTIVITY_STARTED_FROM_IN_DEPTH, -1);
-            if(startedFrom == MediaItemType.RADIO_SEARCH.ordinal()){
+            if (startedFrom == MediaItemType.RADIO_SEARCH.ordinal()) {
                 FragmentSearch fragmentSearch = new FragmentSearch();
                 fragmentSearch.setSearchType(MediaItemType.RADIO);
                 ((IFragmentsManager) getActivity()).showFragment(R.id.fl_content, fragmentSearch, FragmentSearch.TAG);
@@ -116,6 +118,8 @@ public class FragmentMainFeatured extends Fragment implements IContentLoadListen
                                     ArrayList<MediaItem> topRadioStations = new ArrayList<MediaItem>();
                                     MediaItemTitle mediaItemTitle = new MediaItemTitle(getString(R.string.top40_chanels), getString(R.string.top40_chanels_subheader));
                                     mediaItemTitle.showButton = true;
+                                    RoundedButtonsLayoutItem roundedButtonsLayoutItem = new RoundedButtonsLayoutItem();
+                                    topRadioStations.add(roundedButtonsLayoutItem);
                                     topRadioStations.add(mediaItemTitle);
                                     topRadioStations.addAll(RadioItem.withJsonArray(jResponse.getJSONArray("result"), getActivity()));
                                     mediaItemsAdapter.addItems(topRadioStations);
