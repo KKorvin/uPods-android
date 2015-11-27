@@ -22,7 +22,7 @@
         android:background="@drawable/selector_btn_countries"
         android:paddingLeft="20dp"
         android:paddingRight="20dp"
-        android:text="@string/categories"
+        android:text="@string/countries"
         android:textColor="@color/white" />
 
     <Button

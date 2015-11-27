@@ -7,22 +7,30 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.chickenkiller.upods2.R;
 import com.chickenkiller.upods2.activity.ActivityPlayer;
+import com.chickenkiller.upods2.controllers.adaperts.CategoriesAdapter;
 import com.chickenkiller.upods2.controllers.adaperts.MediaItemsAdapter;
 import com.chickenkiller.upods2.controllers.internet.BackendManager;
 import com.chickenkiller.upods2.interfaces.IContentLoadListener;
+import com.chickenkiller.upods2.interfaces.ICustumziedBackPress;
 import com.chickenkiller.upods2.interfaces.IFragmentsManager;
+import com.chickenkiller.upods2.interfaces.IOperationFinishWithDataCallback;
 import com.chickenkiller.upods2.interfaces.IRequestCallback;
 import com.chickenkiller.upods2.interfaces.IToolbarHolder;
+import com.chickenkiller.upods2.models.Category;
 import com.chickenkiller.upods2.models.MediaItem;
 import com.chickenkiller.upods2.models.MediaItemTitle;
 import com.chickenkiller.upods2.models.RadioItem;
 import com.chickenkiller.upods2.models.RoundedButtonsLayoutItem;
-import com.chickenkiller.upods2.utils.enums.MediaItemType;
+import com.chickenkiller.upods2.utils.Logger;
 import com.chickenkiller.upods2.utils.ServerApi;
+import com.chickenkiller.upods2.utils.enums.MediaItemType;
 import com.chickenkiller.upods2.views.AutofitRecyclerView;
 import com.chickenkiller.upods2.views.GridSpacingItemDecoration;
 
@@ -30,20 +38,38 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by alonzilberman on 7/10/15.
  */
-public class FragmentMainFeatured extends Fragment implements IContentLoadListener {
+public class FragmentMainFeatured extends Fragment implements IContentLoadListener, AdapterView.OnItemClickListener, ICustumziedBackPress {
 
     public static final String TAG = "main_featured";
     public static final int MEDIA_ITEMS_CARDS_MARGIN = 25;
     public static final int MEDIA_ITEMS_TYPES_COUNT = 4;
-
+    private static final int RADIO_BUTTON_MODE_MEDIA_ITEMS_TYPES_COUNT = 2;
 
     private AutofitRecyclerView rvMain;
+    private ListView lvMain;
+    private CategoriesAdapter categoriesAdapter;
     private MediaItemsAdapter mediaItemsAdapter;
     private ProgressBar pbLoadingFeatured;
+    private View listViewHeader;
+
+    private int currentRoundBtnMode;
+
+
+    private IOperationFinishWithDataCallback iRoundButtonClicked = new IOperationFinishWithDataCallback() {
+        @Override
+        public void operationFinished(Object data) {
+            int btnClicked = (int) data;
+            currentRoundBtnMode = btnClicked;
+            rvMain.setVisibility(View.INVISIBLE);
+            pbLoadingFeatured.setVisibility(View.VISIBLE);
+            loadListView();
+        }
+    };
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -53,6 +79,8 @@ public class FragmentMainFeatured extends Fragment implements IContentLoadListen
         View view = inflater.inflate(R.layout.fragment_main_featured, container, false);
         pbLoadingFeatured = (ProgressBar) view.findViewById(R.id.pbLoadingFeatured);
         rvMain = (AutofitRecyclerView) view.findViewById(R.id.rvMain);
+        lvMain = (ListView) view.findViewById(R.id.lvMain);
+        lvMain.setOnItemClickListener(this);
 
         //Toolbar
         if (getActivity() instanceof IToolbarHolder) {
@@ -76,6 +104,7 @@ public class FragmentMainFeatured extends Fragment implements IContentLoadListen
         }
         mediaItemsAdapter.setRoundedButtonsLayout(R.layout.rounded_buttons_item);
         mediaItemsAdapter.setContentLoadListener(this);
+        mediaItemsAdapter.setiRoundButtonClicked(iRoundButtonClicked);
 
         //Featured recycle view
         rvMain.setHasFixedSize(true);
@@ -84,8 +113,12 @@ public class FragmentMainFeatured extends Fragment implements IContentLoadListen
             @Override
             public int getSpanSize(int position) {
                 int viewType = mediaItemsAdapter.getItemViewType(position);
-                return (viewType != MediaItemsAdapter.HEADER && viewType != MediaItemsAdapter.BANNERS_LAYOUT
-                        && viewType != MediaItemsAdapter.ROUNDED_BUTTONS) ? 1 : rvMain.getSpanCount();
+                if (currentRoundBtnMode > 0) {
+                    return viewType != MediaItemsAdapter.HEADER ? 1 : rvMain.getSpanCount();
+                } else {
+                    return (viewType != MediaItemsAdapter.HEADER && viewType != MediaItemsAdapter.BANNERS_LAYOUT
+                            && viewType != MediaItemsAdapter.ROUNDED_BUTTONS) ? 1 : rvMain.getSpanCount();
+                }
             }
         });
         rvMain.setVisibility(View.INVISIBLE);
@@ -104,7 +137,48 @@ public class FragmentMainFeatured extends Fragment implements IContentLoadListen
             }
         }
 
+        currentRoundBtnMode = -1;
+
         return view;
+    }
+
+    private void loadListView() {
+        BackendManager.getInstance().sendRequest(getCurrentRoundBtnModeListUrl(), new IRequestCallback() {
+            @Override
+            public void onRequestSuccessed(final JSONObject jResponse) {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        List<Category> categories = null;
+                        try {
+                            categories = Category.getCategoriesListFromJSON(jResponse.getJSONArray("result").toString());
+                            categoriesAdapter = new CategoriesAdapter(getActivity(), R.layout.category_item, categories);
+
+                            if (listViewHeader != null && lvMain.getHeaderViewsCount() > 0) {
+                                lvMain.removeHeaderView(listViewHeader);
+                            }
+
+                            LayoutInflater Li = LayoutInflater.from(getActivity());
+                            listViewHeader = Li.inflate(R.layout.category_item_header, null);
+                            ((TextView) listViewHeader.findViewById(R.id.tvCategoriesHeader)).setText(getCurrentRoundBtnModeTitle());
+
+                            pbLoadingFeatured.setVisibility(View.GONE);
+                            lvMain.setVisibility(View.VISIBLE);
+                            lvMain.addHeaderView(listViewHeader, null, false);
+                            lvMain.setAdapter(categoriesAdapter);
+                        } catch (JSONException e) {
+                            Logger.printError(TAG, "Can't load listview with categories (from round btn)");
+                            e.printStackTrace();
+                        }
+                    }
+                });
+            }
+
+            @Override
+            public void onRequestFailed() {
+
+            }
+        });
     }
 
     private void showTops() {
@@ -122,17 +196,7 @@ public class FragmentMainFeatured extends Fragment implements IContentLoadListen
                                     topRadioStations.add(roundedButtonsLayoutItem);
                                     topRadioStations.add(mediaItemTitle);
                                     topRadioStations.addAll(RadioItem.withJsonArray(jResponse.getJSONArray("result"), getActivity()));
-                                    mediaItemsAdapter.addItems(topRadioStations);
-                                    mediaItemsAdapter.notifyContentLoadingStatus();
-                                    rvMain.post(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            GridSpacingItemDecoration gridSpacingItemDecoration = new GridSpacingItemDecoration(rvMain.getSpanCount(), MEDIA_ITEMS_CARDS_MARGIN, true);
-                                            gridSpacingItemDecoration.setGridItemType(MediaItemsAdapter.ITEM);
-                                            gridSpacingItemDecoration.setItemsTypesCount(MEDIA_ITEMS_TYPES_COUNT);
-                                            rvMain.addItemDecoration(gridSpacingItemDecoration);
-                                        }
-                                    });
+                                    updateMediaItems(topRadioStations);
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
@@ -149,6 +213,87 @@ public class FragmentMainFeatured extends Fragment implements IContentLoadListen
         );
     }
 
+    private void updateMediaItems(ArrayList<MediaItem> radioStations) {
+        mediaItemsAdapter.addItems(radioStations);
+        mediaItemsAdapter.notifyContentLoadingStatus();
+        rvMain.post(new Runnable() {
+            @Override
+            public void run() {
+                GridSpacingItemDecoration gridSpacingItemDecoration = new GridSpacingItemDecoration(rvMain.getSpanCount(), MEDIA_ITEMS_CARDS_MARGIN, true);
+                gridSpacingItemDecoration.setGridItemType(MediaItemsAdapter.ITEM);
+                gridSpacingItemDecoration.setItemsTypesCount(currentRoundBtnMode > 0 ? RADIO_BUTTON_MODE_MEDIA_ITEMS_TYPES_COUNT : MEDIA_ITEMS_TYPES_COUNT);
+                rvMain.addItemDecoration(gridSpacingItemDecoration);
+            }
+        });
+    }
+
+    private void loadMediaItems(final Category category) {
+        BackendManager.getInstance().sendRequest(getCurrentRoundBtnModeMediasUrl(category), new IRequestCallback() {
+            @Override
+            public void onRequestSuccessed(final JSONObject jResponse) {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            ArrayList<MediaItem> radiosStations = new ArrayList<MediaItem>();
+                            MediaItemTitle mediaItemTitle = new MediaItemTitle(category.getName());
+                            mediaItemTitle.showButton = false;
+                            radiosStations.add(mediaItemTitle);
+                            radiosStations.addAll(RadioItem.withJsonArray(jResponse.getJSONArray("result"), getActivity()));
+                            updateMediaItems(radiosStations);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+            }
+
+            @Override
+            public void onRequestFailed() {
+
+            }
+        });
+    }
+
+    private String getCurrentRoundBtnModeTitle() {
+        switch (currentRoundBtnMode) {
+            case RoundedButtonsLayoutItem.ROUND_BTN_COUNTRIES:
+                return getString(R.string.countries);
+            case RoundedButtonsLayoutItem.ROUND_BTN_GENRES:
+                return getString(R.string.genres);
+            case RoundedButtonsLayoutItem.ROUND_BTN_LAGUAGES:
+                return getString(R.string.languages);
+            default:
+                return "";
+        }
+    }
+
+    private String getCurrentRoundBtnModeListUrl() {
+        switch (currentRoundBtnMode) {
+            case RoundedButtonsLayoutItem.ROUND_BTN_COUNTRIES:
+                return ServerApi.RADIO_COUNTRIES;
+            case RoundedButtonsLayoutItem.ROUND_BTN_GENRES:
+                return ServerApi.RADIO_CATEGORIES;
+            case RoundedButtonsLayoutItem.ROUND_BTN_LAGUAGES:
+                return ServerApi.RADIO_LANGUAGES;
+            default:
+                return "";
+        }
+    }
+
+    private String getCurrentRoundBtnModeMediasUrl(Category category) {
+        switch (currentRoundBtnMode) {
+            case RoundedButtonsLayoutItem.ROUND_BTN_COUNTRIES:
+                return ServerApi.RADIO_BY_COUNTRY + category.getName();
+            case RoundedButtonsLayoutItem.ROUND_BTN_GENRES:
+                return ServerApi.RADIO_BY_CATEGORIES + category.getId();
+            case RoundedButtonsLayoutItem.ROUND_BTN_LAGUAGES:
+                return ServerApi.RADIO_BY_LANGUAGE + category.getName();
+            default:
+                return "";
+        }
+    }
+
     @Override
     public void onDestroy() {
         mediaItemsAdapter.destroy();
@@ -161,4 +306,36 @@ public class FragmentMainFeatured extends Fragment implements IContentLoadListen
         rvMain.setVisibility(View.VISIBLE);
     }
 
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        Category category = (Category) lvMain.getItemAtPosition(position);
+        mediaItemsAdapter.clearItems();
+        mediaItemsAdapter.clearCurrentContentLevel();
+        mediaItemsAdapter.notifyContentLoadingStatus();
+        lvMain.setVisibility(View.GONE);
+        pbLoadingFeatured.setVisibility(View.VISIBLE);
+        loadMediaItems(category);
+
+    }
+
+    @Override
+    public boolean onBackPressed() {
+        if (currentRoundBtnMode > 0 && rvMain.getVisibility() == View.VISIBLE) {//In button mode + media items are visiable
+            rvMain.setVisibility(View.INVISIBLE);
+            pbLoadingFeatured.setVisibility(View.VISIBLE);
+            loadListView();
+            return false;
+        } else if (currentRoundBtnMode > 0) {
+            lvMain.setVisibility(View.GONE);
+            mediaItemsAdapter.clearCurrentContentLevel();
+            mediaItemsAdapter.clearItems();
+            mediaItemsAdapter.addItems(RadioItem.withOnlyBannersHeader());
+            mediaItemsAdapter.notifyDataSetChanged();
+            pbLoadingFeatured.setVisibility(View.VISIBLE);
+            showTops();
+            return false;
+        }
+        return true;
+    }
 }

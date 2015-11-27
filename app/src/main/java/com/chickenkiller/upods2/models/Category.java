@@ -15,6 +15,7 @@ import java.util.List;
 
 /**
  * Created by alonzilberman on 10/7/15.
+ * Used for podcasts categories, music genres, languages and countries.
  */
 public class Category {
 
@@ -35,18 +36,23 @@ public class Category {
 
     public static List<Category> getPodcastsCategoriesList() {
         String categoriesJsonStr = Prefs.getString(CATEGORIES_PREF, null);
-        ArrayList<Category> podcastsCategories = new ArrayList<>();
+        return getCategoriesListFromJSON(categoriesJsonStr);
+    }
+
+    public static List<Category> getCategoriesListFromJSON(String categoriesJsonStr) {
+        ArrayList<Category> categories = new ArrayList<>();
         try {
             JSONArray jsonCategories = jsonCategories = new JSONArray(categoriesJsonStr);
             for (int i = 0; i < jsonCategories.length(); i++) {
-                podcastsCategories.add(new Category(jsonCategories.getJSONObject(i).getString("name"),
-                        jsonCategories.getJSONObject(i).getInt("id")));
+                String name = jsonCategories.getJSONObject(i).has("name") ? jsonCategories.getJSONObject(i).getString("name") : "";
+                int id = jsonCategories.getJSONObject(i).has("id") ? jsonCategories.getJSONObject(i).getInt("id") : -1;
+                categories.add(new Category(name, id));
             }
         } catch (JSONException e) {
             Logger.printInfo(CATEGORIES_LOG, "Can't get podcasts categories from shared prefs");
             e.printStackTrace();
         }
-        return podcastsCategories;
+        return categories;
     }
 
     public String getName() {
@@ -60,7 +66,7 @@ public class Category {
     /**
      * Call it in application launch to put podcasts categories into the memory
      */
-    public static void initCatrgories() {
+    public static void initPodcastsCatrgories() {
         String categoriesJsonStr = Prefs.getString(CATEGORIES_PREF, null);
         if (categoriesJsonStr == null) {
             BackendManager.getInstance().sendRequest(ServerApi.PODCAST_CATEGORIES, new IRequestCallback() {

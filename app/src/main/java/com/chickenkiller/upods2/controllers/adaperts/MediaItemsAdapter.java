@@ -22,6 +22,7 @@ import com.chickenkiller.upods2.fragments.FragmentMediaItemDetails;
 import com.chickenkiller.upods2.interfaces.IContentLoadListener;
 import com.chickenkiller.upods2.interfaces.IContextMenuManager;
 import com.chickenkiller.upods2.interfaces.IFragmentsManager;
+import com.chickenkiller.upods2.interfaces.IOperationFinishWithDataCallback;
 import com.chickenkiller.upods2.interfaces.IPlayableMediaItem;
 import com.chickenkiller.upods2.models.BannersLayoutItem;
 import com.chickenkiller.upods2.models.MediaItem;
@@ -59,6 +60,7 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     private Context mContext;
     private IFragmentsManager fragmentsManager;
     private IContentLoadListener iContentLoadListener;
+    private IOperationFinishWithDataCallback iRoundButtonClicked;
 
 
     private static class ViewHolderCardItem extends RecyclerView.ViewHolder {
@@ -116,9 +118,31 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     private static class ViewHolderRoundedButtons extends RecyclerView.ViewHolder {
 
-        public ViewHolderRoundedButtons(View view) {
+        public ViewHolderRoundedButtons(View view, final IOperationFinishWithDataCallback iRoundButtonClicked) {
             super(view);
+            if (iRoundButtonClicked != null) {
+                view.findViewById(R.id.btnRoundedGenres).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        iRoundButtonClicked.operationFinished(RoundedButtonsLayoutItem.ROUND_BTN_GENRES);
+                    }
+                });
+                view.findViewById(R.id.btnRoundedCountries).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        iRoundButtonClicked.operationFinished(RoundedButtonsLayoutItem.ROUND_BTN_COUNTRIES);
+                    }
+                });
+
+                view.findViewById(R.id.btnRoundedLanguages).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        iRoundButtonClicked.operationFinished(RoundedButtonsLayoutItem.ROUND_BTN_LAGUAGES);
+                    }
+                });
+            }
         }
+
     }
 
     public MediaItemsAdapter(Context mContext, int itemLayout, List<MediaItem> items) {
@@ -146,6 +170,10 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         this.fragmentsManager = fragmentsManager;
     }
 
+    public void setiRoundButtonClicked(IOperationFinishWithDataCallback iRoundButtonClicked) {
+        this.iRoundButtonClicked = iRoundButtonClicked;
+    }
+
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = null;
@@ -165,7 +193,7 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             viewHolder = new ViewHolderCardItem(view);
         } else if (viewType == ROUNDED_BUTTONS) {
             view = LayoutInflater.from(parent.getContext()).inflate(roundedButtonsLayout, parent, false);
-            viewHolder = new ViewHolderRoundedButtons(view);
+            viewHolder = new ViewHolderRoundedButtons(view, iRoundButtonClicked);
         } else {
             view = LayoutInflater.from(parent.getContext()).inflate(titleLayout, parent, false);
             viewHolder = new ViewHolderMediaItemTitle(view);
@@ -285,6 +313,10 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     public void addItems(ArrayList<MediaItem> items) {
         this.items.addAll(items);
         this.notifyDataSetChanged();
+    }
+
+    public void clearCurrentContentLevel() {
+        currentContentLevel = 0;
     }
 
     public void clearItems() {

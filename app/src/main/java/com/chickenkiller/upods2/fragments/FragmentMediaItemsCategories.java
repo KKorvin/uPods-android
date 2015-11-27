@@ -114,11 +114,6 @@ public class FragmentMediaItemsCategories extends Fragment implements AdapterVie
         this.mediaItemType = mediaItemType;
     }
 
-    @Override
-    public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-        Category category = (Category) lvCategories.getItemAtPosition(position);
-        loadMediaItems(category);
-    }
 
     private void loadMediaItems(final Category category) {
         lvCategories.setVisibility(View.GONE);
@@ -173,7 +168,6 @@ public class FragmentMediaItemsCategories extends Fragment implements AdapterVie
         super.onDestroy();
     }
 
-
     @Override
     public boolean onBackPressed() {
         if (rvMain.getVisibility() == View.VISIBLE || pbLoadingMediaItems.getVisibility() == View.VISIBLE) {
@@ -183,5 +177,11 @@ public class FragmentMediaItemsCategories extends Fragment implements AdapterVie
             return false;
         }
         return true;
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+        Category category = (Category) lvCategories.getItemAtPosition(position);
+        loadMediaItems(category);
     }
 }

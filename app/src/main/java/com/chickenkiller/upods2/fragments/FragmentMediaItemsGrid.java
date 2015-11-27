@@ -129,13 +129,9 @@ public class FragmentMediaItemsGrid extends Fragment implements ICustumziedBackP
 
     @Override
     public boolean onBackPressed() {
-        if (mediaItemType == MediaItemType.PODCAST && vpMedia.getCurrentItem() == CATEGORIES_FRAGMENT_POSITION) {
-            FragmentMediaItemsCategories fCategories = (FragmentMediaItemsCategories) vpMedia.getAdapter().instantiateItem(vpMedia, vpMedia.getCurrentItem());
-            if (fCategories instanceof ICustumziedBackPress) {
-                return fCategories.onBackPressed();
-            }
-        } else if (mediaItemType == MediaItemType.RADIO) {
-            getActivity().finish();
+        Fragment fragment = (Fragment) vpMedia.getAdapter().instantiateItem(vpMedia, vpMedia.getCurrentItem());
+        if (fragment instanceof ICustumziedBackPress) {
+            return ((ICustumziedBackPress) fragment).onBackPressed();
         }
         return true;
     }
