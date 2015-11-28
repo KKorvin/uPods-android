@@ -5,6 +5,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.support.v7.app.NotificationCompat;
 import android.widget.RemoteViews;
 
@@ -15,12 +16,14 @@ import com.chickenkiller.upods2.activity.ActivityPlayer;
 import com.chickenkiller.upods2.controllers.app.MainBroadcastRecivier;
 import com.chickenkiller.upods2.controllers.player.UniversalPlayer;
 import com.chickenkiller.upods2.interfaces.IPlayableMediaItem;
+import com.chickenkiller.upods2.utils.ui.LetterBitmap;
 
 /**
  * Created by alonzilberman on 7/31/15.
  */
 public class DefaultNotificationPanel extends PlayerNotificationPanel {
     private static int NOTIFICATION_ID = 12;
+    private static int COVER_IMAGE_SIZE = 50;
     private PendingIntent playIntent;
     private PendingIntent pauseIntent;
     private PendingIntent forwardIntent;
@@ -52,15 +55,22 @@ public class DefaultNotificationPanel extends PlayerNotificationPanel {
         this.nManager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
         this.nManager.notify(NOTIFICATION_ID, notification);
 
-        Glide.with(mContext)
-                .load(playableMediaItem.getCoverImageUrl())
-                .asBitmap()
-                .into(new NotificationTarget(
-                        mContext,
-                        remoteView,
-                        R.id.imgPlayerNtBar,
-                        notification,
-                        NOTIFICATION_ID));
+        if (playableMediaItem.getCoverImageUrl() != null) {
+            Glide.with(mContext)
+                    .load(playableMediaItem.getCoverImageUrl())
+                    .asBitmap()
+                    .into(new NotificationTarget(
+                            mContext,
+                            remoteView,
+                            R.id.imgPlayerNtBar,
+                            notification,
+                            NOTIFICATION_ID));
+        } else {
+            final LetterBitmap letterBitmap = new LetterBitmap(mContext);
+            Bitmap letterTile = letterBitmap.getLetterTile(playableMediaItem.getName(), playableMediaItem.getName(), COVER_IMAGE_SIZE, COVER_IMAGE_SIZE);
+            remoteView.setImageViewBitmap(R.id.imgPlayerNtBar, letterTile);
+            this.nManager.notify(NOTIFICATION_ID, notification);
+        }
     }
 
     @Override

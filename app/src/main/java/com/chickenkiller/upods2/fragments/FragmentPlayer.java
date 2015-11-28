@@ -42,6 +42,7 @@ import com.chickenkiller.upods2.models.Track;
 import com.chickenkiller.upods2.utils.DataHolder;
 import com.chickenkiller.upods2.utils.Logger;
 import com.chickenkiller.upods2.utils.MediaUtils;
+import com.chickenkiller.upods2.utils.ui.LetterBitmap;
 import com.chickenkiller.upods2.utils.ui.UIHelper;
 
 
@@ -52,6 +53,7 @@ public class FragmentPlayer extends Fragment implements MediaPlayer.OnPreparedLi
     public static String TAG = "fragmentPlayer";
     public static final long DEFAULT_RADIO_DURATIO = 1000000;
     private static final float TOOLBAR_TEXT_SIZE = 20f;
+    private static final int COVER_IMAGE_SIZE = 150;
 
     private IPlayableMediaItem playableMediaItem;
     private UniversalPlayer universalPlayer;
@@ -200,15 +202,23 @@ public class FragmentPlayer extends Fragment implements MediaPlayer.OnPreparedLi
             tvPlayerTitle.setText(playableMediaItem.getName());
         }
         tvPlayserSubtitle.setText(playableMediaItem.getSubHeader());
-        Glide.with(getActivity()).load(playableMediaItem.getCoverImageUrl()).crossFade().into(new GlideDrawableImageViewTarget(imgPlayerCover) {
-            @Override
-            public void onResourceReady(GlideDrawable drawable, GlideAnimation anim) {
-                super.onResourceReady(drawable, anim);
-                Bitmap bitmap = ((GlideBitmapDrawable) drawable).getBitmap();
-                int dominantColor = UIHelper.getDominantColor(bitmap);
-                rlTopSectionBckg.setBackgroundColor(dominantColor);
-            }
-        });
+        if (playableMediaItem.getCoverImageUrl() == null) {
+            final LetterBitmap letterBitmap = new LetterBitmap(getActivity());
+            Bitmap letterTile = letterBitmap.getLetterTile(playableMediaItem.getName(), playableMediaItem.getName(), COVER_IMAGE_SIZE, COVER_IMAGE_SIZE);
+            imgPlayerCover.setImageBitmap(letterTile);
+            int dominantColor = UIHelper.getDominantColor(letterTile);
+            rlTopSectionBckg.setBackgroundColor(dominantColor);
+        } else {
+            Glide.with(getActivity()).load(playableMediaItem.getCoverImageUrl()).crossFade().into(new GlideDrawableImageViewTarget(imgPlayerCover) {
+                @Override
+                public void onResourceReady(GlideDrawable drawable, GlideAnimation anim) {
+                    super.onResourceReady(drawable, anim);
+                    Bitmap bitmap = ((GlideBitmapDrawable) drawable).getBitmap();
+                    int dominantColor = UIHelper.getDominantColor(bitmap);
+                    rlTopSectionBckg.setBackgroundColor(dominantColor);
+                }
+            });
+        }
         if (playableMediaItem instanceof ITrackable) {
             Track selectedTrack = ((ITrackable) playableMediaItem).getSelectedTrack();
             tvTrackDuration.setText(selectedTrack.getDuration());

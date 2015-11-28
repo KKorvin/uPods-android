@@ -44,6 +44,7 @@ import com.chickenkiller.upods2.models.Podcast;
 import com.chickenkiller.upods2.utils.DataHolder;
 import com.chickenkiller.upods2.utils.enums.ContextMenuType;
 import com.chickenkiller.upods2.utils.enums.MediaItemType;
+import com.chickenkiller.upods2.utils.ui.LetterBitmap;
 import com.chickenkiller.upods2.utils.ui.UIHelper;
 import com.chickenkiller.upods2.views.DetailsScrollView;
 
@@ -64,6 +65,7 @@ public class FragmentMediaItemDetails extends Fragment implements View.OnTouchLi
     private static final float BOTTOM_SCROLL_BORDER_PERCENT = 0.35f;
     private static final float TOP_SCROLL_BORDER_PERCENT = 1f;
     private static final float COVER_SCALE_FACTOR = 2f;
+    private static final int COVER_IMAGE_SIZE = 80;
     private static int bottomScrollBorder;
     private static int topScrollBorder;
     public static String TAG = "media_details";
@@ -200,18 +202,27 @@ public class FragmentMediaItemDetails extends Fragment implements View.OnTouchLi
      * Init colors and settings of header images
      */
     private void initImagesColors() {
-        Glide.with(getActivity()).load(playableItem.getCoverImageUrl()).crossFade().into(new GlideDrawableImageViewTarget(imgDetailedTopCover) {
-            @Override
-            public void onResourceReady(GlideDrawable drawable, GlideAnimation anim) {
-                super.onResourceReady(drawable, anim);
-                Bitmap bitmap = ((GlideBitmapDrawable) drawable).getBitmap();
-                int dominantColor = UIHelper.getDominantColor(bitmap);
-                viewDetailedHeader.setBackgroundColor(dominantColor);
-                //viewDetailsDevider.setBackgroundColor(dominantColor);
-                tvDetailedDesHeader.setTextColor(dominantColor);
-                imgBluredCover.setImageBitmap(UIHelper.createScaledBitmap(bitmap, COVER_SCALE_FACTOR));
-            }
-        });
+        if (playableItem.getCoverImageUrl() == null) {
+            final LetterBitmap letterBitmap = new LetterBitmap(getActivity());
+            Bitmap letterTile = letterBitmap.getLetterTile(playableItem.getName(), playableItem.getName(), COVER_IMAGE_SIZE, COVER_IMAGE_SIZE);
+            imgDetailedTopCover.setImageBitmap(letterTile);
+            int dominantColor = UIHelper.getDominantColor(letterTile);
+            viewDetailedHeader.setBackgroundColor(dominantColor);
+            tvDetailedDesHeader.setTextColor(dominantColor);
+            imgBluredCover.setImageBitmap(UIHelper.createScaledBitmap(letterTile, COVER_SCALE_FACTOR));
+        } else {
+            Glide.with(getActivity()).load(playableItem.getCoverImageUrl()).crossFade().into(new GlideDrawableImageViewTarget(imgDetailedTopCover) {
+                @Override
+                public void onResourceReady(GlideDrawable drawable, GlideAnimation anim) {
+                    super.onResourceReady(drawable, anim);
+                    Bitmap bitmap = ((GlideBitmapDrawable) drawable).getBitmap();
+                    int dominantColor = UIHelper.getDominantColor(bitmap);
+                    viewDetailedHeader.setBackgroundColor(dominantColor);
+                    tvDetailedDesHeader.setTextColor(dominantColor);
+                    imgBluredCover.setImageBitmap(UIHelper.createScaledBitmap(bitmap, COVER_SCALE_FACTOR));
+                }
+            });
+        }
     }
 
     private void initSubscribeBtn() {
