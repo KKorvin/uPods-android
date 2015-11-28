@@ -32,7 +32,6 @@ import com.chickenkiller.upods2.utils.enums.ContextMenuType;
 import com.chickenkiller.upods2.utils.enums.MediaItemType;
 import com.chickenkiller.upods2.utils.ui.UIHelper;
 import com.chickenkiller.upods2.views.SlidingMenu;
-import com.facebook.appevents.AppEventsLogger;
 
 public class ActivityMain extends BasicActivity implements IOverlayable, IToolbarHolder, ISlidingMenuHolder {
 
@@ -164,14 +163,14 @@ public class ActivityMain extends BasicActivity implements IOverlayable, IToolba
     protected void onResume() {
         super.onResume();
         //Facebook analytics
-        AppEventsLogger.activateApp(this);
+        //AppEventsLogger.activateApp(this);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         //Facebook analytics
-        AppEventsLogger.deactivateApp(this);
+        //AppEventsLogger.deactivateApp(this);
     }
 
     @Override
