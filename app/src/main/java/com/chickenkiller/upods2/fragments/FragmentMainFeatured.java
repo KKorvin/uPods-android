@@ -220,7 +220,7 @@ public class FragmentMainFeatured extends Fragment implements IContentLoadListen
         rvMain.post(new Runnable() {
             @Override
             public void run() {
-                if(gridSpacingItemDecoration!=null) {
+                if (gridSpacingItemDecoration != null) {
                     rvMain.removeItemDecoration(gridSpacingItemDecoration);
                 }
                 gridSpacingItemDecoration = new GridSpacingItemDecoration(rvMain.getSpanCount(), MEDIA_ITEMS_CARDS_MARGIN, true);
@@ -300,7 +300,6 @@ public class FragmentMainFeatured extends Fragment implements IContentLoadListen
 
     @Override
     public void onDestroy() {
-        mediaItemsAdapter.destroy();
         super.onDestroy();
     }
 

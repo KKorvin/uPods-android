@@ -164,7 +164,6 @@ public class FragmentMediaItemsCategories extends Fragment implements AdapterVie
 
     @Override
     public void onDestroy() {
-        mediaItemsAdapter.destroy();
         super.onDestroy();
     }
 

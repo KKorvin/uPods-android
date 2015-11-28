@@ -17,13 +17,14 @@ import com.chickenkiller.upods2.controllers.app.MainBroadcastRecivier;
 import com.chickenkiller.upods2.controllers.player.UniversalPlayer;
 import com.chickenkiller.upods2.interfaces.IPlayableMediaItem;
 import com.chickenkiller.upods2.utils.ui.LetterBitmap;
+import com.chickenkiller.upods2.utils.ui.UIHelper;
 
 /**
  * Created by alonzilberman on 7/31/15.
  */
 public class DefaultNotificationPanel extends PlayerNotificationPanel {
+    private static final int COVER_IMAGE_SIZE =  UIHelper.dpToPixels(50);
     private static int NOTIFICATION_ID = 12;
-    private static int COVER_IMAGE_SIZE = 50;
     private PendingIntent playIntent;
     private PendingIntent pauseIntent;
     private PendingIntent forwardIntent;

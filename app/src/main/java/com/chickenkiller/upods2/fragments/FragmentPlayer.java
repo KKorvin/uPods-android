@@ -53,7 +53,7 @@ public class FragmentPlayer extends Fragment implements MediaPlayer.OnPreparedLi
     public static String TAG = "fragmentPlayer";
     public static final long DEFAULT_RADIO_DURATIO = 1000000;
     private static final float TOOLBAR_TEXT_SIZE = 20f;
-    private static final int COVER_IMAGE_SIZE = 150;
+    private static final int COVER_IMAGE_SIZE = UIHelper.dpToPixels(100);
 
     private IPlayableMediaItem playableMediaItem;
     private UniversalPlayer universalPlayer;

@@ -48,13 +48,13 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     public static final int BANNERS_LAYOUT = 3;
     public static final int ROUNDED_BUTTONS = 4;
     private static final int MAX_CONTENT_LEVEL = 2; //count of items to load (banner, main cards)
-    private static final int COVER_IMAGE_SIZE = 80;
+    private static final int COVER_IMAGE_SIZE = UIHelper.dpToPixels(80);
+    ;
 
     private int itemLayout;
     private int titleLayout;
     private int roundedButtonsLayout;
     private int currentContentLevel;
-    private boolean needDestroy;
 
     private List<MediaItem> items;
     private Context mContext;
@@ -341,10 +341,6 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         if (currentContentLevel == MAX_CONTENT_LEVEL && iContentLoadListener != null) {
             iContentLoadListener.onContentLoaded();
         }
-    }
-
-    public void destroy() {
-        this.needDestroy = true;
     }
 
 }

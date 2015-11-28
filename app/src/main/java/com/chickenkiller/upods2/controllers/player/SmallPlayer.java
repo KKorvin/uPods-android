@@ -2,6 +2,7 @@ package com.chickenkiller.upods2.controllers.player;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.media.MediaPlayer;
 import android.os.AsyncTask;
 import android.view.View;
@@ -24,11 +25,15 @@ import com.chickenkiller.upods2.interfaces.ITrackable;
 import com.chickenkiller.upods2.models.Podcast;
 import com.chickenkiller.upods2.models.Track;
 import com.chickenkiller.upods2.utils.MediaUtils;
+import com.chickenkiller.upods2.utils.ui.LetterBitmap;
+import com.chickenkiller.upods2.utils.ui.UIHelper;
 
 /**
  * Created by alonzilberman on 8/5/15.
  */
 public class SmallPlayer implements IPlayerStateListener, View.OnClickListener, MediaPlayer.OnPreparedListener {
+
+    private static final int COVER_IMAGE_SIZE = UIHelper.dpToPixels(64);
 
     private ImageView imgCover;
     private TextView tvTitle;
@@ -81,7 +86,13 @@ public class SmallPlayer implements IPlayerStateListener, View.OnClickListener, 
                 tvTitle.setText(playingMediaItem.getName());
             }
             this.tvSubTtitle.setText(playingMediaItem.getSubHeader());
-            Glide.with(mActivity).load(playingMediaItem.getCoverImageUrl()).crossFade().into(new GlideDrawableImageViewTarget(imgCover));
+            if (playingMediaItem.getCoverImageUrl() == null) {
+                final LetterBitmap letterBitmap = new LetterBitmap(mActivity);
+                Bitmap letterTile = letterBitmap.getLetterTile(playingMediaItem.getName(), playingMediaItem.getName(), COVER_IMAGE_SIZE, COVER_IMAGE_SIZE);
+                imgCover.setImageBitmap(letterTile);
+            } else {
+                Glide.with(mActivity).load(playingMediaItem.getCoverImageUrl()).crossFade().into(new GlideDrawableImageViewTarget(imgCover));
+            }
         } else {
             this.rlSmallPLayer.setVisibility(View.GONE);
         }

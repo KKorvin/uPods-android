@@ -147,7 +147,6 @@ public class FragmentPodcastFeatured extends Fragment implements IContentLoadLis
 
     @Override
     public void onDestroy() {
-        mediaItemsAdapter.destroy();
         super.onDestroy();
     }
 

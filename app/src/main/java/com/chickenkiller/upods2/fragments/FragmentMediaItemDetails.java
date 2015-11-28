@@ -65,7 +65,8 @@ public class FragmentMediaItemDetails extends Fragment implements View.OnTouchLi
     private static final float BOTTOM_SCROLL_BORDER_PERCENT = 0.35f;
     private static final float TOP_SCROLL_BORDER_PERCENT = 1f;
     private static final float COVER_SCALE_FACTOR = 2f;
-    private static final int COVER_IMAGE_SIZE = 80;
+    private static final int COVER_IMAGE_SIZE = UIHelper.dpToPixels(80);
+    ;
     private static int bottomScrollBorder;
     private static int topScrollBorder;
     public static String TAG = "media_details";
