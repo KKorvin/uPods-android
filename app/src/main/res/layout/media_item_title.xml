@@ -7,21 +7,20 @@
     <TextView
         android:id="@+id/tvMediaCardTitle"
         android:layout_width="wrap_content"
-        android:layout_alignParentTop="true"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
+        android:layout_alignParentTop="true"
         android:layout_marginLeft="15dp"
+        android:layout_marginTop="15dp"
+        android:fontFamily="sans-serif-medium"
         android:text="@string/top40_chanels"
         android:textColor="@color/gray_202020"
-        android:fontFamily="sans-serif-medium"
-        android:textSize="@dimen/default_text_size_18"
-         />
+        android:textSize="@dimen/default_text_size_18" />
 
     <TextView
         android:id="@+id/tvMediaCardSubTitle"
         android:layout_width="wrap_content"
-        android:layout_below="@+id/tvMediaCardTitle"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/tvMediaCardTitle"
         android:layout_marginBottom="7dp"
         android:layout_marginLeft="15dp"
         android:text="@string/top40_chanels_subheader"
@@ -31,13 +30,13 @@
     <Button
         android:id="@+id/btnMediaTitleMore"
         android:layout_width="65dp"
-        android:textColor="@color/white_material"
-        android:layout_height="40dp"
-        android:textSize="@dimen/default_text_size_12"
-        android:text="@string/btn_more"
+        android:layout_height="27dp"
         android:layout_alignParentRight="true"
-        android:backgroundTint="@color/green_600"
         android:layout_marginRight="19dp"
-        android:layout_marginTop="18dp" />
+        android:layout_marginTop="18dp"
+        android:background="@drawable/selector_btn_more"
+        android:text="@string/btn_more"
+        android:textColor="@color/white_material"
+        android:textSize="@dimen/default_text_size_12" />
 
 </RelativeLayout>
