@@ -51,6 +51,7 @@ public class FragmentMainFeatured extends Fragment implements IContentLoadListen
     private static final int RADIO_BUTTON_MODE_MEDIA_ITEMS_TYPES_COUNT = 2;
 
     private AutofitRecyclerView rvMain;
+    private GridSpacingItemDecoration gridSpacingItemDecoration;
     private ListView lvMain;
     private CategoriesAdapter categoriesAdapter;
     private MediaItemsAdapter mediaItemsAdapter;
@@ -219,7 +220,10 @@ public class FragmentMainFeatured extends Fragment implements IContentLoadListen
         rvMain.post(new Runnable() {
             @Override
             public void run() {
-                GridSpacingItemDecoration gridSpacingItemDecoration = new GridSpacingItemDecoration(rvMain.getSpanCount(), MEDIA_ITEMS_CARDS_MARGIN, true);
+                if(gridSpacingItemDecoration!=null) {
+                    rvMain.removeItemDecoration(gridSpacingItemDecoration);
+                }
+                gridSpacingItemDecoration = new GridSpacingItemDecoration(rvMain.getSpanCount(), MEDIA_ITEMS_CARDS_MARGIN, true);
                 gridSpacingItemDecoration.setGridItemType(MediaItemsAdapter.ITEM);
                 gridSpacingItemDecoration.setItemsTypesCount(currentRoundBtnMode > 0 ? RADIO_BUTTON_MODE_MEDIA_ITEMS_TYPES_COUNT : MEDIA_ITEMS_TYPES_COUNT);
                 rvMain.addItemDecoration(gridSpacingItemDecoration);
@@ -327,11 +331,12 @@ public class FragmentMainFeatured extends Fragment implements IContentLoadListen
             loadListView();
             return false;
         } else if (currentRoundBtnMode > 0) {
+            currentRoundBtnMode = -1;
             lvMain.setVisibility(View.GONE);
             mediaItemsAdapter.clearCurrentContentLevel();
+            mediaItemsAdapter.notifyContentLoadingStatus();
             mediaItemsAdapter.clearItems();
             mediaItemsAdapter.addItems(RadioItem.withOnlyBannersHeader());
-            mediaItemsAdapter.notifyDataSetChanged();
             pbLoadingFeatured.setVisibility(View.VISIBLE);
             showTops();
             return false;
