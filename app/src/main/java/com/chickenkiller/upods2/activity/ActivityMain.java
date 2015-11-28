@@ -27,11 +27,12 @@ import com.chickenkiller.upods2.models.Podcast;
 import com.chickenkiller.upods2.models.Track;
 import com.chickenkiller.upods2.utils.ContextMenuHelper;
 import com.chickenkiller.upods2.utils.DataHolder;
-import com.chickenkiller.upods2.utils.enums.ContextMenuType;
 import com.chickenkiller.upods2.utils.Logger;
+import com.chickenkiller.upods2.utils.enums.ContextMenuType;
 import com.chickenkiller.upods2.utils.enums.MediaItemType;
 import com.chickenkiller.upods2.utils.ui.UIHelper;
 import com.chickenkiller.upods2.views.SlidingMenu;
+import com.facebook.appevents.AppEventsLogger;
 
 public class ActivityMain extends BasicActivity implements IOverlayable, IToolbarHolder, ISlidingMenuHolder {
 
@@ -157,6 +158,20 @@ public class ActivityMain extends BasicActivity implements IOverlayable, IToolba
     @Override
     public void setSlidingMenuHeader(String itemName) {
         slidingMenu.getAdapter().setSelectedRow(itemName);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        //Facebook analytics
+        AppEventsLogger.activateApp(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        //Facebook analytics
+        AppEventsLogger.deactivateApp(this);
     }
 
     @Override
