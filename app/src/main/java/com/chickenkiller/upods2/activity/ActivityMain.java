@@ -1,6 +1,7 @@
 package com.chickenkiller.upods2.activity;
 
 import android.animation.ObjectAnimator;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
@@ -15,9 +16,11 @@ import android.widget.Toast;
 import com.chickenkiller.upods2.R;
 import com.chickenkiller.upods2.controllers.app.ProfileManager;
 import com.chickenkiller.upods2.fragments.FragmentMediaItemsGrid;
+import com.chickenkiller.upods2.fragments.FragmentProfile;
 import com.chickenkiller.upods2.fragments.FragmentSearch;
 import com.chickenkiller.upods2.fragments.FragmentWellcome;
 import com.chickenkiller.upods2.interfaces.ICustumziedBackPress;
+import com.chickenkiller.upods2.interfaces.ILoginManager;
 import com.chickenkiller.upods2.interfaces.IOverlayable;
 import com.chickenkiller.upods2.interfaces.IPlayableMediaItem;
 import com.chickenkiller.upods2.interfaces.ISlidingMenuHolder;
@@ -32,8 +35,9 @@ import com.chickenkiller.upods2.utils.enums.ContextMenuType;
 import com.chickenkiller.upods2.utils.enums.MediaItemType;
 import com.chickenkiller.upods2.utils.ui.UIHelper;
 import com.chickenkiller.upods2.views.SlidingMenu;
+import com.facebook.CallbackManager;
 
-public class ActivityMain extends BasicActivity implements IOverlayable, IToolbarHolder, ISlidingMenuHolder {
+public class ActivityMain extends BasicActivity implements IOverlayable, IToolbarHolder, ISlidingMenuHolder, ILoginManager {
 
     private static final int MIN_NUMBER_FRAGMENTS_IN_STACK = 2;
     private static final float MAX_OVERLAY_LEVEL = 0.8f;
@@ -45,11 +49,16 @@ public class ActivityMain extends BasicActivity implements IOverlayable, IToolba
 
     public static boolean isFirstRun = true;
 
+    CallbackManager callbackManager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         vOverlay = findViewById(R.id.vOverlay);
+
+        //Social
+        callbackManager = CallbackManager.Factory.create();
 
         //Toolbar
         toolbar = (Toolbar) findViewById(R.id.toolbar_main);
@@ -231,5 +240,18 @@ public class ActivityMain extends BasicActivity implements IOverlayable, IToolba
             ContextMenuHelper.removeDonwloadedTrack(this, track, (IPlayableMediaItem) mediaItem, onContextItemSelected);
         }
         return super.onContextItemSelected(item);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (getFragmentManager().findFragmentByTag(getLatestFragmentTag()) instanceof FragmentProfile) {
+            getFragmentManager().findFragmentByTag(getLatestFragmentTag()).onActivityResult(requestCode, resultCode, data);
+        }
+    }
+
+    @Override
+    public CallbackManager getFacebookCallbackManager() {
+        return callbackManager;
     }
 }

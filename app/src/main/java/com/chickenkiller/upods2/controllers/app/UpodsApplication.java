@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.ContextWrapper;
 
 import com.chickenkiller.upods2.models.Category;
+import com.facebook.FacebookSdk;
 import com.pixplicity.easyprefs.library.Prefs;
 
 /**
@@ -17,6 +18,7 @@ public class UpodsApplication extends Application {
     @Override
     public void onCreate() {
         applicationContext = getApplicationContext();
+        FacebookSdk.sdkInitialize(applicationContext);
         new Prefs.Builder()
                 .setContext(this)
                 .setMode(ContextWrapper.MODE_PRIVATE)

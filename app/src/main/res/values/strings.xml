@@ -1,5 +1,9 @@
 <resources>
 
+
+    <!-- Social -->
+    <string name="facebook_app_id">916102948459538</string>
+
     <!-- Name of App Block -->
     <string name="app_name">AirTune</string>
 

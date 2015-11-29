@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import com.chickenkiller.upods2.R;
 import com.chickenkiller.upods2.fragments.FragmentMediaItemsGrid;
+import com.chickenkiller.upods2.fragments.FragmentProfile;
 import com.chickenkiller.upods2.fragments.FragmentSettings;
 import com.chickenkiller.upods2.interfaces.IFragmentsManager;
 import com.chickenkiller.upods2.interfaces.ISlidingMenuManager;
@@ -148,6 +149,9 @@ public class SlidingMenuAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                         FragmentMediaItemsGrid fragmentMediaItemsGrid = new FragmentMediaItemsGrid();
                         fragmentMediaItemsGrid.setMediaItemType(MediaItemType.RADIO);
                         fragmentsManager.showFragment(R.id.fl_content, fragmentMediaItemsGrid, FragmentMediaItemsGrid.TAG);
+                    } else if (clickedMenuItem.getTitle().equals(context.getString(R.string.profile_my_profile))) {
+                        FragmentProfile fragmentProfile = new FragmentProfile();
+                        fragmentsManager.showFragment(R.id.fl_content, fragmentProfile, FragmentProfile.TAG);
                     } else {
                         Toast.makeText(context, "TEST" + clickedMenuItem.getTitle(), Toast.LENGTH_SHORT).show();
                     }
