@@ -19,6 +19,7 @@ public class UpodsApplication extends Application {
     public void onCreate() {
         applicationContext = getApplicationContext();
         FacebookSdk.sdkInitialize(applicationContext);
+        LoginMaster.getInstance().init();
         new Prefs.Builder()
                 .setContext(this)
                 .setMode(ContextWrapper.MODE_PRIVATE)

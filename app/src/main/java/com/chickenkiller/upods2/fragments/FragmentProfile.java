@@ -8,7 +8,9 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import com.chickenkiller.upods2.R;
+import com.chickenkiller.upods2.controllers.app.LoginMaster;
 import com.chickenkiller.upods2.interfaces.ILoginManager;
+import com.chickenkiller.upods2.utils.Logger;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.login.LoginResult;
@@ -41,7 +43,7 @@ public class FragmentProfile extends Fragment {
 
         @Override
         public void onError(FacebookException exception) {
-            // App code
+            Logger.printError("Facebook login error: ", exception.toString());
         }
     };
 
@@ -51,9 +53,15 @@ public class FragmentProfile extends Fragment {
         loginManager = (ILoginManager) getActivity();
         lnLogein = (LinearLayout) view.findViewById(R.id.lnLogin);
         lnLogedin = (LinearLayout) view.findViewById(R.id.lnLogedIn);
-        btnFacebookLogin = (LoginButton) view.findViewById(R.id.btnFacebookLogin);
-        btnFacebookLogin.setReadPermissions(FB_PERMISSIONS);
-        btnFacebookLogin.registerCallback(loginManager.getFacebookCallbackManager(), facebookCallback);
+        if (LoginMaster.getInstance().isLogedIn()) {
+            lnLogein.setVisibility(View.GONE);
+            lnLogedin.setVisibility(View.VISIBLE);
+        } else {
+            btnFacebookLogin = (LoginButton) view.findViewById(R.id.btnFacebookLogin);
+            btnFacebookLogin.setReadPermissions(FB_PERMISSIONS);
+            btnFacebookLogin.registerCallback(loginManager.getFacebookCallbackManager(), facebookCallback);
+        }
         return view;
     }
+
 }

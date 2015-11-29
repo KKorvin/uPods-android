@@ -16,7 +16,6 @@ import android.widget.Toast;
 import com.chickenkiller.upods2.R;
 import com.chickenkiller.upods2.controllers.app.ProfileManager;
 import com.chickenkiller.upods2.fragments.FragmentMediaItemsGrid;
-import com.chickenkiller.upods2.fragments.FragmentProfile;
 import com.chickenkiller.upods2.fragments.FragmentSearch;
 import com.chickenkiller.upods2.fragments.FragmentWellcome;
 import com.chickenkiller.upods2.interfaces.ICustumziedBackPress;
@@ -49,7 +48,7 @@ public class ActivityMain extends BasicActivity implements IOverlayable, IToolba
 
     public static boolean isFirstRun = true;
 
-    CallbackManager callbackManager;
+    private CallbackManager callbackManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -245,9 +244,7 @@ public class ActivityMain extends BasicActivity implements IOverlayable, IToolba
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (getFragmentManager().findFragmentByTag(getLatestFragmentTag()) instanceof FragmentProfile) {
-            getFragmentManager().findFragmentByTag(getLatestFragmentTag()).onActivityResult(requestCode, resultCode, data);
-        }
+        callbackManager.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override

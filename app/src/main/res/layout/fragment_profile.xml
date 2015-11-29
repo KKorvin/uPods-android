@@ -21,10 +21,12 @@
         <com.facebook.login.widget.LoginButton
             android:id="@+id/btnFacebookLogin"
             android:layout_width="250dp"
-            android:layout_height="50dp"
+            android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginBottom="30dp"
-            android:layout_marginTop="30dp" />
+            android:layout_marginTop="30dp"
+            android:paddingBottom="15dp"
+            android:paddingTop="15dp" />
 
         <com.twitter.sdk.android.core.identity.TwitterLoginButton
             android:id="@+id/btnTwitterLogin"
@@ -42,18 +44,16 @@
 
         <TextView
             android:layout_width="wrap_content"
-
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:text="You are loged in" />
 
         <Button
             android:id="@+id/btnLogout"
-
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:text="You are loged in" />
+            android:text="Logout" />
     </LinearLayout>
 
 </RelativeLayout>
