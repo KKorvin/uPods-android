@@ -13,6 +13,7 @@ import com.chickenkiller.upods2.interfaces.ILoginManager;
 import com.chickenkiller.upods2.utils.Logger;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
+import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 
@@ -49,19 +50,33 @@ public class FragmentProfile extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_profile, container, false);
+        final View view = inflater.inflate(R.layout.fragment_profile, container, false);
         loginManager = (ILoginManager) getActivity();
         lnLogein = (LinearLayout) view.findViewById(R.id.lnLogin);
         lnLogedin = (LinearLayout) view.findViewById(R.id.lnLogedIn);
+
+        view.findViewById(R.id.btnLogout).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                LoginManager.getInstance().logOut();
+                initLoginUI(view);
+            }
+        });
+
         if (LoginMaster.getInstance().isLogedIn()) {
             lnLogein.setVisibility(View.GONE);
             lnLogedin.setVisibility(View.VISIBLE);
         } else {
-            btnFacebookLogin = (LoginButton) view.findViewById(R.id.btnFacebookLogin);
-            btnFacebookLogin.setReadPermissions(FB_PERMISSIONS);
-            btnFacebookLogin.registerCallback(loginManager.getFacebookCallbackManager(), facebookCallback);
+            initLoginUI(view);
         }
         return view;
     }
 
+    public void initLoginUI(View rootView) {
+        lnLogein.setVisibility(View.VISIBLE);
+        lnLogedin.setVisibility(View.GONE);
+        btnFacebookLogin = (LoginButton) rootView.findViewById(R.id.btnFacebookLogin);
+        btnFacebookLogin.setReadPermissions(FB_PERMISSIONS);
+        btnFacebookLogin.registerCallback(loginManager.getFacebookCallbackManager(), facebookCallback);
+    }
 }

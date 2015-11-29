@@ -3,6 +3,7 @@ package com.chickenkiller.upods2.controllers.app;
 import com.chickenkiller.upods2.utils.Logger;
 import com.facebook.AccessToken;
 import com.facebook.AccessTokenTracker;
+import com.facebook.login.LoginManager;
 
 /**
  * Created by alonzilberman on 11/29/15.
@@ -41,5 +42,12 @@ public class LoginMaster {
 
     public boolean isLogedIn() {
         return isLogedinWithFacebook;
+    }
+
+    public void logout() {
+        if (isLogedinWithFacebook) {
+            LoginManager.getInstance().logOut();
+            Logger.printInfo(LOG_TAG, "Loged out from facebook");
+        }
     }
 }
