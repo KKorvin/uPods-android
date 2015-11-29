@@ -1,5 +1,9 @@
 package com.chickenkiller.upods2.controllers.app;
 
+import com.amazonaws.mobileconnectors.cognito.CognitoSyncManager;
+import com.amazonaws.mobileconnectors.cognito.Dataset;
+import com.amazonaws.mobileconnectors.cognito.DefaultSyncCallback;
+import com.amazonaws.regions.Regions;
 import com.chickenkiller.upods2.interfaces.IOperationFinishCallback;
 import com.chickenkiller.upods2.interfaces.IPlayableMediaItem;
 import com.chickenkiller.upods2.models.Episod;
@@ -8,11 +12,9 @@ import com.chickenkiller.upods2.models.Podcast;
 import com.chickenkiller.upods2.models.RadioItem;
 import com.chickenkiller.upods2.models.Track;
 import com.chickenkiller.upods2.utils.Logger;
-import com.pixplicity.easyprefs.library.Prefs;
 
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -26,8 +28,8 @@ public class ProfileManager {
     public static final String JS_SUBSCRIBED_STATIONS = "subscribedStations";
     public static final String JS_RECENT_STATIONS = "recentStations";
 
-    private static final String PROFILE_PREF = "profile_pref";
     private static final String PROFILE = "PROFILE";
+    private static final String AWS_DATASET_NAME = "user_profile";
     private static final int RECTNT_RADIO_STATIONS_LIMIT = 10;
 
     public enum ProfileItem {DOWNLOADED_PODCASTS, SUBSCRIBDED_PODCASTS, SUBSCRIBDED_RADIO, RECENT_RADIO, SUBSCRIBED_STATIONS}
@@ -45,35 +47,7 @@ public class ProfileManager {
         this.subscribedPodcasts = new ArrayList<>();
         this.subscribedRadioItems = new ArrayList<>();
         this.recentRadioItems = new ArrayList<>();
-        String profileJsonStr = Prefs.getString(PROFILE_PREF, null);
-        if (profileJsonStr == null) {
-            JSONObject rootProfile = new JSONObject();
-            JSONArray downloadedPodcasts = new JSONArray();
-            JSONArray subscribedPodcasts = new JSONArray();
-            JSONArray subscribedRadioStations = new JSONArray();
-            JSONArray recentRadioStations = new JSONArray();
-            try {
-                rootProfile.put(JS_DOWNLOADED_PODCASTS, downloadedPodcasts);
-                rootProfile.put(JS_SUBSCRIBED_PODCASTS, subscribedPodcasts);
-                rootProfile.put(JS_SUBSCRIBED_STATIONS, subscribedRadioStations);
-                rootProfile.put(JS_RECENT_STATIONS, recentRadioStations);
-            } catch (JSONException e) {
-                Logger.printError(PROFILE, "Can't create empty profile object");
-                e.printStackTrace();
-            }
-            profileJsonStr = rootProfile.toString();
-            Prefs.putString(PROFILE_PREF, profileJsonStr);
-        }
-        try {
-            JSONObject rootProfile = new JSONObject(profileJsonStr);
-            initProfilePodcastItem(rootProfile.getJSONArray(JS_DOWNLOADED_PODCASTS), ProfileItem.DOWNLOADED_PODCASTS);
-            initProfilePodcastItem(rootProfile.getJSONArray(JS_SUBSCRIBED_PODCASTS), ProfileItem.SUBSCRIBDED_PODCASTS);
-            initProfileRadioItems(rootProfile.getJSONArray(JS_SUBSCRIBED_STATIONS), ProfileItem.SUBSCRIBDED_RADIO);
-            initProfileRadioItems(rootProfile.getJSONArray(JS_RECENT_STATIONS), ProfileItem.RECENT_RADIO);
-        } catch (JSONException e) {
-            Logger.printError(PROFILE, "Can't parse profile string to json: " + profileJsonStr);
-            e.printStackTrace();
-        }
+        syncFromCloud();
     }
 
     public static ProfileManager getInstance() {
@@ -101,6 +75,31 @@ public class ProfileManager {
 
     public ArrayList<RadioItem> getRecentRadioItems() {
         return this.recentRadioItems;
+    }
+
+    private void syncFromCloud() {
+        CognitoSyncManager syncClient = new CognitoSyncManager(
+                UpodsApplication.getContext(),
+                Regions.US_EAST_1,
+                LoginMaster.getInstance().getCredentialsProvider());
+        Dataset dataset = syncClient.openOrCreateDataset(AWS_DATASET_NAME);
+        try {
+            if (dataset.get(JS_DOWNLOADED_PODCASTS) != null) {
+                initProfilePodcastItem(new JSONArray(dataset.get(JS_DOWNLOADED_PODCASTS)), ProfileItem.DOWNLOADED_PODCASTS);
+            }
+            if (dataset.get(JS_SUBSCRIBED_PODCASTS) != null) {
+                initProfilePodcastItem(new JSONArray(dataset.get(JS_SUBSCRIBED_PODCASTS)), ProfileItem.SUBSCRIBDED_PODCASTS);
+            }
+            if (dataset.get(JS_SUBSCRIBED_STATIONS) != null) {
+                initProfileRadioItems(new JSONArray(dataset.get(JS_SUBSCRIBED_STATIONS)), ProfileItem.SUBSCRIBDED_RADIO);
+            }
+            if (dataset.get(JS_DOWNLOADED_PODCASTS) != null) {
+                initProfileRadioItems(new JSONArray(dataset.get(JS_RECENT_STATIONS)), ProfileItem.RECENT_RADIO);
+            }
+        } catch (JSONException e) {
+            Logger.printError(PROFILE, "Can't get profile from cognito");
+            e.printStackTrace();
+        }
     }
 
 
@@ -302,28 +301,45 @@ public class ProfileManager {
 
 
     private void saveChanges(ProfileItem profileItem) {
-        String profileJsonStr = Prefs.getString(PROFILE_PREF, null);
-        if (profileJsonStr != null) {
-            try {
-                JSONObject rootProfile = new JSONObject(profileJsonStr);
-                if (profileItem == ProfileItem.DOWNLOADED_PODCASTS) {
-                    rootProfile.put(JS_DOWNLOADED_PODCASTS, Podcast.toJsonArray(downloadedPodcasts, true));
-                } else if (profileItem == ProfileItem.SUBSCRIBDED_PODCASTS) {
-                    rootProfile.put(JS_SUBSCRIBED_PODCASTS, Podcast.toJsonArray(subscribedPodcasts, false));
-                } else if (profileItem == ProfileItem.SUBSCRIBDED_RADIO) {
-                    rootProfile.put(JS_SUBSCRIBED_STATIONS, RadioItem.toJsonArray(subscribedRadioItems));
-                } else if (profileItem == ProfileItem.RECENT_RADIO) {
-                    rootProfile.put(JS_RECENT_STATIONS, RadioItem.toJsonArray(recentRadioItems));
-                }
-                Prefs.putString(PROFILE_PREF, rootProfile.toString());
-                Logger.printInfo(PROFILE_PREF, rootProfile.toString());
-            } catch (JSONException e) {
-                Logger.printInfo(PROFILE, "Can't parse profile string to json: " + profileJsonStr);
-                e.printStackTrace();
+        CognitoSyncManager syncClient = new CognitoSyncManager(
+                UpodsApplication.getContext(),
+                Regions.US_EAST_1,
+                LoginMaster.getInstance().getCredentialsProvider());
+        Dataset dataset = syncClient.openOrCreateDataset(AWS_DATASET_NAME);
+        try {
+            if (profileItem == ProfileItem.DOWNLOADED_PODCASTS) {
+                dataset.put(JS_DOWNLOADED_PODCASTS, Podcast.toJsonArray(downloadedPodcasts, true).toString());
+            } else if (profileItem == ProfileItem.SUBSCRIBDED_PODCASTS) {
+                dataset.put(JS_SUBSCRIBED_PODCASTS, Podcast.toJsonArray(subscribedPodcasts, false).toString());
+            } else if (profileItem == ProfileItem.SUBSCRIBDED_RADIO) {
+                dataset.put(JS_SUBSCRIBED_STATIONS, RadioItem.toJsonArray(subscribedRadioItems).toString());
+            } else if (profileItem == ProfileItem.RECENT_RADIO) {
+                dataset.put(JS_RECENT_STATIONS, RadioItem.toJsonArray(recentRadioItems).toString());
             }
-            if (profileSavedCallback != null) {
-                profileSavedCallback.operationFinished();
-            }
+            dataset.synchronize(new DefaultSyncCallback());
+            Logger.printInfo(PROFILE, "Syncying profile with AWS...");
+        } catch (Exception e) {
+            Logger.printInfo(PROFILE, "Can't sync profile with AWS);");
+            e.printStackTrace();
         }
+        if (profileSavedCallback != null) {
+            profileSavedCallback.operationFinished();
+        }
+
+    }
+
+
+    public void syncAllChanges() {
+        syncFromCloud();
+        CognitoSyncManager syncClient = new CognitoSyncManager(
+                UpodsApplication.getContext(),
+                Regions.US_EAST_1,
+                LoginMaster.getInstance().getCredentialsProvider());
+        Dataset dataset = syncClient.openOrCreateDataset(AWS_DATASET_NAME);
+        dataset.put(JS_DOWNLOADED_PODCASTS, Podcast.toJsonArray(downloadedPodcasts, true).toString());
+        dataset.put(JS_SUBSCRIBED_PODCASTS, Podcast.toJsonArray(subscribedPodcasts, true).toString());
+        dataset.put(JS_SUBSCRIBED_STATIONS, RadioItem.toJsonArray(subscribedRadioItems).toString());
+        dataset.put(JS_RECENT_STATIONS, RadioItem.toJsonArray(recentRadioItems).toString());
+        dataset.synchronizeOnConnectivity(new DefaultSyncCallback());
     }
 }

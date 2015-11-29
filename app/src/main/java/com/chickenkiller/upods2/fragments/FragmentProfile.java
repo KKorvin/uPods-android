@@ -9,6 +9,7 @@ import android.widget.LinearLayout;
 
 import com.chickenkiller.upods2.R;
 import com.chickenkiller.upods2.controllers.app.LoginMaster;
+import com.chickenkiller.upods2.controllers.app.ProfileManager;
 import com.chickenkiller.upods2.interfaces.ILoginManager;
 import com.chickenkiller.upods2.utils.Logger;
 import com.facebook.FacebookCallback;
@@ -35,6 +36,7 @@ public class FragmentProfile extends Fragment {
         public void onSuccess(LoginResult loginResult) {
             lnLogein.setVisibility(View.GONE);
             lnLogedin.setVisibility(View.VISIBLE);
+            ProfileManager.getInstance().syncAllChanges();
         }
 
         @Override
