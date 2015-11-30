@@ -3,6 +3,9 @@ package com.chickenkiller.upods2.controllers.app;
 import com.amazonaws.mobileconnectors.cognito.CognitoSyncManager;
 import com.amazonaws.mobileconnectors.cognito.Dataset;
 import com.amazonaws.mobileconnectors.cognito.DefaultSyncCallback;
+import com.amazonaws.mobileconnectors.cognito.Record;
+import com.amazonaws.mobileconnectors.cognito.SyncConflict;
+import com.amazonaws.mobileconnectors.cognito.exceptions.DataStorageException;
 import com.amazonaws.regions.Regions;
 import com.chickenkiller.upods2.interfaces.IOperationFinishCallback;
 import com.chickenkiller.upods2.interfaces.IPlayableMediaItem;
@@ -17,6 +20,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by alonzilberman on 9/28/15.
@@ -43,11 +47,7 @@ public class ProfileManager {
     private ArrayList<RadioItem> recentRadioItems;
 
     private ProfileManager() {
-        this.downloadedPodcasts = new ArrayList<>();
-        this.subscribedPodcasts = new ArrayList<>();
-        this.subscribedRadioItems = new ArrayList<>();
-        this.recentRadioItems = new ArrayList<>();
-        syncFromCloud();
+        syncFromLocalStorage();
     }
 
     public static ProfileManager getInstance() {
@@ -75,31 +75,6 @@ public class ProfileManager {
 
     public ArrayList<RadioItem> getRecentRadioItems() {
         return this.recentRadioItems;
-    }
-
-    private void syncFromCloud() {
-        CognitoSyncManager syncClient = new CognitoSyncManager(
-                UpodsApplication.getContext(),
-                Regions.US_EAST_1,
-                LoginMaster.getInstance().getCredentialsProvider());
-        Dataset dataset = syncClient.openOrCreateDataset(AWS_DATASET_NAME);
-        try {
-            if (dataset.get(JS_DOWNLOADED_PODCASTS) != null) {
-                initProfilePodcastItem(new JSONArray(dataset.get(JS_DOWNLOADED_PODCASTS)), ProfileItem.DOWNLOADED_PODCASTS);
-            }
-            if (dataset.get(JS_SUBSCRIBED_PODCASTS) != null) {
-                initProfilePodcastItem(new JSONArray(dataset.get(JS_SUBSCRIBED_PODCASTS)), ProfileItem.SUBSCRIBDED_PODCASTS);
-            }
-            if (dataset.get(JS_SUBSCRIBED_STATIONS) != null) {
-                initProfileRadioItems(new JSONArray(dataset.get(JS_SUBSCRIBED_STATIONS)), ProfileItem.SUBSCRIBDED_RADIO);
-            }
-            if (dataset.get(JS_DOWNLOADED_PODCASTS) != null) {
-                initProfileRadioItems(new JSONArray(dataset.get(JS_RECENT_STATIONS)), ProfileItem.RECENT_RADIO);
-            }
-        } catch (JSONException e) {
-            Logger.printError(PROFILE, "Can't get profile from cognito");
-            e.printStackTrace();
-        }
     }
 
 
@@ -329,17 +304,78 @@ public class ProfileManager {
     }
 
 
-    public void syncAllChanges() {
-        syncFromCloud();
+    private void readFromDataset(Dataset dataset) {
+        this.downloadedPodcasts = new ArrayList<>();
+        this.subscribedPodcasts = new ArrayList<>();
+        this.subscribedRadioItems = new ArrayList<>();
+        this.recentRadioItems = new ArrayList<>();
+        try {
+            if (dataset.get(JS_DOWNLOADED_PODCASTS) != null) {
+                initProfilePodcastItem(new JSONArray(dataset.get(JS_DOWNLOADED_PODCASTS)), ProfileItem.DOWNLOADED_PODCASTS);
+            }
+            if (dataset.get(JS_SUBSCRIBED_PODCASTS) != null) {
+                initProfilePodcastItem(new JSONArray(dataset.get(JS_SUBSCRIBED_PODCASTS)), ProfileItem.SUBSCRIBDED_PODCASTS);
+            }
+            if (dataset.get(JS_SUBSCRIBED_STATIONS) != null) {
+                initProfileRadioItems(new JSONArray(dataset.get(JS_SUBSCRIBED_STATIONS)), ProfileItem.SUBSCRIBDED_RADIO);
+            }
+            if (dataset.get(JS_DOWNLOADED_PODCASTS) != null) {
+                initProfileRadioItems(new JSONArray(dataset.get(JS_RECENT_STATIONS)), ProfileItem.RECENT_RADIO);
+            }
+        } catch (JSONException e) {
+            Logger.printError(PROFILE, "Can't get profile from cognito");
+            e.printStackTrace();
+        }
+    }
+
+
+    /**
+     * Loads profile from local storage
+     */
+    private void syncFromLocalStorage() {
         CognitoSyncManager syncClient = new CognitoSyncManager(
                 UpodsApplication.getContext(),
                 Regions.US_EAST_1,
                 LoginMaster.getInstance().getCredentialsProvider());
         Dataset dataset = syncClient.openOrCreateDataset(AWS_DATASET_NAME);
-        dataset.put(JS_DOWNLOADED_PODCASTS, Podcast.toJsonArray(downloadedPodcasts, true).toString());
-        dataset.put(JS_SUBSCRIBED_PODCASTS, Podcast.toJsonArray(subscribedPodcasts, true).toString());
-        dataset.put(JS_SUBSCRIBED_STATIONS, RadioItem.toJsonArray(subscribedRadioItems).toString());
-        dataset.put(JS_RECENT_STATIONS, RadioItem.toJsonArray(recentRadioItems).toString());
-        dataset.synchronizeOnConnectivity(new DefaultSyncCallback());
+        readFromDataset(dataset);
     }
+
+    /**
+     * Syncs provider profile with cloud and loads last copy.
+     */
+    public void syncAllChanges() {
+        CognitoSyncManager syncClient = new CognitoSyncManager(
+                UpodsApplication.getContext(),
+                Regions.US_EAST_1,
+                LoginMaster.getInstance().getCredentialsProvider());
+        Dataset dataset = syncClient.openOrCreateDataset(AWS_DATASET_NAME);
+        dataset.synchronize(new Dataset.SyncCallback() {
+            @Override
+            public void onSuccess(Dataset dataset, List<Record> updatedRecords) {
+                readFromDataset(dataset);
+            }
+
+            @Override
+            public boolean onConflict(Dataset dataset, List<SyncConflict> conflicts) {
+                return false;
+            }
+
+            @Override
+            public boolean onDatasetDeleted(Dataset dataset, String datasetName) {
+                return false;
+            }
+
+            @Override
+            public boolean onDatasetsMerged(Dataset dataset, List<String> datasetNames) {
+                return false;
+            }
+
+            @Override
+            public void onFailure(DataStorageException dse) {
+
+            }
+        });
+    }
+
 }
