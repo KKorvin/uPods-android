@@ -57,7 +57,7 @@ public class ProfileManager {
         return profileManager;
     }
 
-    public void setOperationFinishCallback(IOperationFinishCallback profileSavedCallback) {
+    public void setProfileSavedCallback(IOperationFinishCallback profileSavedCallback) {
         this.profileSavedCallback = profileSavedCallback;
     }
 
@@ -344,7 +344,7 @@ public class ProfileManager {
     /**
      * Syncs provider profile with cloud and loads last copy.
      */
-    public void syncAllChanges() {
+    public void syncAllChanges(final IOperationFinishCallback profileSyncedCallback) {
         CognitoSyncManager syncClient = new CognitoSyncManager(
                 UpodsApplication.getContext(),
                 Regions.US_EAST_1,
@@ -354,26 +354,32 @@ public class ProfileManager {
             @Override
             public void onSuccess(Dataset dataset, List<Record> updatedRecords) {
                 readFromDataset(dataset);
+                profileSyncedCallback.operationFinished();
             }
 
             @Override
             public boolean onConflict(Dataset dataset, List<SyncConflict> conflicts) {
+                profileSyncedCallback.operationFinished();
                 return false;
             }
 
             @Override
             public boolean onDatasetDeleted(Dataset dataset, String datasetName) {
+                profileSyncedCallback.operationFinished();
                 return false;
             }
 
             @Override
             public boolean onDatasetsMerged(Dataset dataset, List<String> datasetNames) {
+                profileSyncedCallback.operationFinished();
                 return false;
             }
 
             @Override
             public void onFailure(DataStorageException dse) {
-
+                if (profileSyncedCallback != null) {
+                    profileSyncedCallback.operationFinished();
+                }
             }
         });
     }

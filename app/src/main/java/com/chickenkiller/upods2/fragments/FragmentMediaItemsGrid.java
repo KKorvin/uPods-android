@@ -104,7 +104,7 @@ public class FragmentMediaItemsGrid extends Fragment implements ICustumziedBackP
     @Override
     public void onResume() {
         //Set callback for ProviderProfileManager
-        ProfileManager.getInstance().setOperationFinishCallback(new IOperationFinishCallback() {
+        ProfileManager.getInstance().setProfileSavedCallback(new IOperationFinishCallback() {
             @Override
             public void operationFinished() {
                 if (isAdded() && mediaPagesAdapter != null) {

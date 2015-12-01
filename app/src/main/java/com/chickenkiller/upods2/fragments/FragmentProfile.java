@@ -1,22 +1,30 @@
 package com.chickenkiller.upods2.fragments;
 
 import android.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 
 import com.chickenkiller.upods2.R;
 import com.chickenkiller.upods2.controllers.app.LoginMaster;
 import com.chickenkiller.upods2.controllers.app.ProfileManager;
 import com.chickenkiller.upods2.interfaces.ILoginManager;
+import com.chickenkiller.upods2.interfaces.IOperationFinishCallback;
 import com.chickenkiller.upods2.utils.Logger;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
+import com.twitter.sdk.android.core.Callback;
+import com.twitter.sdk.android.core.Result;
+import com.twitter.sdk.android.core.TwitterException;
+import com.twitter.sdk.android.core.TwitterSession;
+import com.twitter.sdk.android.core.identity.TwitterLoginButton;
 
 /**
  * Created by alonzilberman on 8/8/15.
@@ -28,15 +36,16 @@ public class FragmentProfile extends Fragment {
 
     private LinearLayout lnLogein;
     private LinearLayout lnLogedin;
+
     private LoginButton btnFacebookLogin;
+    private TwitterLoginButton btnTwitter;
     private ILoginManager loginManager;
+    private ProgressBar progressBar;
 
     private FacebookCallback facebookCallback = new FacebookCallback<LoginResult>() {
         @Override
         public void onSuccess(LoginResult loginResult) {
-            lnLogein.setVisibility(View.GONE);
-            lnLogedin.setVisibility(View.VISIBLE);
-            ProfileManager.getInstance().syncAllChanges();
+            initUIAfterLogin();
         }
 
         @Override
@@ -50,12 +59,28 @@ public class FragmentProfile extends Fragment {
         }
     };
 
+    private Callback<TwitterSession> tweetCallback = new Callback<TwitterSession>() {
+        @Override
+        public void success(Result<TwitterSession> result) {
+            LoginMaster.getInstance().setIsLogedinWithTwitter(true);
+            LoginMaster.getInstance().setTwitterToCognito(result.data);
+            initUIAfterLogin();
+        }
+
+        @Override
+        public void failure(TwitterException exception) {
+        }
+    };
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_profile, container, false);
         loginManager = (ILoginManager) getActivity();
         lnLogein = (LinearLayout) view.findViewById(R.id.lnLogin);
         lnLogedin = (LinearLayout) view.findViewById(R.id.lnLogedIn);
+        progressBar = (ProgressBar) view.findViewById(R.id.pbLoading);
+
+        progressBar.setVisibility(View.GONE);
 
         view.findViewById(R.id.btnLogout).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -74,11 +99,36 @@ public class FragmentProfile extends Fragment {
         return view;
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        btnTwitter.onActivityResult(requestCode, resultCode, data);
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    private void initUIAfterLogin() {
+        lnLogein.setVisibility(View.GONE);
+        progressBar.setVisibility(View.VISIBLE);
+        ProfileManager.getInstance().syncAllChanges(new IOperationFinishCallback() {
+            @Override
+            public void operationFinished() {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        progressBar.setVisibility(View.GONE);
+                        lnLogedin.setVisibility(View.VISIBLE);
+                    }
+                });
+            }
+        });
+    }
+
     public void initLoginUI(View rootView) {
         lnLogein.setVisibility(View.VISIBLE);
         lnLogedin.setVisibility(View.GONE);
         btnFacebookLogin = (LoginButton) rootView.findViewById(R.id.btnFacebookLogin);
+        btnTwitter = (TwitterLoginButton) rootView.findViewById(R.id.btnTwitterLogin);
         btnFacebookLogin.setReadPermissions(FB_PERMISSIONS);
         btnFacebookLogin.registerCallback(loginManager.getFacebookCallbackManager(), facebookCallback);
+        btnTwitter.setCallback(tweetCallback);
     }
 }

@@ -41,7 +41,7 @@ dependencies {
     compile 'com.github.wseemann:FFmpegMediaMetadataRetriever:1.0.1+'
     compile 'com.github.asyl.animation:arcanimator:1.0.0'
     compile 'com.facebook.android:facebook-android-sdk:4.6.0'
-    compile('com.twitter.sdk.android:twitter-core:1.3.1@aar') {
+    compile('com.twitter.sdk.android:twitter:1.10.0@aar') {
         transitive = true;
     }
     compile 'com.amazonaws:aws-android-sdk-core:2.+'
