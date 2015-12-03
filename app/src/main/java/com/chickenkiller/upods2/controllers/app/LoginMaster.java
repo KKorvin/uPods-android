@@ -10,6 +10,9 @@ import com.twitter.sdk.android.Twitter;
 import com.twitter.sdk.android.core.TwitterAuthConfig;
 import com.twitter.sdk.android.core.TwitterAuthToken;
 import com.twitter.sdk.android.core.TwitterSession;
+import com.vk.sdk.VKAccessToken;
+import com.vk.sdk.VKAccessTokenTracker;
+import com.vk.sdk.VKSdk;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -48,6 +51,7 @@ public class LoginMaster {
     public void init() {
         initFacebook();
         initTwitter();
+        initVkontakte();
     }
 
     private void initFacebook() {
@@ -80,6 +84,22 @@ public class LoginMaster {
         }
     }
 
+    private void initVkontakte() {
+        VKSdk.initialize(UpodsApplication.getContext());
+        VKAccessTokenTracker vkAccessTokenTracker = new VKAccessTokenTracker() {
+            @Override
+            public void onVKAccessTokenChanged(VKAccessToken oldToken, VKAccessToken newToken) {
+                if (newToken == null) {
+                    setVkToCognito(newToken);
+                }
+            }
+        };
+        vkAccessTokenTracker.startTracking();
+        if (VKSdk.isLoggedIn()) {
+            setVkToCognito(VKAccessToken.currentToken());
+        }
+    }
+
     private void setFbAccountToCognito() {
         if (isLogedinWithFacebook) {
             Map<String, String> logins = new HashMap<String, String>();
@@ -97,6 +117,12 @@ public class LoginMaster {
         credentialsProvider.setLogins(logins);
     }
 
+    public void setVkToCognito(VKAccessToken token) {
+        Map<String, String> logins = new HashMap<String, String>();
+        logins.put("login.vk.com", token.accessToken);
+        credentialsProvider.setLogins(logins);
+    }
+
     public CognitoCachingCredentialsProvider getCredentialsProvider() {
         return credentialsProvider;
     }
@@ -106,13 +132,18 @@ public class LoginMaster {
     }
 
     public boolean isLogedIn() {
-        return isLogedinWithFacebook || isLogedinWithTwitter;
+        return isLogedinWithFacebook || isLogedinWithTwitter || VKSdk.isLoggedIn();
     }
 
     public void logout() {
         if (isLogedinWithFacebook) {
             LoginManager.getInstance().logOut();
             Logger.printInfo(LOG_TAG, "Loged out from facebook");
+        } else if (isLogedinWithTwitter) {
+            Twitter.getSessionManager().clearActiveSession();
+            Twitter.logOut();
+        } else if (VKSdk.isLoggedIn()) {
+            //VKSdk.logout();
         }
     }
 }

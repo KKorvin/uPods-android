@@ -3,6 +3,9 @@
 
     <!-- Social -->
     <string name="facebook_app_id">916102948459538</string>
+    <string name="twitter_api_key">wr8t6lPMxtC09uMpIEayM5FBC</string>
+    <integer name="com_vk_sdk_AppId">5171950</integer>
+
 
     <!-- Name of App Block -->
     <string name="app_name">AirTune</string>
@@ -94,6 +97,7 @@
     <string name="now_paying">Now playing</string>
     <string name="buffering">Buffering...</string>
     <string name="kbps">" Kbs"</string>
+    <string name="login_with_vk">Log in with Vkontakte</string>
 
 
 </resources>

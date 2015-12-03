@@ -12,6 +12,7 @@ android {
     }
     defaultConfig {
         applicationId "com.chickenkiller.upods2"
+        multiDexEnabled true
         minSdkVersion 17
         targetSdkVersion 22
         versionCode 1
@@ -46,4 +47,6 @@ dependencies {
     }
     compile 'com.amazonaws:aws-android-sdk-core:2.+'
     compile 'com.amazonaws:aws-android-sdk-cognito:2.+'
+    compile 'com.vk:androidsdk:+'
+
 }

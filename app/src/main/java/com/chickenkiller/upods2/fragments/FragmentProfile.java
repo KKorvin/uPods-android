@@ -25,6 +25,10 @@ import com.twitter.sdk.android.core.Result;
 import com.twitter.sdk.android.core.TwitterException;
 import com.twitter.sdk.android.core.TwitterSession;
 import com.twitter.sdk.android.core.identity.TwitterLoginButton;
+import com.vk.sdk.VKAccessToken;
+import com.vk.sdk.VKCallback;
+import com.vk.sdk.VKSdk;
+import com.vk.sdk.api.VKError;
 
 /**
  * Created by alonzilberman on 8/8/15.
@@ -33,6 +37,7 @@ public class FragmentProfile extends Fragment {
 
     public static final String TAG = "fragment_profile";
     private static final String FB_PERMISSIONS = "public_profile";
+    private static final String VK_SCOPE = "email";
 
     private LinearLayout lnLogein;
     private LinearLayout lnLogedin;
@@ -90,6 +95,13 @@ public class FragmentProfile extends Fragment {
             }
         });
 
+        view.findViewById(R.id.btnVklogin).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                VKSdk.login(FragmentProfile.this, VK_SCOPE);
+            }
+        });
+
         if (LoginMaster.getInstance().isLogedIn()) {
             lnLogein.setVisibility(View.GONE);
             lnLogedin.setVisibility(View.VISIBLE);
@@ -102,9 +114,27 @@ public class FragmentProfile extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         btnTwitter.onActivityResult(requestCode, resultCode, data);
-        super.onActivityResult(requestCode, resultCode, data);
+        if (!VKSdk.onActivityResult(requestCode, resultCode, data, new VKCallback<VKAccessToken>() {
+            @Override
+            public void onResult(VKAccessToken token) {
+                LoginMaster.getInstance().setVkToCognito(token);
+                initUIAfterLogin();
+            }
+
+            @Override
+            public void onError(VKError error) {
+            }
+        })) {
+            super.onActivityResult(requestCode, resultCode, data);
+        } else {
+            super.onActivityResult(requestCode, resultCode, data);
+        }
     }
 
+
+    /**
+     * Should be called after login, will sync all changes with cloud and update UI after it.
+     */
     private void initUIAfterLogin() {
         lnLogein.setVisibility(View.GONE);
         progressBar.setVisibility(View.VISIBLE);

@@ -377,9 +377,9 @@ public class ProfileManager {
 
             @Override
             public void onFailure(DataStorageException dse) {
-                if (profileSyncedCallback != null) {
-                    profileSyncedCallback.operationFinished();
-                }
+                Logger.printError(PROFILE, "Sync error: " + dse.getMessage());
+                profileSyncedCallback.operationFinished();
+
             }
         });
     }
