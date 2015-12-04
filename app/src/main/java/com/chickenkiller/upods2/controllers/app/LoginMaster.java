@@ -155,7 +155,7 @@ public class LoginMaster {
             Twitter.getSessionManager().clearActiveSession();
             Twitter.logOut();
         } else if (VKSdk.isLoggedIn()) {
-            //VKSdk.logout();
+            VKSdk.logout();
         }
     }
 }
