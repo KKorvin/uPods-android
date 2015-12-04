@@ -103,30 +103,7 @@ public class VKAuthenticationProvider extends AWSAbstractCognitoDeveloperIdentit
     public String getIdentityId() {
         identityId = Prefs.getString(PREF_IDENTITY_ID, null);
         if (identityId == null) {
-            if (VKSdk.isLoggedIn() && getProviderName() != null && !this.loginsMap.isEmpty()
-                    && this.loginsMap.containsKey(getProviderName())) {
-                RequestBody formBody = new FormEncodingBuilder()
-                        .add("identityId", getIdentityId())
-                        .add("devUserIdentifier", VKAccessToken.currentToken().accessToken)
-                        .build();
-                Request request = new Request.Builder()
-                        .url(ServerApi.COGNITO_LOGIN).post(formBody)
-                        .build();
-                try {
-                    JSONObject jResponse = BackendManager.getInstance().sendSynchronicRequest(request);
-                    String responseToken = jResponse.getString("Token");
-                    String identityId = jResponse.getString("IdentityId");
-                    Prefs.putString(PREF_IDENTITY_ID, identityId);
-                    update(identityId, responseToken);
-                    return identityId;
-                } catch (Exception e) {
-                    Logger.printError(LOG, "Error in refresh: ");
-                    e.printStackTrace();
-                    identityId = super.getIdentityId();
-                }
-            } else {
-                identityId = super.getIdentityId();
-            }
+            identityId = super.getIdentityId();
         }
         Prefs.putString(PREF_IDENTITY_ID, identityId);
         return identityId;
