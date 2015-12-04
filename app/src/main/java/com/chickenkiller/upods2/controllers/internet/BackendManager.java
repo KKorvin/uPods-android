@@ -9,6 +9,7 @@ import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -199,6 +200,12 @@ public class BackendManager {
         } else {
             searchQueue.add(new QueueTask(request, uiUpdater));
         }
+    }
+
+    public JSONObject sendSynchronicRequest(Request request) throws IOException, JSONException {
+        Response response = client.newCall(request).execute();
+        final JSONObject jResponse = new JSONObject(response.body().string());
+        return jResponse;
     }
 
     public void clearSearchQueue() {

@@ -1,7 +1,10 @@
 package com.chickenkiller.upods2.controllers.app;
 
+import android.os.AsyncTask;
+
 import com.amazonaws.auth.CognitoCachingCredentialsProvider;
 import com.amazonaws.regions.Regions;
+import com.chickenkiller.upods2.interfaces.IOperationFinishCallback;
 import com.chickenkiller.upods2.utils.Logger;
 import com.facebook.AccessToken;
 import com.facebook.AccessTokenTracker;
@@ -25,13 +28,15 @@ import io.fabric.sdk.android.Fabric;
 public class LoginMaster {
 
     private static final String LOG_TAG = "LoginMaster";
-    private static final String IDENTITY_POOL = "us-east-1:1bef9ad3-34bd-42d2-8e71-50c648aabf32";
+    private static final String IDENTITY_POOL_ID = "us-east-1:1bef9ad3-34bd-42d2-8e71-50c648aabf32";
     private static final String TWITTER_CONSUMER_KEY = "wr8t6lPMxtC09uMpIEayM5FBC";
     private static final String TWITTER_CONSUMER_SECRET = "dtnTy4RQfnowu60XGHToj830j4AYsKxDA82PWZBijgSdk0gnlk";
 
     private static LoginMaster loginMaster;
 
     private CognitoCachingCredentialsProvider credentialsProvider;
+    private VKAuthenticationProvider vkAuthenticationProvider;
+
     private boolean isLogedinWithFacebook;
     private boolean isLogedinWithTwitter;
 
@@ -49,17 +54,26 @@ public class LoginMaster {
     }
 
     public void init() {
+        //First init VKSdk because it is used by vkAuthenticationProvider
+        VKSdk.initialize(UpodsApplication.getContext());
+
+        vkAuthenticationProvider = new VKAuthenticationProvider(
+                null,
+                IDENTITY_POOL_ID,
+                Regions.US_EAST_1);
+
+        credentialsProvider = new CognitoCachingCredentialsProvider(
+                UpodsApplication.getContext(),
+                vkAuthenticationProvider,
+                Regions.US_EAST_1
+        );
+
         initFacebook();
         initTwitter();
         initVkontakte();
     }
 
     private void initFacebook() {
-        credentialsProvider = new CognitoCachingCredentialsProvider(
-                UpodsApplication.getContext(),
-                IDENTITY_POOL, // Identity Pool ID
-                Regions.US_EAST_1 // Region
-        );
         isLogedinWithFacebook = AccessToken.getCurrentAccessToken() != null;
         AccessTokenTracker accessTokenTracker = new AccessTokenTracker() {
             @Override
@@ -70,34 +84,23 @@ public class LoginMaster {
             }
         };
         accessTokenTracker.startTracking();
-        setFbAccountToCognito();
-        Logger.printInfo(LOG_TAG, "Is loged in with facebook: " + String.valueOf(isLogedinWithFacebook));
     }
 
     private void initTwitter() {
         TwitterAuthConfig authConfig = new TwitterAuthConfig(TWITTER_CONSUMER_KEY, TWITTER_CONSUMER_SECRET);
         Fabric.with(UpodsApplication.getContext(), new Twitter(authConfig));
-        TwitterSession session = Twitter.getSessionManager().getActiveSession();
-        if (session != null) {
-            isLogedinWithTwitter = true;
-            setTwitterToCognito(session);
-        }
     }
 
     private void initVkontakte() {
-        VKSdk.initialize(UpodsApplication.getContext());
         VKAccessTokenTracker vkAccessTokenTracker = new VKAccessTokenTracker() {
             @Override
             public void onVKAccessTokenChanged(VKAccessToken oldToken, VKAccessToken newToken) {
                 if (newToken == null) {
-                    setVkToCognito(newToken);
+                    setVkToCognito(newToken, null);
                 }
             }
         };
         vkAccessTokenTracker.startTracking();
-        if (VKSdk.isLoggedIn()) {
-            setVkToCognito(VKAccessToken.currentToken());
-        }
     }
 
     private void setFbAccountToCognito() {
@@ -117,10 +120,19 @@ public class LoginMaster {
         credentialsProvider.setLogins(logins);
     }
 
-    public void setVkToCognito(VKAccessToken token) {
-        Map<String, String> logins = new HashMap<String, String>();
-        logins.put("login.vk.com", token.accessToken);
-        credentialsProvider.setLogins(logins);
+    public void setVkToCognito(final VKAccessToken token, final IOperationFinishCallback iLoginFinished) {
+        AsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+                HashMap<String, String> loginsMap = new HashMap<String, String>();
+                loginsMap.put(vkAuthenticationProvider.getProviderName(), token.accessToken);
+                credentialsProvider.setLogins(loginsMap);
+                credentialsProvider.refresh();
+                if (iLoginFinished != null) {
+                    iLoginFinished.operationFinished();
+                }
+            }
+        });
     }
 
     public CognitoCachingCredentialsProvider getCredentialsProvider() {

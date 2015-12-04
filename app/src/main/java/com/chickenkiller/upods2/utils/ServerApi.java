@@ -22,6 +22,8 @@ public class ServerApi {
     public static final String PODCAST_SEARCH_PARAM;
     public static final String PODCASTS_BY_CATEGORY;
 
+    public static final String COGNITO_LOGIN;
+
     static {
         DOMAIN = "https://upods.io";
         RADIO_TOP = DOMAIN + "/upods/api/v1.0/radio-stations/top?type=";
@@ -38,5 +40,7 @@ public class ServerApi {
         PODCAST_SEARCH = "https://itunes.apple.com/search?term=";
         PODCAST_SEARCH_PARAM = "&entity=podcast";
         PODCASTS_BY_CATEGORY = DOMAIN + "/upods/api/v1.0/podcasts/category?id=";
+
+        COGNITO_LOGIN = DOMAIN + "/upods/api/v1.0/login";
     }
 }

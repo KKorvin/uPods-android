@@ -117,8 +117,19 @@ public class FragmentProfile extends Fragment {
         if (!VKSdk.onActivityResult(requestCode, resultCode, data, new VKCallback<VKAccessToken>() {
             @Override
             public void onResult(VKAccessToken token) {
-                LoginMaster.getInstance().setVkToCognito(token);
-                initUIAfterLogin();
+                lnLogein.setVisibility(View.GONE);
+                progressBar.setVisibility(View.VISIBLE);
+                LoginMaster.getInstance().setVkToCognito(token, new IOperationFinishCallback() {
+                    @Override
+                    public void operationFinished() {
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                initUIAfterLogin();
+                            }
+                        });
+                    }
+                });
             }
 
             @Override
