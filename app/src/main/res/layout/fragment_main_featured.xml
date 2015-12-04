@@ -24,4 +24,5 @@
         android:layout_height="match_parent"
         android:visibility="gone" />
 
+    <include layout="@layout/ln_no_internet"></include>
 </RelativeLayout>

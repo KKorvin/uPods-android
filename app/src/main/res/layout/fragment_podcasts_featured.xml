@@ -18,4 +18,5 @@
         android:clipToPadding="true"
         android:columnWidth="@dimen/rv_cards_column_width" />
 
+    <include layout="@layout/ln_no_internet"></include>
 </RelativeLayout>

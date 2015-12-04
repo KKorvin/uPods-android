@@ -35,4 +35,5 @@
         android:clipToPadding="true" />
 
     <include layout="@layout/small_player"></include>
+    <include layout="@layout/ln_no_internet"></include>
 </RelativeLayout>

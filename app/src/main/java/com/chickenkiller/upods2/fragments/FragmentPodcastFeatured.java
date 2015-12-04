@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
 import com.chickenkiller.upods2.R;
@@ -42,6 +43,7 @@ public class FragmentPodcastFeatured extends Fragment implements IContentLoadLis
     private AutofitRecyclerView rvMain;
     private MediaItemsAdapter mediaItemsAdapter;
     private ProgressBar pbLoadingFeatured;
+    private LinearLayout lnInternetError;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -49,6 +51,7 @@ public class FragmentPodcastFeatured extends Fragment implements IContentLoadLis
 
         //Init fragments views
         View view = inflater.inflate(R.layout.fragment_podcasts_featured, container, false);
+        lnInternetError = (LinearLayout) view.findViewById(R.id.lnInternetError);
         pbLoadingFeatured = (ProgressBar) view.findViewById(R.id.pbLoadingFeatured);
         rvMain = (AutofitRecyclerView) view.findViewById(R.id.rvMain);
 
@@ -138,9 +141,15 @@ public class FragmentPodcastFeatured extends Fragment implements IContentLoadLis
 
                     @Override
                     public void onRequestFailed() {
-
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                pbLoadingFeatured.setVisibility(View.GONE);
+                                rvMain.setVisibility(View.GONE);
+                                lnInternetError.setVisibility(View.VISIBLE);
+                            }
+                        });
                     }
-
                 }
         );
     }

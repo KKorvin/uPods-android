@@ -85,10 +85,10 @@
                 android:id="@+id/imgMediaMore"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_dots_vertical_white_24dp"
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="10dp"
-                android:layout_marginTop="8dp" />
+                android:layout_marginTop="8dp"
+                android:src="@drawable/ic_dots_vertical_white_24dp" />
 
             <Button
                 android:id="@+id/btnSubscribe"
@@ -164,13 +164,14 @@
             android:id="@+id/fbDetailsPlay"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
             android:layout_alignParentBottom="true"
-            android:layout_marginRight="20dp"
+            android:layout_alignParentRight="true"
             android:layout_marginBottom="20dp"
-            android:src="@drawable/ic_play_white_24dp"
+            android:layout_marginRight="20dp"
             android:background="@drawable/selector_play_button"
+            android:src="@drawable/ic_play_white_24dp"
             app:elevation="8dp" />
 
+        <include layout="@layout/ln_no_internet"></include>
     </RelativeLayout>
 </LinearLayout>

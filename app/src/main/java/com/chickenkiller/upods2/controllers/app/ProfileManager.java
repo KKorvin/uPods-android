@@ -319,10 +319,10 @@ public class ProfileManager {
             if (dataset.get(JS_SUBSCRIBED_STATIONS) != null) {
                 initProfileRadioItems(new JSONArray(dataset.get(JS_SUBSCRIBED_STATIONS)), ProfileItem.SUBSCRIBDED_RADIO);
             }
-            if (dataset.get(JS_DOWNLOADED_PODCASTS) != null) {
+            if (dataset.get(JS_RECENT_STATIONS) != null) {
                 initProfileRadioItems(new JSONArray(dataset.get(JS_RECENT_STATIONS)), ProfileItem.RECENT_RADIO);
             }
-        } catch (JSONException e) {
+        } catch (Exception e) {
             Logger.printError(PROFILE, "Can't get profile from cognito");
             e.printStackTrace();
         }

@@ -19,6 +19,7 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.GlideBitmapDrawable;
@@ -42,6 +43,7 @@ import com.chickenkiller.upods2.interfaces.ITrackable;
 import com.chickenkiller.upods2.models.Episod;
 import com.chickenkiller.upods2.models.Podcast;
 import com.chickenkiller.upods2.utils.DataHolder;
+import com.chickenkiller.upods2.utils.GlobalUtils;
 import com.chickenkiller.upods2.utils.enums.ContextMenuType;
 import com.chickenkiller.upods2.utils.enums.MediaItemType;
 import com.chickenkiller.upods2.utils.ui.LetterBitmap;
@@ -74,6 +76,7 @@ public class FragmentMediaItemDetails extends Fragment implements View.OnTouchLi
     private IPlayableMediaItem playableItem;
 
     private RelativeLayout rlDetailedContent;
+    private LinearLayout lnInternetError;
     private DetailsScrollView svDetails;
     private RecyclerView rvTracks;
     private TextView tvDetailedDescription;
@@ -103,6 +106,7 @@ public class FragmentMediaItemDetails extends Fragment implements View.OnTouchLi
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         View view = inflater.inflate(R.layout.fragment_media_details, container, false);
+        lnInternetError = (LinearLayout) view.findViewById(R.id.lnInternetError);
         rlDetailedContent = (RelativeLayout) view.findViewById(R.id.rlDetailedContent);
         tvDetailedDescription = (TextView) view.findViewById(R.id.tvDetailedDescription);
         tvDetailedHeader = (TextView) view.findViewById(R.id.tvDetailedHeader);
@@ -187,14 +191,18 @@ public class FragmentMediaItemDetails extends Fragment implements View.OnTouchLi
         fbDetailsPlay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent myIntent = new Intent(getActivity(), ActivityPlayer.class);
-                DataHolder.getInstance().save(ActivityPlayer.MEDIA_ITEM_EXTRA, playableItem);
-                if (FragmentSearch.isActive) {
-                    myIntent.putExtra(ActivityPlayer.ACTIVITY_STARTED_FROM_IN_DEPTH, MediaItemType.RADIO_SEARCH.ordinal());
+                if (GlobalUtils.isInternetConnected()) {
+                    Intent myIntent = new Intent(getActivity(), ActivityPlayer.class);
+                    DataHolder.getInstance().save(ActivityPlayer.MEDIA_ITEM_EXTRA, playableItem);
+                    if (FragmentSearch.isActive) {
+                        myIntent.putExtra(ActivityPlayer.ACTIVITY_STARTED_FROM_IN_DEPTH, MediaItemType.RADIO_SEARCH.ordinal());
+                    }
+                    myIntent.putExtra(ActivityPlayer.ACTIVITY_STARTED_FROM, MediaItemType.RADIO.ordinal());
+                    getActivity().startActivity(myIntent);
+                    getActivity().finish();
+                } else {
+                    Toast.makeText(getActivity(), getString(R.string.no_internet_access), Toast.LENGTH_SHORT).show();
                 }
-                myIntent.putExtra(ActivityPlayer.ACTIVITY_STARTED_FROM, MediaItemType.RADIO.ordinal());
-                getActivity().startActivity(myIntent);
-                getActivity().finish();
             }
         });
     }
@@ -292,7 +300,9 @@ public class FragmentMediaItemDetails extends Fragment implements View.OnTouchLi
 
                     @Override
                     public void onRequestFailed() {
-
+                        rvTracks.setVisibility(View.GONE);
+                        pbTracks.setVisibility(View.GONE);
+                        lnInternetError.setVisibility(View.VISIBLE);
                     }
                 }
 
@@ -305,13 +315,6 @@ public class FragmentMediaItemDetails extends Fragment implements View.OnTouchLi
         this.playableItem = mediaItem;
     }
 
-    @Override
-    public boolean onTouch(View view, MotionEvent event) {
-        onMove(event, true);
-        return true;
-    }
-
-
     private void correctOverlayLevel(int margin) {
         if (getActivity() instanceof IOverlayable) {
             // 100 - percent
@@ -321,6 +324,12 @@ public class FragmentMediaItemDetails extends Fragment implements View.OnTouchLi
             alpha = 255 - alpha;
             ((IOverlayable) getActivity()).setOverlayAlpha(alpha);
         }
+    }
+
+    @Override
+    public boolean onTouch(View view, MotionEvent event) {
+        onMove(event, true);
+        return true;
     }
 
     @Override

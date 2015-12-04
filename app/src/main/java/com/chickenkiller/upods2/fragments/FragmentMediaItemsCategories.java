@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -50,6 +51,7 @@ public class FragmentMediaItemsCategories extends Fragment implements AdapterVie
     private AutofitRecyclerView rvMain;
     private MediaItemsAdapter mediaItemsAdapter;
     private GridSpacingItemDecoration gridSpacingItemDecoration;
+    private LinearLayout lnInternetError;
 
     private MediaItemType mediaItemType;
 
@@ -74,6 +76,7 @@ public class FragmentMediaItemsCategories extends Fragment implements AdapterVie
         pbLoadingMediaItems = (ProgressBar) view.findViewById(R.id.pbLoadingMediaItems);
         rvMain = (AutofitRecyclerView) view.findViewById(R.id.rvMain);
         lvCategories = (ListView) view.findViewById(R.id.lvCategories);
+        lnInternetError = (LinearLayout) view.findViewById(R.id.lnInternetError);
 
         List<Category> categories = null;
 
@@ -154,7 +157,15 @@ public class FragmentMediaItemsCategories extends Fragment implements AdapterVie
 
                     @Override
                     public void onRequestFailed() {
-
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                lvCategories.setVisibility(View.GONE);
+                                rvMain.setVisibility(View.GONE);
+                                pbLoadingMediaItems.setVisibility(View.GONE);
+                                lnInternetError.setVisibility(View.VISIBLE);
+                            }
+                        });
                     }
 
                 }

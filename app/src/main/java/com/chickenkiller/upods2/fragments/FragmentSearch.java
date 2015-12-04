@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -50,6 +51,7 @@ public class FragmentSearch extends Fragment implements SearchView.OnQueryTextLi
     private TextView tvSearchNoResults;
     private TextView tvStartTyping;
     private MediaItemType mediaItemType;
+    private LinearLayout lnInternetError;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -57,6 +59,7 @@ public class FragmentSearch extends Fragment implements SearchView.OnQueryTextLi
 
         //Init fragments views
         View view = inflater.inflate(R.layout.fragment_search_results, container, false);
+        lnInternetError = (LinearLayout) view.findViewById(R.id.lnInternetError);
         pbLoadingSearch = (ProgressBar) view.findViewById(R.id.pbLoadingSearch);
         rvSearchResults = (RecyclerView) view.findViewById(R.id.rvSearchResults);
         tvSearchNoResults = (TextView) view.findViewById(R.id.tvSearchNoResults);
@@ -137,7 +140,16 @@ public class FragmentSearch extends Fragment implements SearchView.OnQueryTextLi
 
                     @Override
                     public void onRequestFailed() {
-
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                pbLoadingSearch.setVisibility(View.GONE);
+                                rvSearchResults.setVisibility(View.GONE);
+                                tvSearchNoResults.setVisibility(View.GONE);
+                                tvStartTyping.setVisibility(View.GONE);
+                                lnInternetError.setVisibility(View.VISIBLE);
+                            }
+                        });
                     }
 
                 }

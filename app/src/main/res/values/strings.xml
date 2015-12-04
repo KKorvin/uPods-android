@@ -98,6 +98,7 @@
     <string name="buffering">Buffering...</string>
     <string name="kbps">" Kbs"</string>
     <string name="login_with_vk">Log in with Vkontakte</string>
+    <string name="no_internet_access">No internet access</string>
 
 
 </resources>

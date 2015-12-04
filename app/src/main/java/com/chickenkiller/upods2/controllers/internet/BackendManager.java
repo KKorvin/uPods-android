@@ -81,6 +81,7 @@ public class BackendManager {
             }
         } catch (Exception e) {
             Logger.printInfo(TAG, "Can't restore cache for url: " + request.urlString());
+            uiUpdater.onRequestFailed();
             e.printStackTrace();
         }
         try {

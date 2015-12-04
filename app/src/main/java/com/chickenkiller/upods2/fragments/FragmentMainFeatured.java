@@ -8,6 +8,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -57,6 +58,7 @@ public class FragmentMainFeatured extends Fragment implements IContentLoadListen
     private MediaItemsAdapter mediaItemsAdapter;
     private ProgressBar pbLoadingFeatured;
     private View listViewHeader;
+    private LinearLayout lnInternetError;
 
     private int currentRoundBtnMode;
 
@@ -78,6 +80,7 @@ public class FragmentMainFeatured extends Fragment implements IContentLoadListen
 
         //Init fragments views
         View view = inflater.inflate(R.layout.fragment_main_featured, container, false);
+        lnInternetError = (LinearLayout) view.findViewById(R.id.lnInternetError);
         pbLoadingFeatured = (ProgressBar) view.findViewById(R.id.pbLoadingFeatured);
         rvMain = (AutofitRecyclerView) view.findViewById(R.id.rvMain);
         lvMain = (ListView) view.findViewById(R.id.lvMain);
@@ -177,7 +180,7 @@ public class FragmentMainFeatured extends Fragment implements IContentLoadListen
 
             @Override
             public void onRequestFailed() {
-
+                showNoInternetView();
             }
         });
     }
@@ -207,7 +210,7 @@ public class FragmentMainFeatured extends Fragment implements IContentLoadListen
 
                     @Override
                     public void onRequestFailed() {
-
+                        showNoInternetView();
                     }
 
                 }
@@ -254,7 +257,7 @@ public class FragmentMainFeatured extends Fragment implements IContentLoadListen
 
             @Override
             public void onRequestFailed() {
-
+                showNoInternetView();
             }
         });
     }
@@ -296,6 +299,18 @@ public class FragmentMainFeatured extends Fragment implements IContentLoadListen
             default:
                 return "";
         }
+    }
+
+    private void showNoInternetView() {
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                pbLoadingFeatured.setVisibility(View.GONE);
+                rvMain.setVisibility(View.GONE);
+                lvMain.setVisibility(View.GONE);
+                lnInternetError.setVisibility(View.VISIBLE);
+            }
+        });
     }
 
     @Override
