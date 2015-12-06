@@ -25,7 +25,6 @@ public class FragmentHelpItem extends Fragment {
         TAG = "f_help_item" + String.valueOf(time);
     }
 
-    private LinearLayout lnCirclesIndicator;
     private ImageView imgHelpTip;
     private Button btnCloseHelp;
     private View.OnClickListener closeClickListener;
@@ -36,7 +35,6 @@ public class FragmentHelpItem extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_help_item, container, false);
-        lnCirclesIndicator = (LinearLayout) view.findViewById(R.id.lnCirclesIndicator);
         imgHelpTip = (ImageView) view.findViewById(R.id.imgHelpTip);
         btnCloseHelp = (Button) view.findViewById(R.id.btnCloseHelp);
         if (closeClickListener != null) {
