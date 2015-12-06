@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.chickenkiller.upods2.R;
 import com.chickenkiller.upods2.controllers.app.ProfileManager;
+import com.chickenkiller.upods2.fragments.FragmentHelp;
 import com.chickenkiller.upods2.fragments.FragmentMediaItemsGrid;
 import com.chickenkiller.upods2.fragments.FragmentProfile;
 import com.chickenkiller.upods2.fragments.FragmentSearch;
@@ -36,6 +37,7 @@ import com.chickenkiller.upods2.utils.enums.MediaItemType;
 import com.chickenkiller.upods2.utils.ui.UIHelper;
 import com.chickenkiller.upods2.views.SlidingMenu;
 import com.facebook.CallbackManager;
+import com.pixplicity.easyprefs.library.Prefs;
 
 public class ActivityMain extends BasicActivity implements IOverlayable, IToolbarHolder, ISlidingMenuHolder, ILoginManager {
 
@@ -69,16 +71,21 @@ public class ActivityMain extends BasicActivity implements IOverlayable, IToolba
         UIHelper.changeSearchViewTextColor(searchView, Color.WHITE);
 
         slidingMenu = new SlidingMenu(this, toolbar);
+
         showFragment(R.id.fl_content, new FragmentWellcome(), FragmentWellcome.TAG);
 
         if (isFirstRun) {
             toolbar.setVisibility(View.GONE);
             new Handler().postDelayed(new Runnable() {
                 public void run() {
-                    toolbar.setVisibility(View.VISIBLE);
-                    FragmentMediaItemsGrid fragmentMediaItemsGrid = new FragmentMediaItemsGrid();
-                    fragmentMediaItemsGrid.setMediaItemType(MediaItemType.RADIO);
-                    showFragment(R.id.fl_content, fragmentMediaItemsGrid, FragmentMediaItemsGrid.TAG);
+                    if (!Prefs.getBoolean(FragmentHelp.PREF_HELP_SHOWN, false)) {
+                        showHelpFragment();
+                    } else {
+                        toolbar.setVisibility(View.VISIBLE);
+                        FragmentMediaItemsGrid fragmentMediaItemsGrid = new FragmentMediaItemsGrid();
+                        fragmentMediaItemsGrid.setMediaItemType(MediaItemType.RADIO);
+                        showFragment(R.id.fl_content, fragmentMediaItemsGrid, FragmentMediaItemsGrid.TAG);
+                    }
                 }
             }, WELLCOME_SCREEN_TIME);
         } else {
@@ -102,6 +109,20 @@ public class ActivityMain extends BasicActivity implements IOverlayable, IToolba
     }
 
 
+    private void showHelpFragment() {
+        FragmentHelp fragmentHelp = new FragmentHelp();
+        fragmentHelp.setCloseClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                toolbar.setVisibility(View.VISIBLE);
+                FragmentMediaItemsGrid fragmentMediaItemsGrid = new FragmentMediaItemsGrid();
+                fragmentMediaItemsGrid.setMediaItemType(MediaItemType.RADIO);
+                showFragment(R.id.fl_content, fragmentMediaItemsGrid, FragmentMediaItemsGrid.TAG);
+            }
+        });
+        showFragment(R.id.fl_content, fragmentHelp, FragmentHelp.TAG);
+    }
+
     @Override
     public void onBackPressed() {
         if (getFragmentManager().findFragmentByTag(getLatestFragmentTag()) instanceof ICustumziedBackPress) {
@@ -115,7 +136,7 @@ public class ActivityMain extends BasicActivity implements IOverlayable, IToolba
         slidingMenu.getAdapter().clearRowSelections();
         slidingMenu.getAdapter().notifyDataSetChanged();
         Logger.printInfo(LOG_TAG, "Number fragments in stack: " + String.valueOf(getFragmentManager().getBackStackEntryCount()));
-        if (getFragmentManager().getBackStackEntryCount() > MIN_NUMBER_FRAGMENTS_IN_STACK) {
+        if (getFragmentManager().getBackStackEntryCount() > MIN_NUMBER_FRAGMENTS_IN_STACK && !getLatestFragmentTag().equals(FragmentHelp.TAG)) {
             if (getLatestFragmentTag().equals(FragmentSearch.TAG)) {
                 toolbar.getMenu().findItem(R.id.action_search).collapseActionView();
                 getFragmentManager().popBackStack();

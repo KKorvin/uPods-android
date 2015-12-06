@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:CircleIndicator="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:gravity="center"
+    android:orientation="vertical">
+
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/vpHelp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    </android.support.v4.view.ViewPager>
+
+    <com.chickenkiller.upods2.views.CircleIndicator
+        android:id="@+id/indicatorHelp"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginBottom="120dp"
+        CircleIndicator:ci_background="@color/whiteGray"
+        CircleIndicator:ci_gravity="center"
+        CircleIndicator:ci_margin="5dp"
+        CircleIndicator:ci_mode="outside"
+        CircleIndicator:ci_radius="10dp"
+        CircleIndicator:ci_selected_background="@color/pink_A400" />
+</LinearLayout>
