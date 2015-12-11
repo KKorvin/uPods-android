@@ -49,6 +49,7 @@ public class UniversalPlayer implements MediaPlayer.OnPreparedListener, MediaPla
     private MediaPlayer.OnPreparedListener preparedListener;
     private IOperationFinishWithDataCallback onMetaDataFetchedCallback;
     private IOperationFinishCallback onAutonomicTrackChangeCallback;
+    private IOperationFinishCallback onPlayingFailedCallback;
     private IPlayerStateListener playerStateListener;
 
     private IPlayableMediaItem mediaItem;
@@ -92,6 +93,9 @@ public class UniversalPlayer implements MediaPlayer.OnPreparedListener, MediaPla
         this.onMetaDataFetchedCallback = onMetaDataFetchedCallback;
     }
 
+    public void setOnPlayingFailedCallback(IOperationFinishCallback onPlayingFailedCallback) {
+        this.onPlayingFailedCallback = onPlayingFailedCallback;
+    }
 
     public void setPreparedListener(MediaPlayer.OnPreparedListener preparedListener) {
         this.preparedListener = preparedListener;
@@ -140,6 +144,10 @@ public class UniversalPlayer implements MediaPlayer.OnPreparedListener, MediaPla
                 mediaPlayer.setOnCompletionListener(this);
                 mediaPlayer.prepareAsync();
             } catch (Exception e) {
+                Logger.printInfo(PLAYER_LOG, "Failed to prepare player...");
+                if (onPlayingFailedCallback != null) {
+                    onPlayingFailedCallback.operationFinished();
+                }
                 e.printStackTrace();
             }
         }
@@ -156,15 +164,17 @@ public class UniversalPlayer implements MediaPlayer.OnPreparedListener, MediaPla
         if (mediaItem instanceof RadioItem) {
             ((RadioItem) mediaItem).fixAudeoLinks(new IOperationFinishCallback() {
                 @Override
-                public void operationFinished() {
+                public void operationFinished() { //Succeed to fetch valid URL
                     isLinkReadyForPlaying = true;
-                    prepare(); //Succeed to fetch valid URL
+                    prepare();
                 }
             }, new IOperationFinishCallback() {
                 @Override
-                public void operationFinished() {
+                public void operationFinished() {  //Failed to fetch valid URL
                     isLinkReadyForPlaying = true;
-                    //Failed to fetch valid URL
+                    if (onPlayingFailedCallback != null) {
+                        onPlayingFailedCallback.operationFinished();
+                    }
                 }
             });
             return false;
@@ -254,6 +264,7 @@ public class UniversalPlayer implements MediaPlayer.OnPreparedListener, MediaPla
         playerStateListener = null;
         onMetaDataFetchedCallback = null;
         onAutonomicTrackChangeCallback = null;
+        onPlayingFailedCallback = null;
     }
 
 

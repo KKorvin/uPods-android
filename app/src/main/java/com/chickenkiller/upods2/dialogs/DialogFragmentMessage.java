@@ -7,13 +7,15 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 
 import com.chickenkiller.upods2.R;
+import com.chickenkiller.upods2.interfaces.IOperationFinishCallback;
 
 /**
  * Created by alonzilberman on 8/8/15.
  */
 public class DialogFragmentMessage extends DialogFragment {
 
-    public static final String TAG = "df_track_info";
+    public static final String TAG = "df_simple_message";
+    private IOperationFinishCallback onOkClicked;
     private String message;
     private String title;
 
@@ -24,6 +26,9 @@ public class DialogFragmentMessage extends DialogFragment {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
                         dialog.dismiss();
+                        if (onOkClicked != null) {
+                            onOkClicked.operationFinished();
+                        }
                     }
                 });
         return builder.create();
@@ -35,5 +40,9 @@ public class DialogFragmentMessage extends DialogFragment {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public void setOnOkClicked(IOperationFinishCallback onOkClicked) {
+        this.onOkClicked = onOkClicked;
     }
 }

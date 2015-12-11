@@ -99,6 +99,11 @@
     <string name="kbps">" Kbs"</string>
     <string name="login_with_vk">Log in with Vkontakte</string>
     <string name="no_internet_access">No internet access</string>
+    <string name="cant_play">Can\'t play current</string>
+    <string name="podcast_small">podcast</string>
+    <string name="radio_station">radio station</string>
+    <string name="please_try_later">Please try again later.</string>
+    <string name="oops">Ooops</string>
 
 
 </resources>

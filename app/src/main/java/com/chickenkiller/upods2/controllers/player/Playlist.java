@@ -300,7 +300,7 @@ public class Playlist implements AdapterView.OnItemClickListener {
     }
 
     public int getTracksCount() {
-        return playlistAdapter.getCount();
+        return playlistAdapter.getCount() + 1;
     }
 
     public int getCurrentTrackNumber() {
