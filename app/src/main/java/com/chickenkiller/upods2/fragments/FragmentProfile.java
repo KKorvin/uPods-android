@@ -14,6 +14,7 @@ import com.chickenkiller.upods2.controllers.app.LoginMaster;
 import com.chickenkiller.upods2.controllers.app.ProfileManager;
 import com.chickenkiller.upods2.interfaces.ILoginManager;
 import com.chickenkiller.upods2.interfaces.IOperationFinishCallback;
+import com.chickenkiller.upods2.interfaces.ISlidingMenuHolder;
 import com.chickenkiller.upods2.utils.Logger;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
@@ -161,6 +162,7 @@ public class FragmentProfile extends Fragment {
                 });
             }
         });
+        ((ISlidingMenuHolder) getActivity()).getSlidingMenu().updateHeader(true);
     }
 
     public void initLoginUI(View rootView) {

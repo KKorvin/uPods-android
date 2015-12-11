@@ -1,21 +1,38 @@
 package com.chickenkiller.upods2.controllers.app;
 
 import android.os.AsyncTask;
+import android.os.Bundle;
 
 import com.amazonaws.auth.CognitoCachingCredentialsProvider;
 import com.amazonaws.regions.Regions;
 import com.chickenkiller.upods2.interfaces.IOperationFinishCallback;
+import com.chickenkiller.upods2.interfaces.IOperationFinishWithDataCallback;
+import com.chickenkiller.upods2.models.UserProfile;
 import com.chickenkiller.upods2.utils.Logger;
 import com.facebook.AccessToken;
 import com.facebook.AccessTokenTracker;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
 import com.facebook.login.LoginManager;
 import com.twitter.sdk.android.Twitter;
+import com.twitter.sdk.android.core.Callback;
+import com.twitter.sdk.android.core.Result;
 import com.twitter.sdk.android.core.TwitterAuthConfig;
 import com.twitter.sdk.android.core.TwitterAuthToken;
+import com.twitter.sdk.android.core.TwitterException;
 import com.twitter.sdk.android.core.TwitterSession;
+import com.twitter.sdk.android.core.models.User;
 import com.vk.sdk.VKAccessToken;
 import com.vk.sdk.VKAccessTokenTracker;
 import com.vk.sdk.VKSdk;
+import com.vk.sdk.api.VKApi;
+import com.vk.sdk.api.VKError;
+import com.vk.sdk.api.VKParameters;
+import com.vk.sdk.api.VKRequest;
+import com.vk.sdk.api.VKResponse;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -40,9 +57,12 @@ public class LoginMaster {
     private boolean isLogedinWithFacebook;
     private boolean isLogedinWithTwitter;
 
+    private UserProfile userProfile;
+
     private LoginMaster() {
         this.isLogedinWithFacebook = false;
         this.isLogedinWithTwitter = false;
+        this.userProfile = null;
     }
 
 
@@ -157,5 +177,110 @@ public class LoginMaster {
         } else if (VKSdk.isLoggedIn()) {
             VKSdk.logout();
         }
+    }
+
+    public void initUserProfile(final IOperationFinishWithDataCallback profileFetched, boolean isForceUpdate) {
+        if (userProfile != null && !isForceUpdate) {
+            profileFetched.operationFinished(userProfile);
+        } else if (!isLogedIn()) {
+            userProfile = new UserProfile();
+            profileFetched.operationFinished(userProfile);
+        } else {
+            if (isLogedinWithFacebook) {
+                fetchFacebookUserData(profileFetched);
+            } else if (isLogedinWithTwitter) {
+                fetchTwitterUserData(profileFetched);
+            } else if (VKSdk.isLoggedIn()) {
+                fetchVkUserData(profileFetched);
+            }
+        }
+    }
+
+    private void fetchVkUserData(final IOperationFinishWithDataCallback profileFetched) {
+        VKParameters parameters = new VKParameters();
+        parameters.put("fields", "photo_200");
+        VKRequest request = VKApi.users().get(parameters);
+        request.executeWithListener(new VKRequest.VKRequestListener() {
+            @Override
+            public void onComplete(VKResponse response) {
+                userProfile = new UserProfile();
+                try {
+                    JSONObject jsonUser = response.json.getJSONArray("response").optJSONObject(0);
+                    StringBuilder userName = new StringBuilder();
+                    if (jsonUser.has("first_name")) {
+                        userName.append(jsonUser.getString("first_name"));
+                    }
+                    if (jsonUser.has("last_name")) {
+                        userName.append(" ");
+                        userName.append(jsonUser.getString("last_name"));
+                    }
+                    userProfile.setName(userName.toString());
+                    userProfile.setProfileImageUrl(jsonUser.getString("photo_200"));
+                    profileFetched.operationFinished(userProfile);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onError(VKError error) {
+            }
+
+            @Override
+            public void attemptFailed(VKRequest request, int attemptNumber, int totalAttempts) {
+            }
+        });
+    }
+
+    private void fetchTwitterUserData(final IOperationFinishWithDataCallback profileFetched) {
+        TwitterSession session =
+                Twitter.getSessionManager().getActiveSession();
+        Twitter.getApiClient(session).getAccountService()
+                .verifyCredentials(true, false, new Callback<User>() {
+                    @Override
+                    public void success(Result<User> userResult) {
+                        User user = userResult.data;
+                        userProfile = new UserProfile();
+                        userProfile.setName(user.screenName);
+                        userProfile.setProfileImageUrl(user.profileImageUrlHttps);
+                        profileFetched.operationFinished(userProfile);
+                    }
+
+                    @Override
+                    public void failure(TwitterException e) {
+
+                    }
+                });
+    }
+
+    private void fetchFacebookUserData(final IOperationFinishWithDataCallback profileFetched) {
+        GraphRequest request = GraphRequest.newMeRequest(
+                AccessToken.getCurrentAccessToken(),
+                new GraphRequest.GraphJSONObjectCallback() {
+                    @Override
+                    public void onCompleted(JSONObject object, GraphResponse response) {
+                        userProfile = new UserProfile();
+                        try {
+                            StringBuilder userName = new StringBuilder();
+                            if (object.has("first_name")) {
+                                userName.append(object.getString("first_name"));
+                            }
+                            if (object.has("last_name")) {
+                                userName.append(" ");
+                                userName.append(object.getString("last_name"));
+                            }
+                            userProfile.setName(userName.toString());
+                            String avatarUrl = "https://graph.facebook.com/" + object.getString("id") + "/picture?type=large";
+                            userProfile.setProfileImageUrl(avatarUrl);
+                            profileFetched.operationFinished(userProfile);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+        Bundle parameters = new Bundle();
+        parameters.putString("fields", "id,first_name,email,last_name");
+        request.setParameters(parameters);
+        request.executeAsync();
     }
 }

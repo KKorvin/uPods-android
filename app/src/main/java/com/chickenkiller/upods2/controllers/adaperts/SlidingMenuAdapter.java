@@ -1,6 +1,9 @@
 package com.chickenkiller.upods2.controllers.adaperts;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +13,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.chickenkiller.upods2.R;
 import com.chickenkiller.upods2.fragments.FragmentMediaItemsGrid;
 import com.chickenkiller.upods2.fragments.FragmentProfile;
@@ -123,6 +128,23 @@ public class SlidingMenuAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 ((ViewHolderItem) holder).image.setImageResource(((SlidingMenuRow) item).getMainIconId());
             }
             setSlidingMenuItemClick((ViewHolderItem) holder, position);
+        } else if (holder instanceof ViewHolderHeader) {
+            SlidingMenuHeader headerItem = (SlidingMenuHeader) item;
+            final ViewHolderHeader viewHolderHeader = (ViewHolderHeader) holder;
+            final Context mContext = viewHolderHeader.headerText.getContext();
+
+            viewHolderHeader.headerText.setText(headerItem.getName());
+            viewHolderHeader.headerEmail.setText(headerItem.getEmail());
+
+            Glide.with(mContext).load(headerItem.getImgUrl()).asBitmap().centerCrop().into(new BitmapImageViewTarget(viewHolderHeader.headerAvater) {
+                @Override
+                protected void setResource(Bitmap resource) {
+                    RoundedBitmapDrawable circularBitmapDrawable =
+                            RoundedBitmapDrawableFactory.create(mContext.getResources(), resource);
+                    circularBitmapDrawable.setCircular(true);
+                    viewHolderHeader.headerAvater.setImageDrawable(circularBitmapDrawable);
+                }
+            });
         }
         holder.itemView.setTag(item);
     }

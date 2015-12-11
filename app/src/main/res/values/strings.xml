@@ -104,6 +104,8 @@
     <string name="radio_station">radio station</string>
     <string name="please_try_later">Please try again later.</string>
     <string name="oops">Ooops</string>
+    <string name="anonymus">Anonymus</string>
+    <string name="anonymus_email">unknown</string>
 
 
 </resources>

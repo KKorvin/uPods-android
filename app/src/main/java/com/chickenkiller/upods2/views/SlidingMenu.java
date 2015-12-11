@@ -12,11 +12,14 @@ import android.view.View;
 
 import com.chickenkiller.upods2.R;
 import com.chickenkiller.upods2.controllers.adaperts.SlidingMenuAdapter;
+import com.chickenkiller.upods2.controllers.app.LoginMaster;
 import com.chickenkiller.upods2.interfaces.IFragmentsManager;
+import com.chickenkiller.upods2.interfaces.IOperationFinishWithDataCallback;
 import com.chickenkiller.upods2.interfaces.ISlidingMenuManager;
 import com.chickenkiller.upods2.models.SlidingMenuHeader;
 import com.chickenkiller.upods2.models.SlidingMenuItem;
 import com.chickenkiller.upods2.models.SlidingMenuRow;
+import com.chickenkiller.upods2.models.UserProfile;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,18 +37,19 @@ public class SlidingMenu implements ISlidingMenuManager {
     private RecyclerView rvDrawerList;
     private ActionBarDrawerToggle mDrawerToggle;
     private SlidingMenuAdapter slidingMenuAdapter;
+    private SlidingMenuHeader slidingMenuHeader;
 
     private final LinearLayoutManager layoutManager;
-
 
     public SlidingMenu(Activity mActivity, Toolbar mToolbar) {
         this.activity = mActivity;
         this.layoutManager = new LinearLayoutManager(mActivity);
         this.layoutManager.setOrientation(OrientationHelper.VERTICAL);
         this.mDrawerLayout = (DrawerLayout) activity.findViewById(R.id.drawer_layout);
+        this.slidingMenuHeader = new SlidingMenuHeader();
 
         List<SlidingMenuItem> slidingMenuItems = new ArrayList<>();
-        slidingMenuItems.add(new SlidingMenuHeader());
+        slidingMenuItems.add(slidingMenuHeader);
         slidingMenuItems.addAll(SlidingMenuRow.fromDefaultSlidingMenuSet());
         if (activity instanceof IFragmentsManager) {
             this.slidingMenuAdapter = new SlidingMenuAdapter(slidingMenuItems,
@@ -80,9 +84,10 @@ public class SlidingMenu implements ISlidingMenuManager {
         };
         mDrawerLayout.setDrawerListener(mDrawerToggle);
         mDrawerToggle.syncState();
+        updateHeader(false);
     }
 
-    public SlidingMenuAdapter getAdapter(){
+    public SlidingMenuAdapter getAdapter() {
         return slidingMenuAdapter;
     }
 
@@ -93,6 +98,21 @@ public class SlidingMenu implements ISlidingMenuManager {
         } else {
             mDrawerLayout.closeDrawer(Gravity.LEFT);
         }
+    }
+
+    public void updateHeader(boolean isForceUpdate) {
+        LoginMaster.getInstance().initUserProfile(new IOperationFinishWithDataCallback() {
+            @Override
+            public void operationFinished(Object data) {
+                UserProfile userProfile = (UserProfile) data;
+                if (slidingMenuHeader != null && slidingMenuAdapter != null) {
+                    slidingMenuHeader.setEmail(userProfile.getEmail());
+                    slidingMenuHeader.setName(userProfile.getName());
+                    slidingMenuHeader.setImgUrl(userProfile.getProfileImageUrl());
+                    slidingMenuAdapter.notifyDataSetChanged();
+                }
+            }
+        }, isForceUpdate);
     }
 
 }
