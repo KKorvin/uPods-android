@@ -48,6 +48,7 @@ public class ProfileManager {
 
     private ProfileManager() {
         syncFromLocalStorage();
+        saveChanges(ProfileItem.RECENT_RADIO); //Just to make sure we created at least empty identity on cognito i.e on first run
     }
 
     public static ProfileManager getInstance() {
