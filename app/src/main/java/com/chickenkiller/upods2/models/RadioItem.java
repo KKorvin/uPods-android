@@ -179,7 +179,7 @@ public class RadioItem extends MediaItem implements IPlayableMediaItem {
                     final String currentUrl = streamUrl.getUrl();
                     if (GlobalUtils.isUrlReachable(currentUrl)) {
                         if (currentUrl.matches("(.+\\.m3u$)|(.+\\.pls$)")) {
-                            MediaUtils.extractMp3FromFile(streamUrl.getUrl(), new IOperationFinishWithDataCallback() {
+                            MediaUtils.extractMp3FromFile(currentUrl, new IOperationFinishWithDataCallback() {
                                 @Override
                                 public void operationFinished(Object data) {
                                     StreamUrl.replaceUrl(streamUrls, (String) data, currentUrl);
