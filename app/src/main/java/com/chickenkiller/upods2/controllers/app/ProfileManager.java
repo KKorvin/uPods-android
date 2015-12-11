@@ -2,7 +2,6 @@ package com.chickenkiller.upods2.controllers.app;
 
 import com.amazonaws.mobileconnectors.cognito.CognitoSyncManager;
 import com.amazonaws.mobileconnectors.cognito.Dataset;
-import com.amazonaws.mobileconnectors.cognito.DefaultSyncCallback;
 import com.amazonaws.mobileconnectors.cognito.Record;
 import com.amazonaws.mobileconnectors.cognito.SyncConflict;
 import com.amazonaws.mobileconnectors.cognito.exceptions.DataStorageException;
@@ -292,7 +291,37 @@ public class ProfileManager {
             } else if (profileItem == ProfileItem.RECENT_RADIO) {
                 dataset.put(JS_RECENT_STATIONS, RadioItem.toJsonArray(recentRadioItems).toString());
             }
-            dataset.synchronize(new DefaultSyncCallback());
+            dataset.synchronize(new Dataset.SyncCallback() {
+                @Override
+                public void onSuccess(Dataset dataset, List<Record> updatedRecords) {
+
+                }
+
+                @Override
+                public boolean onConflict(Dataset dataset, List<SyncConflict> conflicts) {
+                    List<Record> resolvedRecords = new ArrayList<Record>();
+                    for (SyncConflict conflict : conflicts) {
+                        resolvedRecords.add(conflict.resolveWithLastWriterWins());
+                    }
+                    dataset.resolve(resolvedRecords);
+                    return true;
+                }
+
+                @Override
+                public boolean onDatasetDeleted(Dataset dataset, String datasetName) {
+                    return false;
+                }
+
+                @Override
+                public boolean onDatasetsMerged(Dataset dataset, List<String> datasetNames) {
+                    return true;
+                }
+
+                @Override
+                public void onFailure(DataStorageException dse) {
+                    dse.printStackTrace();
+                }
+            });
             Logger.printInfo(PROFILE, "Syncying profile with AWS...");
         } catch (Exception e) {
             Logger.printInfo(PROFILE, "Can't sync profile with AWS);");
