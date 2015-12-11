@@ -5,10 +5,9 @@ import android.net.ConnectivityManager;
 
 import com.chickenkiller.upods2.controllers.app.UpodsApplication;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-
 import java.io.File;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -21,27 +20,6 @@ import java.util.regex.Pattern;
  * Created by alonzilberman on 8/14/15.
  */
 public class GlobalUtils {
-
-    private static final String[] bestStreamPatterns = {".+\\.mp3", ".+[^.]{4}$"};
-
-
-    public static String getBestStreamUrl(JSONArray allUrls) {
-        String url = "";
-        try {
-            url = allUrls.getString(0);
-            for (String pattern : bestStreamPatterns) {
-                for (int i = 0; i < allUrls.length(); i++) {
-                    if (allUrls.getString(i).matches(pattern)) {
-                        url = allUrls.getString(i);
-                        return url;
-                    }
-                }
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return url;
-    }
 
     public static String parserDateToUS(String date) {
         try {
@@ -110,5 +88,19 @@ public class GlobalUtils {
             }
         }
         return containedUrls;
+    }
+
+    public static boolean isUrlReachable(String urlToCheck) {
+        try {
+            URL url = new URL(urlToCheck);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            int code = connection.getResponseCode();
+            if (code == 200) {
+                return true;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 }

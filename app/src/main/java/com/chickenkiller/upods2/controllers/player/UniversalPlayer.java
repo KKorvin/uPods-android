@@ -57,6 +57,7 @@ public class UniversalPlayer implements MediaPlayer.OnPreparedListener, MediaPla
     private TimerTask autoReconector;
 
     public boolean isPrepaired;
+    public boolean isLinkReadyForPlaying;
 
 
     private UniversalPlayer() {
@@ -119,10 +120,11 @@ public class UniversalPlayer implements MediaPlayer.OnPreparedListener, MediaPla
         }
         if (!isPrepaired) {
             try {
-                Logger.printInfo(PLAYER_LOG, "Trying to play: " + mediaItem.getAudeoLink());
-                if (!menageAudeoFormats()) {
+                if (!isLinkReadyForPlaying && !prepareLinkForPlaying()) {
                     return;
                 }
+                Logger.printInfo(PLAYER_LOG, "Trying to play: " + mediaItem.getAudeoLink());
+
                 if (onMetaDataFetchedCallback != null) {
                     MetaDataFetcher metaDataFetcher = new MetaDataFetcher(onMetaDataFetchedCallback, mediaItem.getAudeoLink());
                     metaDataFetcher.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
@@ -144,21 +146,30 @@ public class UniversalPlayer implements MediaPlayer.OnPreparedListener, MediaPla
     }
 
     /**
-     * Call it to manage different media formats, will try to convert format to mp3 if it is not supported
+     * Call it in the start of prepare  to manage different media formats
+     * and broken links. It will try to select working link and  convert format to
+     * mp3 if it is not supported.
      *
-     * @return true - if prepare should continues, false if it will call atomatycly bac callback
+     * @return true - if prepare should continues regulary, false if it will call atomatycly by callback
      */
-    private boolean menageAudeoFormats() {
-        if (mediaItem.getAudeoLink().matches("(.+\\.m3u$)|(.+\\.pls$)")) {
-            MediaUtils.extractMp3FromFile(mediaItem.getAudeoLink(), new IOperationFinishWithDataCallback() {
+    private boolean prepareLinkForPlaying() {
+        if (mediaItem instanceof RadioItem) {
+            ((RadioItem) mediaItem).fixAudeoLinks(new IOperationFinishCallback() {
                 @Override
-                public void operationFinished(Object data) {
-                    mediaItem.setAudeoLink((String) data);
-                    prepare();
+                public void operationFinished() {
+                    isLinkReadyForPlaying = true;
+                    prepare(); //Succeed to fetch valid URL
+                }
+            }, new IOperationFinishCallback() {
+                @Override
+                public void operationFinished() {
+                    isLinkReadyForPlaying = true;
+                    //Failed to fetch valid URL
                 }
             });
             return false;
         }
+        isLinkReadyForPlaying = true;
         return true;
     }
 
@@ -219,6 +230,7 @@ public class UniversalPlayer implements MediaPlayer.OnPreparedListener, MediaPla
             mediaPlayer = null;
             mediaItem = null;
             isPrepaired = false;
+            isLinkReadyForPlaying = false;
             positionOffset = 0;
         }
         if (notificationPanel != null) {
@@ -230,6 +242,7 @@ public class UniversalPlayer implements MediaPlayer.OnPreparedListener, MediaPla
         if (mediaPlayer != null) {
             mediaPlayer.reset();
             isPrepaired = false;
+            isLinkReadyForPlaying = false;
         }
         if (notificationPanel != null) {
             notificationPanel.notificationCancel();

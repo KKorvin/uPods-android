@@ -176,11 +176,6 @@ public class Podcast extends MediaItem implements IPlayableMediaItem, ITrackable
     }
 
     @Override
-    public void setAudeoLink(String data) {
-
-    }
-
-    @Override
     public boolean hasTracks() {
         return true;
     }
