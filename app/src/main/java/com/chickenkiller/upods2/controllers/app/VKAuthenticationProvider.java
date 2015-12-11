@@ -5,7 +5,6 @@ import com.amazonaws.regions.Regions;
 import com.chickenkiller.upods2.controllers.internet.BackendManager;
 import com.chickenkiller.upods2.utils.Logger;
 import com.chickenkiller.upods2.utils.ServerApi;
-import com.pixplicity.easyprefs.library.Prefs;
 import com.squareup.okhttp.FormEncodingBuilder;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.RequestBody;
@@ -19,11 +18,10 @@ import org.json.JSONObject;
  */
 public class VKAuthenticationProvider extends AWSAbstractCognitoDeveloperIdentityProvider {
 
-    private static final String PREF_IDENTITY_ID = "cognito_identity_id";
     private static final String DEVELOPER_PROVIDER_NAME = "login.vk.com";
     private static final String LOG = "VKAuthenticationProvider";
     private static final Regions REGION = Regions.US_EAST_1;
-
+    public static final String PREF_IDENTITY_ID = "cognito_identity_id";
 
     public VKAuthenticationProvider(String accountId, String identityPoolId, Regions region) {
         super(accountId, identityPoolId, region);
@@ -101,11 +99,10 @@ public class VKAuthenticationProvider extends AWSAbstractCognitoDeveloperIdentit
      */
     @Override
     public String getIdentityId() {
-        identityId = Prefs.getString(PREF_IDENTITY_ID, null);
+        identityId = LoginMaster.getInstance().getCredentialsProvider().getCachedIdentityId();
         if (identityId == null) {
             identityId = super.getIdentityId();
         }
-        Prefs.putString(PREF_IDENTITY_ID, identityId);
         return identityId;
     }
 }

@@ -14,6 +14,7 @@ import com.facebook.AccessTokenTracker;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.login.LoginManager;
+import com.pixplicity.easyprefs.library.Prefs;
 import com.twitter.sdk.android.Twitter;
 import com.twitter.sdk.android.core.Callback;
 import com.twitter.sdk.android.core.Result;
@@ -132,11 +133,11 @@ public class LoginMaster {
     }
 
     public void setTwitterToCognito(TwitterSession session) {
+        Prefs.remove(VKAuthenticationProvider.PREF_IDENTITY_ID);
         TwitterAuthToken authToken = session.getAuthToken();
         String value = authToken.token + ";" + authToken.secret;
         Map<String, String> logins = new HashMap<String, String>();
         logins.put("api.twitter.com", value);
-        // Note: This overrides any existing logins
         credentialsProvider.setLogins(logins);
     }
 
