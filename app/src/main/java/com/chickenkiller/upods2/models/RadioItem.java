@@ -47,7 +47,7 @@ public class RadioItem extends MediaItem implements IPlayableMediaItem {
 
     public RadioItem(RadioItem item) {
         this.name = item.name;
-        this.streamUrls = item.streamUrls;
+        this.streamUrls = new HashSet<>(item.streamUrls);
         this.coverImageUrl = item.coverImageUrl;
         this.bannerImageUrl = item.bannerImageUrl;
         this.description = item.description;
@@ -168,6 +168,7 @@ public class RadioItem extends MediaItem implements IPlayableMediaItem {
 
     /**
      * Fixes current RadioItem link (formail, isAlive) if needed.
+     *
      * @param operationFinishSecsuessCallback
      * @param operationFinishFailCallback
      */

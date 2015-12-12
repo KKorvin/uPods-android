@@ -27,6 +27,8 @@ public class Podcast extends MediaItem implements IPlayableMediaItem, ITrackable
     protected String genre;
     protected String description;
 
+    public boolean hasUpdates;
+
     protected ArrayList<Episod> episods;
 
     public Podcast() {
@@ -37,8 +39,9 @@ public class Podcast extends MediaItem implements IPlayableMediaItem, ITrackable
     public Podcast(JSONObject jsonItem) {
         this();
         try {
+            this.hasUpdates = jsonItem.has("hasUpdates") ? jsonItem.getBoolean("hasUpdates") : false;
             this.description = jsonItem.has("description") ? jsonItem.getString("description") : "";
-            if (jsonItem.has("kind")) { //Itnes
+            if (jsonItem.has("kind")) { //Itunes
                 this.id = jsonItem.has("trackId") ? jsonItem.getInt("trackId") : 0;
                 this.name = jsonItem.has("collectionName") ? jsonItem.getString("collectionName") : "";
                 this.censoredName = jsonItem.has("collectionCensoredName") ? jsonItem.getString("collectionCensoredName") : "";
@@ -84,6 +87,7 @@ public class Podcast extends MediaItem implements IPlayableMediaItem, ITrackable
         JSONObject podcast = new JSONObject();
         try {
             podcast.put("id", this.id);
+            podcast.put("hasUpdates", this.hasUpdates);
             podcast.put("name", this.name);
             podcast.put("censored_name", this.censoredName);
             podcast.put("artist_name", this.artistName);
@@ -115,6 +119,7 @@ public class Podcast extends MediaItem implements IPlayableMediaItem, ITrackable
 
     public Podcast(Podcast podcast) {
         this.name = podcast.getName();
+        this.hasUpdates = podcast.hasUpdates;
         this.censoredName = podcast.getCensoredName();
         this.artistName = podcast.getArtistName();
         this.feedUrl = podcast.getFeedUrl();
