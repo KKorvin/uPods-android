@@ -1,8 +1,8 @@
-package com.chickenkiller.upods2.controllers.app;
+package com.chickenkiller.upods2.controllers.internet;
 
 import com.amazonaws.auth.AWSAbstractCognitoDeveloperIdentityProvider;
 import com.amazonaws.regions.Regions;
-import com.chickenkiller.upods2.controllers.internet.BackendManager;
+import com.chickenkiller.upods2.controllers.app.LoginMaster;
 import com.chickenkiller.upods2.utils.Logger;
 import com.chickenkiller.upods2.utils.ServerApi;
 import com.squareup.okhttp.FormEncodingBuilder;

@@ -26,6 +26,7 @@ public class UpodsApplication extends Application {
                 .setPrefsName(getPackageName())
                 .setUseDefaultSharedPreference(true)
                 .build();
+        SettingsManager.getInstace().init();
         Category.initPodcastsCatrgories();
         SimpleCacheManager.getInstance().removeExpiredCache();
         super.onCreate();

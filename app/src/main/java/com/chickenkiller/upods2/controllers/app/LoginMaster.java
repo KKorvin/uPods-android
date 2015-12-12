@@ -5,6 +5,7 @@ import android.os.Bundle;
 
 import com.amazonaws.auth.CognitoCachingCredentialsProvider;
 import com.amazonaws.regions.Regions;
+import com.chickenkiller.upods2.controllers.internet.VKAuthenticationProvider;
 import com.chickenkiller.upods2.interfaces.IOperationFinishCallback;
 import com.chickenkiller.upods2.interfaces.IOperationFinishWithDataCallback;
 import com.chickenkiller.upods2.models.UserProfile;

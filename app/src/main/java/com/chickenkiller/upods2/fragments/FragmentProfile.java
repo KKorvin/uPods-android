@@ -12,6 +12,7 @@ import android.widget.ProgressBar;
 import com.chickenkiller.upods2.R;
 import com.chickenkiller.upods2.controllers.app.LoginMaster;
 import com.chickenkiller.upods2.controllers.app.ProfileManager;
+import com.chickenkiller.upods2.controllers.app.SettingsManager;
 import com.chickenkiller.upods2.interfaces.ILoginManager;
 import com.chickenkiller.upods2.interfaces.IOperationFinishCallback;
 import com.chickenkiller.upods2.interfaces.ISlidingMenuHolder;
@@ -150,6 +151,7 @@ public class FragmentProfile extends Fragment {
     private void initUIAfterLogin() {
         lnLogein.setVisibility(View.GONE);
         progressBar.setVisibility(View.VISIBLE);
+        SettingsManager.getInstace().sync();
         ProfileManager.getInstance().syncAllChanges(new IOperationFinishCallback() {
             @Override
             public void operationFinished() {
