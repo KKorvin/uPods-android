@@ -31,7 +31,6 @@ import com.chickenkiller.upods2.utils.DataHolder;
 import com.chickenkiller.upods2.utils.Logger;
 import com.chickenkiller.upods2.utils.MediaUtils;
 import com.chickenkiller.upods2.utils.enums.Direction;
-import com.chickenkiller.upods2.utils.ui.UIHelper;
 
 import java.util.List;
 
@@ -44,7 +43,7 @@ import io.codetail.animation.arcanimator.Side;
 public class Playlist implements AdapterView.OnItemClickListener {
 
     private static final String LOG_TAG = "Playlist";
-    private static final int BTN_Y_POISTION_CORRECTOR = UIHelper.dpToPixels(30);
+    private static final float BTN_Y_POISTION_CORRECTOR = 1.01f;
     private static final int BTN_Y__INITIAL_POISTION_CORRECTOR = 35;
     private static final long PLAYLIST_ANIMATION_DURATION = 400;
     private static final long BUTTON_ANIMATION_DURATION = 400;
@@ -66,6 +65,7 @@ public class Playlist implements AdapterView.OnItemClickListener {
     private ArrayAdapter playlistAdapter;
     private TextView tvTrackCurrentTime;
     private TextView tvTrackDuration;
+    private TextView tvTrackInfo;
 
     private int pInfoAnimationStartPoint; //When start to animate player info section
     private int initialPlayListMargin;
@@ -88,6 +88,7 @@ public class Playlist implements AdapterView.OnItemClickListener {
         this.rlPlayerInfoSection = (RelativeLayout) rootView.findViewById(R.id.rlPlayerInfoSection);
         this.tvTrackDuration = (TextView) rootView.findViewById(R.id.tvTrackDuration);
         this.tvTrackCurrentTime = (TextView) rootView.findViewById(R.id.tvTrackCurrentTime);
+        this.tvTrackInfo = (TextView) rootView.findViewById(R.id.tvTrackInfo);
         this.lvPlaylist = (ListView) rootView.findViewById(R.id.lvPlaylist);
         this.animationFirstRun = true;
         this.playlistTrackSelected = playlistTrackSelected;
@@ -128,6 +129,7 @@ public class Playlist implements AdapterView.OnItemClickListener {
         sbPlayerProgress.setVisibility(View.INVISIBLE);
         tvTrackDuration.setVisibility(View.INVISIBLE);
         tvTrackCurrentTime.setVisibility(View.INVISIBLE);
+        tvTrackInfo.setVisibility(View.INVISIBLE);
         final RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) lnPlaylist.getLayoutParams();
 
         pInfoAnimationStartPoint = lnPlayerContorls.getHeight() + rlPlayerUnderbar.getHeight() + sbPlayerProgress.getHeight();
@@ -146,7 +148,7 @@ public class Playlist implements AdapterView.OnItemClickListener {
             ((Activity) mContext).getWindowManager().getDefaultDisplay().getMetrics(metrics);
 
             btnFinalY = btnInitialY + lnPlayerContorls.getHeight() + rlPlayerInfoSection.getHeight() + (btnPlay.getHeight() / 2f);
-            btnFinalY += BTN_Y_POISTION_CORRECTOR;
+            btnFinalY *= BTN_Y_POISTION_CORRECTOR;
             btnFinalY = metrics.heightPixels - btnFinalY;
 
             btnFinalX = metrics.widthPixels * BTN_POSITION_MULTIPLYER;
@@ -209,6 +211,7 @@ public class Playlist implements AdapterView.OnItemClickListener {
             public void onAnimationEnd(Animator animation) {
                 sbPlayerProgress.setVisibility(View.VISIBLE);
                 tvTrackDuration.setVisibility(View.VISIBLE);
+                tvTrackInfo.setVisibility(View.VISIBLE);
                 tvTrackCurrentTime.setVisibility(View.VISIBLE);
             }
         });
