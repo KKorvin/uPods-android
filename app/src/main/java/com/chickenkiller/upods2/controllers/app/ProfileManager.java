@@ -275,7 +275,7 @@ public class ProfileManager {
     }
 
 
-    private void saveChanges(ProfileItem profileItem) {
+    public void saveChanges(ProfileItem profileItem) {
         CognitoSyncManager syncClient = new CognitoSyncManager(
                 UpodsApplication.getContext(),
                 Regions.US_EAST_1,

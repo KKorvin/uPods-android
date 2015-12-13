@@ -10,6 +10,11 @@ public class Logger {
     public static void printInfo(String tag, String text) {
         Log.i(tag, text);
     }
+
+    public static void printInfo(String tag, int text) {
+        Log.i(tag, String.valueOf(text));
+    }
+
     public static void printError(String tag, String text) {
         Log.i(tag, text);
     }

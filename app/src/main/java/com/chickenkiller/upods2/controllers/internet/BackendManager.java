@@ -209,6 +209,11 @@ public class BackendManager {
         return jResponse;
     }
 
+    public String sendSimpleSynchronicRequest(Request request) throws IOException, JSONException {
+        Response response = client.newCall(request).execute();
+        return response.body().string();
+    }
+
     public void clearSearchQueue() {
         searchQueue.clear();
     }

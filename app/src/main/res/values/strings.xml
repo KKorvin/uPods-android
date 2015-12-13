@@ -111,6 +111,8 @@
     <string name="radio_station_ucfirst">Radio Stations</string>
     <string name="checking_new_episods_rate">Checking for new episods rate</string>
     <string name="notify_episods">Notify about new episods</string>
+    <string name="there_are">"There are   "</string>
+    <string name="new_episods_for">new episods for this podcast</string>
 
 
 </resources>

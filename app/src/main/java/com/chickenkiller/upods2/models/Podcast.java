@@ -27,7 +27,8 @@ public class Podcast extends MediaItem implements IPlayableMediaItem, ITrackable
     protected String genre;
     protected String description;
 
-    public boolean hasUpdates;
+    protected int newEpisodsCount;
+    protected int episodsCount;
 
     protected ArrayList<Episod> episods;
 
@@ -39,7 +40,8 @@ public class Podcast extends MediaItem implements IPlayableMediaItem, ITrackable
     public Podcast(JSONObject jsonItem) {
         this();
         try {
-            this.hasUpdates = jsonItem.has("hasUpdates") ? jsonItem.getBoolean("hasUpdates") : false;
+            this.episodsCount = jsonItem.has("episodsCount") ? jsonItem.getInt("episodsCount") : 0;
+            this.newEpisodsCount = jsonItem.has("newEpisodsCount") ? jsonItem.getInt("newEpisodsCount") : 0;
             this.description = jsonItem.has("description") ? jsonItem.getString("description") : "";
             if (jsonItem.has("kind")) { //Itunes
                 this.id = jsonItem.has("trackId") ? jsonItem.getInt("trackId") : 0;
@@ -87,7 +89,8 @@ public class Podcast extends MediaItem implements IPlayableMediaItem, ITrackable
         JSONObject podcast = new JSONObject();
         try {
             podcast.put("id", this.id);
-            podcast.put("hasUpdates", this.hasUpdates);
+            podcast.put("newEpisodsCount", this.newEpisodsCount);
+            podcast.put("episodsCount", this.episodsCount);
             podcast.put("name", this.name);
             podcast.put("censored_name", this.censoredName);
             podcast.put("artist_name", this.artistName);
@@ -119,7 +122,8 @@ public class Podcast extends MediaItem implements IPlayableMediaItem, ITrackable
 
     public Podcast(Podcast podcast) {
         this.name = podcast.getName();
-        this.hasUpdates = podcast.hasUpdates;
+        this.newEpisodsCount = podcast.newEpisodsCount;
+        this.episodsCount = podcast.episodsCount;
         this.censoredName = podcast.getCensoredName();
         this.artistName = podcast.getArtistName();
         this.feedUrl = podcast.getFeedUrl();
@@ -183,6 +187,22 @@ public class Podcast extends MediaItem implements IPlayableMediaItem, ITrackable
     @Override
     public boolean hasTracks() {
         return true;
+    }
+
+    public int getNewEpisodsCount() {
+        return newEpisodsCount;
+    }
+
+    public void setNewEpisodsCount(int newEpisodsCount) {
+        this.newEpisodsCount = newEpisodsCount;
+    }
+
+    public int getEpisodsCount() {
+        return episodsCount;
+    }
+
+    public void setEpisodsCount(int episodsCount) {
+        this.episodsCount = episodsCount;
     }
 
     public void setName(String name) {
