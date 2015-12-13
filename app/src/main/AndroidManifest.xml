@@ -33,13 +33,15 @@
         <activity
             android:name=".activity.ActivityPlayer"
             android:label="@string/title_activity_activity_player"
-            android:launchMode="singleInstance"></activity>
+            android:launchMode="singleInstance"
+            android:screenOrientation="portrait"></activity>
 
         <activity
             android:name="com.facebook.FacebookActivity"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
             android:label="@string/app_name"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+
         <activity
             android:name="com.vk.sdk.VKServiceActivity"
             android:label="ServiceActivity"

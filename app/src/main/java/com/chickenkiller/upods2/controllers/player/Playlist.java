@@ -166,7 +166,7 @@ public class Playlist implements AdapterView.OnItemClickListener {
         runOpenInfoSectionAnimation(PLAYLIST_ANIMATION_DURATION);
 
         //Button animation
-        runPlayButtonAnimation(btnFinalX, btnFinalY);
+        runPlayButtonAnimation(btnFinalX, btnFinalY, Side.LEFT);
     }
 
     private void runOpenInfoSectionAnimation(long duration) {
@@ -216,11 +216,11 @@ public class Playlist implements AdapterView.OnItemClickListener {
         runCloseInfoSectionAnimation(PLAYLIST_ANIMATION_DURATION);
 
         //Button animation
-        runPlayButtonAnimation(btnInitialX, btnInitialY);
+        runPlayButtonAnimation(btnInitialX, btnInitialY, Side.RIGHT);
     }
 
-    private void runPlayButtonAnimation(float toXDelta, float toYDelta) {
-        ArcAnimator.createArcAnimator(btnPlay, toXDelta, Math.abs(toYDelta), BUTTON_ANIMATION_ANGLE, Side.LEFT)
+    private void runPlayButtonAnimation(float toXDelta, float toYDelta, Side side) {
+        ArcAnimator.createArcAnimator(btnPlay, toXDelta, Math.abs(toYDelta), BUTTON_ANIMATION_ANGLE, side)
                 .setDuration(BUTTON_ANIMATION_DURATION)
                 .start();
     }
