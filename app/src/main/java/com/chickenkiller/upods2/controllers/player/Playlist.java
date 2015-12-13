@@ -31,6 +31,7 @@ import com.chickenkiller.upods2.utils.DataHolder;
 import com.chickenkiller.upods2.utils.Logger;
 import com.chickenkiller.upods2.utils.MediaUtils;
 import com.chickenkiller.upods2.utils.enums.Direction;
+import com.chickenkiller.upods2.utils.ui.UIHelper;
 
 import java.util.List;
 
@@ -43,7 +44,7 @@ import io.codetail.animation.arcanimator.Side;
 public class Playlist implements AdapterView.OnItemClickListener {
 
     private static final String LOG_TAG = "Playlist";
-    private static final int BTN_Y_POISTION_CORRECTOR = 20;
+    private static final int BTN_Y_POISTION_CORRECTOR = UIHelper.dpToPixels(30);
     private static final int BTN_Y__INITIAL_POISTION_CORRECTOR = 35;
     private static final long PLAYLIST_ANIMATION_DURATION = 400;
     private static final long BUTTON_ANIMATION_DURATION = 400;
