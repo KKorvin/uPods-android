@@ -31,6 +31,7 @@ import com.chickenkiller.upods2.utils.DataHolder;
 import com.chickenkiller.upods2.utils.Logger;
 import com.chickenkiller.upods2.utils.MediaUtils;
 import com.chickenkiller.upods2.utils.enums.Direction;
+import com.chickenkiller.upods2.utils.ui.UIHelper;
 
 import java.util.List;
 
@@ -154,8 +155,9 @@ public class Playlist implements AdapterView.OnItemClickListener {
             btnFinalX = metrics.widthPixels * BTN_POSITION_MULTIPLYER;
         }
 
-        //Layout animation
-        final ValueAnimator animator = ValueAnimator.ofInt(params.bottomMargin, 0);
+        //Layout animation         int bottomMarginFinal = rlPlayerUnderbar.getHeight() / 2;
+
+        final ValueAnimator animator = ValueAnimator.ofInt(params.bottomMargin, UIHelper.dpToPixels(20));
         animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator valueAnimator) {
