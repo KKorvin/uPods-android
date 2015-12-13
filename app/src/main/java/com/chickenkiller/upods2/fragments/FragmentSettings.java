@@ -5,6 +5,7 @@ import android.preference.ListPreference;
 import android.preference.PreferenceFragment;
 
 import com.chickenkiller.upods2.R;
+import com.chickenkiller.upods2.controllers.app.SettingsManager;
 import com.chickenkiller.upods2.interfaces.ISlidingMenuHolder;
 
 /**
@@ -25,5 +26,10 @@ public class FragmentSettings extends PreferenceFragment {
         addPreferencesFromResource(R.xml.settings);
     }
 
+    @Override
+    public void onPause() {
+        SettingsManager.getInstace().initSettingsFromPreferences();
+        super.onPause();
+    }
 
 }

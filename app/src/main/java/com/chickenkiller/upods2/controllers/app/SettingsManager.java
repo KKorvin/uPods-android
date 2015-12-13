@@ -7,6 +7,7 @@ import com.amazonaws.mobileconnectors.cognito.SyncConflict;
 import com.amazonaws.mobileconnectors.cognito.exceptions.DataStorageException;
 import com.amazonaws.regions.Regions;
 import com.chickenkiller.upods2.utils.Logger;
+import com.pixplicity.easyprefs.library.Prefs;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -23,11 +24,16 @@ public class SettingsManager {
     private static final String AWS_DATASET_NAME = "preferences";
     private static final String JS_SETTINGS = "settings";
 
+
     private static final int DEFAULT_PODCAST_UPDATE_TIME = 24; //hours
+    private static final boolean DEFAULT_NOTIFY_EPISODS = true;
+    private static final String DEFAULT_START_SCREEN = "rs_featured";
 
     private static SettingsManager settingsManager;
 
     public static final String JS_PODCASTS_UPDATE_TIME = "podcasts_update_time";
+    public static final String JS_START_SCREEN = "start_screen";
+    public static final String JS_NOTIFY_EPISODS = "notify_episods";
 
     private JSONObject settingsObject;
 
@@ -62,6 +68,8 @@ public class SettingsManager {
             if (dataset.get(JS_SETTINGS) != null) {
                 settingsObject = new JSONObject(dataset.get(JS_SETTINGS));
             } else {
+                settingsObject.put(JS_START_SCREEN, DEFAULT_START_SCREEN);
+                settingsObject.put(JS_NOTIFY_EPISODS, DEFAULT_NOTIFY_EPISODS);
                 settingsObject.put(JS_PODCASTS_UPDATE_TIME, DEFAULT_PODCAST_UPDATE_TIME);
             }
         } catch (JSONException e) {
@@ -152,10 +160,18 @@ public class SettingsManager {
             } else if (value instanceof String) {
                 settingsObject.put(key, (String) value);
             }
-            saveSettings(getDataset());
         } catch (JSONException e) {
             Logger.printInfo(TAG, "Can't put value for key: " + key + " to json settings");
             e.printStackTrace();
         }
+    }
+
+    public void initSettingsFromPreferences() {
+        putSettingsValue(JS_NOTIFY_EPISODS, Prefs.getBoolean(JS_NOTIFY_EPISODS, DEFAULT_NOTIFY_EPISODS));
+        putSettingsValue(JS_START_SCREEN, Prefs.getString(JS_START_SCREEN, DEFAULT_START_SCREEN));
+
+        String pUpdateTime = Prefs.getString(JS_PODCASTS_UPDATE_TIME, String.valueOf(DEFAULT_PODCAST_UPDATE_TIME));
+        putSettingsValue(JS_PODCASTS_UPDATE_TIME, Integer.valueOf(pUpdateTime));
+        saveSettings(getDataset());
     }
 }

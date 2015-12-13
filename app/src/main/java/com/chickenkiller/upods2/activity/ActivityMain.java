@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.chickenkiller.upods2.R;
 import com.chickenkiller.upods2.controllers.app.ProfileManager;
+import com.chickenkiller.upods2.controllers.app.SettingsManager;
 import com.chickenkiller.upods2.fragments.FragmentHelp;
 import com.chickenkiller.upods2.fragments.FragmentMediaItemsGrid;
 import com.chickenkiller.upods2.fragments.FragmentProfile;
@@ -82,9 +83,7 @@ public class ActivityMain extends BasicActivity implements IOverlayable, IToolba
                         showHelpFragment();
                     } else {
                         toolbar.setVisibility(View.VISIBLE);
-                        FragmentMediaItemsGrid fragmentMediaItemsGrid = new FragmentMediaItemsGrid();
-                        fragmentMediaItemsGrid.setMediaItemType(MediaItemType.RADIO);
-                        showFragment(R.id.fl_content, fragmentMediaItemsGrid, FragmentMediaItemsGrid.TAG);
+                        showFragment(R.id.fl_content, getStartFrament(), FragmentMediaItemsGrid.TAG);
                     }
                 }
             }, WELLCOME_SCREEN_TIME);
@@ -121,6 +120,31 @@ public class ActivityMain extends BasicActivity implements IOverlayable, IToolba
             }
         });
         showFragment(R.id.fl_content, fragmentHelp, FragmentHelp.TAG);
+    }
+
+    private FragmentMediaItemsGrid getStartFrament() {
+        FragmentMediaItemsGrid fragmentMediaItemsGrid = new FragmentMediaItemsGrid();
+        String startScreen = SettingsManager.getInstace().getStringSettingValue(SettingsManager.JS_START_SCREEN);
+        if (startScreen.equals("rs_subscribed")) {
+            fragmentMediaItemsGrid.setMediaItemType(MediaItemType.RADIO);
+            fragmentMediaItemsGrid.setStartItemNumber(1);
+        } else if (startScreen.equals("rs_recent")) {
+            fragmentMediaItemsGrid.setMediaItemType(MediaItemType.RADIO);
+            fragmentMediaItemsGrid.setStartItemNumber(2);
+        } else if (startScreen.equals("podcasts_featured")) {
+            fragmentMediaItemsGrid.setMediaItemType(MediaItemType.PODCAST);
+            fragmentMediaItemsGrid.setStartItemNumber(0);
+        } else if (startScreen.equals("podcasts_favorites")) {
+            fragmentMediaItemsGrid.setMediaItemType(MediaItemType.PODCAST);
+            fragmentMediaItemsGrid.setStartItemNumber(1);
+        } else if (startScreen.equals("podcasts_downloaded")) {
+            fragmentMediaItemsGrid.setMediaItemType(MediaItemType.PODCAST);
+            fragmentMediaItemsGrid.setStartItemNumber(2);
+        } else {
+            fragmentMediaItemsGrid.setMediaItemType(MediaItemType.RADIO);
+            fragmentMediaItemsGrid.setStartItemNumber(0);
+        }
+        return fragmentMediaItemsGrid;
     }
 
     @Override
