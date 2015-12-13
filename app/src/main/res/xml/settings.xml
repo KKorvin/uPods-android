@@ -1,35 +1,34 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <PreferenceCategory android:title="Test1">
+    <PreferenceCategory android:title="@string/global">
 
-        <CheckBoxPreference
-            android:defaultValue="Test2"
-            android:key="checkbox_preference"
-            android:title="Test3" />
-
-        <EditTextPreference
-            android:dependency="checkbox_preference"
-            android:dialogTitle="Test3"
-            android:key="edittext_preference"
-            android:summary="Test4"
-            android:title="Test5" />
+        <ListPreference
+            android:defaultValue="rs_featured"
+            android:dialogTitle="@string/start_screen"
+            android:entries="@array/start_screen_preference"
+            android:entryValues="@array/start_screen_values"
+            android:key="start_screen"
+            android:summary="%s"
+            android:title="@string/start_screen" />
 
     </PreferenceCategory>
 
-    <PreferenceCategory android:title="Test6">
+
+    <PreferenceCategory android:title="@string/podcasts">
+
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="notify_episods"
+            android:title="@string/notify_episods" />
 
         <ListPreference
-            android:dialogTitle="Test7"
-            android:entries="@array/entries_list_preference"
-            android:entryValues="@array/entries_list_values"
-            android:key="list_preference"
-            android:title="Test10" />
-
-        <Preference android:title="Test8">
-            <intent
-                android:action="android.intent.action.VIEW"
-                android:data="http://codepath.com/" />
-        </Preference>
+            android:defaultValue="24"
+            android:dialogTitle="@string/checking_new_episods_rate"
+            android:entries="@array/podcasts_update_time_preference"
+            android:entryValues="@array/podcasts_update_time_values"
+            android:key="podcasts_update_time"
+            android:summary="%s"
+            android:title="@string/checking_new_episods_rate" />
 
     </PreferenceCategory>
 

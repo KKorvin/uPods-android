@@ -1,17 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="entries_list_preference">
-        <item>Big Buck Bunny</item>
-        <item>Elephants Dream</item>
-        <item>Sintel</item>
-        <item>Tears of Steel</item>
+
+    <string-array name="start_screen_preference">
+        <item>Radio stations - featured</item>
+        <item>Radio stations - subscribed</item>
+        <item>Radio stations - recent</item>
+        <item>Podcasts - featured</item>
+        <item>Podcasts - favorites</item>
+        <item>Podcasts - downloaded</item>
     </string-array>
 
-    <string-array name="entries_list_values">
-        <item>Big Buck Bunny</item>
-        <item>Elephants Dream</item>
-        <item>Sintel</item>
-        <item>Tears of Steel</item>
+    <string-array name="start_screen_values">
+        <item>rs_featured</item>
+        <item>rs_subscribed</item>
+        <item>rs_recent</item>
+        <item>podcasts_featured</item>
+        <item>podcasts_favorites</item>
+        <item>podcasts_downloaded</item>
+    </string-array>
+
+    <string-array name="podcasts_update_time_preference">
+        <item>Every 24 hours</item>
+        <item>Every 12 hours</item>
+        <item>Every 6 hours</item>
+        <item>Every 3 hours</item>
+        <item>Every hour</item>
+        <item>Never</item>
+    </string-array>
+
+    <string-array name="podcasts_update_time_values">
+        <item>24</item>
+        <item>12</item>
+        <item>6</item>
+        <item>3</item>
+        <item>1</item>
+        <item>-1</item>
     </string-array>
 
     <!-- All of the possible tile background colors for LetterBitmap -->
