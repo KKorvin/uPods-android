@@ -53,13 +53,18 @@ public class StreamUrl implements Serializable {
     }
 
     public static StreamUrl getBestStreamUrl(Set<StreamUrl> allUrls) {
-        StreamUrl emptyStreamUrl = new StreamUrl("");
+        StreamUrl emptyStreamUrl = null;
         for (String pattern : bestStreamPatterns) {
             for (StreamUrl streamUrl : allUrls) {
                 if (streamUrl.isAlive && streamUrl.getUrl().matches(pattern)) {
                     return streamUrl;
+                } else if (streamUrl.isAlive && emptyStreamUrl == null) {
+                    emptyStreamUrl = streamUrl;
                 }
             }
+        }
+        if (emptyStreamUrl == null) {
+            emptyStreamUrl = new StreamUrl("");
         }
         return emptyStreamUrl;
     }
