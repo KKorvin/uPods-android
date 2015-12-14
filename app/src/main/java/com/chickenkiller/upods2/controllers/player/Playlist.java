@@ -31,7 +31,6 @@ import com.chickenkiller.upods2.utils.DataHolder;
 import com.chickenkiller.upods2.utils.Logger;
 import com.chickenkiller.upods2.utils.MediaUtils;
 import com.chickenkiller.upods2.utils.enums.Direction;
-import com.chickenkiller.upods2.utils.ui.UIHelper;
 
 import java.util.List;
 
@@ -44,13 +43,9 @@ import io.codetail.animation.arcanimator.Side;
 public class Playlist implements AdapterView.OnItemClickListener {
 
     private static final String LOG_TAG = "Playlist";
-    private static final float BTN_Y_POISTION_CORRECTOR = 1.01f;
-    private static final int BTN_Y__INITIAL_POISTION_CORRECTOR = 35;
     private static final long PLAYLIST_ANIMATION_DURATION = 400;
     private static final long BUTTON_ANIMATION_DURATION = 400;
-    private static final float BTN_POSITION_MULTIPLYER = 0.8f;
-    private static final float INFO_START_POINT_CORRECTOR = 1.4f;
-    private static final float INFO_ANIMATION_MARGIN_CORECTOR = 0.92f;
+    private static final float BTN_POSITION_MULTIPLYER = 0.76f;
     private static final float BUTTON_ANIMATION_ANGLE = 60f;
 
     private IOperationFinishCallback playlistTrackSelected;
@@ -68,10 +63,7 @@ public class Playlist implements AdapterView.OnItemClickListener {
     private TextView tvTrackDuration;
     private TextView tvTrackInfo;
 
-    private int pInfoAnimationStartPoint; //When start to animate player info section
     private int initialPlayListMargin;
-    private int pInfoAnimationMargin;
-    private int initialPlayPInfo;
     private float btnFinalY;
     private float btnFinalX;
     private float btnInitialX;
@@ -133,31 +125,24 @@ public class Playlist implements AdapterView.OnItemClickListener {
         tvTrackInfo.setVisibility(View.INVISIBLE);
         final RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) lnPlaylist.getLayoutParams();
 
-        pInfoAnimationStartPoint = lnPlayerContorls.getHeight() + rlPlayerUnderbar.getHeight() + sbPlayerProgress.getHeight();
-        pInfoAnimationStartPoint *= INFO_START_POINT_CORRECTOR;
-
         if (animationFirstRun) {
+            final RelativeLayout.LayoutParams btnPlayParams = (RelativeLayout.LayoutParams) btnPlay.getLayoutParams();
             initialPlayListMargin = params.bottomMargin;
 
             int cords[] = new int[2];
             btnPlay.getLocationOnScreen(cords);
 
             btnInitialX = cords[0] + btnPlay.getWidth() / 2;
-            btnInitialY = cords[1] - btnPlay.getHeight() / 2 - BTN_Y__INITIAL_POISTION_CORRECTOR;
+            btnInitialY = cords[1] - (btnPlay.getHeight() / 2) - btnPlayParams.bottomMargin;
 
             DisplayMetrics metrics = new DisplayMetrics();
             ((Activity) mContext).getWindowManager().getDefaultDisplay().getMetrics(metrics);
 
-            btnFinalY = btnInitialY + lnPlayerContorls.getHeight() + rlPlayerInfoSection.getHeight() + (btnPlay.getHeight() / 2f);
-            btnFinalY *= BTN_Y_POISTION_CORRECTOR;
-            btnFinalY = metrics.heightPixels - btnFinalY;
-
+            btnFinalY = btnInitialY - lnPlaylist.getHeight() + rlPlayerUnderbar.getHeight() + btnPlayParams.bottomMargin;
             btnFinalX = metrics.widthPixels * BTN_POSITION_MULTIPLYER;
         }
 
-        //Layout animation         int bottomMarginFinal = rlPlayerUnderbar.getHeight() / 2;
-
-        final ValueAnimator animator = ValueAnimator.ofInt(params.bottomMargin, UIHelper.dpToPixels(20));
+        final ValueAnimator animator = ValueAnimator.ofInt(params.bottomMargin, 0);
         animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator valueAnimator) {
@@ -178,13 +163,11 @@ public class Playlist implements AdapterView.OnItemClickListener {
         final LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) rlPlayerInfoSection.getLayoutParams();
 
         if (animationFirstRun) {
-            initialPlayPInfo = params.topMargin;
-            pInfoAnimationMargin = params.topMargin - pInfoAnimationStartPoint;
-            pInfoAnimationMargin *= INFO_ANIMATION_MARGIN_CORECTOR;
             animationFirstRun = false;
         }
 
-        ValueAnimator animator = ValueAnimator.ofInt(params.topMargin, pInfoAnimationMargin);
+        int animateMarginTo = -(lnPlaylist.getHeight() - lnPlayerContorls.getHeight() - rlPlayerUnderbar.getHeight()); //should me minus value
+        ValueAnimator animator = ValueAnimator.ofInt(params.topMargin, animateMarginTo);
         animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator valueAnimator) {
@@ -233,7 +216,7 @@ public class Playlist implements AdapterView.OnItemClickListener {
 
     private void runCloseInfoSectionAnimation(long duration) {
         final LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) rlPlayerInfoSection.getLayoutParams();
-        ValueAnimator animator = ValueAnimator.ofInt(pInfoAnimationMargin, initialPlayPInfo);
+        ValueAnimator animator = ValueAnimator.ofInt(params.topMargin, 0);
         animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator valueAnimator) {
