@@ -1,5 +1,6 @@
 package com.chickenkiller.upods2.controllers.player;
 
+import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.AsyncTask;
 
@@ -136,13 +137,16 @@ public class UniversalPlayer implements MediaPlayer.OnPreparedListener, MediaPla
                 if (mediaPlayer == null) {
                     mediaPlayer = new MediaPlayer();
                 }
+                mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
                 mediaPlayer.setDataSource(mediaItem.getAudeoLink());
                 mediaPlayer.setOnPreparedListener(this);
                 mediaPlayer.setOnErrorListener(this);
                 mediaPlayer.setOnInfoListener(this);
                 mediaPlayer.setOnBufferingUpdateListener(this);
                 mediaPlayer.setOnCompletionListener(this);
+                Logger.printInfo(PLAYER_LOG, "Calling  prepareAsync");
                 mediaPlayer.prepareAsync();
+                Logger.printInfo(PLAYER_LOG, "Prepared called");
             } catch (Exception e) {
                 Logger.printInfo(PLAYER_LOG, "Failed to prepare player...");
                 if (onPlayingFailedCallback != null) {
@@ -366,6 +370,7 @@ public class UniversalPlayer implements MediaPlayer.OnPreparedListener, MediaPla
     public void onPrepared(MediaPlayer mediaPlayer) {
         isPrepaired = true;
         mediaPlayer.start();
+        Logger.printInfo(PLAYER_LOG, "onPrepared - music should start playing here");
         if (mediaItem instanceof RadioItem) {
             ProfileManager.getInstance().addRecentMediaItem(mediaItem);
         }
