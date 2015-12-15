@@ -369,6 +369,7 @@ public class UniversalPlayer implements MediaPlayer.OnPreparedListener, MediaPla
     @Override
     public void onPrepared(MediaPlayer mediaPlayer) {
         isPrepaired = true;
+        Logger.printInfo(PLAYER_LOG, "mediaPlayer.start();");
         mediaPlayer.start();
         Logger.printInfo(PLAYER_LOG, "onPrepared - music should start playing here");
         if (mediaItem instanceof RadioItem) {
