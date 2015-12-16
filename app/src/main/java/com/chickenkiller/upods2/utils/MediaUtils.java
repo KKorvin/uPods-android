@@ -2,10 +2,12 @@ package com.chickenkiller.upods2.utils;
 
 import com.chickenkiller.upods2.controllers.internet.BackendManager;
 import com.chickenkiller.upods2.fragments.FragmentPlayer;
-import com.chickenkiller.upods2.interfaces.IOperationFinishWithDataCallback;
-import com.chickenkiller.upods2.interfaces.ISimpleRequestCallback;
 import com.chickenkiller.upods2.utils.enums.Direction;
+import com.squareup.okhttp.Request;
 
+import org.json.JSONException;
+
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -22,22 +24,13 @@ public class MediaUtils {
 
     private static final String LOG_TAG = "MediaUtils";
 
-    public static String extractMp3FromFile(final String m3uUrl, final IOperationFinishWithDataCallback mp3Extracted) {
-        BackendManager.getInstance().sendRequest(m3uUrl, new ISimpleRequestCallback() {
-            @Override
-            public void onRequestSuccessed(String response) {
-                List<String> allURls = GlobalUtils.extractUrls(response);
-                String mp3Url = allURls.size() > 0 ? allURls.get(0) : "";
-                Logger.printInfo(LOG_TAG, "Extracted from file urls: " + allURls.toString());
-                mp3Extracted.operationFinished(mp3Url);
-            }
-
-            @Override
-            public void onRequestFailed() {
-
-            }
-        });
-        return "";
+    public static String extractMp3FromFile(String m3uUrl) throws IOException, JSONException {
+        Request request = new Request.Builder().url(m3uUrl).build();
+        String response = BackendManager.getInstance().sendSimpleSynchronicRequest(request);
+        List<String> allURls = GlobalUtils.extractUrls(response);
+        String mp3Url = allURls.size() > 0 ? allURls.get(0) : "";
+        Logger.printInfo(LOG_TAG, "Extracted from file urls: " + allURls.toString());
+        return mp3Url;
     }
 
     public static String formatMsToTimeString(int millis) {

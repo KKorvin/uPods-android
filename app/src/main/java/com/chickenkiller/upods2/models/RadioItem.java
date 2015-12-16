@@ -4,7 +4,6 @@ import android.content.Context;
 import android.os.AsyncTask;
 
 import com.chickenkiller.upods2.interfaces.IOperationFinishCallback;
-import com.chickenkiller.upods2.interfaces.IOperationFinishWithDataCallback;
 import com.chickenkiller.upods2.interfaces.IPlayableMediaItem;
 import com.chickenkiller.upods2.utils.GlobalUtils;
 import com.chickenkiller.upods2.utils.Logger;
@@ -180,16 +179,17 @@ public class RadioItem extends MediaItem implements IPlayableMediaItem {
                     final String currentUrl = streamUrl.getUrl();
                     if (GlobalUtils.isUrlReachable(currentUrl)) {
                         if (currentUrl.matches("(.+\\.m3u$)|(.+\\.pls$)")) {
-                            MediaUtils.extractMp3FromFile(currentUrl, new IOperationFinishWithDataCallback() {
-                                @Override
-                                public void operationFinished(Object data) {
-                                    StreamUrl.replaceUrl(streamUrls, (String) data, currentUrl);
-                                    operationFinishSecsuessCallback.operationFinished();
-                                }
-                            });
-                        } else {
-                            operationFinishSecsuessCallback.operationFinished();
+                            try {
+                                String newUrl = MediaUtils.extractMp3FromFile(currentUrl);
+                                StreamUrl.replaceUrl(streamUrls, newUrl, currentUrl);
+                            } catch (Exception e) {
+                                Logger.printInfo(RADIO_LOG, "Error with fetching radio url from file");
+                                e.printStackTrace();
+                                continue;
+                            }
                         }
+                        streamUrl.isAlive = true;
+                        operationFinishSecsuessCallback.operationFinished();
                         return;
                     } else {
                         streamUrl.isAlive = false;

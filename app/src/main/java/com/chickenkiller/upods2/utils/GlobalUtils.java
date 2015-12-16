@@ -94,6 +94,7 @@ public class GlobalUtils {
         try {
             URL url = new URL(urlToCheck);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setConnectTimeout(1000);
             int code = connection.getResponseCode();
             if (code == 200) {
                 return true;
