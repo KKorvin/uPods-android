@@ -78,11 +78,11 @@ public class ActivityMain extends BasicActivity implements IOverlayable, IToolba
 
         slidingMenu = new SlidingMenu(this, toolbar);
 
-        showFragment(R.id.fl_content, new FragmentWellcome(), FragmentWellcome.TAG);
         int startedFrom = getIntent().getIntExtra(ActivityPlayer.ACTIVITY_STARTED_FROM, -1);
 
         if (isFirstRun && !Arrays.asList(notificationsActions).contains(startedFrom)) {
             toolbar.setVisibility(View.GONE);
+            showFragment(R.id.fl_content, new FragmentWellcome(), FragmentWellcome.TAG);
             new Handler().postDelayed(new Runnable() {
                 public void run() {
                     if (!Prefs.getBoolean(FragmentHelp.PREF_HELP_SHOWN, false)) {
