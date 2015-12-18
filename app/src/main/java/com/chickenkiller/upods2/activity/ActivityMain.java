@@ -16,6 +16,7 @@ import android.widget.Toast;
 import com.chickenkiller.upods2.R;
 import com.chickenkiller.upods2.controllers.app.ProfileManager;
 import com.chickenkiller.upods2.controllers.app.SettingsManager;
+import com.chickenkiller.upods2.controllers.internet.NetworkTasksService;
 import com.chickenkiller.upods2.fragments.FragmentHelp;
 import com.chickenkiller.upods2.fragments.FragmentMediaItemsGrid;
 import com.chickenkiller.upods2.fragments.FragmentProfile;
@@ -40,6 +41,8 @@ import com.chickenkiller.upods2.views.SlidingMenu;
 import com.facebook.CallbackManager;
 import com.pixplicity.easyprefs.library.Prefs;
 
+import java.util.Arrays;
+
 public class ActivityMain extends BasicActivity implements IOverlayable, IToolbarHolder, ISlidingMenuHolder, ILoginManager {
 
     private static final int MIN_NUMBER_FRAGMENTS_IN_STACK = 2;
@@ -52,7 +55,9 @@ public class ActivityMain extends BasicActivity implements IOverlayable, IToolba
 
     public static boolean isFirstRun = true;
 
+    private int[] notificationsActions = {NetworkTasksService.NOTIFICATIONS_SHOW_PODCASTS_SUBSCRIBED};
     private CallbackManager callbackManager;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,8 +79,9 @@ public class ActivityMain extends BasicActivity implements IOverlayable, IToolba
         slidingMenu = new SlidingMenu(this, toolbar);
 
         showFragment(R.id.fl_content, new FragmentWellcome(), FragmentWellcome.TAG);
+        int startedFrom = getIntent().getIntExtra(ActivityPlayer.ACTIVITY_STARTED_FROM, -1);
 
-        if (isFirstRun) {
+        if (isFirstRun && !Arrays.asList(notificationsActions).contains(startedFrom)) {
             toolbar.setVisibility(View.GONE);
             new Handler().postDelayed(new Runnable() {
                 public void run() {
@@ -90,12 +96,16 @@ public class ActivityMain extends BasicActivity implements IOverlayable, IToolba
         } else {
             toolbar.setVisibility(View.VISIBLE);
 
-            int startedFrom = getIntent().getIntExtra(ActivityPlayer.ACTIVITY_STARTED_FROM, -1);
             int startedFragmentNumber = -1;
 
             //In order to return to fragment inside view pager which leaved activity
             startedFragmentNumber = DataHolder.getInstance().contains(FragmentMediaItemsGrid.LAST_ITEM_POSITION) ?
                     (int) DataHolder.getInstance().retrieve(FragmentMediaItemsGrid.LAST_ITEM_POSITION) : -1;
+
+            if (startedFrom == NetworkTasksService.NOTIFICATIONS_SHOW_PODCASTS_SUBSCRIBED) {
+                startedFragmentNumber = 1;
+                startedFrom = MediaItemType.PODCAST.ordinal();
+            }
 
             FragmentMediaItemsGrid fragmentMediaItemsGrid = new FragmentMediaItemsGrid();
             fragmentMediaItemsGrid.setMediaItemType(startedFrom == MediaItemType.PODCAST.ordinal() ? MediaItemType.PODCAST : MediaItemType.RADIO);

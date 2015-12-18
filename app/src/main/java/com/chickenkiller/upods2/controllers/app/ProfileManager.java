@@ -274,8 +274,11 @@ public class ProfileManager {
         }
     }
 
-
     public void saveChanges(ProfileItem profileItem) {
+        saveChanges(profileItem, true);
+    }
+
+    public void saveChanges(ProfileItem profileItem, boolean isFireCallback) {
         CognitoSyncManager syncClient = new CognitoSyncManager(
                 UpodsApplication.getContext(),
                 Regions.US_EAST_1,
@@ -327,7 +330,7 @@ public class ProfileManager {
             Logger.printInfo(PROFILE, "Can't sync profile with AWS);");
             e.printStackTrace();
         }
-        if (profileSavedCallback != null) {
+        if (profileSavedCallback != null && isFireCallback) {
             profileSavedCallback.operationFinished();
         }
 

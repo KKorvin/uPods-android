@@ -174,4 +174,5 @@ public class SettingsManager {
         putSettingsValue(JS_PODCASTS_UPDATE_TIME, Integer.valueOf(pUpdateTime));
         saveSettings(getDataset());
     }
+
 }
