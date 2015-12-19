@@ -166,18 +166,6 @@
         </LinearLayout>
     </LinearLayout>
 
-    <ImageButton
-        android:id="@+id/btnPlay"
-        android:layout_width="65dp"
-        android:layout_height="65dp"
-        android:layout_alignParentBottom="true"
-        android:layout_centerInParent="true"
-        android:layout_marginBottom="13dp"
-        android:background="@drawable/selector_play_button"
-        android:elevation="20dp"
-        android:src="@drawable/ic_play_white"
-        android:text="Play" />
-
     <LinearLayout
         android:id="@+id/lnPlaylist"
         android:layout_width="wrap_content"
@@ -195,4 +183,16 @@
             android:focusable="false" />
 
     </LinearLayout>
+
+    <ImageButton
+        android:id="@+id/btnPlay"
+        android:layout_width="65dp"
+        android:layout_height="65dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerInParent="true"
+        android:layout_marginBottom="13dp"
+        android:background="@drawable/selector_play_button"
+        android:elevation="20dp"
+        android:src="@drawable/ic_play_white"
+        android:text="Play" />
 </RelativeLayout>

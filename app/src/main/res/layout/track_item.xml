@@ -52,11 +52,11 @@
     <Button
         android:id="@+id/btnDownload"
         android:layout_width="85dp"
-        android:layout_height="40dp"
+        android:layout_height="30dp"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:layout_marginRight="10dp"
-        android:backgroundTint="@color/green_600"
+        android:background="@drawable/selector_btn_more"
         android:text="@string/download"
         android:textColor="@color/white_material"
         android:textSize="@dimen/default_text_size_10"

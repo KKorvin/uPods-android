@@ -113,6 +113,7 @@
     <string name="notify_episods">Notify about new episods</string>
     <string name="there_are">"There are   "</string>
     <string name="new_episods">new episods</string>
+    <string name="add_radio_station">Add radio station</string>
 
 
 </resources>

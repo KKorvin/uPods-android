@@ -93,12 +93,13 @@
             <Button
                 android:id="@+id/btnSubscribe"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="35dp"
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentRight="true"
-                android:layout_marginBottom="7dp"
+                android:layout_marginBottom="13dp"
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="11dp"
+                android:background="@drawable/selector_btn_subscribe"
                 android:layout_toRightOf="@+id/imgDetailedCover"
                 android:text="@string/subscribe" />
 
