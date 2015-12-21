@@ -185,6 +185,11 @@ public class Podcast extends MediaItem implements IPlayableMediaItem, ITrackable
     }
 
     @Override
+    public String getBitrate() {
+        return "";
+    }
+
+    @Override
     public boolean hasTracks() {
         return true;
     }

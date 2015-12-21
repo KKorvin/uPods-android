@@ -26,7 +26,6 @@ import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
 import com.chickenkiller.upods2.R;
 import com.chickenkiller.upods2.activity.ActivityPlayer;
-import com.chickenkiller.upods2.controllers.player.MetaDataFetcher;
 import com.chickenkiller.upods2.controllers.player.PlayerPositionUpdater;
 import com.chickenkiller.upods2.controllers.player.Playlist;
 import com.chickenkiller.upods2.controllers.player.UniversalPlayer;
@@ -34,7 +33,6 @@ import com.chickenkiller.upods2.dialogs.DialogFragmentMessage;
 import com.chickenkiller.upods2.interfaces.IFragmentsManager;
 import com.chickenkiller.upods2.interfaces.IOnPositionUpdatedCallback;
 import com.chickenkiller.upods2.interfaces.IOperationFinishCallback;
-import com.chickenkiller.upods2.interfaces.IOperationFinishWithDataCallback;
 import com.chickenkiller.upods2.interfaces.IPlayableMediaItem;
 import com.chickenkiller.upods2.interfaces.IPlayerStateListener;
 import com.chickenkiller.upods2.interfaces.IToolbarHolder;
@@ -263,7 +261,11 @@ public class FragmentPlayer extends Fragment implements MediaPlayer.OnPreparedLi
     private void initPlayerStateUI() {
         if (universalPlayer.isPrepaired && universalPlayer.isPlaying()) {
             btnPlay.setImageResource(R.drawable.ic_pause_white);
-
+            if (!playableMediaItem.getBitrate().isEmpty()) {
+                tvTrackInfo.setText(playableMediaItem.getBitrate() + getString(R.string.kbps));
+            } else {
+                tvTrackInfo.setText("");
+            }
         } else {
             btnPlay.setImageResource(R.drawable.ic_play_white);
         }
@@ -325,18 +327,6 @@ public class FragmentPlayer extends Fragment implements MediaPlayer.OnPreparedLi
         //Sets all callback to player
         universalPlayer.setPreparedListener(this);
         universalPlayer.setPlayerStateListener(this);
-        universalPlayer.setOnMetaDataFetchedCallback(new IOperationFinishWithDataCallback() {
-            @Override
-            public void operationFinished(Object data) {
-                if (isAdded()) {
-                    MetaDataFetcher.MetaData metaData = (MetaDataFetcher.MetaData) data;
-                    metaData.bitrate = metaData.bitrate.replace("000", "");
-                    metaData.bitrate += getString(R.string.kbps);
-                    tvTrackInfo.setText(metaData.bitrate);
-                }
-            }
-        });
-
         universalPlayer.setOnAutonomicTrackChangeCallback(new IOperationFinishCallback() {
             @Override
             public void operationFinished() {
@@ -405,6 +395,11 @@ public class FragmentPlayer extends Fragment implements MediaPlayer.OnPreparedLi
                 ((IToolbarHolder) getActivity()).getToolbar().setTitle(R.string.now_paying);
             }
             btnPlay.setImageResource(R.drawable.ic_pause_white);
+            if (!playableMediaItem.getBitrate().isEmpty()) {
+                tvTrackInfo.setText(playableMediaItem.getBitrate() + getString(R.string.kbps));
+            } else {
+                tvTrackInfo.setText("");
+            };
             playlist.updateTracks();
         }
     }

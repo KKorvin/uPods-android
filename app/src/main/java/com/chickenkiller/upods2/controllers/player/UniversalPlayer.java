@@ -2,12 +2,10 @@ package com.chickenkiller.upods2.controllers.player;
 
 import android.media.AudioManager;
 import android.media.MediaPlayer;
-import android.os.AsyncTask;
 
 import com.chickenkiller.upods2.controllers.app.ProfileManager;
 import com.chickenkiller.upods2.controllers.app.UpodsApplication;
 import com.chickenkiller.upods2.interfaces.IOperationFinishCallback;
-import com.chickenkiller.upods2.interfaces.IOperationFinishWithDataCallback;
 import com.chickenkiller.upods2.interfaces.IPlayableMediaItem;
 import com.chickenkiller.upods2.interfaces.IPlayerStateListener;
 import com.chickenkiller.upods2.interfaces.ITrackable;
@@ -48,7 +46,6 @@ public class UniversalPlayer implements MediaPlayer.OnPreparedListener, MediaPla
     private MediaPlayer mediaPlayer;
 
     private MediaPlayer.OnPreparedListener preparedListener;
-    private IOperationFinishWithDataCallback onMetaDataFetchedCallback;
     private IOperationFinishCallback onAutonomicTrackChangeCallback;
     private IOperationFinishCallback onPlayingFailedCallback;
     private IPlayerStateListener playerStateListener;
@@ -90,10 +87,6 @@ public class UniversalPlayer implements MediaPlayer.OnPreparedListener, MediaPla
         }
     }
 
-    public void setOnMetaDataFetchedCallback(IOperationFinishWithDataCallback onMetaDataFetchedCallback) {
-        this.onMetaDataFetchedCallback = onMetaDataFetchedCallback;
-    }
-
     public void setOnPlayingFailedCallback(IOperationFinishCallback onPlayingFailedCallback) {
         this.onPlayingFailedCallback = onPlayingFailedCallback;
     }
@@ -130,10 +123,6 @@ public class UniversalPlayer implements MediaPlayer.OnPreparedListener, MediaPla
                 }
                 Logger.printInfo(PLAYER_LOG, "Trying to play: " + mediaItem.getAudeoLink());
 
-                if (onMetaDataFetchedCallback != null) {
-                    MetaDataFetcher metaDataFetcher = new MetaDataFetcher(onMetaDataFetchedCallback, mediaItem.getAudeoLink());
-                    metaDataFetcher.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-                }
                 if (mediaPlayer == null) {
                     mediaPlayer = new MediaPlayer();
                 }
@@ -266,7 +255,6 @@ public class UniversalPlayer implements MediaPlayer.OnPreparedListener, MediaPla
     public void removeListeners() {
         preparedListener = null;
         playerStateListener = null;
-        onMetaDataFetchedCallback = null;
         onAutonomicTrackChangeCallback = null;
         onPlayingFailedCallback = null;
     }

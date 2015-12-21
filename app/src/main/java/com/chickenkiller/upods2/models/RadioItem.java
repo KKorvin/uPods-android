@@ -67,16 +67,18 @@ public class RadioItem extends MediaItem implements IPlayableMediaItem {
             this.twitter = jsonItem.has("twitter") ? jsonItem.getString("twitter") : "";
             this.country = jsonItem.has("country") ? jsonItem.getString("country") : "";
 
+            if (jsonItem.has("streamUrls") && jsonItem.getJSONArray("streamUrls").length() > 0) {
+                JSONArray jsonStreamUrls = jsonItem.getJSONArray("streamUrls");
+                for (int i = 0; i < jsonStreamUrls.length(); i++) {
+                    this.streamUrls.add(new StreamUrl(jsonStreamUrls.getJSONObject(i)));
+                }
+            }
+
             if (!jsonItem.has("covers")) {//from profile
                 this.coverImageUrl = jsonItem.has("cover_image_url") ? jsonItem.getString("cover_image_url") : "";
                 this.bannerImageUrl = jsonItem.has("banner_image_url") ? jsonItem.getString("banner_image_url") : "";
                 this.genre = jsonItem.has("genre") ? jsonItem.getString("genre") : "";
-                if (jsonItem.has("streamUrls") && jsonItem.getJSONArray("streamUrls").length() > 0) {
-                    JSONArray jsonStreamUrls = jsonItem.getJSONArray("streamUrls");
-                    for (int i = 0; i < jsonStreamUrls.length(); i++) {
-                        this.streamUrls.add(new StreamUrl(jsonStreamUrls.getJSONObject(i)));
-                    }
-                }
+
             } else {//from backend
                 if (jsonItem.has("covers") && jsonItem.getJSONArray("covers").length() > 0) {
                     this.coverImageUrl = jsonItem.getJSONArray("covers").getString(0);
@@ -87,12 +89,7 @@ public class RadioItem extends MediaItem implements IPlayableMediaItem {
                 if (jsonItem.has("genres") && jsonItem.getJSONArray("genres").length() > 0) {
                     this.genre = jsonItem.getJSONArray("genres").getString(0);
                 }
-                if (jsonItem.has("streamUrls") && jsonItem.getJSONArray("streamUrls").length() > 0) {
-                    JSONArray jsonStreamUrls = jsonItem.getJSONArray("streamUrls");
-                    for (int i = 0; i < jsonStreamUrls.length(); i++) {
-                        this.streamUrls.add(new StreamUrl(jsonStreamUrls.getString(i)));
-                    }
-                }
+
             }
 
         } catch (Exception e) {
@@ -122,6 +119,11 @@ public class RadioItem extends MediaItem implements IPlayableMediaItem {
     @Override
     public String getAudeoLink() {
         return StreamUrl.getBestStreamUrl(streamUrls).getUrl();
+    }
+
+    @Override
+    public String getBitrate() {
+        return StreamUrl.getBestStreamUrl(streamUrls).getBitrate();
     }
 
     @Override
