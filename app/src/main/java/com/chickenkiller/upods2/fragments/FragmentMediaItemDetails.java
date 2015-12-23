@@ -43,6 +43,7 @@ import com.chickenkiller.upods2.interfaces.ISimpleRequestCallback;
 import com.chickenkiller.upods2.interfaces.ITrackable;
 import com.chickenkiller.upods2.models.Episod;
 import com.chickenkiller.upods2.models.Podcast;
+import com.chickenkiller.upods2.models.Track;
 import com.chickenkiller.upods2.utils.DataHolder;
 import com.chickenkiller.upods2.utils.GlobalUtils;
 import com.chickenkiller.upods2.utils.Logger;
@@ -356,7 +357,9 @@ public class FragmentMediaItemDetails extends Fragment implements View.OnTouchLi
                 if (lParams.topMargin >= bottomScrollBorder) {
                     getActivity().onBackPressed();
                 } else {
-                    fbDetailsPlay.setVisibility(View.VISIBLE);
+                    if (!(playableItem instanceof ITrackable)) {
+                        fbDetailsPlay.setVisibility(View.VISIBLE);
+                    }
                     svDetails.setEnabled(false);
                 }
 
