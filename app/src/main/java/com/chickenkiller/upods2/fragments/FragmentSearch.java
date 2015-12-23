@@ -25,6 +25,7 @@ import com.chickenkiller.upods2.interfaces.IToolbarHolder;
 import com.chickenkiller.upods2.models.MediaItem;
 import com.chickenkiller.upods2.models.Podcast;
 import com.chickenkiller.upods2.models.RadioItem;
+import com.chickenkiller.upods2.utils.GlobalUtils;
 import com.chickenkiller.upods2.utils.enums.MediaItemType;
 import com.chickenkiller.upods2.utils.ServerApi;
 
@@ -92,6 +93,7 @@ public class FragmentSearch extends Fragment implements SearchView.OnQueryTextLi
         FragmentSearch.isActive = true;
         if (lastQuery != null && !lastQuery.isEmpty()) {
             tvSearchNoResults.setVisibility(View.GONE);
+            lnInternetError.setVisibility(View.GONE);
             tvStartTyping.setVisibility(View.GONE);
             loadSearchResults(lastQuery);
         }
@@ -145,9 +147,12 @@ public class FragmentSearch extends Fragment implements SearchView.OnQueryTextLi
                             public void run() {
                                 pbLoadingSearch.setVisibility(View.GONE);
                                 rvSearchResults.setVisibility(View.GONE);
-                                tvSearchNoResults.setVisibility(View.GONE);
                                 tvStartTyping.setVisibility(View.GONE);
-                                lnInternetError.setVisibility(View.VISIBLE);
+                                if(GlobalUtils.isInternetConnected()){
+                                    tvSearchNoResults.setVisibility(View.GONE);
+                                }else {
+                                    lnInternetError.setVisibility(View.VISIBLE);
+                                }
                             }
                         });
                     }
@@ -190,6 +195,7 @@ public class FragmentSearch extends Fragment implements SearchView.OnQueryTextLi
     @Override
     public boolean onQueryTextChange(String query) {
         tvSearchNoResults.setVisibility(View.GONE);
+        lnInternetError.setVisibility(View.GONE);
         tvStartTyping.setVisibility(View.GONE);
         if (query.equals(lastQuery) || query.isEmpty()) {
             return false;

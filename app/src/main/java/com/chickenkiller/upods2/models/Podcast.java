@@ -49,7 +49,10 @@ public class Podcast extends MediaItem implements IPlayableMediaItem, ITrackable
                 this.censoredName = jsonItem.has("collectionCensoredName") ? jsonItem.getString("collectionCensoredName") : "";
                 this.artistName = jsonItem.has("artistName") ? jsonItem.getString("artistName") : "";
                 this.feedUrl = jsonItem.has("feedUrl") ? jsonItem.getString("feedUrl") : "";
-                this.imageUrl = jsonItem.has("artworkUrl100") ? jsonItem.getString("artworkUrl100") : "";
+                this.imageUrl = jsonItem.has("artworkUrl600") ? jsonItem.getString("artworkUrl600") : "";
+                if (this.imageUrl.isEmpty()) {
+                    this.imageUrl = jsonItem.has("artworkUrl100") ? jsonItem.getString("artworkUrl100") : "";
+                }
                 if (this.imageUrl.isEmpty()) {
                     this.imageUrl = jsonItem.has("artworkUrl60") ? jsonItem.getString("artworkUrl60") : "";
                 }
