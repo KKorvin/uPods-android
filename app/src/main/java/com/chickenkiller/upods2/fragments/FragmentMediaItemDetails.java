@@ -3,6 +3,7 @@ package com.chickenkiller.upods2.fragments;
 import android.app.Fragment;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.LinearLayoutManager;
@@ -44,6 +45,7 @@ import com.chickenkiller.upods2.models.Episod;
 import com.chickenkiller.upods2.models.Podcast;
 import com.chickenkiller.upods2.utils.DataHolder;
 import com.chickenkiller.upods2.utils.GlobalUtils;
+import com.chickenkiller.upods2.utils.Logger;
 import com.chickenkiller.upods2.utils.enums.ContextMenuType;
 import com.chickenkiller.upods2.utils.enums.MediaItemType;
 import com.chickenkiller.upods2.utils.ui.LetterBitmap;
@@ -65,10 +67,9 @@ import javax.xml.parsers.SAXParserFactory;
 public class FragmentMediaItemDetails extends Fragment implements View.OnTouchListener, IMovable {
     private static final int MAGIC_NUMBER = -250; //Don't know what it does
     private static final float BOTTOM_SCROLL_BORDER_PERCENT = 0.35f;
-    private static final float TOP_SCROLL_BORDER_PERCENT = 1f;
     private static final float COVER_SCALE_FACTOR = 2f;
     private static final int COVER_IMAGE_SIZE = UIHelper.dpToPixels(80);
-    ;
+    private static final int STATUS_BAR_HEIGHT = UIHelper.dpToPixels(24);
     private static int bottomScrollBorder;
     private static int topScrollBorder;
     public static String TAG = "media_details";
@@ -85,6 +86,7 @@ public class FragmentMediaItemDetails extends Fragment implements View.OnTouchLi
     private TextView tvBottomHeader;
     private TextView tvDetailedDesHeader;
     private View viewDetailedHeader;
+    private View viewStatusBar;
     private Button btnSubscribe;
     private ImageView imgDetailedTopCover;
     private ImageView imgBluredCover;
@@ -108,6 +110,7 @@ public class FragmentMediaItemDetails extends Fragment implements View.OnTouchLi
         View view = inflater.inflate(R.layout.fragment_media_details, container, false);
         lnInternetError = (LinearLayout) view.findViewById(R.id.lnInternetError);
         rlDetailedContent = (RelativeLayout) view.findViewById(R.id.rlDetailedContent);
+        viewStatusBar = view.findViewById(R.id.viewStatusBar);
         tvDetailedDescription = (TextView) view.findViewById(R.id.tvDetailedDescription);
         tvDetailedHeader = (TextView) view.findViewById(R.id.tvDetailedHeader);
         tvDetailedSubHeader = (TextView) view.findViewById(R.id.tvDetailedSubHeader);
@@ -217,9 +220,10 @@ public class FragmentMediaItemDetails extends Fragment implements View.OnTouchLi
             Bitmap letterTile = letterBitmap.getLetterTile(playableItem.getName(), playableItem.getName(), COVER_IMAGE_SIZE, COVER_IMAGE_SIZE);
             imgDetailedTopCover.setImageBitmap(letterTile);
             int dominantColor = UIHelper.getDominantColor(letterTile);
+            imgBluredCover.setImageBitmap(UIHelper.createScaledBitmap(letterTile, COVER_SCALE_FACTOR));
+            viewStatusBar.setBackgroundColor(dominantColor);
             viewDetailedHeader.setBackgroundColor(dominantColor);
             tvDetailedDesHeader.setTextColor(dominantColor);
-            imgBluredCover.setImageBitmap(UIHelper.createScaledBitmap(letterTile, COVER_SCALE_FACTOR));
         } else {
             Glide.with(getActivity()).load(playableItem.getCoverImageUrl()).crossFade().into(new GlideDrawableImageViewTarget(imgDetailedTopCover) {
                 @Override
@@ -227,6 +231,7 @@ public class FragmentMediaItemDetails extends Fragment implements View.OnTouchLi
                     super.onResourceReady(drawable, anim);
                     Bitmap bitmap = ((GlideBitmapDrawable) drawable).getBitmap();
                     int dominantColor = UIHelper.getDominantColor(bitmap);
+                    viewStatusBar.setBackgroundColor(dominantColor);
                     viewDetailedHeader.setBackgroundColor(dominantColor);
                     tvDetailedDesHeader.setTextColor(dominantColor);
                     imgBluredCover.setImageBitmap(UIHelper.createScaledBitmap(bitmap, COVER_SCALE_FACTOR));
@@ -256,7 +261,12 @@ public class FragmentMediaItemDetails extends Fragment implements View.OnTouchLi
         getActivity().getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
         screenHeight = displaymetrics.heightPixels;
         bottomScrollBorder = screenHeight - (int) (screenHeight * BOTTOM_SCROLL_BORDER_PERCENT);
-        topScrollBorder = screenHeight - (int) (screenHeight * TOP_SCROLL_BORDER_PERCENT);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            topScrollBorder = STATUS_BAR_HEIGHT;
+            Logger.printInfo("topScrollBorder", topScrollBorder);
+        } else {
+            topScrollBorder = 0;
+        }
     }
 
     private void loadTracks() {
@@ -337,8 +347,7 @@ public class FragmentMediaItemDetails extends Fragment implements View.OnTouchLi
     @Override
     public void onMove(MotionEvent event, boolean applyMovement) {
         final int Y = (int) event.getRawY();
-        LinearLayout.LayoutParams lParams = (LinearLayout.LayoutParams) rlDetailedContent.getLayoutParams();
-
+        RelativeLayout.LayoutParams lParams = (RelativeLayout.LayoutParams) rlDetailedContent.getLayoutParams();
         switch (event.getAction() & MotionEvent.ACTION_MASK) {
             case MotionEvent.ACTION_DOWN:
                 moveDeltaY = Y - lParams.topMargin;
@@ -346,14 +355,11 @@ public class FragmentMediaItemDetails extends Fragment implements View.OnTouchLi
             case MotionEvent.ACTION_UP: {
                 if (lParams.topMargin >= bottomScrollBorder) {
                     getActivity().onBackPressed();
-                } else if (lParams.topMargin <= topScrollBorder) {
-                    lParams.topMargin = 0;
-                    lParams.bottomMargin = 0;
-                    rlDetailedContent.setLayoutParams(lParams);
-                    svDetails.setEnabled(true);
                 } else {
+                    fbDetailsPlay.setVisibility(View.VISIBLE);
                     svDetails.setEnabled(false);
                 }
+
                 break;
             }
             case MotionEvent.ACTION_POINTER_DOWN:
@@ -366,6 +372,18 @@ public class FragmentMediaItemDetails extends Fragment implements View.OnTouchLi
                     lParams.topMargin = newMargin;
                     lParams.bottomMargin = MAGIC_NUMBER;
                     rlDetailedContent.setLayoutParams(lParams);
+                    if (lParams.topMargin <= topScrollBorder) {
+                        lParams.bottomMargin = 0;
+                        lParams.topMargin = 0;
+                        rlDetailedContent.setLayoutParams(lParams);
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                            viewStatusBar.setVisibility(View.VISIBLE);
+                        }
+                        svDetails.setEnabled(true);
+                    } else {
+                        viewStatusBar.setVisibility(View.GONE);
+                    }
+                    fbDetailsPlay.setVisibility(View.INVISIBLE);
                     correctOverlayLevel(newMargin);
                 }
                 break;
