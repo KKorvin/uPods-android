@@ -382,8 +382,8 @@ public class FragmentMediaItemDetails extends Fragment implements View.OnTouchLi
                         svDetails.setEnabled(true);
                     } else {
                         viewStatusBar.setVisibility(View.GONE);
+                        fbDetailsPlay.setVisibility(View.INVISIBLE);
                     }
-                    fbDetailsPlay.setVisibility(View.INVISIBLE);
                     correctOverlayLevel(newMargin);
                 }
                 break;
