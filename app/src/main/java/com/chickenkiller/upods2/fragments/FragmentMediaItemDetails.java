@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.RecyclerView;
@@ -15,6 +14,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -43,7 +43,6 @@ import com.chickenkiller.upods2.interfaces.ISimpleRequestCallback;
 import com.chickenkiller.upods2.interfaces.ITrackable;
 import com.chickenkiller.upods2.models.Episod;
 import com.chickenkiller.upods2.models.Podcast;
-import com.chickenkiller.upods2.models.Track;
 import com.chickenkiller.upods2.utils.DataHolder;
 import com.chickenkiller.upods2.utils.GlobalUtils;
 import com.chickenkiller.upods2.utils.Logger;
@@ -52,6 +51,7 @@ import com.chickenkiller.upods2.utils.enums.MediaItemType;
 import com.chickenkiller.upods2.utils.ui.LetterBitmap;
 import com.chickenkiller.upods2.utils.ui.UIHelper;
 import com.chickenkiller.upods2.views.DetailsScrollView;
+import com.github.clans.fab.FloatingActionButton;
 
 import org.xml.sax.InputSource;
 import org.xml.sax.XMLReader;
@@ -198,6 +198,7 @@ public class FragmentMediaItemDetails extends Fragment implements View.OnTouchLi
             public void onClick(View view) {
                 if (GlobalUtils.isInternetConnected()) {
                     Intent myIntent = new Intent(getActivity(), ActivityPlayer.class);
+                    getActivity().overridePendingTransition( R.anim.slide_in_up, R.anim.slide_out_up );
                     DataHolder.getInstance().save(ActivityPlayer.MEDIA_ITEM_EXTRA, playableItem);
                     if (FragmentSearch.isActive) {
                         myIntent.putExtra(ActivityPlayer.ACTIVITY_STARTED_FROM_IN_DEPTH, MediaItemType.RADIO_SEARCH.ordinal());
@@ -348,7 +349,7 @@ public class FragmentMediaItemDetails extends Fragment implements View.OnTouchLi
     @Override
     public void onMove(MotionEvent event, boolean applyMovement) {
         final int Y = (int) event.getRawY();
-        RelativeLayout.LayoutParams lParams = (RelativeLayout.LayoutParams) rlDetailedContent.getLayoutParams();
+        FrameLayout.LayoutParams lParams = (FrameLayout.LayoutParams) rlDetailedContent.getLayoutParams();
         switch (event.getAction() & MotionEvent.ACTION_MASK) {
             case MotionEvent.ACTION_DOWN:
                 moveDeltaY = Y - lParams.topMargin;

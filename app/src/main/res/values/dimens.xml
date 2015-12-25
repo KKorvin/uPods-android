@@ -13,6 +13,7 @@
     <dimen name="default_text_size_24">24sp</dimen>
     <dimen name="default_text_size_26">26sp</dimen>
     <dimen name="default_card_corner_radius">2dp</dimen>
+    <dimen name="float_btn_border">0dp</dimen>
 
     <!-- Elevation -->
     <dimen name="drawer_elevation">7dp</dimen>
