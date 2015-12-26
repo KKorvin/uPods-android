@@ -85,8 +85,8 @@ public class FragmentPlayer extends Fragment implements MediaPlayer.OnPreparedLi
         @Override
         public void onClick(View view) {
             if (universalPlayer.isPrepaired) {
-                universalPlayer.toggle();
                 btnPlay.toggle();
+                universalPlayer.toggle();
                 playlist.updateTracks();
             }
         }
@@ -261,7 +261,9 @@ public class FragmentPlayer extends Fragment implements MediaPlayer.OnPreparedLi
      */
     private void initPlayerStateUI() {
         if (universalPlayer.isPrepaired && universalPlayer.isPlaying()) {
-            btnPlay.setIsPlay(false);
+            if (btnPlay.isPlay()) {
+                btnPlay.toggle();
+            }
             if (!playableMediaItem.getBitrate().isEmpty()) {
                 tvTrackInfo.setText(playableMediaItem.getBitrate() + getString(R.string.kbps));
             } else {
@@ -271,11 +273,15 @@ public class FragmentPlayer extends Fragment implements MediaPlayer.OnPreparedLi
 
         if (universalPlayer.isPrepaired) {
             ((IToolbarHolder) getActivity()).getToolbar().setTitle(R.string.now_paying);
-            btnPlay.setIsPlay(false);
+            if (btnPlay.isPlay()) {
+                btnPlay.toggle();
+            }
 
         } else {
             ((IToolbarHolder) getActivity()).getToolbar().setTitle(R.string.buffering);
-            btnPlay.setIsPlay(true);
+            if (!btnPlay.isPlay()) {
+                btnPlay.toggle();
+            }
         }
     }
 
@@ -393,21 +399,26 @@ public class FragmentPlayer extends Fragment implements MediaPlayer.OnPreparedLi
             if (((IToolbarHolder) getActivity()).getToolbar() != null) {
                 ((IToolbarHolder) getActivity()).getToolbar().setTitle(R.string.now_paying);
             }
-            btnPlay.setIsPlay(false);
+            if (btnPlay.isPlay()) {
+                btnPlay.toggle();
+            }
             if (!playableMediaItem.getBitrate().isEmpty()) {
                 tvTrackInfo.setText(playableMediaItem.getBitrate() + getString(R.string.kbps));
             } else {
                 tvTrackInfo.setText("");
             }
-            ;
             playlist.updateTracks();
         }
     }
 
     @Override
     public void onStateChanged(UniversalPlayer.State state) {
-        if (isAdded()) {
-            btnPlay.setIsPlay(state != UniversalPlayer.State.PLAYING);
+        if (isAdded() && !btnPlay.isAnimationRunning()) {
+            if (btnPlay.isPlay() && state == UniversalPlayer.State.PLAYING) {
+                btnPlay.toggle();
+            } else if (!btnPlay.isPlay() && state == UniversalPlayer.State.PAUSED) {
+                btnPlay.toggle();
+            }
         }
     }
 }

@@ -128,11 +128,16 @@ public class PlayPauseView extends FrameLayout {
         mAnimatorSet.setInterpolator(new DecelerateInterpolator());
         mAnimatorSet.setDuration(PLAY_PAUSE_ANIMATION_DURATION);
         mAnimatorSet.playTogether(colorAnim, pausePlayAnim);
+        mDrawable.isAnimationRunning = true;
         mAnimatorSet.start();
     }
 
-    public void setIsPlay(boolean isPlay) {
-        mDrawable.setIsPlay(isPlay);
+    public boolean isPlay() {
+        return mDrawable.isPlay();
+    }
+
+    public boolean isAnimationRunning() {
+        return mDrawable.isAnimationRunning;
     }
 
 }
