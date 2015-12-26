@@ -65,7 +65,7 @@ public class ActivityPlayer extends BasicActivity implements IToolbarHolder {
                 myIntent.putExtra(ACTIVITY_STARTED_FROM_IN_DEPTH, getIntent().getIntExtra(ACTIVITY_STARTED_FROM_IN_DEPTH, -1));
             }
             startActivity(myIntent);
-            overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_up);
+            overridePendingTransition(R.anim.slide_in_top, R.anim.slide_out_top);
             finish();
         }
     }

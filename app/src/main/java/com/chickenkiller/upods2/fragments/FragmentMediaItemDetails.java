@@ -212,7 +212,7 @@ public class FragmentMediaItemDetails extends Fragment implements View.OnTouchLi
                                 @Override
                                 public void run() {
                                     getActivity().startActivity(myIntent);
-                                    getActivity().overridePendingTransition( R.anim.slide_in_up, R.anim.slide_out_up );
+                                    getActivity().overridePendingTransition( R.anim.slide_in_bottom, R.anim.slide_out_bottom);
                                     getActivity().finish();
                                 }
                             });
