@@ -9,7 +9,6 @@ import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -31,6 +30,7 @@ import com.chickenkiller.upods2.utils.DataHolder;
 import com.chickenkiller.upods2.utils.Logger;
 import com.chickenkiller.upods2.utils.MediaUtils;
 import com.chickenkiller.upods2.utils.enums.Direction;
+import com.chickenkiller.upods2.views.PlayPauseView;
 
 import java.util.List;
 
@@ -56,7 +56,7 @@ public class Playlist implements AdapterView.OnItemClickListener {
     private ListView lvPlaylist;
     private RelativeLayout rlPlayerUnderbar;
     private SeekBar sbPlayerProgress;
-    private ImageButton btnPlay;
+    private PlayPauseView btnPlay;
     private Context mContext;
     private ArrayAdapter playlistAdapter;
     private TextView tvTrackCurrentTime;
@@ -74,7 +74,7 @@ public class Playlist implements AdapterView.OnItemClickListener {
     public Playlist(Context mContext, View rootView, IOperationFinishCallback playlistTrackSelected) {
         this.mContext = mContext;
         this.lnPlaylist = (LinearLayout) rootView.findViewById(R.id.lnPlaylist);
-        this.btnPlay = (ImageButton) rootView.findViewById(R.id.btnPlay);
+        this.btnPlay = (PlayPauseView) rootView.findViewById(R.id.btnPlay);
         this.lnPlayerContorls = (LinearLayout) rootView.findViewById(R.id.lnPlayerContorls);
         this.rlPlayerUnderbar = (RelativeLayout) rootView.findViewById(R.id.rlPlayerUnderbar);
         this.sbPlayerProgress = (SeekBar) rootView.findViewById(R.id.sbPlayerProgress);

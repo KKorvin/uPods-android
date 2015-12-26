@@ -50,4 +50,9 @@
     <dimen name="letter_tile_size">64dp</dimen>
     <dimen name="rounded_btn_radius">40dp</dimen>
 
+    <!-- Button-->
+    <dimen name="pause_bar_width">5dp</dimen>
+    <dimen name="pause_bar_distance">5dp</dimen>
+    <dimen name="pause_bar_height">20dp</dimen>
+
 </resources>

@@ -184,15 +184,15 @@
 
     </LinearLayout>
 
-    <ImageButton
+    <com.chickenkiller.upods2.views.PlayPauseView
         android:id="@+id/btnPlay"
-        android:layout_width="65dp"
-        android:layout_height="65dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/pink_A400"
         android:layout_alignParentBottom="true"
         android:layout_centerInParent="true"
         android:layout_marginBottom="13dp"
-        android:background="@drawable/selector_play_button"
-        android:elevation="20dp"
-        android:src="@drawable/ic_play_white"
+        android:foreground="?android:selectableItemBackground"
+        android:stateListAnimator="@anim/button_elevation"
         android:text="Play" />
 </RelativeLayout>

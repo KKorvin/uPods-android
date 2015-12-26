@@ -45,6 +45,7 @@ import com.chickenkiller.upods2.utils.Logger;
 import com.chickenkiller.upods2.utils.MediaUtils;
 import com.chickenkiller.upods2.utils.ui.LetterBitmap;
 import com.chickenkiller.upods2.utils.ui.UIHelper;
+import com.chickenkiller.upods2.views.PlayPauseView;
 
 
 /**
@@ -62,7 +63,7 @@ public class FragmentPlayer extends Fragment implements MediaPlayer.OnPreparedLi
     private PlayerPositionUpdater playerPositionUpdater;
 
     private View rootView;
-    private ImageButton btnPlay;
+    private PlayPauseView btnPlay;
     private ImageButton btnRewindLeft;
     private ImageButton btnRewindRight;
     private ImageView imgPlayerCover;
@@ -85,7 +86,7 @@ public class FragmentPlayer extends Fragment implements MediaPlayer.OnPreparedLi
         public void onClick(View view) {
             if (universalPlayer.isPrepaired) {
                 universalPlayer.toggle();
-                btnPlay.setImageResource(universalPlayer.isPlaying() ? R.drawable.ic_pause_white : R.drawable.ic_play_white);
+                btnPlay.toggle();
                 playlist.updateTracks();
             }
         }
@@ -113,7 +114,7 @@ public class FragmentPlayer extends Fragment implements MediaPlayer.OnPreparedLi
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         View view = inflater.inflate(R.layout.fragment_player, container, false);
-        btnPlay = (ImageButton) view.findViewById(R.id.btnPlay);
+        btnPlay = (PlayPauseView) view.findViewById(R.id.btnPlay);
         btnRewindLeft = (ImageButton) view.findViewById(R.id.btnRewindLeft);
         btnRewindRight = (ImageButton) view.findViewById(R.id.btnRewindRight);
         btnPlay.setOnClickListener(btnPlayStopClickListener);
@@ -260,23 +261,21 @@ public class FragmentPlayer extends Fragment implements MediaPlayer.OnPreparedLi
      */
     private void initPlayerStateUI() {
         if (universalPlayer.isPrepaired && universalPlayer.isPlaying()) {
-            btnPlay.setImageResource(R.drawable.ic_pause_white);
+            btnPlay.setIsPlay(false);
             if (!playableMediaItem.getBitrate().isEmpty()) {
                 tvTrackInfo.setText(playableMediaItem.getBitrate() + getString(R.string.kbps));
             } else {
                 tvTrackInfo.setText("");
             }
-        } else {
-            btnPlay.setImageResource(R.drawable.ic_play_white);
         }
 
         if (universalPlayer.isPrepaired) {
             ((IToolbarHolder) getActivity()).getToolbar().setTitle(R.string.now_paying);
-            btnPlay.setImageResource(R.drawable.ic_pause_white);
+            btnPlay.setIsPlay(false);
 
         } else {
             ((IToolbarHolder) getActivity()).getToolbar().setTitle(R.string.buffering);
-            btnPlay.setImageResource(R.drawable.ic_play_white);
+            btnPlay.setIsPlay(true);
         }
     }
 
@@ -394,12 +393,13 @@ public class FragmentPlayer extends Fragment implements MediaPlayer.OnPreparedLi
             if (((IToolbarHolder) getActivity()).getToolbar() != null) {
                 ((IToolbarHolder) getActivity()).getToolbar().setTitle(R.string.now_paying);
             }
-            btnPlay.setImageResource(R.drawable.ic_pause_white);
+            btnPlay.setIsPlay(false);
             if (!playableMediaItem.getBitrate().isEmpty()) {
                 tvTrackInfo.setText(playableMediaItem.getBitrate() + getString(R.string.kbps));
             } else {
                 tvTrackInfo.setText("");
-            };
+            }
+            ;
             playlist.updateTracks();
         }
     }
@@ -407,7 +407,7 @@ public class FragmentPlayer extends Fragment implements MediaPlayer.OnPreparedLi
     @Override
     public void onStateChanged(UniversalPlayer.State state) {
         if (isAdded()) {
-            btnPlay.setImageResource(state == UniversalPlayer.State.PLAYING ? R.drawable.ic_pause_white : R.drawable.ic_play_white);
+            btnPlay.setIsPlay(state != UniversalPlayer.State.PLAYING);
         }
     }
 }
