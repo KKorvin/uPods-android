@@ -55,7 +55,7 @@ public class BasicActivity extends Activity implements IFragmentsManager, IConte
         }
         ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
         ft.addToBackStack(tag);
-        ft.commit();
+        ft.commitAllowingStateLoss();
     }
 
     @Override
@@ -117,4 +117,5 @@ public class BasicActivity extends Activity implements IFragmentsManager, IConte
         onContextItemSelected = null;
         return super.onContextItemSelected(item);
     }
+
 }

@@ -158,6 +158,7 @@ public class SmallPlayer implements IPlayerStateListener, View.OnClickListener, 
     public void onClick(View view) {
         Intent intentOpen = new Intent(mActivity, ActivityPlayer.class);
         mActivity.startActivity(intentOpen);
+        mActivity.overridePendingTransition( R.anim.slide_in_bottom, R.anim.slide_out_bottom);
         mActivity.finish();
     }
 
