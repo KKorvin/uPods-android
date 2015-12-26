@@ -179,7 +179,7 @@
         android:layout_marginBottom="8dp"
         android:layout_marginRight="8dp"
         android:src="@drawable/ic_play_white_24dp"
-        app:fab_shadowRadius="4dp"
+        app:fab_shadowRadius="50dp"
         fab:fab_colorNormal="@color/pink_A400"
         fab:fab_colorPressed="@color/pink_A400"
         fab:fab_colorRipple="#99FFFFFF" />

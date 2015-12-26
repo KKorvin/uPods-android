@@ -198,14 +198,14 @@ public class FragmentMediaItemDetails extends Fragment implements View.OnTouchLi
             public void onClick(View view) {
                 if (GlobalUtils.isInternetConnected()) {
                     Intent myIntent = new Intent(getActivity(), ActivityPlayer.class);
-                    getActivity().overridePendingTransition( R.anim.slide_in_up, R.anim.slide_out_up );
                     DataHolder.getInstance().save(ActivityPlayer.MEDIA_ITEM_EXTRA, playableItem);
                     if (FragmentSearch.isActive) {
                         myIntent.putExtra(ActivityPlayer.ACTIVITY_STARTED_FROM_IN_DEPTH, MediaItemType.RADIO_SEARCH.ordinal());
                     }
                     myIntent.putExtra(ActivityPlayer.ACTIVITY_STARTED_FROM, MediaItemType.RADIO.ordinal());
-                    //getActivity().startActivity(myIntent);
-                    //getActivity().finish();
+                    getActivity().startActivity(myIntent);
+                    getActivity().overridePendingTransition( R.anim.slide_in_up, R.anim.slide_out_up );
+                    getActivity().finish();
                 } else {
                     Toast.makeText(getActivity(), getString(R.string.no_internet_access), Toast.LENGTH_SHORT).show();
                 }
