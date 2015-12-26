@@ -204,8 +204,8 @@ public class FragmentMediaItemDetails extends Fragment implements View.OnTouchLi
                         myIntent.putExtra(ActivityPlayer.ACTIVITY_STARTED_FROM_IN_DEPTH, MediaItemType.RADIO_SEARCH.ordinal());
                     }
                     myIntent.putExtra(ActivityPlayer.ACTIVITY_STARTED_FROM, MediaItemType.RADIO.ordinal());
-                    getActivity().startActivity(myIntent);
-                    getActivity().finish();
+                    //getActivity().startActivity(myIntent);
+                    //getActivity().finish();
                 } else {
                     Toast.makeText(getActivity(), getString(R.string.no_internet_access), Toast.LENGTH_SHORT).show();
                 }
