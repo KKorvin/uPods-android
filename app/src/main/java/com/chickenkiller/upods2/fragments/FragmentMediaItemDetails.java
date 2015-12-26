@@ -217,7 +217,7 @@ public class FragmentMediaItemDetails extends Fragment implements View.OnTouchLi
                                 }
                             });
                         }
-                    }, 1000);
+                    }, 300);
                 } else {
                     Toast.makeText(getActivity(), getString(R.string.no_internet_access), Toast.LENGTH_SHORT).show();
                 }
