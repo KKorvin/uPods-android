@@ -40,7 +40,7 @@ public class PlayPauseView extends FrameLayout {
             };
 
     private static final long PLAY_PAUSE_ANIMATION_DURATION = 200;
-    private static final float BUTTON_SIZE = 65;
+    private static final float BUTTON_SIZE = 66;
 
     private final PlayPauseDrawable mDrawable;
     private final Paint mPaint = new Paint();
