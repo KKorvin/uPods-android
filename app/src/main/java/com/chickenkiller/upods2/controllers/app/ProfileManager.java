@@ -106,9 +106,13 @@ public class ProfileManager {
             try {
                 Podcast podcast = new Podcast(podcasts.getJSONObject(i));
                 if (profileItem == ProfileItem.DOWNLOADED_PODCASTS) {
-                    downloadedPodcasts.add(podcast);
+                    if (!MediaItem.hasMediaItemWithName(downloadedPodcasts, podcast)) {
+                        downloadedPodcasts.add(podcast);
+                    }
                 } else if (profileItem == ProfileItem.SUBSCRIBDED_PODCASTS) {
-                    subscribedPodcasts.add(podcast);
+                    if (!MediaItem.hasMediaItemWithName(subscribedPodcasts, podcast)) {
+                        subscribedPodcasts.add(podcast);
+                    }
                 }
             } catch (JSONException e) {
                 Logger.printError(PROFILE, "Can't fetch podcast from json object at index" + String.valueOf(i));
@@ -129,9 +133,13 @@ public class ProfileManager {
             try {
                 RadioItem radioItem = new RadioItem(radioItems.getJSONObject(i));
                 if (profileItem == ProfileItem.SUBSCRIBDED_RADIO) {
-                    subscribedRadioItems.add(radioItem);
+                    if (!MediaItem.hasMediaItemWithName(subscribedRadioItems, radioItem)) {
+                        subscribedRadioItems.add(radioItem);
+                    }
                 } else if (profileItem == ProfileItem.RECENT_RADIO) {
-                    recentRadioItems.add(radioItem);
+                    if (!MediaItem.hasMediaItemWithName(recentRadioItems, radioItem)) {
+                        recentRadioItems.add(radioItem);
+                    }
                 }
             } catch (JSONException e) {
                 Logger.printError(PROFILE, "Can't fetch radio item from json object at index" + String.valueOf(i));

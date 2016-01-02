@@ -109,11 +109,13 @@ public class LoginMaster {
                 @Override
                 public void operationFinished(Object data) {
                     try {
-                        if (((JSONObject) data).has("profile")) {
-                            ProfileManager.getInstance().readFromJson(((JSONObject) data).getJSONObject("profile"));
+                        if (((JSONObject) data).getJSONObject("result").has("profile")) {
+                            JSONObject profile = new JSONObject(((JSONObject) data).getJSONObject("result").getString("profile"));
+                            ProfileManager.getInstance().readFromJson(profile);
                         }
-                        if (((JSONObject) data).has("settings")) {
-                            ProfileManager.getInstance().readFromJson(((JSONObject) data).getJSONObject("settings"));
+                        if (((JSONObject) data).getJSONObject("result").has("settings")) {
+                            JSONObject settings = new JSONObject(((JSONObject) data).getJSONObject("result").getString("settings"));
+                            SettingsManager.getInstace().readSettings(settings);
                         }
                         SyncMaster profileSyncMaster = new SyncMaster(getLoginType(), getToken(), SyncMaster.TASK_SYNC);
                         profileSyncMaster.setProfileSyncedCallback(iOperationFinishCallback);
