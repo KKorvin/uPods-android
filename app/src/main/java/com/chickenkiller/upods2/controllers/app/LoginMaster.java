@@ -109,8 +109,12 @@ public class LoginMaster {
                 @Override
                 public void operationFinished(Object data) {
                     try {
-                        ProfileManager.getInstance().readFromJson(((JSONObject) data).getJSONObject("profile"));
-                        ProfileManager.getInstance().readFromJson(((JSONObject) data).getJSONObject("settings"));
+                        if (((JSONObject) data).has("profile")) {
+                            ProfileManager.getInstance().readFromJson(((JSONObject) data).getJSONObject("profile"));
+                        }
+                        if (((JSONObject) data).has("settings")) {
+                            ProfileManager.getInstance().readFromJson(((JSONObject) data).getJSONObject("settings"));
+                        }
                         SyncMaster profileSyncMaster = new SyncMaster(getLoginType(), getToken(), SyncMaster.TASK_SYNC);
                         profileSyncMaster.setProfileSyncedCallback(iOperationFinishCallback);
                         profileSyncMaster.execute();
@@ -119,11 +123,9 @@ public class LoginMaster {
                     }
                 }
             };
-            if (isLogedinWithFacebook) {
-                SyncMaster profileSyncMaster = new SyncMaster(getLoginType(), getToken());
-                profileSyncMaster.setProfileSyncedCallback(syncFinishedCallback);
-                profileSyncMaster.execute();
-            }
+            SyncMaster profileSyncMaster = new SyncMaster(getLoginType(), getToken());
+            profileSyncMaster.setProfileSyncedCallback(syncFinishedCallback);
+            profileSyncMaster.execute();
         }
     }
 
