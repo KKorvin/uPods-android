@@ -53,19 +53,21 @@ public class SyncMaster extends AsyncTask<Void, Void, Void> {
     protected Void doInBackground(Void... params) {
         StringBuilder link = new StringBuilder();
         link.append(ServerApi.USER_SYNC);
-        link.append("?token=");
-        link.append(token);
-        link.append("&type=");
-        link.append(type);
 
         try {
             Request request = null;
             if (task == TASK_SYNC) {
                 RequestBody formBody = new FormEncodingBuilder().
+                        add("token", token).
+                        add("type", type).
                         add("settings", SettingsManager.getInstace().getAsJson().toString()).
                         add("profile", ProfileManager.getInstance().getAsJson().toString()).build();
                 request = new Request.Builder().url(link.toString()).post(formBody).build();
             } else {
+                link.append("?token=");
+                link.append(token);
+                link.append("&type=");
+                link.append(type);
                 request = new Request.Builder().url(link.toString()).build();
             }
             result = BackendManager.getInstance().sendSynchronicRequest(request);
