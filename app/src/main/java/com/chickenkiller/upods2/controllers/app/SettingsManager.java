@@ -1,19 +1,11 @@
 package com.chickenkiller.upods2.controllers.app;
 
-import com.amazonaws.mobileconnectors.cognito.CognitoSyncManager;
-import com.amazonaws.mobileconnectors.cognito.Dataset;
-import com.amazonaws.mobileconnectors.cognito.Record;
-import com.amazonaws.mobileconnectors.cognito.SyncConflict;
-import com.amazonaws.mobileconnectors.cognito.exceptions.DataStorageException;
-import com.amazonaws.regions.Regions;
+import com.chickenkiller.upods2.controllers.internet.SyncMaster;
 import com.chickenkiller.upods2.utils.Logger;
 import com.pixplicity.easyprefs.library.Prefs;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by alonzilberman on 12/12/15.
@@ -49,25 +41,21 @@ public class SettingsManager {
     }
 
     public void init() {
-        readSettings(getDataset());
-        saveSettings(getDataset());
+        readSettings();
+        saveSettings();
     }
 
-    private Dataset getDataset() {
-        CognitoSyncManager syncClient = new CognitoSyncManager(
-                UpodsApplication.getContext(),
-                Regions.US_EAST_1,
-                LoginMaster.getInstance().getCredentialsProvider());
-        Dataset dataset = syncClient.openOrCreateDataset(AWS_DATASET_NAME);
-        return dataset;
+    public void readSettings(JSONObject jsonObject) {
+        settingsObject = jsonObject;
+        readSettings();
     }
 
-    private void readSettings(Dataset dataset) {
-        settingsObject = new JSONObject();
+    private void readSettings() {
         try {
-            if (dataset.get(JS_SETTINGS) != null) {
-                settingsObject = new JSONObject(dataset.get(JS_SETTINGS));
+            if (Prefs.getString(JS_SETTINGS, null) != null) {
+                settingsObject = new JSONObject(Prefs.getString(JS_SETTINGS, null));
             } else {
+                settingsObject = new JSONObject();
                 settingsObject.put(JS_START_SCREEN, DEFAULT_START_SCREEN);
                 settingsObject.put(JS_NOTIFY_EPISODS, DEFAULT_NOTIFY_EPISODS);
                 settingsObject.put(JS_PODCASTS_UPDATE_TIME, DEFAULT_PODCAST_UPDATE_TIME);
@@ -79,46 +67,17 @@ public class SettingsManager {
 
     }
 
-    private void saveSettings(Dataset dataset) {
+    private void saveSettings() {
         if (settingsObject != null) {
-            dataset.put(JS_SETTINGS, settingsObject.toString());
-            dataset.synchronize(new Dataset.SyncCallback() {
-                @Override
-                public void onSuccess(Dataset dataset, List<Record> updatedRecords) {
-
-                }
-
-                @Override
-                public boolean onConflict(Dataset dataset, List<SyncConflict> conflicts) {
-                    List<Record> resolvedRecords = new ArrayList<Record>();
-                    for (SyncConflict conflict : conflicts) {
-                        resolvedRecords.add(conflict.resolveWithLastWriterWins());
-                    }
-                    dataset.resolve(resolvedRecords);
-                    return true;
-                }
-
-                @Override
-                public boolean onDatasetDeleted(Dataset dataset, String datasetName) {
-                    return false;
-                }
-
-                @Override
-                public boolean onDatasetsMerged(Dataset dataset, List<String> datasetNames) {
-                    return true;
-                }
-
-                @Override
-                public void onFailure(DataStorageException dse) {
-                    Logger.printInfo(TAG, "Failed to save to cognito");
-                    dse.printStackTrace();
-                }
-            });
+            Prefs.putString(JS_SETTINGS, settingsObject.toString());
+        }
+        if (LoginMaster.getInstance().isLogedIn()) {
+            SyncMaster.saveToCloud();
         }
     }
 
     public void sync() {
-        saveSettings(getDataset());
+        saveSettings();
     }
 
     public int getIntSettingsValue(String key) {
@@ -172,7 +131,11 @@ public class SettingsManager {
 
         String pUpdateTime = Prefs.getString(JS_PODCASTS_UPDATE_TIME, String.valueOf(DEFAULT_PODCAST_UPDATE_TIME));
         putSettingsValue(JS_PODCASTS_UPDATE_TIME, Integer.valueOf(pUpdateTime));
-        saveSettings(getDataset());
+        saveSettings();
+    }
+
+    public JSONObject getAsJson() {
+        return settingsObject;
     }
 
 }

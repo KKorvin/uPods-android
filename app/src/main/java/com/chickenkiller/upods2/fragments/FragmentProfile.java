@@ -11,10 +11,8 @@ import android.widget.ProgressBar;
 
 import com.chickenkiller.upods2.R;
 import com.chickenkiller.upods2.controllers.app.LoginMaster;
-import com.chickenkiller.upods2.controllers.app.ProfileManager;
-import com.chickenkiller.upods2.controllers.app.SettingsManager;
 import com.chickenkiller.upods2.interfaces.ILoginManager;
-import com.chickenkiller.upods2.interfaces.IOperationFinishCallback;
+import com.chickenkiller.upods2.interfaces.IOperationFinishWithDataCallback;
 import com.chickenkiller.upods2.interfaces.ISlidingMenuHolder;
 import com.chickenkiller.upods2.utils.Logger;
 import com.facebook.FacebookCallback;
@@ -22,6 +20,7 @@ import com.facebook.FacebookException;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
+import com.pixplicity.easyprefs.library.Prefs;
 import com.twitter.sdk.android.core.Callback;
 import com.twitter.sdk.android.core.Result;
 import com.twitter.sdk.android.core.TwitterException;
@@ -69,8 +68,8 @@ public class FragmentProfile extends Fragment {
     private Callback<TwitterSession> tweetCallback = new Callback<TwitterSession>() {
         @Override
         public void success(Result<TwitterSession> result) {
+            Prefs.putString(LoginMaster.TWITTER_TOKEN, result.data.getAuthToken().token);
             LoginMaster.getInstance().setIsLogedinWithTwitter(true);
-            LoginMaster.getInstance().setTwitterToCognito(result.data);
             initUIAfterLogin();
         }
 
@@ -121,17 +120,7 @@ public class FragmentProfile extends Fragment {
             public void onResult(VKAccessToken token) {
                 lnLogein.setVisibility(View.GONE);
                 progressBar.setVisibility(View.VISIBLE);
-                LoginMaster.getInstance().setVkToCognito(token, new IOperationFinishCallback() {
-                    @Override
-                    public void operationFinished() {
-                        getActivity().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                initUIAfterLogin();
-                            }
-                        });
-                    }
-                });
+                initUIAfterLogin();
             }
 
             @Override
@@ -151,10 +140,9 @@ public class FragmentProfile extends Fragment {
     private void initUIAfterLogin() {
         lnLogein.setVisibility(View.GONE);
         progressBar.setVisibility(View.VISIBLE);
-        SettingsManager.getInstace().sync();
-        ProfileManager.getInstance().syncAllChanges(new IOperationFinishCallback() {
+        LoginMaster.getInstance().syncWithCloud(new IOperationFinishWithDataCallback() {
             @Override
-            public void operationFinished() {
+            public void operationFinished(Object data) {
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {

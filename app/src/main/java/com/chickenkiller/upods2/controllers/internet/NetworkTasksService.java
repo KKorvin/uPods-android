@@ -100,7 +100,7 @@ public class NetworkTasksService extends IntentService {
                     if (parsedEpisods.size() > podcast.getEpisodsCount()) {//
                         podcast.setNewEpisodsCount(parsedEpisods.size() - podcast.getEpisods().size());
                         podcast.setEpisodsCount(parsedEpisods.size());
-                        ProfileManager.getInstance().saveChanges(ProfileManager.ProfileItem.SUBSCRIBDED_PODCASTS, false);
+                        ProfileManager.getInstance().saveChanges(ProfileManager.ProfileItem.SUBSCRIBDED_PODCASTS);
                         sendNewEpisodsNotification(podcast);
                         //TODO automaticly download new episods here
                     }
