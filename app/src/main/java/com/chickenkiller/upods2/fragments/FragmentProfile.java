@@ -20,7 +20,6 @@ import com.facebook.FacebookException;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
-import com.pixplicity.easyprefs.library.Prefs;
 import com.twitter.sdk.android.core.Callback;
 import com.twitter.sdk.android.core.Result;
 import com.twitter.sdk.android.core.TwitterException;
@@ -68,7 +67,6 @@ public class FragmentProfile extends Fragment {
     private Callback<TwitterSession> tweetCallback = new Callback<TwitterSession>() {
         @Override
         public void success(Result<TwitterSession> result) {
-            Prefs.putString(LoginMaster.TWITTER_TOKEN, result.data.getAuthToken().token);
             LoginMaster.getInstance().setIsLogedinWithTwitter(true);
             initUIAfterLogin();
         }

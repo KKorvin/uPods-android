@@ -11,11 +11,11 @@ import com.facebook.AccessTokenTracker;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.login.LoginManager;
-import com.pixplicity.easyprefs.library.Prefs;
 import com.twitter.sdk.android.Twitter;
 import com.twitter.sdk.android.core.Callback;
 import com.twitter.sdk.android.core.Result;
 import com.twitter.sdk.android.core.TwitterAuthConfig;
+import com.twitter.sdk.android.core.TwitterAuthToken;
 import com.twitter.sdk.android.core.TwitterException;
 import com.twitter.sdk.android.core.TwitterSession;
 import com.twitter.sdk.android.core.models.User;
@@ -37,8 +37,6 @@ import io.fabric.sdk.android.Fabric;
  * Created by alonzilberman on 11/29/15.
  */
 public class LoginMaster {
-
-    public static final String TWITTER_TOKEN = "twitter_token";
 
     private static final String LOG_TAG = "LoginMaster";
     private static final String TWITTER_CONSUMER_KEY = "wr8t6lPMxtC09uMpIEayM5FBC";
@@ -143,9 +141,11 @@ public class LoginMaster {
     public String getToken() {
         if (isLogedinWithFacebook)
             return AccessToken.getCurrentAccessToken().getToken();
-        else if (isLogedinWithTwitter)
-            return Prefs.getString(TWITTER_TOKEN, "");
-        else
+        else if (isLogedinWithTwitter) {
+            TwitterSession session = Twitter.getSessionManager().getActiveSession();
+            TwitterAuthToken authToken = session.getAuthToken();
+            return authToken.token;
+        } else
             return VKAccessToken.currentToken().accessToken;
     }
 
