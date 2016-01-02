@@ -45,7 +45,7 @@ public class LoginMaster {
     private static final String TWITTER_CONSUMER_SECRET = "dtnTy4RQfnowu60XGHToj830j4AYsKxDA82PWZBijgSdk0gnlk";
 
     private static LoginMaster loginMaster;
-    
+
     private boolean isLogedinWithFacebook;
     private boolean isLogedinWithTwitter;
 
@@ -61,7 +61,6 @@ public class LoginMaster {
     public static LoginMaster getInstance() {
         if (loginMaster == null) {
             loginMaster = new LoginMaster();
-            loginMaster.syncCounter = 0;
         }
         return loginMaster;
     }
