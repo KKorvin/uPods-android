@@ -152,11 +152,13 @@ public class LoginMaster {
         if (AccessToken.getCurrentAccessToken() != null) {
             LoginManager.getInstance().logOut();
             Logger.printInfo(LOG_TAG, "Loged out from facebook");
-        } else if (Twitter.getSessionManager().getActiveSession() != null) {
+        }
+        if (Twitter.getSessionManager().getActiveSession() != null) {
             Twitter.getSessionManager().clearActiveSession();
             Twitter.logOut();
             Logger.printInfo(LOG_TAG, "Loged out from twitter");
-        } else if (VKSdk.isLoggedIn()) {
+        }
+        if (VKSdk.isLoggedIn()) {
             VKSdk.logout();
             Logger.printInfo(LOG_TAG, "Loged out from vk");
         }
