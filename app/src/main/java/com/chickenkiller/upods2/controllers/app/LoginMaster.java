@@ -155,9 +155,12 @@ public class LoginMaster {
         } else if (Twitter.getSessionManager().getActiveSession() != null) {
             Twitter.getSessionManager().clearActiveSession();
             Twitter.logOut();
+            Logger.printInfo(LOG_TAG, "Loged out from twitter");
         } else if (VKSdk.isLoggedIn()) {
             VKSdk.logout();
+            Logger.printInfo(LOG_TAG, "Loged out from vk");
         }
+        userProfile = new UserProfile();
     }
 
     public void initUserProfile(final IOperationFinishWithDataCallback profileFetched, boolean isForceUpdate) {
