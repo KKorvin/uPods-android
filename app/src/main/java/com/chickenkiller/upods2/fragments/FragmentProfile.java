@@ -89,6 +89,7 @@ public class FragmentProfile extends Fragment {
             @Override
             public void onClick(View v) {
                 LoginMaster.getInstance().logout();
+                ((ISlidingMenuHolder) getActivity()).getSlidingMenu().updateHeader(true);
                 initLoginUI(view);
             }
         });

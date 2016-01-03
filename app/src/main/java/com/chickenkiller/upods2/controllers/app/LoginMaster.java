@@ -11,6 +11,7 @@ import com.facebook.AccessTokenTracker;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.login.LoginManager;
+import com.pixplicity.easyprefs.library.Prefs;
 import com.twitter.sdk.android.Twitter;
 import com.twitter.sdk.android.core.Callback;
 import com.twitter.sdk.android.core.Result;
@@ -101,13 +102,15 @@ public class LoginMaster {
                 @Override
                 public void operationFinished(Object data) {
                     try {
-                        if (((JSONObject) data).getJSONObject("result").has("profile")) {
-                            JSONObject profile = new JSONObject(((JSONObject) data).getJSONObject("result").getString("profile"));
-                            ProfileManager.getInstance().readFromJson(profile);
-                        }
-                        if (((JSONObject) data).getJSONObject("result").has("settings")) {
-                            JSONObject settings = new JSONObject(((JSONObject) data).getJSONObject("result").getString("settings"));
-                            SettingsManager.getInstace().readSettings(settings);
+                        if (((JSONObject) data).has("result")) {
+                            if (((JSONObject) data).getJSONObject("result").has("profile")) {
+                                JSONObject profile = new JSONObject(((JSONObject) data).getJSONObject("result").getString("profile"));
+                                ProfileManager.getInstance().readFromJson(profile);
+                            }
+                            if (((JSONObject) data).getJSONObject("result").has("settings")) {
+                                JSONObject settings = new JSONObject(((JSONObject) data).getJSONObject("result").getString("settings"));
+                                SettingsManager.getInstace().readSettings(settings);
+                            }
                         }
                         SyncMaster profileSyncMaster = new SyncMaster(getLoginType(), getToken(), SyncMaster.TASK_SYNC);
                         profileSyncMaster.setProfileSyncedCallback(iOperationFinishCallback);
@@ -124,7 +127,9 @@ public class LoginMaster {
     }
 
     public String getLoginType() {
-        if (AccessToken.getCurrentAccessToken() != null)
+        if (Prefs.getString(SyncMaster.GLOBAL_TOKEN, null) != null) {
+            return SyncMaster.TYPE_GLOBAL;
+        } else if (AccessToken.getCurrentAccessToken() != null)
             return SyncMaster.TYPE_FB;
         else if (Twitter.getSessionManager().getActiveSession() != null) {
             return SyncMaster.TYPE_TWITTER;
@@ -133,7 +138,9 @@ public class LoginMaster {
     }
 
     public String getToken() {
-        if (AccessToken.getCurrentAccessToken() != null)
+        if (Prefs.getString(SyncMaster.GLOBAL_TOKEN, null) != null) {
+            return Prefs.getString(SyncMaster.GLOBAL_TOKEN, null);
+        } else if (AccessToken.getCurrentAccessToken() != null)
             return AccessToken.getCurrentAccessToken().getToken();
         else if (Twitter.getSessionManager().getActiveSession() != null) {
             TwitterSession session = Twitter.getSessionManager().getActiveSession();
@@ -162,6 +169,7 @@ public class LoginMaster {
             VKSdk.logout();
             Logger.printInfo(LOG_TAG, "Loged out from vk");
         }
+        Prefs.remove(SyncMaster.GLOBAL_TOKEN);
         userProfile = new UserProfile();
     }
 

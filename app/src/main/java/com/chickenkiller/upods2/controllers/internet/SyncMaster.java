@@ -8,6 +8,7 @@ import com.chickenkiller.upods2.controllers.app.SettingsManager;
 import com.chickenkiller.upods2.interfaces.IOperationFinishWithDataCallback;
 import com.chickenkiller.upods2.utils.Logger;
 import com.chickenkiller.upods2.utils.ServerApi;
+import com.pixplicity.easyprefs.library.Prefs;
 import com.squareup.okhttp.FormEncodingBuilder;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.RequestBody;
@@ -22,9 +23,11 @@ public class SyncMaster extends AsyncTask<Void, Void, Void> {
     public static final String TYPE_FB = "facebook";
     public static final String TYPE_TWITTER = "twitter";
     public static final String TYPE_VK = "vkontakte";
+    public static final String TYPE_GLOBAL = "global";
 
     public static final int TASK_GET_USER = 1;
     public static final int TASK_SYNC = 2;
+    public static final String GLOBAL_TOKEN = "global_token";
 
     private IOperationFinishWithDataCallback profileSyncedCallback;
     private JSONObject result;
@@ -60,17 +63,37 @@ public class SyncMaster extends AsyncTask<Void, Void, Void> {
                 RequestBody formBody = new FormEncodingBuilder().
                         add("token", token).
                         add("type", type).
+                        add("task", "sync").
                         add("settings", SettingsManager.getInstace().getAsJson().toString()).
                         add("profile", ProfileManager.getInstance().getAsJson().toString()).build();
                 request = new Request.Builder().url(link.toString()).post(formBody).build();
             } else {
-                link.append("?token=");
-                link.append(token);
-                link.append("&type=");
-                link.append(type);
-                request = new Request.Builder().url(link.toString()).build();
+                RequestBody formBody = new FormEncodingBuilder().
+                        add("token", token).
+                        add("type", type).
+                        add("task", "get_user").build();
+                request = new Request.Builder().url(link.toString()).post(formBody).build();
             }
             result = BackendManager.getInstance().sendSynchronicRequest(request);
+
+            if (task == TASK_SYNC) {
+                Logger.printInfo("SyncMaster", "Saved to cloud");
+                if (!type.equals(TYPE_GLOBAL) && result.has("global_token")) {
+                    String token = result.getString("global_token");
+                    Prefs.putString(GLOBAL_TOKEN, token);
+                }
+            } else {
+                if (result.has("result") && result.getJSONObject("result").has("global_token")) {
+                    String token = result.getJSONObject("result").getString("global_token");
+                    Prefs.putString(GLOBAL_TOKEN, token);
+                }
+            }
+            if (result.has("result") && result.getJSONObject("result").has("message")) {
+                Logger.printInfo("SyncMaster", result.getJSONObject("result").getString("message"));
+            } else if (result.has("message")) {
+                Logger.printInfo("SyncMaster", result.getString("message"));
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -80,9 +103,6 @@ public class SyncMaster extends AsyncTask<Void, Void, Void> {
     @Override
     protected void onPostExecute(Void aVoid) {
         super.onPostExecute(aVoid);
-        if (task == TASK_SYNC) {
-            Logger.printInfo("SyncMaster", "Saved to cloud");
-        }
         if (profileSyncedCallback != null) {
             profileSyncedCallback.operationFinished(result);
         }
