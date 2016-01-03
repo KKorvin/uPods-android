@@ -51,6 +51,7 @@ public class FragmentProfile extends Fragment {
         @Override
         public void onSuccess(LoginResult loginResult) {
             initUIAfterLogin();
+
         }
 
         @Override
@@ -67,7 +68,6 @@ public class FragmentProfile extends Fragment {
     private Callback<TwitterSession> tweetCallback = new Callback<TwitterSession>() {
         @Override
         public void success(Result<TwitterSession> result) {
-            LoginMaster.getInstance().setIsLogedinWithTwitter(true);
             initUIAfterLogin();
         }
 

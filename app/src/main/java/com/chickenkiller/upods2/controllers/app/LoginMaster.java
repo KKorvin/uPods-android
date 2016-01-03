@@ -44,14 +44,10 @@ public class LoginMaster {
 
     private static LoginMaster loginMaster;
 
-    private boolean isLogedinWithFacebook;
-    private boolean isLogedinWithTwitter;
 
     private UserProfile userProfile;
 
     private LoginMaster() {
-        this.isLogedinWithFacebook = false;
-        this.isLogedinWithTwitter = false;
         this.userProfile = null;
     }
 
@@ -73,12 +69,10 @@ public class LoginMaster {
     }
 
     private void initFacebook() {
-        isLogedinWithFacebook = AccessToken.getCurrentAccessToken() != null;
         AccessTokenTracker accessTokenTracker = new AccessTokenTracker() {
             @Override
             protected void onCurrentAccessTokenChanged(AccessToken oldAccessToken, AccessToken newAccessToken) {
-                isLogedinWithFacebook = (AccessToken.getCurrentAccessToken() != null);
-                Logger.printInfo(LOG_TAG, "Is loged in with facebook: " + String.valueOf(isLogedinWithFacebook));
+                Logger.printInfo(LOG_TAG, "Is loged in with facebook");
             }
         };
         accessTokenTracker.startTracking();
@@ -130,18 +124,18 @@ public class LoginMaster {
     }
 
     public String getLoginType() {
-        if (isLogedinWithFacebook)
+        if (AccessToken.getCurrentAccessToken() != null)
             return SyncMaster.TYPE_FB;
-        else if (isLogedinWithTwitter) {
+        else if (Twitter.getSessionManager().getActiveSession() != null) {
             return SyncMaster.TYPE_TWITTER;
         } else
             return SyncMaster.TYPE_VK;
     }
 
     public String getToken() {
-        if (isLogedinWithFacebook)
+        if (AccessToken.getCurrentAccessToken() != null)
             return AccessToken.getCurrentAccessToken().getToken();
-        else if (isLogedinWithTwitter) {
+        else if (Twitter.getSessionManager().getActiveSession() != null) {
             TwitterSession session = Twitter.getSessionManager().getActiveSession();
             TwitterAuthToken authToken = session.getAuthToken();
             return authToken.token;
@@ -150,19 +144,15 @@ public class LoginMaster {
     }
 
 
-    public void setIsLogedinWithTwitter(boolean isLogedinWithTwitter) {
-        this.isLogedinWithTwitter = isLogedinWithTwitter;
-    }
-
     public boolean isLogedIn() {
-        return isLogedinWithFacebook || isLogedinWithTwitter || VKSdk.isLoggedIn();
+        return AccessToken.getCurrentAccessToken() != null || Twitter.getSessionManager().getActiveSession() != null || VKSdk.isLoggedIn();
     }
 
     public void logout() {
-        if (isLogedinWithFacebook) {
+        if (AccessToken.getCurrentAccessToken() != null) {
             LoginManager.getInstance().logOut();
             Logger.printInfo(LOG_TAG, "Loged out from facebook");
-        } else if (isLogedinWithTwitter) {
+        } else if (Twitter.getSessionManager().getActiveSession() != null) {
             Twitter.getSessionManager().clearActiveSession();
             Twitter.logOut();
         } else if (VKSdk.isLoggedIn()) {
@@ -177,9 +167,9 @@ public class LoginMaster {
             userProfile = new UserProfile();
             profileFetched.operationFinished(userProfile);
         } else {
-            if (isLogedinWithFacebook) {
+            if (AccessToken.getCurrentAccessToken() != null) {
                 fetchFacebookUserData(profileFetched);
-            } else if (isLogedinWithTwitter) {
+            } else if (Twitter.getSessionManager().getActiveSession() != null) {
                 fetchTwitterUserData(profileFetched);
             } else if (VKSdk.isLoggedIn()) {
                 fetchVkUserData(profileFetched);
