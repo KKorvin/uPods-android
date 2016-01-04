@@ -33,19 +33,15 @@ public class SyncMaster extends AsyncTask<Void, Void, Void> {
     private JSONObject result;
     private String type;
     private String token;
+    private String secret;
     private int task;
 
-    public SyncMaster(String type, String token) {
-        this.type = type;
-        this.token = token;
-        this.task = TASK_GET_USER;
-    }
 
-    public SyncMaster(String type, String token, int task) {
+    public SyncMaster(String type, String token, String secret, int task) {
         this.type = type;
         this.token = token;
         this.task = task;
-
+        this.secret = secret;
     }
 
     public void setProfileSyncedCallback(IOperationFinishWithDataCallback profileSyncedCallback) {
@@ -62,6 +58,7 @@ public class SyncMaster extends AsyncTask<Void, Void, Void> {
             if (task == TASK_SYNC) {
                 RequestBody formBody = new FormEncodingBuilder().
                         add("token", token).
+                        add("secret", secret).
                         add("type", type).
                         add("task", "sync").
                         add("settings", SettingsManager.getInstace().getAsJson().toString()).
@@ -69,6 +66,7 @@ public class SyncMaster extends AsyncTask<Void, Void, Void> {
                 request = new Request.Builder().url(link.toString()).post(formBody).build();
             } else {
                 RequestBody formBody = new FormEncodingBuilder().
+                        add("secret", secret).
                         add("token", token).
                         add("type", type).
                         add("task", "get_user").build();
@@ -77,7 +75,6 @@ public class SyncMaster extends AsyncTask<Void, Void, Void> {
             result = BackendManager.getInstance().sendSynchronicRequest(request);
 
             if (task == TASK_SYNC) {
-                Logger.printInfo("SyncMaster", "Saved to cloud");
                 if (!type.equals(TYPE_GLOBAL) && result.has("global_token")) {
                     String token = result.getString("global_token");
                     Prefs.putString(GLOBAL_TOKEN, token);
@@ -109,8 +106,9 @@ public class SyncMaster extends AsyncTask<Void, Void, Void> {
     }
 
     public static void saveToCloud() {
-        SyncMaster profileSyncMaster = new SyncMaster(LoginMaster.getInstance().getLoginType(),
-                LoginMaster.getInstance().getToken(), SyncMaster.TASK_SYNC);
+        LoginMaster loginMaster = LoginMaster.getInstance();
+        SyncMaster profileSyncMaster = new SyncMaster(loginMaster.getLoginType(),
+                loginMaster.getToken(), loginMaster.getSecret(), SyncMaster.TASK_SYNC);
         profileSyncMaster.execute();
     }
 }

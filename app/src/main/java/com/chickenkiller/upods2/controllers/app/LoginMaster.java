@@ -112,7 +112,7 @@ public class LoginMaster {
                                 SettingsManager.getInstace().readSettings(settings);
                             }
                         }
-                        SyncMaster profileSyncMaster = new SyncMaster(getLoginType(), getToken(), SyncMaster.TASK_SYNC);
+                        SyncMaster profileSyncMaster = new SyncMaster(getLoginType(), getToken(), getSecret(), SyncMaster.TASK_SYNC);
                         profileSyncMaster.setProfileSyncedCallback(iOperationFinishCallback);
                         profileSyncMaster.execute();
                     } catch (JSONException e) {
@@ -120,7 +120,7 @@ public class LoginMaster {
                     }
                 }
             };
-            SyncMaster profileSyncMaster = new SyncMaster(getLoginType(), getToken());
+            SyncMaster profileSyncMaster = new SyncMaster(getLoginType(), getToken(), getSecret(), SyncMaster.TASK_GET_USER);
             profileSyncMaster.setProfileSyncedCallback(syncFinishedCallback);
             profileSyncMaster.execute();
         }
@@ -148,6 +148,15 @@ public class LoginMaster {
             return authToken.token;
         } else
             return VKAccessToken.currentToken().accessToken;
+    }
+
+    public String getSecret() {
+        if (Twitter.getSessionManager().getActiveSession() != null) {
+            TwitterSession session = Twitter.getSessionManager().getActiveSession();
+            TwitterAuthToken authToken = session.getAuthToken();
+            return authToken.secret;
+        }
+        return "";
     }
 
 
@@ -236,7 +245,7 @@ public class LoginMaster {
                         User user = userResult.data;
                         userProfile = new UserProfile();
                         userProfile.setName(user.screenName);
-                        userProfile.setProfileImageUrl(user.profileImageUrlHttps);
+                        userProfile.setProfileImageUrl(user.profileImageUrl);
                         profileFetched.operationFinished(userProfile);
                     }
 

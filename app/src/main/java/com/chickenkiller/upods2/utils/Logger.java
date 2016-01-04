@@ -15,6 +15,11 @@ public class Logger {
         Log.i(tag, String.valueOf(text));
     }
 
+    public static void printInfo(String tag, boolean text) {
+        Log.i(tag, String.valueOf(text));
+    }
+
+
     public static void printError(String tag, String text) {
         Log.i(tag, text);
     }
