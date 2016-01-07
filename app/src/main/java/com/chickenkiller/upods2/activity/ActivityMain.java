@@ -40,6 +40,7 @@ import com.chickenkiller.upods2.utils.ui.UIHelper;
 import com.chickenkiller.upods2.views.SlidingMenu;
 import com.facebook.CallbackManager;
 import com.pixplicity.easyprefs.library.Prefs;
+import com.vk.sdk.util.VKUtil;
 
 import java.util.Arrays;
 

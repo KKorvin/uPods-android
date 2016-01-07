@@ -245,7 +245,9 @@ public class LoginMaster {
                         User user = userResult.data;
                         userProfile = new UserProfile();
                         userProfile.setName(user.screenName);
-                        userProfile.setProfileImageUrl(user.profileImageUrl);
+                        String profileImage = user.profileImageUrlHttps;
+                        profileImage = profileImage.replace("_normal","");
+                        userProfile.setProfileImageUrl(profileImage);
                         profileFetched.operationFinished(userProfile);
                     }
 
