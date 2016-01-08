@@ -201,12 +201,13 @@ public class UniversalPlayer implements MediaPlayer.OnPreparedListener, MediaPla
     }
 
     public void toggle() {
-        if (mediaPlayer.isPlaying()) {
-            pause();
-        } else {
-            start();
+        if(isPrepaired) {
+            if (mediaPlayer.isPlaying()) {
+                pause();
+            } else {
+                start();
+            }
         }
-
     }
 
     public boolean isPlaying() {

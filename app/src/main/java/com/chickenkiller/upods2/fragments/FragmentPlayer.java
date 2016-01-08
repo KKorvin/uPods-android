@@ -260,20 +260,17 @@ public class FragmentPlayer extends Fragment implements MediaPlayer.OnPreparedLi
      * Inits player UI accorfing to current player state, call it after configurePlayer().
      */
     private void initPlayerStateUI() {
-        if (universalPlayer.isPrepaired && universalPlayer.isPlaying()) {
-            if (btnPlay.isPlay()) {
-                btnPlay.toggle();
-            }
-            if (!playableMediaItem.getBitrate().isEmpty()) {
-                tvTrackInfo.setText(playableMediaItem.getBitrate() + getString(R.string.kbps));
-            } else {
-                tvTrackInfo.setText("");
-            }
+        if (!playableMediaItem.getBitrate().isEmpty()) {
+            tvTrackInfo.setText(playableMediaItem.getBitrate() + getString(R.string.kbps));
+        } else {
+            tvTrackInfo.setText("");
         }
 
         if (universalPlayer.isPrepaired) {
             ((IToolbarHolder) getActivity()).getToolbar().setTitle(R.string.now_paying);
-            if (btnPlay.isPlay()) {
+            if (btnPlay.isPlay() && universalPlayer.isPlaying()) {
+                btnPlay.toggle();
+            }else if (!btnPlay.isPlay() && !universalPlayer.isPlaying()){
                 btnPlay.toggle();
             }
 

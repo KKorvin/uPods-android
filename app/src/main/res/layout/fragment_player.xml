@@ -188,7 +188,7 @@
         android:id="@+id/btnPlay"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/pink_A400"
+        android:background="@color/orange_500"
         android:layout_alignParentBottom="true"
         android:layout_centerInParent="true"
         android:layout_marginBottom="13dp"

@@ -58,6 +58,7 @@ public class PlayPauseDrawable extends Drawable {
         mPauseBarWidth = res.getDimensionPixelSize(R.dimen.pause_bar_width);
         mPauseBarHeight = res.getDimensionPixelSize(R.dimen.pause_bar_height);
         mPauseBarDistance = res.getDimensionPixelSize(R.dimen.pause_bar_distance);
+        mIsPlay = false;
     }
 
     @Override
