@@ -127,19 +127,18 @@ public class UniversalPlayer implements MediaPlayer.EventListener {
             mediaPlayer.play();
             Logger.printInfo(PLAYER_LOG, "play called");
 
-            if (mediaItem instanceof RadioItem) {
-                ProfileManager.getInstance().addRecentMediaItem(mediaItem);
-            }
-
-            if (notificationPanel != null) {
-                notificationPanel.notificationCancel();
-            }
-
             Handler mainHandler = new Handler(UpodsApplication.getContext().getMainLooper());
 
             Runnable myRunnable = new Runnable() {
                 @Override
                 public void run() {
+                    if (mediaItem instanceof RadioItem) {
+                        ProfileManager.getInstance().addRecentMediaItem(mediaItem);
+                    }
+
+                    if (notificationPanel != null) {
+                        notificationPanel.notificationCancel();
+                    }
                     notificationPanel = new DefaultNotificationPanel(UpodsApplication.getContext(), mediaItem);
                 }
             };

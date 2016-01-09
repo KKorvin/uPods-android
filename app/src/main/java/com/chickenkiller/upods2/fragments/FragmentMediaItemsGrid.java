@@ -124,6 +124,7 @@ public class FragmentMediaItemsGrid extends Fragment implements ICustumziedBackP
             smallPlayer.onPause();
         }
         DataHolder.getInstance().save(LAST_ITEM_POSITION, vpMedia.getCurrentItem());
+        ProfileManager.getInstance().setProfileSavedCallback(null);
         super.onPause();
     }
 
