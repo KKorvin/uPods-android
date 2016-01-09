@@ -369,13 +369,20 @@ public class UniversalPlayer implements MediaPlayer.EventListener {
                 playerStateListener.onStateChanged(State.PAUSED);
             }
         } else if (event.type == MediaPlayer.Event.EndReached) {
-            changeTrackToDirection(Direction.RIGHT);
-        } else if (event.type == MediaPlayer.Event.Opening) {
+            if (mediaPlayer.getLength() == 0) {
+                Logger.printInfo(PLAYER_LOG, "Failed to call play...");
+                if (onPlayingFailedCallback != null) {
+                    onPlayingFailedCallback.operationFinished();
+                }
+            } else {
+                changeTrackToDirection(Direction.RIGHT);
+            }
+        } else if (event.type == MediaPlayer.Event.EncounteredError) {
             if (!GlobalUtils.isInternetConnected()) {
                 runReconnectTask();
             }
         }
-        //Logger.printInfo(PLAYER_LOG, "VLC event" + String.valueOf(event.type));
+        Logger.printInfo(PLAYER_LOG, "VLC event" + String.valueOf(event.type));
     }
 
 
