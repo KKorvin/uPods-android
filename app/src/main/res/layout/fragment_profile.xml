@@ -15,33 +15,47 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="0dp"
-            android:layout_weight="60"
+            android:layout_weight="40"
             android:src="@drawable/ic_temp" />
 
-        <com.facebook.login.widget.LoginButton
-            android:id="@+id/btnFacebookLogin"
-            android:layout_width="250dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="30dp"
-            android:layout_marginTop="30dp"
-            android:paddingBottom="15dp"
-            android:paddingTop="15dp" />
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_gravity="center"
+            android:layout_weight="60"
+            android:orientation="vertical"
+            android:paddingTop="40dp">
 
-        <com.twitter.sdk.android.core.identity.TwitterLoginButton
-            android:id="@+id/btnTwitterLogin"
-            android:layout_width="250dp"
-            android:layout_height="50dp"
-            android:layout_gravity="center_horizontal" />
+            <Button
+                android:id="@+id/btnFacebookLogin"
+                android:layout_width="250dp"
+                android:layout_height="50dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/selector_btn_facebook"
+                android:text="@string/login_with_facebook"
+                android:textColor="@color/white" />
 
-        <Button
-            android:id="@+id/btnVklogin"
-            android:layout_width="250dp"
-            android:layout_height="50dp"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="20dp"
-            android:text="@string/login_with_vk" />
+            <Button
+                android:id="@+id/btnTwitterLogin"
+                android:layout_width="250dp"
+                android:layout_height="50dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/selector_btn_twitter"
+                android:text="@string/login_with_twitter"
+                android:textColor="@color/white" />
 
+            <Button
+                android:id="@+id/btnVklogin"
+                android:layout_width="250dp"
+                android:layout_height="50dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/selector_btn_vk"
+                android:text="@string/login_with_vk"
+                android:textColor="@color/white" />
+        </LinearLayout>
     </LinearLayout>
 
     <LinearLayout

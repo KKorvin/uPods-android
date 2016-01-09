@@ -114,6 +114,8 @@
     <string name="there_are">"There are   "</string>
     <string name="new_episods">new episods</string>
     <string name="add_radio_station">Add radio station</string>
+    <string name="login_with_facebook">Login with Facebook</string>
+    <string name="login_with_twitter">Login with Twitter</string>
 
 
 </resources>
