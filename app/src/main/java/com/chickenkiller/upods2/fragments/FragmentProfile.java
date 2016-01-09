@@ -15,6 +15,7 @@ import com.chickenkiller.upods2.controllers.app.LoginMaster;
 import com.chickenkiller.upods2.interfaces.ILoginManager;
 import com.chickenkiller.upods2.interfaces.IOperationFinishWithDataCallback;
 import com.chickenkiller.upods2.interfaces.ISlidingMenuHolder;
+import com.chickenkiller.upods2.interfaces.IToolbarHolder;
 import com.chickenkiller.upods2.utils.Logger;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
@@ -81,6 +82,7 @@ public class FragmentProfile extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        ((IToolbarHolder) getActivity()).getToolbar().setVisibility(View.GONE);
         mTwitterAuthClient = new TwitterAuthClient();
 
         final View view = inflater.inflate(R.layout.fragment_profile, container, false);

@@ -77,6 +77,7 @@ public class FragmentMainFeatured extends Fragment implements IContentLoadListen
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ((IToolbarHolder) getActivity()).getToolbar().setVisibility(View.VISIBLE);
 
         //Init fragments views
         View view = inflater.inflate(R.layout.fragment_main_featured, container, false);

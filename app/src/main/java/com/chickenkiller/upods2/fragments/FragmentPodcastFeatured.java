@@ -48,6 +48,7 @@ public class FragmentPodcastFeatured extends Fragment implements IContentLoadLis
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ((IToolbarHolder) getActivity()).getToolbar().setVisibility(View.VISIBLE);
 
         //Init fragments views
         View view = inflater.inflate(R.layout.fragment_podcasts_featured, container, false);

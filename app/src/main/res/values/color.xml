@@ -50,6 +50,8 @@
     <color name="indigo_900">#1A237E</color>
 
     <!-- Light Blue Material -->
+
+    <color name="light_blue_200">#7ED6FD</color>
     <color name="light_blue_500">#03A9F4</color>
     <color name="light_blue_600">#039BE5</color>
     <color name="light_blue_700">#0288D1</color>
