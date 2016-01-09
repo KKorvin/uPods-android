@@ -3,7 +3,6 @@ package com.chickenkiller.upods2.fragments;
 import android.app.Fragment;
 import android.graphics.Bitmap;
 import android.graphics.Typeface;
-import android.media.MediaPlayer;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -51,7 +50,7 @@ import com.chickenkiller.upods2.views.PlayPauseView;
 /**
  * Created by alonzilberman on 7/27/15.
  */
-public class FragmentPlayer extends Fragment implements MediaPlayer.OnPreparedListener, IPlayerStateListener {
+public class FragmentPlayer extends Fragment implements IPlayerStateListener {
     public static String TAG = "fragmentPlayer";
     public static final long DEFAULT_RADIO_DURATIO = 1000000;
     private static final float TOOLBAR_TEXT_SIZE = 20f;
@@ -85,7 +84,6 @@ public class FragmentPlayer extends Fragment implements MediaPlayer.OnPreparedLi
         @Override
         public void onClick(View view) {
             if (universalPlayer.isPrepaired) {
-                btnPlay.toggle();
                 universalPlayer.toggle();
                 playlist.updateTracks();
             }
@@ -270,7 +268,7 @@ public class FragmentPlayer extends Fragment implements MediaPlayer.OnPreparedLi
             ((IToolbarHolder) getActivity()).getToolbar().setTitle(R.string.now_paying);
             if (btnPlay.isPlay() && universalPlayer.isPlaying()) {
                 btnPlay.toggle();
-            }else if (!btnPlay.isPlay() && !universalPlayer.isPlaying()){
+            } else if (!btnPlay.isPlay() && !universalPlayer.isPlaying()) {
                 btnPlay.toggle();
             }
 
@@ -298,7 +296,7 @@ public class FragmentPlayer extends Fragment implements MediaPlayer.OnPreparedLi
             }
         } else {
             Logger.printInfo(TAG, "Starting new MediaItem");
-            universalPlayer.releasePlayer();
+            universalPlayer.resetPlayer();
             universalPlayer.setMediaItem(playableMediaItem);
             universalPlayer.prepare();
             createPlaylist();
@@ -327,7 +325,6 @@ public class FragmentPlayer extends Fragment implements MediaPlayer.OnPreparedLi
 
     private void setPlayerCallbacks() {
         //Sets all callback to player
-        universalPlayer.setPreparedListener(this);
         universalPlayer.setPlayerStateListener(this);
         universalPlayer.setOnAutonomicTrackChangeCallback(new IOperationFinishCallback() {
             @Override
@@ -389,33 +386,18 @@ public class FragmentPlayer extends Fragment implements MediaPlayer.OnPreparedLi
         }).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
-
-    @Override
-    public void onPrepared(MediaPlayer mediaPlayer) {
-        if (isAdded()) {
-            if (((IToolbarHolder) getActivity()).getToolbar() != null) {
-                ((IToolbarHolder) getActivity()).getToolbar().setTitle(R.string.now_paying);
-            }
-            if (btnPlay.isPlay()) {
-                btnPlay.toggle();
-            }
-            if (!playableMediaItem.getBitrate().isEmpty()) {
-                tvTrackInfo.setText(playableMediaItem.getBitrate() + getString(R.string.kbps));
-            } else {
-                tvTrackInfo.setText("");
-            }
-            playlist.updateTracks();
-        }
-    }
-
     @Override
     public void onStateChanged(UniversalPlayer.State state) {
-        if (isAdded() && !btnPlay.isAnimationRunning()) {
+        if (isAdded()) {
             if (btnPlay.isPlay() && state == UniversalPlayer.State.PLAYING) {
                 btnPlay.toggle();
+                if (((IToolbarHolder) getActivity()).getToolbar() != null) {
+                    ((IToolbarHolder) getActivity()).getToolbar().setTitle(R.string.now_paying);
+                }
             } else if (!btnPlay.isPlay() && state == UniversalPlayer.State.PAUSED) {
                 btnPlay.toggle();
             }
+            playlist.updateTracks();
         }
     }
 }

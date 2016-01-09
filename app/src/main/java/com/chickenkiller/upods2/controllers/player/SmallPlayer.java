@@ -3,7 +3,6 @@ package com.chickenkiller.upods2.controllers.player;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.media.MediaPlayer;
 import android.os.AsyncTask;
 import android.view.View;
 import android.widget.ImageButton;
@@ -31,7 +30,7 @@ import com.chickenkiller.upods2.utils.ui.UIHelper;
 /**
  * Created by alonzilberman on 8/5/15.
  */
-public class SmallPlayer implements IPlayerStateListener, View.OnClickListener, MediaPlayer.OnPreparedListener {
+public class SmallPlayer implements IPlayerStateListener, View.OnClickListener {
 
     private static final int COVER_IMAGE_SIZE = UIHelper.dpToPixels(64);
 
@@ -99,7 +98,6 @@ public class SmallPlayer implements IPlayerStateListener, View.OnClickListener, 
     }
 
     private void setPlayerCallbacks() {
-        universalPlayer.setPreparedListener(this);
         universalPlayer.setPlayerStateListener(this);
         universalPlayer.setOnAutonomicTrackChangeCallback(new IOperationFinishCallback() {
             @Override
@@ -158,12 +156,7 @@ public class SmallPlayer implements IPlayerStateListener, View.OnClickListener, 
     public void onClick(View view) {
         Intent intentOpen = new Intent(mActivity, ActivityPlayer.class);
         mActivity.startActivity(intentOpen);
-        mActivity.overridePendingTransition( R.anim.slide_in_bottom, R.anim.slide_out_bottom);
+        mActivity.overridePendingTransition(R.anim.slide_in_bottom, R.anim.slide_out_bottom);
         mActivity.finish();
-    }
-
-    @Override
-    public void onPrepared(MediaPlayer mp) {
-        initPlayerUI();
     }
 }

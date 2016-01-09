@@ -1,7 +1,7 @@
 package com.chickenkiller.upods2.controllers.player;
 
-import android.media.AudioManager;
-import android.media.MediaPlayer;
+import android.net.Uri;
+import android.os.Handler;
 
 import com.chickenkiller.upods2.controllers.app.ProfileManager;
 import com.chickenkiller.upods2.controllers.app.UpodsApplication;
@@ -19,6 +19,10 @@ import com.chickenkiller.upods2.utils.enums.Direction;
 import com.chickenkiller.upods2.views.DefaultNotificationPanel;
 import com.chickenkiller.upods2.views.PlayerNotificationPanel;
 
+import org.videolan.libvlc.LibVLC;
+import org.videolan.libvlc.Media;
+import org.videolan.libvlc.MediaPlayer;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
@@ -27,12 +31,10 @@ import java.util.TimerTask;
 /**
  * Created by alonzilberman on 7/29/15.
  */
-public class UniversalPlayer implements MediaPlayer.OnPreparedListener, MediaPlayer.OnErrorListener,
-        MediaPlayer.OnInfoListener, MediaPlayer.OnBufferingUpdateListener, MediaPlayer.OnCompletionListener {
+public class UniversalPlayer implements MediaPlayer.EventListener {
 
 
     private static final long RECONNECT_RATE = 5000;
-    private int positionOffset = 0;
 
     public enum State {PLAYING, PAUSED}
 
@@ -43,9 +45,10 @@ public class UniversalPlayer implements MediaPlayer.OnPreparedListener, MediaPla
     private static final String PLAYER_LOG = "UniversalPlayer";
 
     private static UniversalPlayer universalPlayer;
-    private MediaPlayer mediaPlayer;
+    private LibVLC mLibVLC = null;
+    private MediaPlayer mediaPlayer = null;
 
-    private MediaPlayer.OnPreparedListener preparedListener;
+
     private IOperationFinishCallback onAutonomicTrackChangeCallback;
     private IOperationFinishCallback onPlayingFailedCallback;
     private IPlayerStateListener playerStateListener;
@@ -55,9 +58,8 @@ public class UniversalPlayer implements MediaPlayer.OnPreparedListener, MediaPla
 
     private TimerTask autoReconector;
 
-    public boolean isPrepaired;
     public boolean isLinkReadyForPlaying;
-
+    public boolean isPrepaired;
 
     private UniversalPlayer() {
     }
@@ -91,22 +93,12 @@ public class UniversalPlayer implements MediaPlayer.OnPreparedListener, MediaPla
         this.onPlayingFailedCallback = onPlayingFailedCallback;
     }
 
-    public void setPreparedListener(MediaPlayer.OnPreparedListener preparedListener) {
-        this.preparedListener = preparedListener;
-    }
-
     public void setPlayerStateListener(IPlayerStateListener playerStateListener) {
         this.playerStateListener = playerStateListener;
     }
 
     public void setOnAutonomicTrackChangeCallback(IOperationFinishCallback onAutonomicTrackChangeCallback) {
         this.onAutonomicTrackChangeCallback = onAutonomicTrackChangeCallback;
-    }
-
-    public void prepare(IPlayableMediaItem mediaItem, MediaPlayer.OnPreparedListener preparedListener) {
-        setPreparedListener(preparedListener);
-        setMediaItem(mediaItem);
-        prepare();
     }
 
     /**
@@ -116,34 +108,51 @@ public class UniversalPlayer implements MediaPlayer.OnPreparedListener, MediaPla
         if (mediaItem == null) {
             throw new RuntimeException("MediaItem is not set. Call setMediaItem before prepare.");
         }
-        if (!isPrepaired) {
-            try {
-                if (!isLinkReadyForPlaying && !prepareLinkForPlaying()) {
-                    return;
-                }
-                Logger.printInfo(PLAYER_LOG, "Trying to play: " + mediaItem.getAudeoLink());
 
-                if (mediaPlayer == null) {
-                    mediaPlayer = new MediaPlayer();
-                }
-                mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-                mediaPlayer.setDataSource(mediaItem.getAudeoLink());
-                mediaPlayer.setOnPreparedListener(this);
-                mediaPlayer.setOnErrorListener(this);
-                mediaPlayer.setOnInfoListener(this);
-                mediaPlayer.setOnBufferingUpdateListener(this);
-                mediaPlayer.setOnCompletionListener(this);
-                Logger.printInfo(PLAYER_LOG, "Calling  prepareAsync");
-                mediaPlayer.prepareAsync();
-                Logger.printInfo(PLAYER_LOG, "Prepared called");
-            } catch (Exception e) {
-                Logger.printInfo(PLAYER_LOG, "Failed to prepare player...");
-                if (onPlayingFailedCallback != null) {
-                    onPlayingFailedCallback.operationFinished();
-                }
-                e.printStackTrace();
+        try {
+            if (!isLinkReadyForPlaying && !prepareLinkForPlaying()) {
+                return;
             }
+            Logger.printInfo(PLAYER_LOG, "Trying to play: " + mediaItem.getAudeoLink());
+            if (mLibVLC == null) {
+                mLibVLC = new LibVLC();
+            }
+            if (mediaPlayer == null || mediaPlayer.isReleased()) {
+                mediaPlayer = new MediaPlayer(mLibVLC);
+                mediaPlayer.setEventListener(this);
+            }
+            isPrepaired = false;
+            Media m = new Media(mLibVLC, Uri.parse(mediaItem.getAudeoLink()));
+            mediaPlayer.setMedia(m);
+            mediaPlayer.play();
+            Logger.printInfo(PLAYER_LOG, "play called");
+
+            if (mediaItem instanceof RadioItem) {
+                ProfileManager.getInstance().addRecentMediaItem(mediaItem);
+            }
+
+            if (notificationPanel != null) {
+                notificationPanel.notificationCancel();
+            }
+
+            Handler mainHandler = new Handler(UpodsApplication.getContext().getMainLooper());
+
+            Runnable myRunnable = new Runnable() {
+                @Override
+                public void run() {
+                    notificationPanel = new DefaultNotificationPanel(UpodsApplication.getContext(), mediaItem);
+                }
+            };
+            mainHandler.post(myRunnable);
+
+        } catch (Exception e) {
+            Logger.printInfo(PLAYER_LOG, "Failed to call play...");
+            if (onPlayingFailedCallback != null) {
+                onPlayingFailedCallback.operationFinished();
+            }
+            e.printStackTrace();
         }
+
     }
 
     /**
@@ -177,31 +186,25 @@ public class UniversalPlayer implements MediaPlayer.OnPreparedListener, MediaPla
     }
 
     public void start() {
-        if (mediaPlayer != null && isPrepaired) {
-            mediaPlayer.start();
+        if (mediaPlayer != null) {
+            mediaPlayer.play();
             if (notificationPanel != null) {
                 notificationPanel.updateNotificationStatus(State.PLAYING);
-            }
-            if (playerStateListener != null) {
-                playerStateListener.onStateChanged(State.PLAYING);
             }
         }
     }
 
     public void pause() {
-        if (mediaPlayer != null && isPrepaired && mediaPlayer.isPlaying()) {
+        if (mediaPlayer != null && mediaPlayer.isPlaying()) {
             mediaPlayer.pause();
             if (notificationPanel != null) {
                 notificationPanel.updateNotificationStatus(State.PAUSED);
-            }
-            if (playerStateListener != null) {
-                playerStateListener.onStateChanged(State.PAUSED);
             }
         }
     }
 
     public void toggle() {
-        if(isPrepaired) {
+        if (mediaPlayer != null) {
             if (mediaPlayer.isPlaying()) {
                 pause();
             } else {
@@ -211,7 +214,7 @@ public class UniversalPlayer implements MediaPlayer.OnPreparedListener, MediaPla
     }
 
     public boolean isPlaying() {
-        if (mediaPlayer != null && isPrepaired) {
+        if (mediaPlayer != null) {
             return mediaPlayer.isPlaying();
         }
         return false;
@@ -228,14 +231,14 @@ public class UniversalPlayer implements MediaPlayer.OnPreparedListener, MediaPla
         }
     }
 
-    public void releasePlayer() {
+    private void releasePlayer() {
         if (mediaPlayer != null) {
+            mediaPlayer.stop();
             mediaPlayer.release();
             mediaPlayer = null;
             mediaItem = null;
             isPrepaired = false;
             isLinkReadyForPlaying = false;
-            positionOffset = 0;
         }
         if (notificationPanel != null) {
             notificationPanel.notificationCancel();
@@ -244,9 +247,9 @@ public class UniversalPlayer implements MediaPlayer.OnPreparedListener, MediaPla
 
     public void resetPlayer() {
         if (mediaPlayer != null) {
-            mediaPlayer.reset();
-            isPrepaired = false;
+            mediaPlayer.stop();
             isLinkReadyForPlaying = false;
+            isPrepaired = false;
         }
         if (notificationPanel != null) {
             notificationPanel.notificationCancel();
@@ -254,7 +257,6 @@ public class UniversalPlayer implements MediaPlayer.OnPreparedListener, MediaPla
     }
 
     public void removeListeners() {
-        preparedListener = null;
         playerStateListener = null;
         onAutonomicTrackChangeCallback = null;
         onPlayingFailedCallback = null;
@@ -286,8 +288,8 @@ public class UniversalPlayer implements MediaPlayer.OnPreparedListener, MediaPla
     }
 
     public void seekTo(int ms) {
-        if (isPrepaired && ms >= 0) {
-            mediaPlayer.seekTo(ms);
+        if (mediaPlayer != null && ms >= 0) {
+            mediaPlayer.setTime(ms);
         }
     }
 
@@ -332,7 +334,7 @@ public class UniversalPlayer implements MediaPlayer.OnPreparedListener, MediaPla
     }
 
     public int getCurrentPosition() {
-        return isPrepaired && mediaPlayer != null ? mediaPlayer.getCurrentPosition() : 0;
+        return mediaPlayer != null ? (int) mediaPlayer.getTime() : 0;
     }
 
 
@@ -356,48 +358,26 @@ public class UniversalPlayer implements MediaPlayer.OnPreparedListener, MediaPla
     }
 
     @Override
-    public void onPrepared(MediaPlayer mediaPlayer) {
-        isPrepaired = true;
-        Logger.printInfo(PLAYER_LOG, "mediaPlayer.start();");
-        mediaPlayer.start();
-        Logger.printInfo(PLAYER_LOG, "onPrepared - music should start playing here");
-        if (mediaItem instanceof RadioItem) {
-            ProfileManager.getInstance().addRecentMediaItem(mediaItem);
+    public void onEvent(MediaPlayer.Event event) {
+        if (event.type == MediaPlayer.Event.Playing) {
+            isPrepaired = true;
+            if (playerStateListener != null) {
+                playerStateListener.onStateChanged(State.PLAYING);
+            }
+        } else if (event.type == MediaPlayer.Event.Paused) {
+            isPrepaired = true;
+            if (playerStateListener != null) {
+                playerStateListener.onStateChanged(State.PAUSED);
+            }
+        } else if (event.type == MediaPlayer.Event.EndReached) {
+            changeTrackToDirection(Direction.RIGHT);
+        } else if (event.type == MediaPlayer.Event.Opening) {
+            if (!GlobalUtils.isInternetConnected()) {
+                runReconnectTask();
+            }
         }
-
-        if (notificationPanel != null) {
-            notificationPanel.notificationCancel();
-        }
-        notificationPanel = new DefaultNotificationPanel(UpodsApplication.getContext(), mediaItem);
-
-        if (preparedListener != null) {
-            preparedListener.onPrepared(mediaPlayer);
-        }
+        //Logger.printInfo(PLAYER_LOG, "VLC event" + String.valueOf(event.type));
     }
 
-    @Override
-    public boolean onError(MediaPlayer mp, int what, int extra) {
-        Logger.printInfo(PLAYER_LOG, "Error code: " + String.valueOf(what));
-        return false;
-    }
 
-    @Override
-    public boolean onInfo(MediaPlayer mp, int what, int extra) {
-        Logger.printInfo(PLAYER_LOG, "Info code: " + String.valueOf(what));
-        if (what == MediaPlayer.MEDIA_INFO_BUFFERING_START && !GlobalUtils.isInternetConnected()) {
-            runReconnectTask();
-        }
-        return false;
-    }
-
-    @Override
-    public void onBufferingUpdate(MediaPlayer mp, int percent) {
-        //Log.i(PLAYER_LOG, "Player buffer: " + String.valueOf(percent));
-    }
-
-    @Override
-    public void onCompletion(MediaPlayer mp) {
-        Logger.printInfo(PLAYER_LOG, "Completed current track, switchin to nex in playlit");
-        changeTrackToDirection(Direction.RIGHT);
-    }
 }
