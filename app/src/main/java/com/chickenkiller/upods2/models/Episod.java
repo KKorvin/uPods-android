@@ -53,7 +53,7 @@ public class Episod extends Track {
 
     public static boolean hasEpisodWithTitle(ArrayList<Episod> episods, Episod episodToCheck) {
         for (Episod episod : episods) {
-            if (episod.getTitle().equals(episodToCheck.getTitle())) {
+            if (episod.getTitle().replace("\n", "").equals(episodToCheck.getTitle().replace("\n", ""))) {
                 return true;
             }
         }
