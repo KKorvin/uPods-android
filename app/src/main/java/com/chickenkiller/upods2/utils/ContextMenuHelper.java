@@ -8,6 +8,7 @@ import android.widget.Toast;
 
 import com.chickenkiller.upods2.R;
 import com.chickenkiller.upods2.controllers.app.ProfileManager;
+import com.chickenkiller.upods2.dialogs.DialogFragmentAddMediaItem;
 import com.chickenkiller.upods2.dialogs.DialogFragmentConfarmation;
 import com.chickenkiller.upods2.dialogs.DialogFragmentMessage;
 import com.chickenkiller.upods2.interfaces.IFragmentsManager;
@@ -15,6 +16,7 @@ import com.chickenkiller.upods2.interfaces.IOperationFinishCallback;
 import com.chickenkiller.upods2.interfaces.IPlayableMediaItem;
 import com.chickenkiller.upods2.models.Podcast;
 import com.chickenkiller.upods2.models.Track;
+import com.chickenkiller.upods2.utils.enums.MediaItemType;
 
 import java.io.File;
 
@@ -60,5 +62,11 @@ public class ContextMenuHelper {
         ProfileManager.getInstance().removeDownloadedTrack(mediaItem, track);
         contextItemSelected.operationFinished();
         Toast.makeText(activity, R.string.episod_removed, Toast.LENGTH_SHORT).show();
+    }
+
+    public static void showAddMediaDialog(Activity activity, MediaItemType mediaItemType) {
+        DialogFragmentAddMediaItem dialogFragmentAddMediaItem = new DialogFragmentAddMediaItem();
+        dialogFragmentAddMediaItem.setMediaItemType(mediaItemType);
+        ((IFragmentsManager) activity).showDialogFragment(dialogFragmentAddMediaItem);
     }
 }

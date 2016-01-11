@@ -18,18 +18,13 @@
         android:title="@string/app_name"
         yourapp:showAsAction="always" />
     <item
-        android:id="@+id/action_genres"
+        android:id="@+id/add_radio"
         android:orderInCategory="1"
-        android:title="@string/genres"
+        android:title="@string/add_radio_station"
         yourapp:showAsAction="never" />
     <item
-        android:id="@+id/action_countries"
+        android:id="@+id/add_podcast"
         android:orderInCategory="2"
-        android:title="@string/countries"
-        yourapp:showAsAction="never" />
-    <item
-        android:id="@+id/action_languages"
-        android:orderInCategory="3"
-        android:title="@string/languages"
+        android:title="@string/add_podcast"
         yourapp:showAsAction="never" />
 </menu>

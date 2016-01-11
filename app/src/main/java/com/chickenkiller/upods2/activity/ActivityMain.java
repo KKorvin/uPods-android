@@ -40,11 +40,10 @@ import com.chickenkiller.upods2.utils.ui.UIHelper;
 import com.chickenkiller.upods2.views.SlidingMenu;
 import com.facebook.CallbackManager;
 import com.pixplicity.easyprefs.library.Prefs;
-import com.vk.sdk.util.VKUtil;
 
 import java.util.Arrays;
 
-public class ActivityMain extends BasicActivity implements IOverlayable, IToolbarHolder, ISlidingMenuHolder, ILoginManager {
+public class ActivityMain extends BasicActivity implements IOverlayable, IToolbarHolder, ISlidingMenuHolder, ILoginManager, Toolbar.OnMenuItemClickListener {
 
     private static final int MIN_NUMBER_FRAGMENTS_IN_STACK = 2;
     private static final float MAX_OVERLAY_LEVEL = 0.8f;
@@ -72,7 +71,9 @@ public class ActivityMain extends BasicActivity implements IOverlayable, IToolba
         //Toolbar
         toolbar = (Toolbar) findViewById(R.id.toolbar_main);
         toolbar.inflateMenu(R.menu.menu_activity_main);
+        toolbar.setOnMenuItemClickListener(this);
         toolbar.setTitleTextColor(getResources().getColor(R.color.white));
+
         MenuItem searchMenuItem = toolbar.getMenu().findItem(R.id.action_search);
         SearchView searchView = (SearchView) searchMenuItem.getActionView();
         UIHelper.changeSearchViewTextColor(searchView, Color.WHITE);
@@ -273,7 +274,7 @@ public class ActivityMain extends BasicActivity implements IOverlayable, IToolba
                 menu.add(getString(R.string.delete));
             }
         } else {
-            inflater.inflate(R.menu.menu_media_item_feature, menu);
+            inflater.inflate(R.menu.menu_activity_main, menu);
         }
     }
 
@@ -314,4 +315,14 @@ public class ActivityMain extends BasicActivity implements IOverlayable, IToolba
     }
 
 
+    @Override
+    public boolean onMenuItemClick(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.add_podcast) {
+            ContextMenuHelper.showAddMediaDialog(this, MediaItemType.PODCAST);
+        } else if (id == R.id.add_radio) {
+            ContextMenuHelper.showAddMediaDialog(this, MediaItemType.RADIO);
+        }
+        return true;
+    }
 }
