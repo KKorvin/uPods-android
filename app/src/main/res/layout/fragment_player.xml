@@ -153,7 +153,8 @@
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
                 android:layout_marginRight="60dp"
-                android:background="@drawable/selector_rewind_left" />
+                android:background="?selectableItemBackgroundBorderless"
+                android:src="@drawable/selector_rewind_left" />
 
 
             <ImageButton

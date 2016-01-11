@@ -2,6 +2,7 @@ package com.chickenkiller.upods2.controllers.player;
 
 import android.net.Uri;
 import android.os.Handler;
+import android.webkit.URLUtil;
 
 import com.chickenkiller.upods2.controllers.app.ProfileManager;
 import com.chickenkiller.upods2.controllers.app.UpodsApplication;
@@ -121,11 +122,21 @@ public class UniversalPlayer implements MediaPlayer.EventListener {
                 mediaPlayer = new MediaPlayer(mLibVLC);
                 mediaPlayer.setEventListener(this);
             }
-            isPrepaired = false;
-            Media m = new Media(mLibVLC, Uri.parse(mediaItem.getAudeoLink()));
-            mediaPlayer.setMedia(m);
-            mediaPlayer.play();
-            Logger.printInfo(PLAYER_LOG, "play called");
+
+            String audeoLink = mediaItem.getAudeoLink();
+            if (mediaItem instanceof RadioItem || URLUtil.isValidUrl(audeoLink)) {
+                isPrepaired = false;
+                Media m = new Media(mLibVLC, Uri.parse(audeoLink));
+                mediaPlayer.setMedia(m);
+                mediaPlayer.play();
+                Logger.printInfo(PLAYER_LOG, "Play called for URL");
+            } else {
+                Media m = new Media(mLibVLC, audeoLink);
+                mediaPlayer.setMedia(m);
+                mediaPlayer.play();
+                isPrepaired = true;
+                Logger.printInfo(PLAYER_LOG, "Play called for local file");
+            }
 
             Handler mainHandler = new Handler(UpodsApplication.getContext().getMainLooper());
 
