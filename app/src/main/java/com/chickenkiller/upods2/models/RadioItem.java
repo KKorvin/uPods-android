@@ -42,6 +42,12 @@ public class RadioItem extends MediaItem implements IPlayableMediaItem {
         this.streamUrls = new HashSet<>();
         this.streamUrls.add(streamUrl);
         this.coverImageUrl = coverImageUrl;
+        this.bannerImageUrl = "";
+        this.website = "";
+        this.facebook = "";
+        this.twitter = "";
+        this.country = "";
+        this.genre = "";
     }
 
     public RadioItem(RadioItem item) {
@@ -138,7 +144,7 @@ public class RadioItem extends MediaItem implements IPlayableMediaItem {
 
     @Override
     public String getCoverImageUrl() {
-        return coverImageUrl;
+        return coverImageUrl != null && coverImageUrl.isEmpty() ? null : coverImageUrl;
     }
 
     public JSONObject toJSON() {

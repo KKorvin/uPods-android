@@ -35,6 +35,22 @@ public class Podcast extends MediaItem implements IPlayableMediaItem, ITrackable
     public Podcast() {
         super();
         this.episods = new ArrayList<>();
+        this.name = "";
+        this.censoredName = "";
+        this.artistName = "";
+        this.feedUrl = "";
+        this.imageUrl = "";
+        this.releaseDate = "";
+        this.explicitness = "";
+        this.trackCount = "0";
+        this.genre = "";
+        this.description = "";
+    }
+
+    public Podcast(String name, String feedUrl) {
+        this();
+        this.name = name;
+        this.feedUrl = feedUrl;
     }
 
     public Podcast(JSONObject jsonItem) {
@@ -159,7 +175,7 @@ public class Podcast extends MediaItem implements IPlayableMediaItem, ITrackable
 
     @Override
     public String getCoverImageUrl() {
-        return imageUrl;
+        return imageUrl != null && imageUrl.isEmpty() ? null : imageUrl;
     }
 
     @Override

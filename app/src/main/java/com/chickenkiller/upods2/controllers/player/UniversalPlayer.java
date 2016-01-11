@@ -393,7 +393,7 @@ public class UniversalPlayer implements MediaPlayer.EventListener {
                 runReconnectTask();
             }
         }
-        Logger.printInfo(PLAYER_LOG, "VLC event" + String.valueOf(event.type));
+        //Logger.printInfo(PLAYER_LOG, "VLC event" + String.valueOf(event.type));
     }
 
 

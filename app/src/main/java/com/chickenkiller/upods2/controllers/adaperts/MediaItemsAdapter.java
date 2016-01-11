@@ -49,7 +49,6 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     public static final int ROUNDED_BUTTONS = 4;
     private static final int MAX_CONTENT_LEVEL = 2; //count of items to load (banner, main cards)
     private static final int COVER_IMAGE_SIZE = UIHelper.dpToPixels(80);
-    ;
 
     private int itemLayout;
     private int titleLayout;

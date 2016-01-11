@@ -117,6 +117,10 @@
     <string name="login_with_facebook">Login with Facebook</string>
     <string name="login_with_twitter">Login with Twitter</string>
     <string name="add_podcast">Add podcast</string>
+    <string name="title_too_short">The title is too short</string>
+    <string name="url_not_correct">The url is not correct</string>
+    <string name="radio_added">Radio station added to subscribed</string>
+    <string name="podcast_added">Podcast added to subscribed</string>
 
 
 </resources>
