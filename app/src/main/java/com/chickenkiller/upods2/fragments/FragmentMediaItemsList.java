@@ -74,6 +74,7 @@ public class FragmentMediaItemsList extends Fragment implements IUpdateableFragm
 
         mediaItemsAdapter = new MediaItemsAdapter(getActivity(), R.layout.card_media_item_horizontal, R.layout.media_item_title, allItems);
         mediaItemsAdapter.setFragmentsManager((IFragmentsManager) getActivity());
+        mediaItemsAdapter.setMediaItemType(mediaItemType);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setOrientation(OrientationHelper.VERTICAL);

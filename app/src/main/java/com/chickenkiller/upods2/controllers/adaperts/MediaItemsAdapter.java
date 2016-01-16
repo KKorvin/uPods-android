@@ -30,6 +30,7 @@ import com.chickenkiller.upods2.models.MediaItemTitle;
 import com.chickenkiller.upods2.models.RoundedButtonsLayoutItem;
 import com.chickenkiller.upods2.models.ViewHolderBannersLayout;
 import com.chickenkiller.upods2.utils.enums.ContextMenuType;
+import com.chickenkiller.upods2.utils.enums.MediaItemType;
 import com.chickenkiller.upods2.utils.ui.LetterBitmap;
 import com.chickenkiller.upods2.utils.ui.UIHelper;
 import com.chickenkiller.upods2.views.ImageViewSquare;
@@ -60,6 +61,7 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     private IFragmentsManager fragmentsManager;
     private IContentLoadListener iContentLoadListener;
     private IOperationFinishWithDataCallback iRoundButtonClicked;
+    private MediaItemType mediaItemType;
 
 
     private static class ViewHolderCardItem extends RecyclerView.ViewHolder {
@@ -149,6 +151,7 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         this.items = items;
         this.itemLayout = itemLayout;
         this.mContext = mContext;
+        this.mediaItemType = MediaItemType.DEFAULT;
     }
 
     public MediaItemsAdapter(Context mContext, int itemLayout, int titleLayout, ArrayList<MediaItem> items) {
@@ -171,6 +174,10 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     public void setiRoundButtonClicked(IOperationFinishWithDataCallback iRoundButtonClicked) {
         this.iRoundButtonClicked = iRoundButtonClicked;
+    }
+
+    public void setMediaItemType(MediaItemType mediaItemType) {
+        this.mediaItemType = mediaItemType;
     }
 
     @Override
@@ -252,7 +259,8 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     }
 
     private void initStatusBlock(ViewHolderCardItem holder, IPlayableMediaItem currentItem) {
-        if (ProfileManager.getInstance().isDownloaded(currentItem)) {
+        if (mediaItemType == MediaItemType.PODCAST_DOWNLOADED &&
+                ProfileManager.getInstance().isDownloaded(currentItem)) {
             holder.tvItemStatus.setText(R.string.downloaded);
             holder.tvItemStatus.setVisibility(View.VISIBLE);
             if (holder.imgCardStatusIcon != null) {
