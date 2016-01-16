@@ -36,7 +36,7 @@ public class DefaultNotificationPanel extends PlayerNotificationPanel {
         this.nBuilder.setContentTitle(playableMediaItem.getName());
         this.nBuilder.setContentInfo(playableMediaItem.getName());
         this.nBuilder.setContentText(playableMediaItem.getName());
-        this.nBuilder.setSmallIcon(R.drawable.ic_play_white_24dp);
+        this.nBuilder.setSmallIcon(R.drawable.ic_pause_white);
         this.nBuilder.setAutoCancel(false);
         this.nBuilder.setOngoing(true);
 
