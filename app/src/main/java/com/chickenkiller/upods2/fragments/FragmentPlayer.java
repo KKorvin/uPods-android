@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.view.menu.ActionMenuItemView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -25,6 +26,7 @@ import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
 import com.chickenkiller.upods2.R;
 import com.chickenkiller.upods2.activity.ActivityPlayer;
+import com.chickenkiller.upods2.controllers.app.ProfileManager;
 import com.chickenkiller.upods2.controllers.player.PlayerPositionUpdater;
 import com.chickenkiller.upods2.controllers.player.Playlist;
 import com.chickenkiller.upods2.controllers.player.UniversalPlayer;
@@ -75,6 +77,7 @@ public class FragmentPlayer extends Fragment implements IPlayerStateListener {
     private TextView tvTrackNumbers;
     private SeekBar sbPlayerProgress;
     private LinearLayout lnPlayerinfo;
+    private ActionMenuItemView itemFavorites;
 
     private long maxDuration = -1;
     private boolean isChangingProgress = false;
@@ -128,7 +131,7 @@ public class FragmentPlayer extends Fragment implements IPlayerStateListener {
         tvTrackNumbers = (TextView) view.findViewById(R.id.tvTrackNumbers);
         lnPlayerinfo = (LinearLayout) view.findViewById(R.id.lnPlayerInfo);
         sbPlayerProgress = (SeekBar) view.findViewById(R.id.sbPlayerProgress);
-
+        itemFavorites = (ActionMenuItemView) ((IToolbarHolder) getActivity()).getToolbar().findViewById(R.id.action_favorites_player);
         universalPlayer = UniversalPlayer.getInstance();
 
         ((IToolbarHolder) getActivity()).getToolbar().setTitle(R.string.buffering);
@@ -250,6 +253,12 @@ public class FragmentPlayer extends Fragment implements IPlayerStateListener {
                     return true;
                 }
             });
+        }
+
+        if (ProfileManager.getInstance().isSubscribedToMediaItem(playableMediaItem)) {
+            itemFavorites.setIcon(getResources().getDrawable(R.drawable.ic_heart_black_24dp));
+        } else {
+            itemFavorites.setIcon(getResources().getDrawable(R.drawable.ic_heart_white_24dp));
         }
     }
 

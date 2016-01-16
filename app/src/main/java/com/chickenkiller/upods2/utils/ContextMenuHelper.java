@@ -69,4 +69,5 @@ public class ContextMenuHelper {
         dialogFragmentAddMediaItem.setMediaItemType(mediaItemType);
         ((IFragmentsManager) activity).showDialogFragment(dialogFragmentAddMediaItem);
     }
+
 }

@@ -121,6 +121,8 @@
     <string name="url_not_correct">The url is not correct</string>
     <string name="radio_added">Radio station added to subscribed</string>
     <string name="podcast_added">Podcast added to subscribed</string>
+    <string name="added_to_favorites">Added to favorites</string>
+    <string name="removed_from_favorites">Removed from favorites</string>
 
 
 </resources>

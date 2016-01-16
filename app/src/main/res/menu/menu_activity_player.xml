@@ -5,8 +5,8 @@
     tools:context="com.chickenkiller.upods2.activity.ActivityPlayer">
 
     <item
-        android:id="@+id/action_player_settings"
-        android:icon="@drawable/ic_cast_white_24dp"
+        android:id="@+id/action_favorites_player"
+        android:icon="@drawable/ic_heart_white_24dp"
         android:orderInCategory="100"
         android:title="@string/app_name"
         yourapp:showAsAction="always" />

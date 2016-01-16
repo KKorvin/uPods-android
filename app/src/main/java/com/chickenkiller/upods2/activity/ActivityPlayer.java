@@ -3,9 +3,13 @@ package com.chickenkiller.upods2.activity;
 import android.app.FragmentManager;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.view.menu.ActionMenuItemView;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.chickenkiller.upods2.R;
+import com.chickenkiller.upods2.controllers.app.ProfileManager;
 import com.chickenkiller.upods2.controllers.player.UniversalPlayer;
 import com.chickenkiller.upods2.fragments.FragmentMainFeatured;
 import com.chickenkiller.upods2.fragments.FragmentPlayer;
@@ -13,7 +17,7 @@ import com.chickenkiller.upods2.interfaces.IPlayableMediaItem;
 import com.chickenkiller.upods2.interfaces.IToolbarHolder;
 import com.chickenkiller.upods2.utils.DataHolder;
 
-public class ActivityPlayer extends BasicActivity implements IToolbarHolder {
+public class ActivityPlayer extends BasicActivity implements IToolbarHolder, Toolbar.OnMenuItemClickListener {
 
     public static final String MEDIA_ITEM_EXTRA = "mediaItem";
     public static final String ACTIVITY_STARTED_FROM = "startedFrom";
@@ -21,6 +25,7 @@ public class ActivityPlayer extends BasicActivity implements IToolbarHolder {
 
     private IPlayableMediaItem currentMediaItem;
     private Toolbar toolbar;
+    private ActionMenuItemView itemFavorites;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +35,8 @@ public class ActivityPlayer extends BasicActivity implements IToolbarHolder {
         toolbar = (Toolbar) findViewById(R.id.toolbar_player);
         toolbar.setTitleTextColor(getResources().getColor(R.color.white));
         toolbar.inflateMenu(R.menu.menu_activity_player);
+        toolbar.setOnMenuItemClickListener(this);
+        itemFavorites = (ActionMenuItemView) toolbar.findViewById(R.id.action_favorites_player);
 
         if (DataHolder.getInstance().contains(MEDIA_ITEM_EXTRA)) {
             currentMediaItem = (IPlayableMediaItem) DataHolder.getInstance().retrieve(MEDIA_ITEM_EXTRA);
@@ -45,6 +52,7 @@ public class ActivityPlayer extends BasicActivity implements IToolbarHolder {
         if (currentMediaItem == null) {
             throw new RuntimeException("Can't run activity player, MediaItem for play not set.");
         }
+
         if (getFragmentManager().getBackStackEntryCount() == 0) {
             FragmentPlayer fragmentPlayer = new FragmentPlayer();
             fragmentPlayer.setPlayableItem(currentMediaItem);
@@ -83,5 +91,21 @@ public class ActivityPlayer extends BasicActivity implements IToolbarHolder {
     @Override
     public Toolbar getToolbar() {
         return toolbar;
+    }
+
+
+    @Override
+    public boolean onMenuItemClick(MenuItem item) {
+        IPlayableMediaItem mediaItem = UniversalPlayer.getInstance().getPlayingMediaItem();
+        if (ProfileManager.getInstance().isSubscribedToMediaItem(mediaItem)) {
+            itemFavorites.setIcon(getResources().getDrawable(R.drawable.ic_heart_white_24dp));
+            ProfileManager.getInstance().removeSubscribedMediaItem(mediaItem);
+            Toast.makeText(this, getString(R.string.removed_from_favorites), Toast.LENGTH_SHORT).show();
+        } else {
+            itemFavorites.setIcon(getResources().getDrawable(R.drawable.ic_heart_black_24dp));
+            ProfileManager.getInstance().addSubscribedMediaItem(mediaItem);
+            Toast.makeText(this, getString(R.string.added_to_favorites), Toast.LENGTH_SHORT).show();
+        }
+        return false;
     }
 }
