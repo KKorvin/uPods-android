@@ -9,6 +9,7 @@ import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -59,6 +60,7 @@ public class Playlist implements AdapterView.OnItemClickListener {
     private PlayPauseView btnPlay;
     private Context mContext;
     private ArrayAdapter playlistAdapter;
+    private ImageButton btnPlPlay;
     private TextView tvTrackCurrentTime;
     private TextView tvTrackDuration;
     private TextView tvTrackInfo;
@@ -83,6 +85,7 @@ public class Playlist implements AdapterView.OnItemClickListener {
         this.tvTrackCurrentTime = (TextView) rootView.findViewById(R.id.tvTrackCurrentTime);
         this.tvTrackInfo = (TextView) rootView.findViewById(R.id.tvTrackInfo);
         this.lvPlaylist = (ListView) rootView.findViewById(R.id.lvPlaylist);
+        this.btnPlPlay = (ImageButton) rootView.findViewById(R.id.btnPlPlay);
         this.animationFirstRun = true;
         this.playlistTrackSelected = playlistTrackSelected;
         initPlaylist();
