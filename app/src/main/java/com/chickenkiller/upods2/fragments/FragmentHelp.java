@@ -9,13 +9,15 @@ import android.view.ViewGroup;
 
 import com.chickenkiller.upods2.R;
 import com.chickenkiller.upods2.controllers.adaperts.HelpPagesAdapter;
+import com.chickenkiller.upods2.interfaces.ICustumziedBackPress;
+import com.chickenkiller.upods2.interfaces.IToolbarHolder;
 import com.chickenkiller.upods2.views.CircleIndicator;
 import com.pixplicity.easyprefs.library.Prefs;
 
 /**
  * Created by alonzilberman on 8/8/15.
  */
-public class FragmentHelp extends Fragment {
+public class FragmentHelp extends Fragment implements ICustumziedBackPress {
 
     public static final String TAG = "fragment_help";
     public static final String PREF_HELP_SHOWN = "help_shown";
@@ -28,9 +30,13 @@ public class FragmentHelp extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_help, container, false);
+
+        ((IToolbarHolder) getActivity()).getToolbar().setVisibility(View.GONE);
+
         vpHelp = (ViewPager) view.findViewById(R.id.vpHelp);
         indicatorHelp = (CircleIndicator) view.findViewById(R.id.indicatorHelp);
         helpPagesAdapter = new HelpPagesAdapter(getChildFragmentManager());
+        initCloseListener();
         helpPagesAdapter.setCloseClickListener(closeClickListener);
         vpHelp.setAdapter(helpPagesAdapter);
         indicatorHelp.setViewPager(vpHelp);
@@ -38,7 +44,25 @@ public class FragmentHelp extends Fragment {
         return view;
     }
 
+    private void initCloseListener() {
+        if (closeClickListener == null) {
+            closeClickListener = new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    getFragmentManager().popBackStack();
+                }
+            };
+        }
+    }
+
+
     public void setCloseClickListener(View.OnClickListener closeClickListener) {
         this.closeClickListener = closeClickListener;
+    }
+
+    @Override
+    public boolean onBackPressed() {
+        closeClickListener.onClick(null);
+        return false;
     }
 }

@@ -172,7 +172,8 @@ public class ActivityMain extends BasicActivity implements IOverlayable, IToolba
         slidingMenu.getAdapter().clearRowSelections();
         slidingMenu.getAdapter().notifyDataSetChanged();
         Logger.printInfo(LOG_TAG, "Number fragments in stack: " + String.valueOf(getFragmentManager().getBackStackEntryCount()));
-        if (getFragmentManager().getBackStackEntryCount() > MIN_NUMBER_FRAGMENTS_IN_STACK && !getLatestFragmentTag().equals(FragmentHelp.TAG)) {
+        if (getFragmentManager().getBackStackEntryCount() > MIN_NUMBER_FRAGMENTS_IN_STACK
+                && !getLatestFragmentTag().equals(FragmentHelp.TAG)) {
             if (getLatestFragmentTag().equals(FragmentSearch.TAG)) {
                 toolbar.getMenu().findItem(R.id.action_search).collapseActionView();
                 getFragmentManager().popBackStack();
