@@ -12,12 +12,6 @@
         yourapp:showAsAction="always|collapseActionView" />
 
     <item
-        android:id="@+id/action_favorites"
-        android:icon="@drawable/ic_heart_white_24dp"
-        android:orderInCategory="100"
-        android:title="@string/app_name"
-        yourapp:showAsAction="always" />
-    <item
         android:id="@+id/add_radio"
         android:orderInCategory="1"
         android:title="@string/add_radio_station"
