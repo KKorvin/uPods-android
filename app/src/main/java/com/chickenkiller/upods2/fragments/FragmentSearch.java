@@ -57,6 +57,7 @@ public class FragmentSearch extends Fragment implements SearchView.OnQueryTextLi
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ((IToolbarHolder) getActivity()).getToolbar().setVisibility(View.VISIBLE);
 
         //Init fragments views
         View view = inflater.inflate(R.layout.fragment_search_results, container, false);
