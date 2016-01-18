@@ -300,14 +300,14 @@ public class FragmentPlayer extends Fragment implements IPlayerStateListener {
     private void configurePlayer() {
         if (universalPlayer.isPrepaired && universalPlayer.isCurrentMediaItem(playableMediaItem)) { //Player already running
             Logger.printInfo(TAG, "Configured from playing MediaItem");
-            if (playlist == null) {
-                createPlaylist();
-            }
         } else {
             Logger.printInfo(TAG, "Starting new MediaItem");
             universalPlayer.resetPlayer();
             universalPlayer.setMediaItem(playableMediaItem);
             universalPlayer.prepare();
+
+        }
+        if (playlist == null) {
             createPlaylist();
         }
         initPlayerStateUI();
