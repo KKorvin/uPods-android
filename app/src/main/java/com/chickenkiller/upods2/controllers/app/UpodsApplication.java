@@ -42,7 +42,12 @@ public class UpodsApplication extends Application {
         super.onCreate();
 
         runNetworkTasksService();
+        runMainService();
         setAlarmManagerTasks();
+    }
+
+    private void runMainService() {
+        startService(new Intent(this, MainService.class));
     }
 
     private void runNetworkTasksService() {

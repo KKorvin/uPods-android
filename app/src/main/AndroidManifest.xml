@@ -14,13 +14,16 @@
         android:allowBackup="true"
         android:hardwareAccelerated="true"
         android:icon="@mipmap/ic_launcher"
-        android:logo="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:logo="@mipmap/ic_launcher"
         android:screenOrientation="portrait"
         android:theme="@style/AppTheme">
 
         <service
             android:name=".controllers.internet.NetworkTasksService"
+            android:exported="false" />
+        <service
+            android:name=".controllers.app.MainService"
             android:exported="false" />
 
         <activity

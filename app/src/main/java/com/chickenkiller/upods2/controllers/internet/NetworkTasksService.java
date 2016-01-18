@@ -57,6 +57,7 @@ public class NetworkTasksService extends IntentService {
     @Override
     public void onCreate() {
         super.onCreate();
+        Logger.printInfo(TAG, "I am created! ");
         PowerManager mgr = (PowerManager) getSystemService(Context.POWER_SERVICE);
         wakeLock = mgr.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, WAKE_LOCK_NAME);
         wakeLock.setReferenceCounted(true);
