@@ -27,6 +27,7 @@ import com.chickenkiller.upods2.interfaces.IPlayableMediaItem;
 import com.chickenkiller.upods2.models.BannersLayoutItem;
 import com.chickenkiller.upods2.models.MediaItem;
 import com.chickenkiller.upods2.models.MediaItemTitle;
+import com.chickenkiller.upods2.models.Podcast;
 import com.chickenkiller.upods2.models.RoundedButtonsLayoutItem;
 import com.chickenkiller.upods2.models.ViewHolderBannersLayout;
 import com.chickenkiller.upods2.utils.enums.ContextMenuType;
@@ -68,6 +69,7 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         public ImageViewSquare imgSquare;
         public TextView tvSquareTitle;
         public TextView tvItemStatus;
+        public TextView tvItemCount;
         public TextView tvSquareSubTitle;
         public RatingBar rbMediaItem;
         public CardView cvSquare;
@@ -82,6 +84,7 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             this.tvItemStatus = (TextView) view.findViewById(R.id.tvItemStatus);
             this.tvSquareTitle = (TextView) view.findViewById(R.id.tvSquareTitle);
             this.tvSquareSubTitle = (TextView) view.findViewById(R.id.tvSquareSubTitle);
+            this.tvItemCount = (TextView) view.findViewById(R.id.tvItemCount);
             this.rbMediaItem = (RatingBar) view.findViewById(R.id.rbMediaItem);
             this.cvSquare = (CardView) view;
             Context context = view.getContext();
@@ -252,12 +255,17 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         if (((ViewHolderCardItem) holder).tvItemStatus != null) {
             initStatusBlock((ViewHolderCardItem) holder, currentItem);
         }
-
+        if (((ViewHolderCardItem) holder).tvItemCount != null) {
+            initCountBlock((ViewHolderCardItem) holder, currentItem);
+        }
         holder.itemView.setTag(currentItem);
         ((ViewHolderCardItem) holder).setCardClickListener(getCardClickListener(position));
         ((ViewHolderCardItem) holder).setCardMenuClickListener(getCardMenuClickListener(position));
     }
 
+    /**
+     * Inits status block (icon + text, i.e downloaded)
+     */
     private void initStatusBlock(ViewHolderCardItem holder, IPlayableMediaItem currentItem) {
         if (mediaItemType == MediaItemType.PODCAST_DOWNLOADED &&
                 ProfileManager.getInstance().isDownloaded(currentItem)) {
@@ -271,6 +279,19 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             if (holder.imgCardStatusIcon != null) {
                 holder.imgCardStatusIcon.setVisibility(View.GONE);
             }
+        }
+    }
+
+    /**
+     * Inits cpunt block (number in circle, i.e new episods)
+     */
+    private void initCountBlock(ViewHolderCardItem holder, IPlayableMediaItem currentItem) {
+        if (mediaItemType == MediaItemType.PODCAST_FAVORITE && currentItem instanceof Podcast &&
+                ((Podcast) currentItem).getNewEpisodsCount() > 0) {//only for podcasts in favorites
+            holder.tvItemCount.setText(String.valueOf(((Podcast) currentItem).getNewEpisodsCount()));
+            holder.tvItemCount.setVisibility(View.VISIBLE);
+        } else {
+            holder.tvItemCount.setVisibility(View.GONE);
         }
     }
 

@@ -43,6 +43,8 @@ public class Podcast extends MediaItem implements IPlayableMediaItem, ITrackable
         this.releaseDate = "";
         this.explicitness = "";
         this.trackCount = "0";
+        this.episodsCount = 0;
+        this.newEpisodsCount = 0;
         this.genre = "";
         this.description = "";
     }
@@ -104,6 +106,22 @@ public class Podcast extends MediaItem implements IPlayableMediaItem, ITrackable
         }
     }
 
+    public Podcast(Podcast podcast) {
+        this.name = podcast.getName();
+        this.newEpisodsCount = podcast.newEpisodsCount;
+        this.episodsCount = podcast.episodsCount;
+        this.censoredName = podcast.getCensoredName();
+        this.artistName = podcast.getArtistName();
+        this.feedUrl = podcast.getFeedUrl();
+        this.imageUrl = podcast.getCoverImageUrl();
+        this.releaseDate = podcast.getReleaseDate();
+        this.explicitness = podcast.getExplicitness();
+        this.trackCount = podcast.getTrackCount();
+        this.country = podcast.getCountry();
+        this.genre = podcast.getGenre();
+        this.episods = new ArrayList<Episod>(podcast.episods);
+    }
+
     public JSONObject toJSON(boolean convertEpisods) {
         JSONObject podcast = new JSONObject();
         try {
@@ -139,21 +157,6 @@ public class Podcast extends MediaItem implements IPlayableMediaItem, ITrackable
         return jsonPodcasts;
     }
 
-    public Podcast(Podcast podcast) {
-        this.name = podcast.getName();
-        this.newEpisodsCount = podcast.newEpisodsCount;
-        this.episodsCount = podcast.episodsCount;
-        this.censoredName = podcast.getCensoredName();
-        this.artistName = podcast.getArtistName();
-        this.feedUrl = podcast.getFeedUrl();
-        this.imageUrl = podcast.getCoverImageUrl();
-        this.releaseDate = podcast.getReleaseDate();
-        this.explicitness = podcast.getExplicitness();
-        this.trackCount = podcast.getTrackCount();
-        this.country = podcast.getCountry();
-        this.genre = podcast.getGenre();
-        this.episods = new ArrayList<Episod>(podcast.episods);
-    }
 
     public static ArrayList<Podcast> withJsonArray(JSONArray jsonPodcastsItems) {
         ArrayList<Podcast> items = new ArrayList<Podcast>();

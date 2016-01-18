@@ -6,6 +6,8 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.PowerManager;
 import android.support.v7.app.NotificationCompat;
 
@@ -13,15 +15,19 @@ import com.chickenkiller.upods2.R;
 import com.chickenkiller.upods2.activity.ActivityMain;
 import com.chickenkiller.upods2.activity.ActivityPlayer;
 import com.chickenkiller.upods2.controllers.app.ProfileManager;
+import com.chickenkiller.upods2.controllers.app.SimpleCacheManager;
 import com.chickenkiller.upods2.models.Episod;
 import com.chickenkiller.upods2.models.Podcast;
 import com.chickenkiller.upods2.utils.Logger;
+import com.chickenkiller.upods2.utils.ui.LetterBitmap;
+import com.chickenkiller.upods2.utils.ui.UIHelper;
 import com.squareup.okhttp.Request;
 
 import org.xml.sax.InputSource;
 import org.xml.sax.XMLReader;
 
 import java.io.StringReader;
+import java.net.URL;
 import java.util.ArrayList;
 
 import javax.xml.parsers.SAXParser;
@@ -34,6 +40,7 @@ public class NetworkTasksService extends IntentService {
 
     private final static String TAG = "NetworkTasksService";
     private final static String WAKE_LOCK_NAME = "com.chickenkiller.upods2.WAKE_LOCK";
+    private static final int LARGE_ICON_SIZE = UIHelper.dpToPixels(80);
 
     public static final String ACTION_CHECK_FOR_NEW_EPISODS = "com.chickenkiller.upods2.service.check_new_episods";
     public static final int NOTIFICATIONS_SHOW_PODCASTS_SUBSCRIBED = 3501;
@@ -98,9 +105,11 @@ public class NetworkTasksService extends IntentService {
                     xr.parse(inputSource);
                     ArrayList<Episod> parsedEpisods = episodsXMLHandler.getParsedEpisods();
                     if (parsedEpisods.size() > podcast.getEpisodsCount()) {//
-                        podcast.setNewEpisodsCount(parsedEpisods.size() - podcast.getEpisods().size());
+                        Logger.printInfo("OLOLO", podcast.getNewEpisodsCount());
+                        podcast.setNewEpisodsCount(parsedEpisods.size() - podcast.getEpisodsCount() + podcast.getNewEpisodsCount());
                         podcast.setEpisodsCount(parsedEpisods.size());
                         ProfileManager.getInstance().saveChanges(ProfileManager.ProfileItem.SUBSCRIBDED_PODCASTS);
+                        SimpleCacheManager.getInstance().removeFromCache(podcast.getFeedUrl());
                         sendNewEpisodsNotification(podcast);
                         //TODO automaticly download new episods here
                     }
@@ -112,12 +121,26 @@ public class NetworkTasksService extends IntentService {
         }
     }
 
-    private void sendNewEpisodsNotification(Podcast podcast) {
+    private void sendNewEpisodsNotification(final Podcast podcast) {
         NotificationCompat.Builder nBuilder = new NotificationCompat.Builder(this);
         nBuilder.setContentTitle(podcast.getName());
         nBuilder.setContentInfo(podcast.getName());
         nBuilder.setContentText(String.valueOf(podcast.getNewEpisodsCount()) + " " + getString(R.string.new_episods));
         nBuilder.setSmallIcon(R.mipmap.ic_launcher);
+
+        try {
+            Bitmap icon = null;
+            if (podcast.getCoverImageUrl() != null) {
+                URL url = new URL(podcast.getCoverImageUrl());
+                icon = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+            } else {
+                LetterBitmap letterBitmap = new LetterBitmap(this);
+                icon = letterBitmap.getLetterTile(podcast.getName(), podcast.getName(), LARGE_ICON_SIZE, LARGE_ICON_SIZE);
+            }
+            nBuilder.setLargeIcon(icon);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         Intent intentOpen = new Intent(getApplicationContext(), ActivityMain.class);
         intentOpen.putExtra(ActivityPlayer.ACTIVITY_STARTED_FROM, NOTIFICATIONS_SHOW_PODCASTS_SUBSCRIBED);
@@ -125,7 +148,7 @@ public class NetworkTasksService extends IntentService {
         PendingIntent piOpen = PendingIntent.getActivity(this, 0, intentOpen, PendingIntent.FLAG_CANCEL_CURRENT);
         nBuilder.setContentIntent(piOpen);
 
-        Notification notification = nBuilder.build();
+        final Notification notification = nBuilder.build();
         NotificationManager nManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         nManager.notify(NEW_EPISODS_NOTIFICATION_ID, notification);
     }

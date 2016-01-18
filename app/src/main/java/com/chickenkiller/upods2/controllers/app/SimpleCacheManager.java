@@ -50,9 +50,6 @@ public class SimpleCacheManager {
     }
 
     public void cacheUrlOutput(String url, String output, long cachePeriod) {
-        //if (existsInCache(output)) {
-        //    return;
-       // }
         String fileName = shortifyFileName(url);
         fileName += FILE_NAME_SEPARATOR + String.valueOf(cachePeriod) + FILE_NAME_SEPARATOR + System.currentTimeMillis();
         FileOutputStream outputStream;
@@ -97,7 +94,7 @@ public class SimpleCacheManager {
     }
 
     public boolean existsInCache(String url) {
-        url = url.replaceAll(FILE_NAME_SHORTIFY_REGEX, "");
+        url = shortifyFileName(url);
         File cacheStorage = new File(UpodsApplication.getContext().getFilesDir() + CACHE_FOLDER);
         if (cacheStorage != null && cacheStorage.list() != null) {
             for (String fileName : cacheStorage.list()) {
@@ -117,6 +114,20 @@ public class SimpleCacheManager {
             return System.currentTimeMillis() > createdAt + period;
         }
         return true;
+    }
+
+    public void removeFromCache(String url) {
+        String fileNameToRemove = shortifyFileName(url);
+        File cacheStorage = new File(UpodsApplication.getContext().getFilesDir() + CACHE_FOLDER);
+        if (cacheStorage != null && cacheStorage.list() != null) {
+            for (String fileName : cacheStorage.list()) {
+                if (fileName.contains(fileNameToRemove)) {
+                    File cacheFile = new File(UpodsApplication.getContext().getFilesDir() + CACHE_FOLDER + fileName);
+                    cacheFile.delete();
+                    Logger.printInfo(LOG_TAG, "Removed from cache: " + fileName);
+                }
+            }
+        }
     }
 
     public void removeExpiredCache() {

@@ -170,7 +170,7 @@ public class FragmentMediaItemDetails extends Fragment implements View.OnTouchLi
         loadTracks();
 
         if (playableItem instanceof Podcast) {
-            ((Podcast) playableItem).setNewEpisodsCount(0);
+            //((Podcast) playableItem).setNewEpisodsCount(0);
             imgMediaMore.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

@@ -6,10 +6,10 @@
     android:layout_height="90dp"
     android:layout_gravity="center"
 
+    android:layout_marginBottom="@dimen/horizantal_card_top_margin"
     android:layout_marginLeft="@dimen/horizontal_card_side_margin"
     android:layout_marginRight="@dimen/horizontal_card_side_margin"
     android:layout_marginTop="@dimen/horizantal_card_top_margin"
-    android:layout_marginBottom="@dimen/horizantal_card_top_margin"
 
     android:clickable="true"
     android:focusable="true"
@@ -34,14 +34,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_toRightOf="@+id/imgSquare"
+            android:fontFamily="sans-serif-medium"
             android:lines="1"
             android:maxLines="2"
             android:paddingLeft="7dp"
             android:paddingRight="7dp"
             android:text="Test text"
-            android:textSize="@dimen/default_text_size_16"
-            android:fontFamily="sans-serif-medium"
-            android:textColor="@color/black" />
+            android:textColor="@color/black"
+            android:textSize="@dimen/default_text_size_16" />
 
         <TextView
             android:id="@+id/tvSquareSubTitle"
@@ -54,8 +54,7 @@
             android:paddingLeft="7dp"
             android:paddingRight="7dp"
             android:text="Test text"
-            android:textColor="@color/media_card_subheader"
- />
+            android:textColor="@color/media_card_subheader" />
 
         <RatingBar
             android:id="@+id/rbMediaItem"
@@ -79,22 +78,38 @@
             android:id="@+id/tvItemStatus"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
             android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
             android:lines="1"
             android:maxLines="2"
             android:paddingLeft="7dp"
             android:text="DOWNLOADED"
-            android:textColor="@color/green_800" />
+            android:textColor="@color/green_800"
+            android:visibility="gone" />
 
         <ImageView
             android:id="@+id/imgCardStatusIcon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:layout_toLeftOf="@+id/tvItemStatus"
             android:layout_marginBottom="-3dp"
-            android:src="@drawable/cloud_download48" />
+            android:layout_toLeftOf="@+id/tvItemStatus"
+            android:src="@drawable/cloud_download48"
 
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/tvItemCount"
+            android:layout_width="wrap_content"
+            android:layout_height="26dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:text="0"
+            android:gravity="center"
+            android:textSize="@dimen/default_text_size_16"
+            android:background="@drawable/circle_count"
+            android:textColor="@color/white" />
     </RelativeLayout>
 </android.support.v7.widget.CardView>

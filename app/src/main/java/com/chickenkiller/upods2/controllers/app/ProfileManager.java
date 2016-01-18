@@ -1,5 +1,7 @@
 package com.chickenkiller.upods2.controllers.app;
 
+import android.os.Handler;
+
 import com.chickenkiller.upods2.controllers.internet.SyncMaster;
 import com.chickenkiller.upods2.interfaces.IOperationFinishCallback;
 import com.chickenkiller.upods2.interfaces.IPlayableMediaItem;
@@ -326,7 +328,12 @@ public class ProfileManager {
                 e.printStackTrace();
             }
             if (profileSavedCallback != null) {
-                profileSavedCallback.operationFinished();
+                new Handler(UpodsApplication.getContext().getMainLooper()).post(new Runnable() {
+                    @Override
+                    public void run() {
+                        profileSavedCallback.operationFinished();
+                    }
+                });
             }
         }
         if (LoginMaster.getInstance().isLogedIn()) {
