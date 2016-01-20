@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.RecyclerView;
@@ -47,6 +46,7 @@ import com.chickenkiller.upods2.models.Podcast;
 import com.chickenkiller.upods2.utils.DataHolder;
 import com.chickenkiller.upods2.utils.GlobalUtils;
 import com.chickenkiller.upods2.utils.Logger;
+import com.chickenkiller.upods2.utils.decorators.DelayedOnClickListener;
 import com.chickenkiller.upods2.utils.enums.ContextMenuType;
 import com.chickenkiller.upods2.utils.enums.MediaItemType;
 import com.chickenkiller.upods2.utils.ui.LetterBitmap;
@@ -194,35 +194,29 @@ public class FragmentMediaItemDetails extends Fragment implements View.OnTouchLi
         svDetails.setEnabled(false);
         svDetails.setIMovable(this);
         tvDetailedDescription.setText(playableItem.getDescription());
-        fbDetailsPlay.setOnClickListener(new View.OnClickListener() {
+        fbDetailsPlay.setOnClickListener(new DelayedOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (GlobalUtils.isInternetConnected()) {
-                    Handler handler = new Handler();
-                    handler.postDelayed(new Runnable(){
+                    final Intent myIntent = new Intent(getActivity(), ActivityPlayer.class);
+                    DataHolder.getInstance().save(ActivityPlayer.MEDIA_ITEM_EXTRA, playableItem);
+                    if (FragmentSearch.isActive) {
+                        myIntent.putExtra(ActivityPlayer.ACTIVITY_STARTED_FROM_IN_DEPTH, MediaItemType.RADIO_SEARCH.ordinal());
+                    }
+                    myIntent.putExtra(ActivityPlayer.ACTIVITY_STARTED_FROM, MediaItemType.RADIO.ordinal());
+                    getActivity().runOnUiThread(new Runnable() {
                         @Override
-                        public void run(){
-                            final Intent myIntent = new Intent(getActivity(), ActivityPlayer.class);
-                            DataHolder.getInstance().save(ActivityPlayer.MEDIA_ITEM_EXTRA, playableItem);
-                            if (FragmentSearch.isActive) {
-                                myIntent.putExtra(ActivityPlayer.ACTIVITY_STARTED_FROM_IN_DEPTH, MediaItemType.RADIO_SEARCH.ordinal());
-                            }
-                            myIntent.putExtra(ActivityPlayer.ACTIVITY_STARTED_FROM, MediaItemType.RADIO.ordinal());
-                            getActivity().runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    getActivity().startActivity(myIntent);
-                                    getActivity().overridePendingTransition( R.anim.slide_in_bottom, R.anim.slide_out_bottom);
-                                    getActivity().finish();
-                                }
-                            });
+                        public void run() {
+                            getActivity().startActivity(myIntent);
+                            getActivity().overridePendingTransition(R.anim.slide_in_bottom, R.anim.slide_out_bottom);
+                            getActivity().finish();
                         }
-                    }, 300);
+                    });
                 } else {
                     Toast.makeText(getActivity(), getString(R.string.no_internet_access), Toast.LENGTH_SHORT).show();
                 }
             }
-        });
+        }));
     }
 
     /**
