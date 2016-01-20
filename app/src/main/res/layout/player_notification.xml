@@ -52,7 +52,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:background="@android:color/transparent"
-            android:src="@drawable/selector_rewind_left" />
+            android:src="@drawable/ic_rewind_white_left" />
 
         <ImageButton
             android:id="@+id/btnPlayNtBar"
@@ -70,6 +70,6 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:background="@android:color/transparent"
-            android:src="@drawable/selector_rewind_right" />
+            android:src="@drawable/ic_rewind_white_right" />
     </LinearLayout>
 </RelativeLayout>

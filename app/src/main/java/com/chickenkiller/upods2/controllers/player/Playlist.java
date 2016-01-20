@@ -254,10 +254,6 @@ public class Playlist implements AdapterView.OnItemClickListener {
 
     private void changeTrack(int position) {
         UniversalPlayer universalPlayer = UniversalPlayer.getInstance();
-        /*if (isOpen) {
-            runCloseAnimation();
-            isOpen = false;
-        }*/
         if (playlistAdapter instanceof PlaylistMediaItemsAdapter) {
             IPlayableMediaItem clickedIPlayableMediaItem = ((PlaylistMediaItemsAdapter) playlistAdapter).getItem(position);
             if (universalPlayer.isCurrentMediaItem(clickedIPlayableMediaItem)) {

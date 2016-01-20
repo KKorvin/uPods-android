@@ -149,21 +149,22 @@
 
             <ImageButton
                 android:id="@+id/btnRewindLeft"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="65dp"
+                android:layout_height="65dp"
                 android:layout_centerInParent="true"
                 android:layout_marginRight="60dp"
-                android:background="?selectableItemBackgroundBorderless"
-                android:src="@drawable/selector_rewind_left" />
+                android:background="@drawable/circle_rewind_btn"
+                android:src="@drawable/ic_rewind_white_left" />
 
 
             <ImageButton
                 android:id="@+id/btnRewindRight"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="65dp"
+                android:layout_height="65dp"
                 android:layout_centerInParent="true"
                 android:layout_marginLeft="60dp"
-                android:background="@drawable/selector_rewind_right" />
+                android:background="@drawable/circle_rewind_btn"
+                android:src="@drawable/ic_rewind_white_right" />
         </LinearLayout>
     </LinearLayout>
 
