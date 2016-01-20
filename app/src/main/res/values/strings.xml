@@ -123,6 +123,8 @@
     <string name="podcast_added">Podcast added to subscribed</string>
     <string name="added_to_favorites">Added to favorites</string>
     <string name="removed_from_favorites">Removed from favorites</string>
+    <string name="version">Version</string>
+    <string name="build">build</string>
 
 
 </resources>

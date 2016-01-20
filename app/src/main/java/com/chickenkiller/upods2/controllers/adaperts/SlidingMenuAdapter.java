@@ -11,11 +11,11 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.chickenkiller.upods2.R;
+import com.chickenkiller.upods2.dialogs.DialogFragmentAbout;
 import com.chickenkiller.upods2.fragments.FragmentHelp;
 import com.chickenkiller.upods2.fragments.FragmentMediaItemsGrid;
 import com.chickenkiller.upods2.fragments.FragmentProfile;
@@ -179,7 +179,8 @@ public class SlidingMenuAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                         FragmentHelp fragmentHelp = new FragmentHelp();
                         fragmentsManager.showFragment(R.id.fl_content, fragmentHelp, FragmentHelp.TAG);
                     } else {
-                        Toast.makeText(context, "TEST" + clickedMenuItem.getTitle(), Toast.LENGTH_SHORT).show();
+                        DialogFragmentAbout dialogFragmentAbout = new DialogFragmentAbout();
+                        fragmentsManager.showDialogFragment(dialogFragmentAbout);
                     }
                 }
             }
