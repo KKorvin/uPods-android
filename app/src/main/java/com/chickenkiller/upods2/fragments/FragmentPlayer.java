@@ -200,11 +200,11 @@ public class FragmentPlayer extends Fragment implements IPlayerStateListener {
      */
     private void initPlayerUI() {
         if (playableMediaItem instanceof ITrackable) {
-            tvPlayerTitle.setText(((ITrackable) playableMediaItem).getSelectedTrack().getTitle());
+            tvPlayerTitle.setText(((ITrackable) playableMediaItem).getSelectedTrack().getTitle().trim());
         } else {
-            tvPlayerTitle.setText(playableMediaItem.getName());
+            tvPlayerTitle.setText(playableMediaItem.getName().trim());
         }
-        tvPlayserSubtitle.setText(playableMediaItem.getSubHeader());
+        tvPlayserSubtitle.setText(playableMediaItem.getSubHeader().trim());
         if (playableMediaItem.getCoverImageUrl() == null) {
             final LetterBitmap letterBitmap = new LetterBitmap(getActivity());
             Bitmap letterTile = letterBitmap.getLetterTile(playableMediaItem.getName(), playableMediaItem.getName(), COVER_IMAGE_SIZE, COVER_IMAGE_SIZE);
@@ -364,6 +364,7 @@ public class FragmentPlayer extends Fragment implements IPlayerStateListener {
                     @Override
                     public void operationFinished() {
                         getActivity().onBackPressed();
+                        UniversalPlayer.getInstance().releasePlayer();
                     }
                 });
                 ((IFragmentsManager) getActivity()).showDialogFragment(dialogFragmentMessage);

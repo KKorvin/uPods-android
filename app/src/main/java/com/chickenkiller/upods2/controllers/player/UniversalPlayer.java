@@ -1,5 +1,7 @@
 package com.chickenkiller.upods2.controllers.player;
 
+import android.app.NotificationManager;
+import android.content.Context;
 import android.net.Uri;
 import android.os.Handler;
 import android.webkit.URLUtil;
@@ -241,7 +243,7 @@ public class UniversalPlayer implements MediaPlayer.EventListener {
         }
     }
 
-    private void releasePlayer() {
+    public void releasePlayer() {
         if (mediaPlayer != null) {
             mediaPlayer.stop();
             mediaPlayer.release();
@@ -250,9 +252,8 @@ public class UniversalPlayer implements MediaPlayer.EventListener {
             isPrepaired = false;
             isLinkReadyForPlaying = false;
         }
-        if (notificationPanel != null) {
-            notificationPanel.notificationCancel();
-        }
+        NotificationManager nMgr = (NotificationManager) UpodsApplication.getContext().getSystemService(Context.NOTIFICATION_SERVICE);
+        nMgr.cancelAll();
     }
 
     public void resetPlayer() {

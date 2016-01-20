@@ -26,6 +26,7 @@ import com.chickenkiller.upods2.interfaces.IUIProgressUpdater;
 import com.chickenkiller.upods2.models.MediaItem;
 import com.chickenkiller.upods2.models.Track;
 import com.chickenkiller.upods2.utils.DataHolder;
+import com.chickenkiller.upods2.utils.decorators.DelayedOnClickListener;
 import com.chickenkiller.upods2.utils.enums.ContextMenuType;
 import com.chickenkiller.upods2.utils.enums.MediaItemType;
 
@@ -67,7 +68,7 @@ public class TracksAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         }
 
         public void setClickListner(View.OnClickListener clickListner) {
-            rootView.setOnClickListener(clickListner);
+            rootView.setOnClickListener(new DelayedOnClickListener(clickListner));
         }
 
         public void setLongClickListner(View.OnLongClickListener clickListner) {
