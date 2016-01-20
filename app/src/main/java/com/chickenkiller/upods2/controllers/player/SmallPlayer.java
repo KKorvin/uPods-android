@@ -12,7 +12,6 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
 import com.chickenkiller.upods2.R;
 import com.chickenkiller.upods2.activity.ActivityPlayer;
 import com.chickenkiller.upods2.fragments.FragmentPlayer;
@@ -90,7 +89,7 @@ public class SmallPlayer implements IPlayerStateListener, View.OnClickListener {
                 Bitmap letterTile = letterBitmap.getLetterTile(playingMediaItem.getName(), playingMediaItem.getName(), COVER_IMAGE_SIZE, COVER_IMAGE_SIZE);
                 imgCover.setImageBitmap(letterTile);
             } else {
-                Glide.with(mActivity).load(playingMediaItem.getCoverImageUrl()).crossFade().into(new GlideDrawableImageViewTarget(imgCover));
+                Glide.with(mActivity).load(playingMediaItem.getCoverImageUrl()).into(imgCover);
             }
         } else {
             this.rlSmallPLayer.setVisibility(View.GONE);

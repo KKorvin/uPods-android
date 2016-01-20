@@ -41,7 +41,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-import jp.wasabeef.recyclerview.adapters.SlideInBottomAnimationAdapter;
+import it.gmariotti.recyclerview.adapter.SlideInBottomAnimatorAdapter;
 
 /**
  * Created by alonzilberman on 7/10/15.
@@ -115,7 +115,7 @@ public class FragmentMainFeatured extends Fragment implements IContentLoadListen
 
         //Featured recycle view
         rvMain.setHasFixedSize(true);
-        rvMain.setAdapter(new SlideInBottomAnimationAdapter(mediaItemsAdapter));
+        rvMain.setAdapter(new SlideInBottomAnimatorAdapter(mediaItemsAdapter, rvMain));
         rvMain.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
             @Override
             public int getSpanSize(int position) {

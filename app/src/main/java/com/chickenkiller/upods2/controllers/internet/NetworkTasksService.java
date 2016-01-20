@@ -21,7 +21,6 @@ import com.chickenkiller.upods2.models.Podcast;
 import com.chickenkiller.upods2.utils.Logger;
 import com.chickenkiller.upods2.utils.ui.LetterBitmap;
 import com.chickenkiller.upods2.utils.ui.UIHelper;
-import com.squareup.okhttp.Request;
 
 import org.xml.sax.InputSource;
 import org.xml.sax.XMLReader;
@@ -32,6 +31,8 @@ import java.util.ArrayList;
 
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
+
+import okhttp3.Request;
 
 /**
  * Created by alonzilberman on 12/13/15.

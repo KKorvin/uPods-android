@@ -12,10 +12,8 @@ import android.widget.ProgressBar;
 
 import com.chickenkiller.upods2.R;
 import com.chickenkiller.upods2.activity.ActivityPlayer;
-import com.chickenkiller.upods2.controllers.internet.BackendManager;
-import com.chickenkiller.upods2.utils.enums.MediaItemType;
-import com.chickenkiller.upods2.views.GridSpacingItemDecoration;
 import com.chickenkiller.upods2.controllers.adaperts.MediaItemsAdapter;
+import com.chickenkiller.upods2.controllers.internet.BackendManager;
 import com.chickenkiller.upods2.interfaces.IContentLoadListener;
 import com.chickenkiller.upods2.interfaces.IFragmentsManager;
 import com.chickenkiller.upods2.interfaces.IRequestCallback;
@@ -25,14 +23,16 @@ import com.chickenkiller.upods2.models.MediaItem;
 import com.chickenkiller.upods2.models.MediaItemTitle;
 import com.chickenkiller.upods2.models.Podcast;
 import com.chickenkiller.upods2.utils.ServerApi;
+import com.chickenkiller.upods2.utils.enums.MediaItemType;
 import com.chickenkiller.upods2.views.AutofitRecyclerView;
+import com.chickenkiller.upods2.views.GridSpacingItemDecoration;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-import jp.wasabeef.recyclerview.adapters.SlideInBottomAnimationAdapter;
+import it.gmariotti.recyclerview.adapter.SlideInBottomAnimatorAdapter;
 
 /**
  * Created by alonzilberman on 7/10/15.
@@ -83,7 +83,7 @@ public class FragmentPodcastFeatured extends Fragment implements IContentLoadLis
         mediaItemsAdapter.setContentLoadListener(this);
         //Featured recycle view
         rvMain.setHasFixedSize(true);
-        rvMain.setAdapter(new SlideInBottomAnimationAdapter(mediaItemsAdapter));
+        rvMain.setAdapter(new SlideInBottomAnimatorAdapter(mediaItemsAdapter,rvMain));
         rvMain.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
             @Override
             public int getSpanSize(int position) {

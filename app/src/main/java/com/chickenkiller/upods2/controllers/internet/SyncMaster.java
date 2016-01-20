@@ -9,11 +9,12 @@ import com.chickenkiller.upods2.interfaces.IOperationFinishWithDataCallback;
 import com.chickenkiller.upods2.utils.Logger;
 import com.chickenkiller.upods2.utils.ServerApi;
 import com.pixplicity.easyprefs.library.Prefs;
-import com.squareup.okhttp.FormEncodingBuilder;
-import com.squareup.okhttp.Request;
-import com.squareup.okhttp.RequestBody;
 
 import org.json.JSONObject;
+
+import okhttp3.FormBody;
+import okhttp3.Request;
+import okhttp3.RequestBody;
 
 /**
  * Created by alonzilberman on 1/2/16.
@@ -56,7 +57,7 @@ public class SyncMaster extends AsyncTask<Void, Void, Void> {
         try {
             Request request = null;
             if (task == TASK_SYNC) {
-                RequestBody formBody = new FormEncodingBuilder().
+                RequestBody formBody = new FormBody.Builder().
                         add("token", token).
                         add("secret", secret).
                         add("type", type).
@@ -65,7 +66,7 @@ public class SyncMaster extends AsyncTask<Void, Void, Void> {
                         add("profile", ProfileManager.getInstance().getAsJson().toString()).build();
                 request = new Request.Builder().url(link.toString()).post(formBody).build();
             } else {
-                RequestBody formBody = new FormEncodingBuilder().
+                RequestBody formBody = new FormBody.Builder().
                         add("secret", secret).
                         add("token", token).
                         add("type", type).

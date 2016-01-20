@@ -3,7 +3,6 @@ package com.chickenkiller.upods2.utils;
 import com.chickenkiller.upods2.controllers.internet.BackendManager;
 import com.chickenkiller.upods2.fragments.FragmentPlayer;
 import com.chickenkiller.upods2.utils.enums.Direction;
-import com.squareup.okhttp.Request;
 
 import org.json.JSONException;
 
@@ -14,6 +13,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
+
+import okhttp3.Request;
 
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 

@@ -26,15 +26,15 @@ import com.chickenkiller.upods2.models.MediaItem;
 import com.chickenkiller.upods2.models.Podcast;
 import com.chickenkiller.upods2.models.RadioItem;
 import com.chickenkiller.upods2.utils.GlobalUtils;
-import com.chickenkiller.upods2.utils.enums.MediaItemType;
 import com.chickenkiller.upods2.utils.ServerApi;
+import com.chickenkiller.upods2.utils.enums.MediaItemType;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-import jp.wasabeef.recyclerview.adapters.SlideInBottomAnimationAdapter;
+import it.gmariotti.recyclerview.adapter.SlideInBottomAnimatorAdapter;
 
 /**
  * Created by alonzilberman on 7/10/15.
@@ -87,7 +87,7 @@ public class FragmentSearch extends Fragment implements SearchView.OnQueryTextLi
         }
 
         //Featured recycle view
-        rvSearchResults.setAdapter(new SlideInBottomAnimationAdapter(mediaItemsAdapter));
+        rvSearchResults.setAdapter(new SlideInBottomAnimatorAdapter(mediaItemsAdapter,rvSearchResults));
         rvSearchResults.setLayoutManager(layoutManager);
         rvSearchResults.setVisibility(View.INVISIBLE);
         tvStartTyping.setVisibility(View.VISIBLE);

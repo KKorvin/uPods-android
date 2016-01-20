@@ -4,16 +4,18 @@ import com.chickenkiller.upods2.controllers.app.SimpleCacheManager;
 import com.chickenkiller.upods2.interfaces.IRequestCallback;
 import com.chickenkiller.upods2.interfaces.ISimpleRequestCallback;
 import com.chickenkiller.upods2.utils.Logger;
-import com.squareup.okhttp.Callback;
-import com.squareup.okhttp.OkHttpClient;
-import com.squareup.okhttp.Request;
-import com.squareup.okhttp.Response;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 /**
  * Created by alonzilberman on 7/11/15.
@@ -72,7 +74,7 @@ public class BackendManager {
      */
     private void sendRequest(final Request request, final IRequestCallback uiUpdater) {
         try {
-            String fromCache = SimpleCacheManager.getInstance().readFromCache(request.urlString());
+            String fromCache = SimpleCacheManager.getInstance().readFromCache(request.url().toString());
             if (fromCache != null) {
                 final JSONObject jResponse = new JSONObject(fromCache);
                 uiUpdater.onRequestSuccessed(jResponse);
@@ -80,30 +82,31 @@ public class BackendManager {
                 return;
             }
         } catch (Exception e) {
-            Logger.printInfo(TAG, "Can't restore cache for url: " + request.urlString());
+            Logger.printInfo(TAG, "Can't restore cache for url: " + request.url().toString());
             uiUpdater.onRequestFailed();
             e.printStackTrace();
         }
         try {
             client.newCall(request).enqueue(new Callback() {
                 @Override
-                public void onFailure(Request request, IOException e) {
+                public void onFailure(Call call, IOException e) {
                     e.printStackTrace();
                     uiUpdater.onRequestFailed();
                     searchQueueNextStep();
                 }
 
                 @Override
-                public void onResponse(Response response) throws IOException {
+                public void onResponse(Call call, Response response) throws IOException {
                     try {
                         final JSONObject jResponse = new JSONObject(response.body().string());
                         uiUpdater.onRequestSuccessed(jResponse);
-                        SimpleCacheManager.getInstance().cacheUrlOutput(request.urlString(), jResponse.toString());
+                        SimpleCacheManager.getInstance().cacheUrlOutput(request.url().toString(), jResponse.toString());
                         searchQueueNextStep();
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }
+
             });
         } catch (Exception e) {
             e.printStackTrace();
@@ -114,28 +117,28 @@ public class BackendManager {
 
     private void sendRequest(final Request request, final ISimpleRequestCallback uiUpdater) {
         try {
-            String fromCache = SimpleCacheManager.getInstance().readFromCache(request.urlString());
+            String fromCache = SimpleCacheManager.getInstance().readFromCache(request.url().toString());
             if (fromCache != null) {
                 uiUpdater.onRequestSuccessed(fromCache);
                 return;
             }
         } catch (Exception e) {
-            Logger.printInfo(TAG, "Can't restore cache for url: " + request.urlString());
+            Logger.printInfo(TAG, "Can't restore cache for url: " + request.url().toString());
             e.printStackTrace();
         }
         try {
             client.newCall(request).enqueue(new Callback() {
                 @Override
-                public void onFailure(Request request, IOException e) {
+                public void onFailure(Call call, IOException e) {
                     e.printStackTrace();
                     uiUpdater.onRequestFailed();
                 }
 
                 @Override
-                public void onResponse(Response response) throws IOException {
+                public void onResponse(Call call, Response response) throws IOException {
                     try {
                         String strResponse = response.body().string();
-                        SimpleCacheManager.getInstance().cacheUrlOutput(request.urlString(), strResponse);
+                        SimpleCacheManager.getInstance().cacheUrlOutput(request.url().toString(), strResponse);
                         uiUpdater.onRequestSuccessed(strResponse);
                     } catch (Exception e) {
                         e.printStackTrace();
