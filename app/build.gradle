@@ -40,6 +40,7 @@ dependencies {
     compile 'com.lsjwzh:recyclerviewpager:+'
     compile 'com.pixplicity.easyprefs:library:+'
     compile 'com.github.jakob-grabner:Circle-Progress-View:v1.2.3+'
+    compile 'jp.wasabeef:recyclerview-animators:2.1.0'
     compile 'com.github.asyl.animation:arcanimator:1.0.0'
     compile 'com.facebook.android:facebook-android-sdk:4.6.0'
     compile('com.twitter.sdk.android:twitter:1.10.0@aar') {

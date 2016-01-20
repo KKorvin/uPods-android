@@ -34,6 +34,8 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import jp.wasabeef.recyclerview.adapters.SlideInBottomAnimationAdapter;
+
 /**
  * Created by alonzilberman on 7/10/15.
  */
@@ -85,7 +87,7 @@ public class FragmentSearch extends Fragment implements SearchView.OnQueryTextLi
         }
 
         //Featured recycle view
-        rvSearchResults.setAdapter(mediaItemsAdapter);
+        rvSearchResults.setAdapter(new SlideInBottomAnimationAdapter(mediaItemsAdapter));
         rvSearchResults.setLayoutManager(layoutManager);
         rvSearchResults.setVisibility(View.INVISIBLE);
         tvStartTyping.setVisibility(View.VISIBLE);
@@ -149,9 +151,9 @@ public class FragmentSearch extends Fragment implements SearchView.OnQueryTextLi
                                 pbLoadingSearch.setVisibility(View.GONE);
                                 rvSearchResults.setVisibility(View.GONE);
                                 tvStartTyping.setVisibility(View.GONE);
-                                if(GlobalUtils.isInternetConnected()){
+                                if (GlobalUtils.isInternetConnected()) {
                                     tvSearchNoResults.setVisibility(View.GONE);
-                                }else {
+                                } else {
                                     lnInternetError.setVisibility(View.VISIBLE);
                                 }
                             }

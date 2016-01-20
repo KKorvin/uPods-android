@@ -23,6 +23,8 @@ import com.chickenkiller.upods2.utils.enums.MediaItemType;
 import java.util.ArrayList;
 import java.util.Calendar;
 
+import jp.wasabeef.recyclerview.adapters.SlideInBottomAnimationAdapter;
+
 /**
  * Created by alonzilberman on 8/8/15.
  */
@@ -79,7 +81,7 @@ public class FragmentMediaItemsList extends Fragment implements IUpdateableFragm
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setOrientation(OrientationHelper.VERTICAL);
         rvMediaItems.setLayoutManager(layoutManager);
-        rvMediaItems.setAdapter(mediaItemsAdapter);
+        rvMediaItems.setAdapter(new SlideInBottomAnimationAdapter(mediaItemsAdapter));
         return view;
     }
 
