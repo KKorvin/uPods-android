@@ -37,7 +37,7 @@ public class DialogFragmentAbout extends DialogFragment {
         }
 
         TextView tvVersion = (TextView) mainView.findViewById(R.id.tvVersion);
-        tvVersion.setText(getString(R.string.version) + " " + versionName + "(" + getString(R.string.build) + " " + build + ")");
+        tvVersion.setText(getString(R.string.version) + " " + versionName + " (" + getString(R.string.build) + " " + build + ")");
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle(getString(R.string.main_about))

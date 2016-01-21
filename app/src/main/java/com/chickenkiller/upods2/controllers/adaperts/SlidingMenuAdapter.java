@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
@@ -25,6 +26,7 @@ import com.chickenkiller.upods2.interfaces.ISlidingMenuManager;
 import com.chickenkiller.upods2.models.SlidingMenuHeader;
 import com.chickenkiller.upods2.models.SlidingMenuItem;
 import com.chickenkiller.upods2.models.SlidingMenuRow;
+import com.chickenkiller.upods2.utils.GlobalUtils;
 import com.chickenkiller.upods2.utils.enums.MediaItemType;
 
 import java.util.List;
@@ -178,9 +180,13 @@ public class SlidingMenuAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                     } else if (clickedMenuItem.getTitle().equals(context.getString(R.string.main_help))) {
                         FragmentHelp fragmentHelp = new FragmentHelp();
                         fragmentsManager.showFragment(R.id.fl_content, fragmentHelp, FragmentHelp.TAG);
-                    } else {
+                    } else if (clickedMenuItem.getTitle().equals(context.getString(R.string.main_about))) {
                         DialogFragmentAbout dialogFragmentAbout = new DialogFragmentAbout();
                         fragmentsManager.showDialogFragment(dialogFragmentAbout);
+                    } else if (clickedMenuItem.getTitle().equals(context.getString(R.string.main_rate_app))) {
+                        GlobalUtils.rateApp(context);
+                    } else {
+                        Toast.makeText(context, "TEST" + clickedMenuItem.getTitle(), Toast.LENGTH_SHORT).show();
                     }
                 }
             }
