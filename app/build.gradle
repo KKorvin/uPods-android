@@ -4,7 +4,7 @@ apply plugin: 'com.zeroturnaround.jrebel.android'
 
 android {
     compileSdkVersion 23
-    buildToolsVersion "23"
+    buildToolsVersion '23.0.2'
 
     packagingOptions {
         exclude 'META-INF/LICENSE.txt'

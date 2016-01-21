@@ -88,13 +88,14 @@
 
             </LinearLayout>
 
-            <ImageView
-                android:id="@+id/imgMediaMore"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+            <ImageButton
+                android:id="@+id/btnMediaMore"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:layout_alignParentRight="true"
-                android:layout_marginRight="10dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginRight="0dp"
+                android:layout_marginTop="0dp"
+                android:background="@drawable/circle_rewind_btn"
                 android:src="@drawable/ic_dots_vertical_white_24dp" />
 
             <Button

@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -90,9 +91,9 @@ public class FragmentMediaItemDetails extends Fragment implements View.OnTouchLi
     private View viewDetailedHeader;
     private View viewStatusBar;
     private Button btnSubscribe;
+    private ImageButton btnMediaMore;
     private ImageView imgDetailedTopCover;
     private ImageView imgBluredCover;
-    private ImageView imgMediaMore;
     private FloatingActionButton fbDetailsPlay;
     private TracksAdapter tracksAdapter;
     private ProgressBar pbTracks;
@@ -120,9 +121,9 @@ public class FragmentMediaItemDetails extends Fragment implements View.OnTouchLi
         tvBottomHeader = (TextView) view.findViewById(R.id.tvDetailedBottomHeader);
         viewDetailedHeader = view.findViewById(R.id.viewDetailedHeader);
         btnSubscribe = (Button) view.findViewById(R.id.btnSubscribe);
+        btnMediaMore = (ImageButton) view.findViewById(R.id.btnMediaMore);
         imgDetailedTopCover = (ImageView) view.findViewById(R.id.imgDetailedCover);
         imgBluredCover = (ImageView) view.findViewById(R.id.imgBluredCover);
-        imgMediaMore = (ImageView) view.findViewById(R.id.imgMediaMore);
         fbDetailsPlay = (FloatingActionButton) view.findViewById(R.id.fbDetailsPlay);
         svDetails = (DetailsScrollView) view.findViewById(R.id.svDetails);
         rvTracks = (RecyclerView) view.findViewById(R.id.rvTracks);
@@ -171,7 +172,7 @@ public class FragmentMediaItemDetails extends Fragment implements View.OnTouchLi
 
         if (playableItem instanceof Podcast) {
             //((Podcast) playableItem).setNewEpisodsCount(0);
-            imgMediaMore.setOnClickListener(new View.OnClickListener() {
+            btnMediaMore.setOnClickListener(new DelayedOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     ((IContextMenuManager) getActivity()).openContextMenu(v, ContextMenuType.PODCAST_MIDDLE_SCREEN, playableItem, new IOperationFinishCallback() {
@@ -181,7 +182,7 @@ public class FragmentMediaItemDetails extends Fragment implements View.OnTouchLi
                         }
                     });
                 }
-            });
+            }));
         }
     }
 
@@ -190,6 +191,7 @@ public class FragmentMediaItemDetails extends Fragment implements View.OnTouchLi
      */
     private void initNotTrackable() {
         rvTracks.setVisibility(View.GONE);
+        btnMediaMore.setVisibility(View.GONE);
         svDetails.setVisibility(View.VISIBLE);
         svDetails.setEnabled(false);
         svDetails.setIMovable(this);
@@ -232,6 +234,7 @@ public class FragmentMediaItemDetails extends Fragment implements View.OnTouchLi
             viewStatusBar.setBackgroundColor(dominantColor);
             viewDetailedHeader.setBackgroundColor(dominantColor);
             tvDetailedDesHeader.setTextColor(dominantColor);
+            btnMediaMore.setBackground(UIHelper.getAdaptiveRippleDrawable(dominantColor, dominantColor));
         } else {
             Glide.with(getActivity()).load(playableItem.getCoverImageUrl()).crossFade().into(new GlideDrawableImageViewTarget(imgDetailedTopCover) {
                 @Override
@@ -243,6 +246,7 @@ public class FragmentMediaItemDetails extends Fragment implements View.OnTouchLi
                     viewDetailedHeader.setBackgroundColor(dominantColor);
                     tvDetailedDesHeader.setTextColor(dominantColor);
                     imgBluredCover.setImageBitmap(UIHelper.createScaledBitmap(bitmap, COVER_SCALE_FACTOR));
+                    btnMediaMore.setBackground(UIHelper.getAdaptiveRippleDrawable(dominantColor, dominantColor));
                 }
             });
         }
