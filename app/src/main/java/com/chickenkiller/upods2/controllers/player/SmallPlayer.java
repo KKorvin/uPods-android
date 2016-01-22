@@ -23,6 +23,7 @@ import com.chickenkiller.upods2.interfaces.ITrackable;
 import com.chickenkiller.upods2.models.Podcast;
 import com.chickenkiller.upods2.models.Track;
 import com.chickenkiller.upods2.utils.MediaUtils;
+import com.chickenkiller.upods2.utils.decorators.DelayedOnClickListener;
 import com.chickenkiller.upods2.utils.ui.LetterBitmap;
 import com.chickenkiller.upods2.utils.ui.UIHelper;
 
@@ -51,7 +52,7 @@ public class SmallPlayer implements IPlayerStateListener, View.OnClickListener {
         public void onClick(View view) {
             UniversalPlayer universalPlayer = UniversalPlayer.getInstance();
             universalPlayer.toggle();
-            btnPlay.setBackgroundResource(universalPlayer.isPlaying() ? R.drawable.ic_pause_white : R.drawable.ic_play_white);
+            btnPlay.setImageResource(universalPlayer.isPlaying() ? R.drawable.ic_pause_white : R.drawable.ic_play_white);
         }
     };
 
@@ -73,10 +74,10 @@ public class SmallPlayer implements IPlayerStateListener, View.OnClickListener {
         if (this.rlSmallPLayer == null) {
             return;
         }
-        rlSmallPLayer.setOnClickListener(this);
+        rlSmallPLayer.setOnClickListener(new DelayedOnClickListener(this));
         if (universalPlayer.isPrepaired) {
             this.rlSmallPLayer.setVisibility(View.VISIBLE);
-            this.btnPlay.setBackgroundResource(universalPlayer.isPlaying() ? R.drawable.ic_pause_white : R.drawable.ic_play_white);
+            this.btnPlay.setImageResource(universalPlayer.isPlaying() ? R.drawable.ic_pause_white : R.drawable.ic_play_white);
             IPlayableMediaItem playingMediaItem = universalPlayer.getPlayingMediaItem();
             if (playingMediaItem instanceof ITrackable) {
                 tvTitle.setText(((ITrackable) playingMediaItem).getSelectedTrack().getTitle());
@@ -131,7 +132,7 @@ public class SmallPlayer implements IPlayerStateListener, View.OnClickListener {
 
     @Override
     public void onStateChanged(UniversalPlayer.State state) {
-        btnPlay.setBackgroundResource(state == UniversalPlayer.State.PLAYING ? R.drawable.ic_pause_white : R.drawable.ic_play_white);
+        btnPlay.setImageResource(state == UniversalPlayer.State.PLAYING ? R.drawable.ic_pause_white : R.drawable.ic_play_white);
     }
 
     public void destroy() {

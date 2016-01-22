@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="64dp"
     android:layout_alignParentBottom="true"
-    android:background="@color/blue_grey_800">
+    android:background="@drawable/selector_player_info_section">
 
     <ImageView
         android:id="@+id/imgSmallPlayerCover"
@@ -51,12 +51,13 @@
 
     <ImageButton
         android:id="@+id/btnSmallPlayerPlay"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
         android:layout_alignParentRight="true"
-        android:layout_marginRight="17dp"
-        android:layout_marginTop="15dp"
-        android:background="@drawable/ic_play_white"
+        android:layout_marginRight="7dp"
+        android:layout_marginTop="10dp"
+        android:src="@drawable/ic_play_white"
+        android:background="@drawable/circle_rewind_btn"
         android:text="Play" />
 
     <SeekBar
