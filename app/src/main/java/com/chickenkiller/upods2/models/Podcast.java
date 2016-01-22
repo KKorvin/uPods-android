@@ -1,5 +1,6 @@
 package com.chickenkiller.upods2.models;
 
+import com.chickenkiller.upods2.controllers.app.ProfileManager;
 import com.chickenkiller.upods2.interfaces.IPlayableMediaItem;
 import com.chickenkiller.upods2.interfaces.ITrackable;
 import com.chickenkiller.upods2.utils.Logger;
@@ -51,7 +52,7 @@ public class Podcast extends MediaItem implements IPlayableMediaItem, ITrackable
 
     public Podcast(String name, String feedUrl) {
         this();
-        this.name = name;
+        this.name = name.replace("\n", "").trim();
         this.feedUrl = feedUrl;
     }
 
@@ -100,6 +101,7 @@ public class Podcast extends MediaItem implements IPlayableMediaItem, ITrackable
                     }
                 }
             }
+            this.name = this.name.replace("\n", "").trim();
         } catch (Exception e) {
             Logger.printError(PODCAST_LOG, "Can't parse podcast from json");
             e.printStackTrace();
@@ -107,7 +109,7 @@ public class Podcast extends MediaItem implements IPlayableMediaItem, ITrackable
     }
 
     public Podcast(Podcast podcast) {
-        this.name = podcast.getName();
+        this.name = podcast.getName().replace("\n", "").trim();
         this.newEpisodsCount = podcast.newEpisodsCount;
         this.episodsCount = podcast.episodsCount;
         this.censoredName = podcast.getCensoredName();
@@ -200,6 +202,9 @@ public class Podcast extends MediaItem implements IPlayableMediaItem, ITrackable
     public String getAudeoLink() {
         for (Episod episod : episods) {
             if (episod.isSelected) {
+                if (ProfileManager.getInstance().isDownloaded(this, episod)) {
+                    episod.setPathOnDisk(ProfileManager.getInstance().getDownloadedTrackPath(this, episod));
+                }
                 return episod.getAudeoUrl();
             }
         }

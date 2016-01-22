@@ -51,6 +51,7 @@ public class PlayPauseView extends FrameLayout {
     private int mBackgroundColor;
     private int mWidth;
     private int mHeight;
+    private boolean isPlay;
 
     public PlayPauseView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -116,6 +117,7 @@ public class PlayPauseView extends FrameLayout {
     }
 
     public void toggle() {
+        isPlay = !isPlay;
         if (mAnimatorSet != null) {
             mAnimatorSet.cancel();
         }
@@ -128,16 +130,12 @@ public class PlayPauseView extends FrameLayout {
         mAnimatorSet.setInterpolator(new DecelerateInterpolator());
         mAnimatorSet.setDuration(PLAY_PAUSE_ANIMATION_DURATION);
         mAnimatorSet.playTogether(colorAnim, pausePlayAnim);
-        mDrawable.isAnimationRunning = true;
         mAnimatorSet.start();
     }
 
     public boolean isPlay() {
-        return mDrawable.isPlay();
+        return isPlay;
     }
 
-    public boolean isAnimationRunning() {
-        return mDrawable.isAnimationRunning;
-    }
 
 }

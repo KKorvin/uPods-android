@@ -126,8 +126,9 @@ public class UniversalPlayer implements MediaPlayer.EventListener {
             }
 
             String audeoLink = mediaItem.getAudeoLink();
+            isPrepaired = false;
+
             if (mediaItem instanceof RadioItem || URLUtil.isValidUrl(audeoLink)) {
-                isPrepaired = false;
                 Media m = new Media(mLibVLC, Uri.parse(audeoLink));
                 mediaPlayer.setMedia(m);
                 mediaPlayer.play();

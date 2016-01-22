@@ -48,7 +48,6 @@ public class PlayPauseDrawable extends Drawable {
 
     private float mProgress;
     private boolean mIsPlay;
-    public boolean isAnimationRunning;
 
     public PlayPauseDrawable(Context context) {
         final Resources res = context.getResources();
@@ -128,7 +127,6 @@ public class PlayPauseDrawable extends Drawable {
             @Override
             public void onAnimationEnd(Animator animation) {
                 mIsPlay = !mIsPlay;
-                isAnimationRunning = false;
             }
         });
         return anim;

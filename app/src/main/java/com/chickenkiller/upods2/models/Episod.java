@@ -38,6 +38,7 @@ public class Episod extends Track {
         this();
         try {
             this.title = jsonItem.has("title") ? jsonItem.getString("title") : "";
+            this.title = this.title.replace("\n", "").trim();
             this.summary = jsonItem.has("summary") ? jsonItem.getString("summary") : "";
             this.length = jsonItem.has("length") ? jsonItem.getString("length") : "";
             this.duration = jsonItem.has("duration") ? jsonItem.getString("duration") : "";
@@ -132,6 +133,10 @@ public class Episod extends Track {
 
     public void setDate(String date) {
         this.date = date;
+    }
+
+    public void setPathOnDisk(String pathOnDisk) {
+        this.pathOnDisk = pathOnDisk;
     }
 
     @Override

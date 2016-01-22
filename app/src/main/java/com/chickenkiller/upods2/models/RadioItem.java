@@ -52,6 +52,7 @@ public class RadioItem extends MediaItem implements IPlayableMediaItem {
 
     public RadioItem(RadioItem item) {
         this.name = item.name;
+        this.name = this.name.replace("\n", "").trim();
         this.streamUrls = new HashSet<>(item.streamUrls);
         this.coverImageUrl = item.coverImageUrl;
         this.bannerImageUrl = item.bannerImageUrl;
@@ -97,7 +98,7 @@ public class RadioItem extends MediaItem implements IPlayableMediaItem {
                 }
 
             }
-
+            this.name = this.name.replace("\n", "").trim();
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -1,5 +1,6 @@
 package com.chickenkiller.upods2.controllers.internet;
 
+import com.chickenkiller.upods2.controllers.app.ProfileManager;
 import com.chickenkiller.upods2.models.Episod;
 import com.chickenkiller.upods2.utils.GlobalUtils;
 
