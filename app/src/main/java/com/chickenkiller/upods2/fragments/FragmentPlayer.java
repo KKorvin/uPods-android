@@ -269,7 +269,6 @@ public class FragmentPlayer extends Fragment implements IPlayerStateListener {
      * Inits player UI accorfing to current player state, call it after configurePlayer().
      */
     private void initPlayerStateUI() {
-        Logger.printInfo("initPlayerStateUI1", btnPlay.isPlay());
         if (!playableMediaItem.getBitrate().isEmpty()) {
             tvTrackInfo.setText(playableMediaItem.getBitrate() + getString(R.string.kbps));
         } else {
@@ -290,7 +289,6 @@ public class FragmentPlayer extends Fragment implements IPlayerStateListener {
                 btnPlay.toggle();
             }
         }
-        Logger.printInfo("initPlayerStateUI2", btnPlay.isPlay());
     }
 
     private void initTrackNumbersSection() {
@@ -402,7 +400,6 @@ public class FragmentPlayer extends Fragment implements IPlayerStateListener {
 
     @Override
     public void onStateChanged(UniversalPlayer.State state) {
-        Logger.printInfo("onStateChanged1", btnPlay.isPlay());
         if (isAdded()) {
             if (btnPlay.isPlay() && state == UniversalPlayer.State.PLAYING) {
                 btnPlay.toggle();
@@ -414,6 +411,5 @@ public class FragmentPlayer extends Fragment implements IPlayerStateListener {
             }
             playlist.updateTracks();
         }
-        Logger.printInfo("onStateChanged2", btnPlay.isPlay());
     }
 }

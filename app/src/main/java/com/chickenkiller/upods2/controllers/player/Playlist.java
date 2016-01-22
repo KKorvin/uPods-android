@@ -257,10 +257,8 @@ public class Playlist implements AdapterView.OnItemClickListener {
         if (playlistAdapter instanceof PlaylistMediaItemsAdapter) {
             IPlayableMediaItem clickedIPlayableMediaItem = ((PlaylistMediaItemsAdapter) playlistAdapter).getItem(position);
             if (universalPlayer.isCurrentMediaItem(clickedIPlayableMediaItem)) {
-                if (!universalPlayer.isPlaying()) {
-                    universalPlayer.toggle();
-                }
-                Logger.printInfo(LOG_TAG, "Clicked on current trcack -> playing it");
+                universalPlayer.toggle();
+                Logger.printInfo(LOG_TAG, "Clicked on current trcack -> toogling it");
             } else {
                 DataHolder.getInstance().save(ActivityPlayer.MEDIA_ITEM_EXTRA, clickedIPlayableMediaItem);
                 Logger.printInfo(LOG_TAG, "Track switched to: " + clickedIPlayableMediaItem.getName());
@@ -268,10 +266,8 @@ public class Playlist implements AdapterView.OnItemClickListener {
         } else if (playlistAdapter instanceof PlaylistTracksAdapter) {
             Track clieckedTrack = ((PlaylistTracksAdapter) playlistAdapter).getItem(position);
             if (universalPlayer.isCurrentTrack(clieckedTrack)) {
-                if (!universalPlayer.isPlaying()) {
-                    universalPlayer.toggle();
-                }
-                Logger.printInfo(LOG_TAG, "Clicked on current trcack -> playing it");
+                universalPlayer.toggle();
+                Logger.printInfo(LOG_TAG, "Clicked on current trcack -> toogling it");
             } else {
                 ITrackable trackable = (ITrackable) universalPlayer.getPlayingMediaItem();
                 trackable.selectTrack(clieckedTrack);
