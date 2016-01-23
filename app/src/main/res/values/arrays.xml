@@ -37,6 +37,12 @@
         <item>-1</item>
     </string-array>
 
+    <string-array name="stream_quality">
+        <item>hight</item>
+        <item>medium</item>
+        <item>low</item>
+    </string-array>
+
     <!-- All of the possible tile background colors for LetterBitmap -->
     <array name="letter_tile_colors">
         <item>#f16364</item>
