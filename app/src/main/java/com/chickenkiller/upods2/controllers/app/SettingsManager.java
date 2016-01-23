@@ -20,12 +20,14 @@ public class SettingsManager {
     private static final int DEFAULT_PODCAST_UPDATE_TIME = 24; //hours
     private static final boolean DEFAULT_NOTIFY_EPISODS = true;
     private static final String DEFAULT_START_SCREEN = "rs_featured";
+    private static final String DEFAULT_STREAM_QUALITY = "hight";
 
     private static SettingsManager settingsManager;
 
     public static final String JS_PODCASTS_UPDATE_TIME = "podcasts_update_time";
     public static final String JS_START_SCREEN = "start_screen";
     public static final String JS_NOTIFY_EPISODS = "notify_episods";
+    public static final String JS_STREAM_QUALITY = "stream_quality";
 
     private JSONObject settingsObject;
 
@@ -59,6 +61,7 @@ public class SettingsManager {
                 settingsObject.put(JS_START_SCREEN, DEFAULT_START_SCREEN);
                 settingsObject.put(JS_NOTIFY_EPISODS, DEFAULT_NOTIFY_EPISODS);
                 settingsObject.put(JS_PODCASTS_UPDATE_TIME, DEFAULT_PODCAST_UPDATE_TIME);
+                settingsObject.put(JS_STREAM_QUALITY, DEFAULT_STREAM_QUALITY);
             }
         } catch (JSONException e) {
             Logger.printInfo(TAG, "Can't read settings from cognito");
@@ -128,6 +131,7 @@ public class SettingsManager {
     public void initSettingsFromPreferences() {
         putSettingsValue(JS_NOTIFY_EPISODS, Prefs.getBoolean(JS_NOTIFY_EPISODS, DEFAULT_NOTIFY_EPISODS));
         putSettingsValue(JS_START_SCREEN, Prefs.getString(JS_START_SCREEN, DEFAULT_START_SCREEN));
+        putSettingsValue(JS_STREAM_QUALITY, Prefs.getString(JS_STREAM_QUALITY, DEFAULT_STREAM_QUALITY));
 
         String pUpdateTime = Prefs.getString(JS_PODCASTS_UPDATE_TIME, String.valueOf(DEFAULT_PODCAST_UPDATE_TIME));
         putSettingsValue(JS_PODCASTS_UPDATE_TIME, Integer.valueOf(pUpdateTime));

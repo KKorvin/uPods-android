@@ -5,7 +5,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.view.menu.ActionMenuItemView;
 import android.support.v7.widget.Toolbar;
+import android.view.ContextMenu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import com.chickenkiller.upods2.R;
@@ -16,6 +19,7 @@ import com.chickenkiller.upods2.fragments.FragmentPlayer;
 import com.chickenkiller.upods2.interfaces.IPlayableMediaItem;
 import com.chickenkiller.upods2.interfaces.IToolbarHolder;
 import com.chickenkiller.upods2.utils.DataHolder;
+import com.chickenkiller.upods2.utils.enums.ContextMenuType;
 
 public class ActivityPlayer extends BasicActivity implements IToolbarHolder, Toolbar.OnMenuItemClickListener {
 
@@ -95,16 +99,31 @@ public class ActivityPlayer extends BasicActivity implements IToolbarHolder, Too
 
 
     @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        MenuInflater inflater = getMenuInflater();
+        if (contextMenuType == ContextMenuType.PLAYER_SETTINGS) {
+            inflater.inflate(R.menu.menu_basic_sceleton, menu);
+            menu.add(getString(R.string.select_stream_quality));
+            menu.add(getString(R.string.stream_info));
+        }
+    }
+
+    @Override
     public boolean onMenuItemClick(MenuItem item) {
         IPlayableMediaItem mediaItem = UniversalPlayer.getInstance().getPlayingMediaItem();
-        if (ProfileManager.getInstance().isSubscribedToMediaItem(mediaItem)) {
-            itemFavorites.setIcon(getResources().getDrawable(R.drawable.ic_heart_white_24dp));
-            ProfileManager.getInstance().removeSubscribedMediaItem(mediaItem);
-            Toast.makeText(this, getString(R.string.removed_from_favorites), Toast.LENGTH_SHORT).show();
-        } else {
-            itemFavorites.setIcon(getResources().getDrawable(R.drawable.ic_heart_black_24dp));
-            ProfileManager.getInstance().addSubscribedMediaItem(mediaItem);
-            Toast.makeText(this, getString(R.string.added_to_favorites), Toast.LENGTH_SHORT).show();
+        if (item.getItemId() == R.id.action_favorites_player) {
+            if (ProfileManager.getInstance().isSubscribedToMediaItem(mediaItem)) {
+                itemFavorites.setIcon(getResources().getDrawable(R.drawable.ic_heart_white_24dp));
+                ProfileManager.getInstance().removeSubscribedMediaItem(mediaItem);
+                Toast.makeText(this, getString(R.string.removed_from_favorites), Toast.LENGTH_SHORT).show();
+            } else {
+                itemFavorites.setIcon(getResources().getDrawable(R.drawable.ic_heart_black_24dp));
+                ProfileManager.getInstance().addSubscribedMediaItem(mediaItem);
+                Toast.makeText(this, getString(R.string.added_to_favorites), Toast.LENGTH_SHORT).show();
+            }
+        } else if (item.getItemId() == R.id.action_player_settings) {
+            openContextMenu(findViewById(R.id.action_player_settings), ContextMenuType.PLAYER_SETTINGS, null, null);
         }
         return false;
     }

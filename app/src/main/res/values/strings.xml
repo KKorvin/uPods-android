@@ -125,6 +125,8 @@
     <string name="removed_from_favorites">Removed from favorites</string>
     <string name="version">Version</string>
     <string name="build">build</string>
+    <string name="select_stream_quality">Select stream quality</string>
+    <string name="stream_info">Info about stream</string>
 
 
 </resources>

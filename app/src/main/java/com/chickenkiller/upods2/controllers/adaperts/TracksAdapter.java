@@ -243,7 +243,7 @@ public class TracksAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 MediaItem.MediaItemBucket bucket = new MediaItem.MediaItemBucket();
                 bucket.mediaItem = (MediaItem) iPlayableMediaItem;
                 bucket.track = (Track) currentTrack;
-                ((IContextMenuManager) mContext).openContextMenu(v, ContextMenuType.EPISOD_MIDDLE_SCREEN,
+                ((IContextMenuManager) mContext).openContextMenu(v, ContextMenuType.EPISODE_MIDDLE_SCREEN,
                         bucket, operationFinishCallback);
                 return true;
             }

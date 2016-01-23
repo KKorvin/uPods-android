@@ -266,7 +266,7 @@ public class ActivityMain extends BasicActivity implements IOverlayable, IToolba
                 menu.add(getString(R.string.open_on_disk));
                 menu.add(getString(R.string.remove_all_episods));
             }
-        } else if (contextMenuType == ContextMenuType.EPISOD_MIDDLE_SCREEN) {
+        } else if (contextMenuType == ContextMenuType.EPISODE_MIDDLE_SCREEN) {
             inflater.inflate(R.menu.menu_basic_sceleton, menu);
             menu.add(getString(R.string.marks_as_played));
             MediaItem mediaItem = ((MediaItem.MediaItemBucket) currentContextMenuData).mediaItem;
