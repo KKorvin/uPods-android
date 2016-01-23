@@ -128,6 +128,8 @@
     <string name="select_stream_quality">Select stream quality</string>
     <string name="stream_info">Info about stream</string>
     <string name="select">Select</string>
+    <string name="not_available_for_stream">Not available for this stream</string>
+    <string name="default_stream_quality">Default stream quality</string>
 
 
 </resources>

@@ -28,9 +28,7 @@ public class SettingsManager {
     public static final String JS_NOTIFY_EPISODS = "notify_episods";
     public static final String JS_STREAM_QUALITY = "stream_quality";
 
-    public static final String STREAM_QUALITY_MEDIUM = "medium";
-    public static final String STREAM_QUALITY_LOW = "low";
-    public static final String DEFAULT_STREAM_QUALITY = "hight";
+    public static final String DEFAULT_STREAM_QUALITY = "25";
 
     private JSONObject settingsObject;
 
@@ -143,26 +141,6 @@ public class SettingsManager {
 
     public JSONObject getAsJson() {
         return settingsObject;
-    }
-
-    public int getChoiceForStreamQuality() {
-        String quality = getStringSettingValue(JS_STREAM_QUALITY);
-        if (quality.equals(STREAM_QUALITY_MEDIUM)) {
-            return 1;
-        } else if (quality.equals(STREAM_QUALITY_LOW)) {
-            return 2;
-        }
-        return 0;
-    }
-
-
-    public String choicesStreamQualityAsString(int choice) {
-        if (choice == 1) {
-            return STREAM_QUALITY_MEDIUM;
-        } else if (choice == 2) {
-            return STREAM_QUALITY_LOW;
-        }
-        return DEFAULT_STREAM_QUALITY;
     }
 
 }

@@ -39,8 +39,12 @@
 
     <string-array name="stream_quality">
         <item>hight</item>
-        <item>medium</item>
         <item>low</item>
+    </string-array>
+
+    <string-array name="stream_quality_description">
+        <item>hight (reccomended)</item>
+        <item>low (optimized for slow internet)</item>
     </string-array>
 
     <!-- All of the possible tile background colors for LetterBitmap -->

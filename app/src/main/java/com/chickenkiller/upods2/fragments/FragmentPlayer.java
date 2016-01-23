@@ -197,6 +197,7 @@ public class FragmentPlayer extends Fragment implements IPlayerStateListener {
         this.playableMediaItem = iPlayableMediaItem;
     }
 
+
     /**
      * Inits player UI accorfing to current MediaItem
      */
@@ -268,7 +269,7 @@ public class FragmentPlayer extends Fragment implements IPlayerStateListener {
     /**
      * Inits player UI accorfing to current player state, call it after configurePlayer().
      */
-    private void initPlayerStateUI() {
+    public void initPlayerStateUI() {
         if (!playableMediaItem.getBitrate().isEmpty()) {
             tvTrackInfo.setText(playableMediaItem.getBitrate() + getString(R.string.kbps));
         } else {

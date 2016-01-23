@@ -14,14 +14,13 @@ import android.widget.Toast;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.chickenkiller.upods2.R;
 import com.chickenkiller.upods2.controllers.app.ProfileManager;
-import com.chickenkiller.upods2.controllers.app.SettingsManager;
 import com.chickenkiller.upods2.controllers.player.UniversalPlayer;
 import com.chickenkiller.upods2.fragments.FragmentMainFeatured;
 import com.chickenkiller.upods2.fragments.FragmentPlayer;
 import com.chickenkiller.upods2.interfaces.IPlayableMediaItem;
 import com.chickenkiller.upods2.interfaces.IToolbarHolder;
+import com.chickenkiller.upods2.models.RadioItem;
 import com.chickenkiller.upods2.utils.DataHolder;
-import com.chickenkiller.upods2.utils.Logger;
 import com.chickenkiller.upods2.utils.enums.ContextMenuType;
 
 public class ActivityPlayer extends BasicActivity implements IToolbarHolder, Toolbar.OnMenuItemClickListener {
@@ -33,6 +32,7 @@ public class ActivityPlayer extends BasicActivity implements IToolbarHolder, Too
     private IPlayableMediaItem currentMediaItem;
     private Toolbar toolbar;
     private ActionMenuItemView itemFavorites;
+    private FragmentPlayer fragmentPlayer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +61,7 @@ public class ActivityPlayer extends BasicActivity implements IToolbarHolder, Too
         }
 
         if (getFragmentManager().getBackStackEntryCount() == 0) {
-            FragmentPlayer fragmentPlayer = new FragmentPlayer();
+            fragmentPlayer = new FragmentPlayer();
             fragmentPlayer.setPlayableItem(currentMediaItem);
             showFragment(R.id.fl_window, fragmentPlayer, FragmentMainFeatured.TAG);
         }
@@ -134,20 +134,28 @@ public class ActivityPlayer extends BasicActivity implements IToolbarHolder, Too
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         if (item.getTitle().equals(getString(R.string.select_stream_quality))) {
-            new MaterialDialog.Builder(this)
-                    .title(R.string.select_stream_quality)
-                    .items(R.array.stream_quality)
-                    .itemsCallbackSingleChoice(SettingsManager.getInstace().getChoiceForStreamQuality(), new MaterialDialog.ListCallbackSingleChoice() {
-                        @Override
-                        public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
-                            Logger.printInfo(LOG_TAG, "Stream selection: " + String.valueOf(which));
-                            SettingsManager.getInstace().putSettingsValue(SettingsManager.JS_STREAM_QUALITY,
-                                    SettingsManager.getInstace().choicesStreamQualityAsString(which));
-                            return true;
-                        }
-                    })
-                    .positiveText(R.string.select)
-                    .show();
+            final IPlayableMediaItem playableMediaItem = UniversalPlayer.getInstance().getPlayingMediaItem();
+            String[] availableStreams = ((RadioItem) playableMediaItem).getAvailableStreams();
+            if (availableStreams.length == 0) {
+                Toast.makeText(this, getString(R.string.not_available_for_stream), Toast.LENGTH_SHORT).show();
+            } else {
+                new MaterialDialog.Builder(this)
+                        .title(R.string.select_stream_quality)
+                        .items(availableStreams)
+                        .itemsCallbackSingleChoice(((RadioItem) playableMediaItem).getSelectedStreamAsNumber(availableStreams),
+                                new MaterialDialog.ListCallbackSingleChoice() {
+                                    @Override
+                                    public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+                                        ((RadioItem) playableMediaItem).selectStreamUrl(text.toString());
+                                        ((RadioItem) currentMediaItem).selectStreamUrl(text.toString());
+                                        UniversalPlayer.getInstance().softRestart();
+                                        fragmentPlayer.initPlayerStateUI();
+                                        return true;
+                                    }
+                                })
+                        .positiveText(R.string.select)
+                        .show();
+            }
         }
         return super.onContextItemSelected(item);
     }

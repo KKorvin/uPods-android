@@ -14,7 +14,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -28,6 +31,7 @@ public class RadioItem extends MediaItem implements IPlayableMediaItem {
 
     protected String name;
     protected Set<StreamUrl> streamUrls;
+    protected StreamUrl selectedStreamUrl;
     protected String coverImageUrl;
     protected String bannerImageUrl;
     protected String description;
@@ -39,6 +43,7 @@ public class RadioItem extends MediaItem implements IPlayableMediaItem {
 
     public RadioItem(String name, StreamUrl streamUrl, String coverImageUrl) {
         this.name = name;
+        this.selectedStreamUrl = null;
         this.streamUrls = new HashSet<>();
         this.streamUrls.add(streamUrl);
         this.coverImageUrl = coverImageUrl;
@@ -53,6 +58,7 @@ public class RadioItem extends MediaItem implements IPlayableMediaItem {
     public RadioItem(RadioItem item) {
         this.name = item.name;
         this.name = this.name.replace("\n", "").trim();
+        this.selectedStreamUrl = item.selectedStreamUrl;
         this.streamUrls = new HashSet<>(item.streamUrls);
         this.coverImageUrl = item.coverImageUrl;
         this.bannerImageUrl = item.bannerImageUrl;
@@ -73,6 +79,7 @@ public class RadioItem extends MediaItem implements IPlayableMediaItem {
             this.facebook = jsonItem.has("facebook") ? jsonItem.getString("facebook") : "";
             this.twitter = jsonItem.has("twitter") ? jsonItem.getString("twitter") : "";
             this.country = jsonItem.has("country") ? jsonItem.getString("country") : "";
+            this.selectedStreamUrl = jsonItem.has("selectedStreamUrl") ? new StreamUrl(jsonItem.getJSONObject("selectedStreamUrl")) : null;
 
             if (jsonItem.has("streamUrls") && jsonItem.getJSONArray("streamUrls").length() > 0) {
                 JSONArray jsonStreamUrls = jsonItem.getJSONArray("streamUrls");
@@ -125,11 +132,17 @@ public class RadioItem extends MediaItem implements IPlayableMediaItem {
 
     @Override
     public String getAudeoLink() {
+        if (selectedStreamUrl != null) {
+            return selectedStreamUrl.getUrl();
+        }
         return StreamUrl.getBestStreamUrl(streamUrls).getUrl();
     }
 
     @Override
     public String getBitrate() {
+        if (selectedStreamUrl != null) {
+            return selectedStreamUrl.getBitrate();
+        }
         return StreamUrl.getBestStreamUrl(streamUrls).getBitrate();
     }
 
@@ -161,6 +174,9 @@ public class RadioItem extends MediaItem implements IPlayableMediaItem {
             radioItem.put("twitter", this.twitter);
             radioItem.put("country", this.country);
             radioItem.put("genre", this.genre);
+            if (this.selectedStreamUrl != null) {
+                radioItem.put("selectedStreamUrl", this.selectedStreamUrl.toJSON());
+            }
             JSONArray jsonStramUrls = new JSONArray();
             for (StreamUrl streamUrl : streamUrls) {
                 jsonStramUrls.put(streamUrl.toJSON());
@@ -184,6 +200,11 @@ public class RadioItem extends MediaItem implements IPlayableMediaItem {
         AsyncTask.execute(new Runnable() {
             @Override
             public void run() {
+                if (selectedStreamUrl != null) {
+                    if (!GlobalUtils.isUrlReachable(selectedStreamUrl.getUrl())) {
+                        selectedStreamUrl = null;
+                    }
+                }
                 for (StreamUrl streamUrl : streamUrls) {
                     final String currentUrl = streamUrl.getUrl();
                     if (GlobalUtils.isUrlReachable(currentUrl)) {
@@ -215,6 +236,49 @@ public class RadioItem extends MediaItem implements IPlayableMediaItem {
             jsonRadioItems.put(radioItem.toJSON());
         }
         return jsonRadioItems;
+    }
+
+    public String[] getAvailableStreams() {
+        Set<String> availableStreams = StreamUrl.getAllAvailableStreams(streamUrls);
+        List<String> list = new ArrayList<String>(availableStreams);
+        Collections.sort(list, new Comparator<String>() {
+            public int compare(String a, String b) {
+                return Integer.parseInt(b) - Integer.parseInt(a);
+            }
+        });
+        return list.toArray(new String[availableStreams.size()]);
+    }
+
+    public int getSelectedStreamAsNumber(String[] availableStreams) {
+        if (selectedStreamUrl != null) {
+            for (int i = 0; i < availableStreams.length; i++) {
+                if (availableStreams[i].equals(selectedStreamUrl.getBitrate())) {
+                    return i;
+                }
+            }
+        } else {
+            for (int i = 0; i < availableStreams.length; i++) {
+                if (availableStreams[i].equals(getBitrate())) {
+                    return i;
+                }
+            }
+        }
+        return 0;
+    }
+
+    public void selectStreamUrl(String quality) {
+        for (StreamUrl streamUrl : streamUrls) {
+            if (streamUrl.isAlive && streamUrl.hasBitrate() && streamUrl.getBitrate().equals(quality)) {
+                selectedStreamUrl = streamUrl;
+                return;
+            }
+
+        }
+
+    }
+
+    public boolean hasMultiplyStreams() {
+        return getAvailableStreams().length > 1;
     }
 
 

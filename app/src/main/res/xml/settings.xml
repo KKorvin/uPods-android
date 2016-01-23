@@ -13,6 +13,19 @@
 
     </PreferenceCategory>
 
+    <PreferenceCategory android:title="@string/radio_main">
+
+
+        <ListPreference
+            android:defaultValue="24"
+            android:dialogTitle="@string/default_stream_quality"
+            android:entries="@array/stream_quality_description"
+            android:entryValues="@array/stream_quality"
+            android:key="stream_quality"
+            android:summary="%s"
+            android:title="@string/select_stream_quality" />
+
+    </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/podcasts">
 

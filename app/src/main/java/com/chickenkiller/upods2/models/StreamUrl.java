@@ -1,11 +1,17 @@
 package com.chickenkiller.upods2.models;
 
+import com.chickenkiller.upods2.controllers.app.SettingsManager;
 import com.chickenkiller.upods2.utils.Logger;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -32,8 +38,15 @@ public class StreamUrl implements Serializable {
             this.bitrate = jsonItem.has("bitrate") ? jsonItem.getString("bitrate") : "";
             this.isAlive = true;
 
-            if (bitrate.equals("null")) {
-                this.bitrate = "";
+            if (bitrate.contains("000")) {
+                bitrate = bitrate.replace("000", "");
+            }
+
+            if (bitrate.equals("null") || bitrate.equals("0")) {
+                bitrate = "";
+            }
+            if (!bitrate.matches("[0-9]+")) {
+                bitrate = "";
             }
 
         } catch (JSONException e) {
@@ -65,23 +78,53 @@ public class StreamUrl implements Serializable {
         this.url = url;
     }
 
-    public static StreamUrl getBestStreamUrl(Set<StreamUrl> allUrls) {
-        StreamUrl emptyStreamUrl = null;
-        for (String pattern : bestStreamPatterns) {
-            for (StreamUrl streamUrl : allUrls) {
-                if (streamUrl.isAlive && streamUrl.getUrl().matches(pattern)) {
-                    return streamUrl;
-                } else if (streamUrl.isAlive && emptyStreamUrl == null) {
-                    emptyStreamUrl = streamUrl;
-                }
-            }
-        }
-        if (emptyStreamUrl == null) {
-            emptyStreamUrl = new StreamUrl("");
-        }
-        return emptyStreamUrl;
+    public boolean hasBitrate() {
+        return bitrate != null && !bitrate.isEmpty();
     }
 
+
+    public static StreamUrl getBestStreamUrl(Set<StreamUrl> allUrls) {
+        final List<StreamUrl> list = new ArrayList<StreamUrl>();
+        for (StreamUrl streamUrl : allUrls) {
+            if (streamUrl.isAlive && streamUrl.hasBitrate()) {
+                list.add(streamUrl);
+            }
+        }
+        if (list.size() > 0) {
+            final String neededQuality = SettingsManager.getInstace().getStringSettingValue(SettingsManager.JS_STREAM_QUALITY);
+            Collections.sort(list, new Comparator<StreamUrl>() {
+                public int compare(StreamUrl a, StreamUrl b) {
+                    if (neededQuality.equals(SettingsManager.DEFAULT_STREAM_QUALITY)) {
+                        return Integer.parseInt(b.bitrate) - Integer.parseInt(a.bitrate);
+                    } else {
+                        return Integer.parseInt(a.bitrate) - Integer.parseInt(b.bitrate);
+                    }
+                }
+            });
+            return list.get(0);
+        } else {
+            for (StreamUrl streamUrl : allUrls) {
+                if (streamUrl.isAlive && !streamUrl.hasBitrate()) {
+                    list.add(streamUrl);
+                }
+            }
+            if (list.size() > 0) {
+                return list.get(0);
+            }
+        }
+        return new StreamUrl("");
+    }
+
+    public static Set<String> getAllAvailableStreams(Set<StreamUrl> allUrls) {
+        Set<String> allStreams = new HashSet<>();
+        for (StreamUrl streamUrl : allUrls) {
+            if (streamUrl.isAlive && streamUrl.hasBitrate()) {
+                allStreams.add(streamUrl.bitrate);
+
+            }
+        }
+        return allStreams;
+    }
 
     public static void replaceUrl(Set<StreamUrl> streamUrls, String newUrl, String oldUrl) {
         for (StreamUrl streamUrl : streamUrls) {
