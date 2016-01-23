@@ -10,15 +10,15 @@
     android:layout_marginLeft="@dimen/horizontal_card_side_margin"
     android:layout_marginRight="@dimen/horizontal_card_side_margin"
     android:layout_marginTop="@dimen/horizantal_card_top_margin"
-
     android:clickable="true"
+
     android:focusable="true"
+    android:foreground="@drawable/card_media_item_bckg"
     card_view:cardCornerRadius="@dimen/default_card_corner_radius">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/card_media_item_bckg"
         android:padding="5dp">
 
         <com.chickenkiller.upods2.views.ImageViewSquare
@@ -104,12 +104,12 @@
             android:layout_height="26dp"
             android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"
+            android:background="@drawable/circle_count"
+            android:gravity="center"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
             android:text="0"
-            android:gravity="center"
-            android:textSize="@dimen/default_text_size_16"
-            android:background="@drawable/circle_count"
-            android:textColor="@color/white" />
+            android:textColor="@color/white"
+            android:textSize="@dimen/default_text_size_16" />
     </RelativeLayout>
 </android.support.v7.widget.CardView>
