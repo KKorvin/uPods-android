@@ -220,7 +220,6 @@ public class RadioItem extends MediaItem implements IPlayableMediaItem {
                         }
                         streamUrl.isAlive = true;
                         operationFinishSecsuessCallback.operationFinished();
-                        return;
                     } else {
                         streamUrl.isAlive = false;
                     }

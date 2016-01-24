@@ -90,7 +90,7 @@ public class StreamUrl implements Serializable {
                 list.add(streamUrl);
             }
         }
-        if (list.size() > 0) {
+        if (list.size() > 0) { //I contains streams with stream quality -> take them
             final String neededQuality = SettingsManager.getInstace().getStringSettingValue(SettingsManager.JS_STREAM_QUALITY);
             Collections.sort(list, new Comparator<StreamUrl>() {
                 public int compare(StreamUrl a, StreamUrl b) {
@@ -102,7 +102,7 @@ public class StreamUrl implements Serializable {
                 }
             });
             return list.get(0);
-        } else {
+        } else { //Take any available stream
             for (StreamUrl streamUrl : allUrls) {
                 if (streamUrl.isAlive && !streamUrl.hasBitrate()) {
                     list.add(streamUrl);

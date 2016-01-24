@@ -116,7 +116,10 @@ public class UniversalPlayer implements MediaPlayer.EventListener {
             if (!isLinkReadyForPlaying && !prepareLinkForPlaying()) {
                 return;
             }
-            Logger.printInfo(PLAYER_LOG, "Trying to play: " + mediaItem.getAudeoLink());
+
+            String audeoLink = mediaItem.getAudeoLink();
+
+            Logger.printInfo(PLAYER_LOG, "Trying to play: " + audeoLink);
             if (mLibVLC == null) {
                 mLibVLC = new LibVLC();
             }
@@ -125,7 +128,6 @@ public class UniversalPlayer implements MediaPlayer.EventListener {
                 mediaPlayer.setEventListener(this);
             }
 
-            String audeoLink = mediaItem.getAudeoLink();
             isPrepaired = false;
 
             if (mediaItem instanceof RadioItem || URLUtil.isValidUrl(audeoLink)) {
