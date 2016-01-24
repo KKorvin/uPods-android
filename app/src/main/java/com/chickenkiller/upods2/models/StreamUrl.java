@@ -1,6 +1,7 @@
 package com.chickenkiller.upods2.models;
 
 import com.chickenkiller.upods2.controllers.app.SettingsManager;
+import com.chickenkiller.upods2.controllers.player.UniversalPlayer;
 import com.chickenkiller.upods2.utils.Logger;
 
 import org.json.JSONException;
@@ -85,12 +86,17 @@ public class StreamUrl implements Serializable {
 
     public static StreamUrl getBestStreamUrl(Set<StreamUrl> allUrls) {
         final List<StreamUrl> list = new ArrayList<StreamUrl>();
+        String alreadySetQuality = SettingsManager.getInstace().getPareSettingValue(SettingsManager.JS_SELECTED_STREAM_QUALITY,
+                UniversalPlayer.getInstance().getPlayingMediaItem().getName());
         for (StreamUrl streamUrl : allUrls) {
             if (streamUrl.isAlive && streamUrl.hasBitrate()) {
                 list.add(streamUrl);
+                if (!alreadySetQuality.isEmpty() && streamUrl.bitrate.equals(alreadySetQuality)) {
+                    return streamUrl; //If user already selected quality for this stream -> take it
+                }
             }
         }
-        if (list.size() > 0) { //I contains streams with stream quality -> take them
+        if (list.size() > 0) { //It contains streams with stream quality -> take them
             final String neededQuality = SettingsManager.getInstace().getStringSettingValue(SettingsManager.JS_STREAM_QUALITY);
             Collections.sort(list, new Comparator<StreamUrl>() {
                 public int compare(StreamUrl a, StreamUrl b) {

@@ -3,12 +3,14 @@ package com.chickenkiller.upods2.utils;
 import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
+import android.util.Pair;
 import android.view.View;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.chickenkiller.upods2.R;
 import com.chickenkiller.upods2.controllers.app.ProfileManager;
+import com.chickenkiller.upods2.controllers.app.SettingsManager;
 import com.chickenkiller.upods2.controllers.player.UniversalPlayer;
 import com.chickenkiller.upods2.dialogs.DialogFragmentAddMediaItem;
 import com.chickenkiller.upods2.dialogs.DialogFragmentConfarmation;
@@ -80,21 +82,23 @@ public class ContextMenuHelper {
         if (availableStreams.length == 0) {
             Toast.makeText(activity, activity.getString(R.string.not_available_for_stream), Toast.LENGTH_SHORT).show();
         } else {
-            new MaterialDialog.Builder(activity).title(R.string.select_stream_quality);
-            new MaterialDialog.Builder(activity).items(availableStreams);
-            new MaterialDialog.Builder(activity).itemsCallbackSingleChoice(((RadioItem) playableMediaItem).getSelectedStreamAsNumber(availableStreams),
-                    new MaterialDialog.ListCallbackSingleChoice() {
-                        @Override
-                        public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
-                            playableMediaItem.selectStreamUrl(text.toString());
-                            currentMediaItem.selectStreamUrl(text.toString());
-                            UniversalPlayer.getInstance().softRestart();
-                            fragmentPlayer.initPlayerStateUI();
-                            return true;
-                        }
-                    });
-            new MaterialDialog.Builder(activity).positiveText(R.string.select);
-            new MaterialDialog.Builder(activity).show();
+            new MaterialDialog.Builder(activity).title(R.string.select_stream_quality)
+                    .items(availableStreams)
+                    .itemsCallbackSingleChoice(((RadioItem) playableMediaItem).getSelectedStreamAsNumber(availableStreams),
+                            new MaterialDialog.ListCallbackSingleChoice() {
+                                @Override
+                                public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+                                    SettingsManager.getInstace().putSettingsValue(SettingsManager.JS_SELECTED_STREAM_QUALITY,
+                                            new Pair<String, String>(playableMediaItem.getName(), text.toString()));
+                                    playableMediaItem.selectStreamUrl(text.toString());
+                                    currentMediaItem.selectStreamUrl(text.toString());
+                                    UniversalPlayer.getInstance().softRestart();
+                                    fragmentPlayer.initPlayerStateUI();
+                                    return true;
+                                }
+                            })
+                    .positiveText(R.string.select)
+                    .show();
         }
     }
 

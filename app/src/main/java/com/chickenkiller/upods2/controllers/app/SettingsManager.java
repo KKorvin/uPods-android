@@ -1,9 +1,12 @@
 package com.chickenkiller.upods2.controllers.app;
 
+import android.util.Pair;
+
 import com.chickenkiller.upods2.controllers.internet.SyncMaster;
 import com.chickenkiller.upods2.utils.Logger;
 import com.pixplicity.easyprefs.library.Prefs;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -26,6 +29,7 @@ public class SettingsManager {
     public static final String JS_START_SCREEN = "start_screen";
     public static final String JS_NOTIFY_EPISODS = "notify_episods";
     public static final String JS_STREAM_QUALITY = "stream_quality";
+    public static final String JS_SELECTED_STREAM_QUALITY = "selected_stream_quality";
 
     public static final String DEFAULT_STREAM_QUALITY = "hight";
 
@@ -57,6 +61,7 @@ public class SettingsManager {
                 settingsObject.put(JS_NOTIFY_EPISODS, DEFAULT_NOTIFY_EPISODS);
                 settingsObject.put(JS_PODCASTS_UPDATE_TIME, DEFAULT_PODCAST_UPDATE_TIME);
                 settingsObject.put(JS_STREAM_QUALITY, DEFAULT_STREAM_QUALITY);
+                settingsObject.put(JS_SELECTED_STREAM_QUALITY, new JSONArray());
                 Prefs.putString(JS_SETTINGS, settingsObject.toString());
             }
             return new JSONObject(Prefs.getString(JS_SETTINGS, null));
@@ -104,6 +109,22 @@ public class SettingsManager {
         }
     }
 
+    public String getPareSettingValue(String settingsKey, String pareKey) {
+        try {
+            JSONArray streamsArray = readSettings().getJSONArray(settingsKey);
+            for (int i = 0; i < streamsArray.length(); i++) {
+                if (streamsArray.getJSONObject(i).has(pareKey)) {
+                    return streamsArray.getJSONObject(i).getString(pareKey);
+                }
+            }
+            return "";
+        } catch (JSONException e) {
+            Logger.printInfo(TAG, "Can't read value with key: " + settingsKey + " from json settings");
+            e.printStackTrace();
+            return "";
+        }
+    }
+
     /**
      * Automaticly saves settings
      *
@@ -119,6 +140,14 @@ public class SettingsManager {
                 settingsObject.put(key, (boolean) value);
             } else if (value instanceof String) {
                 settingsObject.put(key, (String) value);
+            } else if (value instanceof Pair) {
+                String pairKey = (String) ((Pair) value).first;
+                String pairValue = (String) ((Pair) value).second;
+                JSONObject streamForItem = new JSONObject();
+                JSONArray streamsArray = settingsObject.has(key) ? settingsObject.getJSONArray(key) : new JSONArray();
+                streamForItem.put(pairKey, pairValue);
+                streamsArray.put(streamForItem);
+                settingsObject.put(key, streamsArray);
             }
             saveSettings(settingsObject);
         } catch (JSONException e) {
