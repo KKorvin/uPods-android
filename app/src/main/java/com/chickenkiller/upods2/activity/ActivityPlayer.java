@@ -11,7 +11,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
-import com.afollestad.materialdialogs.MaterialDialog;
 import com.chickenkiller.upods2.R;
 import com.chickenkiller.upods2.controllers.app.ProfileManager;
 import com.chickenkiller.upods2.controllers.player.UniversalPlayer;
@@ -20,6 +19,7 @@ import com.chickenkiller.upods2.fragments.FragmentPlayer;
 import com.chickenkiller.upods2.interfaces.IPlayableMediaItem;
 import com.chickenkiller.upods2.interfaces.IToolbarHolder;
 import com.chickenkiller.upods2.models.RadioItem;
+import com.chickenkiller.upods2.utils.ContextMenuHelper;
 import com.chickenkiller.upods2.utils.DataHolder;
 import com.chickenkiller.upods2.utils.enums.ContextMenuType;
 
@@ -107,8 +107,12 @@ public class ActivityPlayer extends BasicActivity implements IToolbarHolder, Too
         MenuInflater inflater = getMenuInflater();
         if (contextMenuType == ContextMenuType.PLAYER_SETTINGS) {
             inflater.inflate(R.menu.menu_basic_sceleton, menu);
-            menu.add(getString(R.string.select_stream_quality));
-            menu.add(getString(R.string.stream_info));
+            if (currentMediaItem instanceof RadioItem) {
+                menu.add(getString(R.string.select_stream_quality));
+                menu.add(getString(R.string.stream_info));
+            } else {
+                menu.add(getString(R.string.show_notes));
+            }
         }
     }
 
@@ -134,28 +138,7 @@ public class ActivityPlayer extends BasicActivity implements IToolbarHolder, Too
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         if (item.getTitle().equals(getString(R.string.select_stream_quality))) {
-            final IPlayableMediaItem playableMediaItem = UniversalPlayer.getInstance().getPlayingMediaItem();
-            String[] availableStreams = ((RadioItem) playableMediaItem).getAvailableStreams();
-            if (availableStreams.length == 0) {
-                Toast.makeText(this, getString(R.string.not_available_for_stream), Toast.LENGTH_SHORT).show();
-            } else {
-                new MaterialDialog.Builder(this)
-                        .title(R.string.select_stream_quality)
-                        .items(availableStreams)
-                        .itemsCallbackSingleChoice(((RadioItem) playableMediaItem).getSelectedStreamAsNumber(availableStreams),
-                                new MaterialDialog.ListCallbackSingleChoice() {
-                                    @Override
-                                    public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
-                                        ((RadioItem) playableMediaItem).selectStreamUrl(text.toString());
-                                        ((RadioItem) currentMediaItem).selectStreamUrl(text.toString());
-                                        UniversalPlayer.getInstance().softRestart();
-                                        fragmentPlayer.initPlayerStateUI();
-                                        return true;
-                                    }
-                                })
-                        .positiveText(R.string.select)
-                        .show();
-            }
+            ContextMenuHelper.selectRadioStreamQuality(this, fragmentPlayer, (RadioItem) currentMediaItem);
         }
         return super.onContextItemSelected(item);
     }

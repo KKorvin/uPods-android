@@ -6,15 +6,19 @@ import android.net.Uri;
 import android.view.View;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.chickenkiller.upods2.R;
 import com.chickenkiller.upods2.controllers.app.ProfileManager;
+import com.chickenkiller.upods2.controllers.player.UniversalPlayer;
 import com.chickenkiller.upods2.dialogs.DialogFragmentAddMediaItem;
 import com.chickenkiller.upods2.dialogs.DialogFragmentConfarmation;
 import com.chickenkiller.upods2.dialogs.DialogFragmentMessage;
+import com.chickenkiller.upods2.fragments.FragmentPlayer;
 import com.chickenkiller.upods2.interfaces.IFragmentsManager;
 import com.chickenkiller.upods2.interfaces.IOperationFinishCallback;
 import com.chickenkiller.upods2.interfaces.IPlayableMediaItem;
 import com.chickenkiller.upods2.models.Podcast;
+import com.chickenkiller.upods2.models.RadioItem;
 import com.chickenkiller.upods2.models.Track;
 import com.chickenkiller.upods2.utils.enums.MediaItemType;
 
@@ -68,6 +72,30 @@ public class ContextMenuHelper {
         DialogFragmentAddMediaItem dialogFragmentAddMediaItem = new DialogFragmentAddMediaItem();
         dialogFragmentAddMediaItem.setMediaItemType(mediaItemType);
         ((IFragmentsManager) activity).showDialogFragment(dialogFragmentAddMediaItem);
+    }
+
+    public static void selectRadioStreamQuality(final Activity activity, final FragmentPlayer fragmentPlayer, final RadioItem currentMediaItem) {
+        final RadioItem playableMediaItem = (RadioItem) UniversalPlayer.getInstance().getPlayingMediaItem();
+        String[] availableStreams = (playableMediaItem).getAvailableStreams();
+        if (availableStreams.length == 0) {
+            Toast.makeText(activity, activity.getString(R.string.not_available_for_stream), Toast.LENGTH_SHORT).show();
+        } else {
+            new MaterialDialog.Builder(activity).title(R.string.select_stream_quality);
+            new MaterialDialog.Builder(activity).items(availableStreams);
+            new MaterialDialog.Builder(activity).itemsCallbackSingleChoice(((RadioItem) playableMediaItem).getSelectedStreamAsNumber(availableStreams),
+                    new MaterialDialog.ListCallbackSingleChoice() {
+                        @Override
+                        public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+                            playableMediaItem.selectStreamUrl(text.toString());
+                            currentMediaItem.selectStreamUrl(text.toString());
+                            UniversalPlayer.getInstance().softRestart();
+                            fragmentPlayer.initPlayerStateUI();
+                            return true;
+                        }
+                    });
+            new MaterialDialog.Builder(activity).positiveText(R.string.select);
+            new MaterialDialog.Builder(activity).show();
+        }
     }
 
 }
