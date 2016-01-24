@@ -1,9 +1,12 @@
 package com.chickenkiller.upods2.controllers.player;
 
 import android.os.AsyncTask;
+import android.util.Pair;
 
+import com.chickenkiller.upods2.controllers.app.SettingsManager;
 import com.chickenkiller.upods2.fragments.FragmentPlayer;
 import com.chickenkiller.upods2.interfaces.IOnPositionUpdatedCallback;
+import com.chickenkiller.upods2.interfaces.ITrackable;
 import com.chickenkiller.upods2.models.RadioItem;
 import com.chickenkiller.upods2.utils.Logger;
 
@@ -12,7 +15,8 @@ import com.chickenkiller.upods2.utils.Logger;
  */
 public class PlayerPositionUpdater extends AsyncTask<Void, Integer, Void> {
 
-    private static final long POSITION_UPDATE_RATE = 1000;
+    private static final long POSITION_UPDATE_RATE = 800;
+    private static final int SAVE_POSITION_RATE = 5;
 
     private IOnPositionUpdatedCallback positionUpdatedCallback;
     private UniversalPlayer universalPlayer;
@@ -34,7 +38,14 @@ public class PlayerPositionUpdater extends AsyncTask<Void, Integer, Void> {
                         radioOfset += FragmentPlayer.DEFAULT_RADIO_DURATIO;
                         position -= radioOfset;
                     }
+
                     publishProgress(position);
+
+                    if (universalPlayer.getPlayingMediaItem() instanceof ITrackable && position % SAVE_POSITION_RATE == 0) {
+                        Pair<String, String> trackPosition = new Pair<>(((ITrackable) universalPlayer.getPlayingMediaItem()).getSelectedTrack().getTitle(),
+                                String.valueOf(position));
+                        SettingsManager.getInstace().putSettingsValue(SettingsManager.JS_EPISODS_POSITIONS, trackPosition);
+                    }
                 }
                 Thread.sleep(POSITION_UPDATE_RATE);
             }
