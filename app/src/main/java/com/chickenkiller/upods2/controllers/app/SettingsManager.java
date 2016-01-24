@@ -13,7 +13,6 @@ import org.json.JSONObject;
 public class SettingsManager {
 
     private static final String TAG = "SettingsManager";
-    private static final String AWS_DATASET_NAME = "preferences";
     private static final String JS_SETTINGS = "settings";
 
 
@@ -28,12 +27,10 @@ public class SettingsManager {
     public static final String JS_NOTIFY_EPISODS = "notify_episods";
     public static final String JS_STREAM_QUALITY = "stream_quality";
 
-    public static final String DEFAULT_STREAM_QUALITY = "25";
-
-    private JSONObject settingsObject;
+    public static final String DEFAULT_STREAM_QUALITY = "hight";
 
     private SettingsManager() {
-
+        super();
     }
 
     public static SettingsManager getInstace() {
@@ -44,49 +41,42 @@ public class SettingsManager {
     }
 
     public void init() {
-        readSettings();
-        saveSettings();
+        readSettings(); //Call it here in order to create empty settings if not exist
     }
 
     public void readSettings(JSONObject jsonObject) {
-        settingsObject = jsonObject;
+        Prefs.putString(JS_SETTINGS, jsonObject.toString());
         readSettings();
     }
 
-    private void readSettings() {
+    private JSONObject readSettings() {
         try {
-            if (Prefs.getString(JS_SETTINGS, null) != null) {
-                settingsObject = new JSONObject(Prefs.getString(JS_SETTINGS, null));
-            } else {
-                settingsObject = new JSONObject();
+            if (Prefs.getString(JS_SETTINGS, null) == null) {
+                JSONObject settingsObject = new JSONObject();
                 settingsObject.put(JS_START_SCREEN, DEFAULT_START_SCREEN);
                 settingsObject.put(JS_NOTIFY_EPISODS, DEFAULT_NOTIFY_EPISODS);
                 settingsObject.put(JS_PODCASTS_UPDATE_TIME, DEFAULT_PODCAST_UPDATE_TIME);
                 settingsObject.put(JS_STREAM_QUALITY, DEFAULT_STREAM_QUALITY);
+                Prefs.putString(JS_SETTINGS, settingsObject.toString());
             }
+            return new JSONObject(Prefs.getString(JS_SETTINGS, null));
         } catch (JSONException e) {
-            Logger.printInfo(TAG, "Can't read settings from cognito");
+            Logger.printInfo(TAG, "Can't read settings");
             e.printStackTrace();
         }
-
+        return null;
     }
 
-    private void saveSettings() {
-        if (settingsObject != null) {
-            Prefs.putString(JS_SETTINGS, settingsObject.toString());
-        }
+    private void saveSettings(JSONObject settingsObject) {
+        Prefs.putString(JS_SETTINGS, settingsObject.toString());
         if (LoginMaster.getInstance().isLogedIn()) {
             SyncMaster.saveToCloud();
         }
     }
 
-    public void sync() {
-        saveSettings();
-    }
-
     public int getIntSettingsValue(String key) {
         try {
-            return settingsObject.getInt(key);
+            return readSettings().getInt(key);
         } catch (JSONException e) {
             Logger.printInfo(TAG, "Can't read value with key: " + key + " from json settings");
             e.printStackTrace();
@@ -96,7 +86,7 @@ public class SettingsManager {
 
     public boolean getBooleanSettingsValue(String key) {
         try {
-            return settingsObject.getBoolean(key);
+            return readSettings().getBoolean(key);
         } catch (JSONException e) {
             Logger.printInfo(TAG, "Can't read value with key: " + key + " from json settings");
             e.printStackTrace();
@@ -106,7 +96,7 @@ public class SettingsManager {
 
     public String getStringSettingValue(String key) {
         try {
-            return settingsObject.getString(key);
+            return readSettings().getString(key);
         } catch (JSONException e) {
             Logger.printInfo(TAG, "Can't read value with key: " + key + " from json settings");
             e.printStackTrace();
@@ -114,8 +104,15 @@ public class SettingsManager {
         }
     }
 
+    /**
+     * Automaticly saves settings
+     *
+     * @param key
+     * @param value
+     */
     public void putSettingsValue(String key, Object value) {
         try {
+            JSONObject settingsObject = readSettings();
             if (value instanceof Integer) {
                 settingsObject.put(key, (int) value);
             } else if (value instanceof Boolean) {
@@ -123,6 +120,7 @@ public class SettingsManager {
             } else if (value instanceof String) {
                 settingsObject.put(key, (String) value);
             }
+            saveSettings(settingsObject);
         } catch (JSONException e) {
             Logger.printInfo(TAG, "Can't put value for key: " + key + " to json settings");
             e.printStackTrace();
@@ -136,11 +134,10 @@ public class SettingsManager {
 
         String pUpdateTime = Prefs.getString(JS_PODCASTS_UPDATE_TIME, String.valueOf(DEFAULT_PODCAST_UPDATE_TIME));
         putSettingsValue(JS_PODCASTS_UPDATE_TIME, Integer.valueOf(pUpdateTime));
-        saveSettings();
     }
 
     public JSONObject getAsJson() {
-        return settingsObject;
+        return readSettings();
     }
 
 }

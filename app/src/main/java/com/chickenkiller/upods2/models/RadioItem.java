@@ -200,9 +200,13 @@ public class RadioItem extends MediaItem implements IPlayableMediaItem {
         AsyncTask.execute(new Runnable() {
             @Override
             public void run() {
+                boolean hasAtleastOneUrl = false;
                 if (selectedStreamUrl != null) {
                     if (!GlobalUtils.isUrlReachable(selectedStreamUrl.getUrl())) {
                         selectedStreamUrl = null;
+                    } else {
+                        operationFinishSecsuessCallback.operationFinished();
+                        return;
                     }
                 }
                 for (StreamUrl streamUrl : streamUrls) {
@@ -218,13 +222,17 @@ public class RadioItem extends MediaItem implements IPlayableMediaItem {
                                 continue;
                             }
                         }
+                        hasAtleastOneUrl = true;
                         streamUrl.isAlive = true;
-                        operationFinishSecsuessCallback.operationFinished();
                     } else {
                         streamUrl.isAlive = false;
                     }
                 }
-                operationFinishFailCallback.operationFinished();
+                if (hasAtleastOneUrl) {
+                    operationFinishSecsuessCallback.operationFinished();
+                } else {
+                    operationFinishFailCallback.operationFinished();
+                }
             }
         });
     }
