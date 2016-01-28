@@ -20,6 +20,8 @@ import com.chickenkiller.upods2.models.Track;
 public class DialogFragmentTrackInfo extends DialogFragment {
 
     public static final String TAG = "df_track_info";
+    public boolean enableStream = true;
+
     private View.OnClickListener streamClickListener;
     private Track track;
 
@@ -40,14 +42,16 @@ public class DialogFragmentTrackInfo extends DialogFragment {
                             public void onClick(DialogInterface dialog, int id) {
                                 dialog.dismiss();
                             }
-                        })
-                .setNegativeButton(R.string.stream,
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int id) {
-                                streamClickListener.onClick(null);
-                            }
-                        }).setView(mainView);
+                        });
+        if (enableStream) {
+            builder.setNegativeButton(R.string.stream,
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int id) {
+                            streamClickListener.onClick(null);
+                        }
+                    }).setView(mainView);
+        }
         return builder.create();
     }
 

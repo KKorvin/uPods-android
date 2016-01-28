@@ -14,10 +14,12 @@ import android.widget.Toast;
 import com.chickenkiller.upods2.R;
 import com.chickenkiller.upods2.controllers.app.ProfileManager;
 import com.chickenkiller.upods2.controllers.player.UniversalPlayer;
+import com.chickenkiller.upods2.dialogs.DialogFragmentTrackInfo;
 import com.chickenkiller.upods2.fragments.FragmentMainFeatured;
 import com.chickenkiller.upods2.fragments.FragmentPlayer;
 import com.chickenkiller.upods2.interfaces.IPlayableMediaItem;
 import com.chickenkiller.upods2.interfaces.IToolbarHolder;
+import com.chickenkiller.upods2.interfaces.ITrackable;
 import com.chickenkiller.upods2.models.RadioItem;
 import com.chickenkiller.upods2.utils.ContextMenuHelper;
 import com.chickenkiller.upods2.utils.DataHolder;
@@ -139,6 +141,13 @@ public class ActivityPlayer extends BasicActivity implements IToolbarHolder, Too
     public boolean onContextItemSelected(MenuItem item) {
         if (item.getTitle().equals(getString(R.string.select_stream_quality))) {
             ContextMenuHelper.selectRadioStreamQuality(this, fragmentPlayer, (RadioItem) currentMediaItem);
+        } else if (item.getTitle().equals("Show notes")) {
+            DialogFragmentTrackInfo dialogFragmentTrackInfo = new DialogFragmentTrackInfo();
+            dialogFragmentTrackInfo.setTrack(((ITrackable) UniversalPlayer.getInstance().getPlayingMediaItem()).getSelectedTrack());
+            dialogFragmentTrackInfo.enableStream = false;
+            showDialogFragment(dialogFragmentTrackInfo);
+        } else if (item.getTitle().equals(getString(R.string.stream_info))) {
+            ContextMenuHelper.showStreamInfoDialog(this);
         }
         return super.onContextItemSelected(item);
     }

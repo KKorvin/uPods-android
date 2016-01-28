@@ -22,8 +22,8 @@ public class ServerApi {
     public static final String PODCAST_SEARCH_PARAM;
     public static final String PODCASTS_BY_CATEGORY;
 
-    public static final String COGNITO_LOGIN;
     public static final String USER_SYNC;
+    public static final String STREAM_INFO;
 
     static {
         DOMAIN = "https://upods.io";
@@ -42,7 +42,7 @@ public class ServerApi {
         PODCAST_SEARCH_PARAM = "&entity=podcast";
         PODCASTS_BY_CATEGORY = DOMAIN + "/upods/api/v1.0/podcasts/category?id=";
 
-        COGNITO_LOGIN = DOMAIN + "/upods/api/v1.0/login";
         USER_SYNC = DOMAIN + "/upods/api/v1.0/user/sync";
+        STREAM_INFO = DOMAIN + "/upods/api/v1.0/stream/info?link=";
     }
 }

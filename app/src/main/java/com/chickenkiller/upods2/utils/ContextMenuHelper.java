@@ -3,6 +3,7 @@ package com.chickenkiller.upods2.utils;
 import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
+import android.text.Html;
 import android.util.Pair;
 import android.view.View;
 import android.widget.Toast;
@@ -11,6 +12,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.chickenkiller.upods2.R;
 import com.chickenkiller.upods2.controllers.app.ProfileManager;
 import com.chickenkiller.upods2.controllers.app.SettingsManager;
+import com.chickenkiller.upods2.controllers.internet.BackendManager;
 import com.chickenkiller.upods2.controllers.player.UniversalPlayer;
 import com.chickenkiller.upods2.dialogs.DialogFragmentAddMediaItem;
 import com.chickenkiller.upods2.dialogs.DialogFragmentConfarmation;
@@ -19,12 +21,17 @@ import com.chickenkiller.upods2.fragments.FragmentPlayer;
 import com.chickenkiller.upods2.interfaces.IFragmentsManager;
 import com.chickenkiller.upods2.interfaces.IOperationFinishCallback;
 import com.chickenkiller.upods2.interfaces.IPlayableMediaItem;
+import com.chickenkiller.upods2.interfaces.IRequestCallback;
 import com.chickenkiller.upods2.models.Podcast;
 import com.chickenkiller.upods2.models.RadioItem;
 import com.chickenkiller.upods2.models.Track;
 import com.chickenkiller.upods2.utils.enums.MediaItemType;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.File;
+import java.util.Iterator;
 
 /**
  * Created by alonzilberman on 10/22/15.
@@ -100,6 +107,51 @@ public class ContextMenuHelper {
                     .positiveText(R.string.select)
                     .show();
         }
+    }
+
+    public static void showStreamInfoDialog(final Activity activity) {
+        String stremLink = UniversalPlayer.getInstance().getPlayingMediaItem().getAudeoLink();
+        final MaterialDialog progressDialog = new MaterialDialog.Builder(activity)
+                .title(R.string.fetching_info)
+                .content(R.string.please_wait)
+                .progress(true, 0)
+                .show();
+        BackendManager.getInstance().sendRequest(ServerApi.STREAM_INFO + stremLink, new IRequestCallback() {
+            @Override
+            public void onRequestSuccessed(final JSONObject jResponse) {
+                activity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        StringBuilder info = new StringBuilder();
+                        Iterator<String> iter = jResponse.keys();
+                        while (iter.hasNext()) {
+                            String key = iter.next();
+                            try {
+                                info.append("<b>" + GlobalUtils.upperCase((String) jResponse.get(key))
+                                            + ":</b>  " + jResponse.get(key) + "<br>");
+                            } catch (JSONException e) {
+                            }
+                        }
+                        new MaterialDialog.Builder(activity)
+                                .title(R.string.stream_info)
+                                .content(Html.fromHtml(info.toString()))
+                                .positiveText(R.string.ok)
+                                .show();
+                        progressDialog.dismiss();
+                    }
+                });
+            }
+
+            @Override
+            public void onRequestFailed() {
+                activity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        progressDialog.dismiss();
+                    }
+                });
+            }
+        });
     }
 
 }

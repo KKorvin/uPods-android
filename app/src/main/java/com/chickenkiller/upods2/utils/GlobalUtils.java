@@ -131,4 +131,11 @@ public class GlobalUtils {
             return false;
         }
     }
+
+    public static String upperCase(String str) {
+        StringBuilder rackingSystemSb = new StringBuilder(str.toLowerCase());
+        rackingSystemSb.setCharAt(0, Character.toUpperCase(rackingSystemSb.charAt(0)));
+        str = rackingSystemSb.toString();
+        return str;
+    }
 }

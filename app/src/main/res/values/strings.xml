@@ -131,6 +131,8 @@
     <string name="not_available_for_stream">Not available for this stream</string>
     <string name="default_stream_quality">Default stream quality</string>
     <string name="show_notes">Show notes</string>
+    <string name="fetching_info">Fetching Info</string>
+    <string name="please_wait">Please Wait</string>
 
 
 </resources>
