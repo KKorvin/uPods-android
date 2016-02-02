@@ -292,7 +292,7 @@ public class FragmentPlayer extends Fragment implements IPlayerStateListener {
         StringBuilder trackNumberString = new StringBuilder();
         trackNumberString.append(playlist.getCurrentTrackNumber() + 1);
         trackNumberString.append("/");
-        trackNumberString.append(playlist.getTracksCount());
+        trackNumberString.append(playlist.getTracksCount() - 1);
         tvTrackNumbers.setText(trackNumberString.toString());
     }
 
