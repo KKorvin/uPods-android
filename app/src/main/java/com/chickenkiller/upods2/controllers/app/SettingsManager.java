@@ -115,10 +115,13 @@ public class SettingsManager {
 
     public String getPareSettingValue(String settingsKey, String pareKey) {
         try {
-            JSONArray streamsArray = readSettings().getJSONArray(settingsKey);
-            for (int i = 0; i < streamsArray.length(); i++) {
-                if (streamsArray.getJSONObject(i).has(pareKey)) {
-                    return streamsArray.getJSONObject(i).getString(pareKey);
+            JSONObject rootobject = readSettings();
+            if(rootobject.has(settingsKey)) {
+                JSONArray streamsArray = readSettings().getJSONArray(settingsKey);
+                for (int i = 0; i < streamsArray.length(); i++) {
+                    if (streamsArray.getJSONObject(i).has(pareKey)) {
+                        return streamsArray.getJSONObject(i).getString(pareKey);
+                    }
                 }
             }
             return "";

@@ -49,9 +49,9 @@ public class UniversalPlayer implements MediaPlayer.EventListener {
     private static final String PLAYER_LOG = "UniversalPlayer";
 
     private static UniversalPlayer universalPlayer;
+
     private LibVLC mLibVLC = null;
     private MediaPlayer mediaPlayer = null;
-
 
     private IOperationFinishCallback onAutonomicTrackChangeCallback;
     private IOperationFinishCallback onPlayingFailedCallback;
@@ -91,6 +91,19 @@ public class UniversalPlayer implements MediaPlayer.EventListener {
         } else {
             throw new RuntimeException("Unsupported type of MediaItem");
         }
+    }
+
+    /**
+     * Checks if given type of media item is supported, if yes copies it and save instance in player.
+     *
+     * @param needReset - if true will reset the player before changing the mediaItem
+     * @param mediaItem
+     */
+    public void setMediaItem(IPlayableMediaItem mediaItem, boolean needReset){
+        if(needReset && !isCurrentMediaItem(mediaItem)){
+            resetPlayer();
+        }
+        setMediaItem(mediaItem);
     }
 
     public void setOnPlayingFailedCallback(IOperationFinishCallback onPlayingFailedCallback) {

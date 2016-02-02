@@ -6,7 +6,6 @@ import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.view.menu.ActionMenuItemView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -25,7 +24,6 @@ import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
 import com.chickenkiller.upods2.R;
-import com.chickenkiller.upods2.activity.ActivityPlayer;
 import com.chickenkiller.upods2.controllers.app.ProfileManager;
 import com.chickenkiller.upods2.controllers.player.PlayerPositionUpdater;
 import com.chickenkiller.upods2.controllers.player.Playlist;
@@ -41,7 +39,6 @@ import com.chickenkiller.upods2.interfaces.ITrackable;
 import com.chickenkiller.upods2.models.Podcast;
 import com.chickenkiller.upods2.models.RadioItem;
 import com.chickenkiller.upods2.models.Track;
-import com.chickenkiller.upods2.utils.DataHolder;
 import com.chickenkiller.upods2.utils.Logger;
 import com.chickenkiller.upods2.utils.MediaUtils;
 import com.chickenkiller.upods2.utils.ui.LetterBitmap;
@@ -180,7 +177,6 @@ public class FragmentPlayer extends Fragment implements IPlayerStateListener {
 
     @Override
     public void onPause() {
-        DataHolder.getInstance().remove(ActivityPlayer.MEDIA_ITEM_EXTRA);
         if (playerPositionUpdater != null) {
             playerPositionUpdater.cancel(false);
         }
@@ -321,11 +317,7 @@ public class FragmentPlayer extends Fragment implements IPlayerStateListener {
         playlist = new Playlist(getActivity(), rootView, new IOperationFinishCallback() {
             @Override
             public void operationFinished() {
-                playableMediaItem = (IPlayableMediaItem) DataHolder.getInstance().retrieve(ActivityPlayer.MEDIA_ITEM_EXTRA);
-                if (playableMediaItem == null) {
-                    playableMediaItem = UniversalPlayer.getInstance().getPlayingMediaItem();
-                    Log.e(TAG, "Error! Playlist callback -> can't retrieve mediaItem from DataHolder -> getting it from Player");
-                }
+                playableMediaItem = UniversalPlayer.getInstance().getPlayingMediaItem();
                 initPlayerUI();
                 configurePlayer();
                 initTrackNumbersSection();

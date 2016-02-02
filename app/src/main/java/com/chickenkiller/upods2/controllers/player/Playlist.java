@@ -17,7 +17,6 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.chickenkiller.upods2.R;
-import com.chickenkiller.upods2.activity.ActivityPlayer;
 import com.chickenkiller.upods2.controllers.adaperts.PlaylistMediaItemsAdapter;
 import com.chickenkiller.upods2.controllers.adaperts.PlaylistTracksAdapter;
 import com.chickenkiller.upods2.controllers.app.ProfileManager;
@@ -27,7 +26,6 @@ import com.chickenkiller.upods2.interfaces.IPlayableMediaItem;
 import com.chickenkiller.upods2.interfaces.ITrackable;
 import com.chickenkiller.upods2.models.RadioItem;
 import com.chickenkiller.upods2.models.Track;
-import com.chickenkiller.upods2.utils.DataHolder;
 import com.chickenkiller.upods2.utils.Logger;
 import com.chickenkiller.upods2.utils.MediaUtils;
 import com.chickenkiller.upods2.utils.enums.Direction;
@@ -260,7 +258,8 @@ public class Playlist implements AdapterView.OnItemClickListener {
                 universalPlayer.toggle();
                 Logger.printInfo(LOG_TAG, "Clicked on current trcack -> toogling it");
             } else {
-                DataHolder.getInstance().save(ActivityPlayer.MEDIA_ITEM_EXTRA, clickedIPlayableMediaItem);
+                universalPlayer.resetPlayer();
+                UniversalPlayer.getInstance().setMediaItem(clickedIPlayableMediaItem);
                 Logger.printInfo(LOG_TAG, "Track switched to: " + clickedIPlayableMediaItem.getName());
             }
         } else if (playlistAdapter instanceof PlaylistTracksAdapter) {
@@ -271,8 +270,8 @@ public class Playlist implements AdapterView.OnItemClickListener {
             } else {
                 ITrackable trackable = (ITrackable) universalPlayer.getPlayingMediaItem();
                 trackable.selectTrack(clieckedTrack);
-                DataHolder.getInstance().save(ActivityPlayer.MEDIA_ITEM_EXTRA, trackable);
                 universalPlayer.resetPlayer();
+                UniversalPlayer.getInstance().setMediaItem((IPlayableMediaItem) trackable);
                 Logger.printInfo(LOG_TAG, "Track switched to: " + clieckedTrack.getTitle());
             }
         }

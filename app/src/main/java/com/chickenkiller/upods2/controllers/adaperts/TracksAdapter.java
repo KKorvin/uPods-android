@@ -14,6 +14,7 @@ import com.chickenkiller.upods2.R;
 import com.chickenkiller.upods2.activity.ActivityPlayer;
 import com.chickenkiller.upods2.controllers.app.ProfileManager;
 import com.chickenkiller.upods2.controllers.internet.DownloadMaster;
+import com.chickenkiller.upods2.controllers.player.UniversalPlayer;
 import com.chickenkiller.upods2.dialogs.DialogFragmentTrackInfo;
 import com.chickenkiller.upods2.fragments.FragmentSearch;
 import com.chickenkiller.upods2.interfaces.IContentLoadListener;
@@ -25,7 +26,6 @@ import com.chickenkiller.upods2.interfaces.ITrackable;
 import com.chickenkiller.upods2.interfaces.IUIProgressUpdater;
 import com.chickenkiller.upods2.models.MediaItem;
 import com.chickenkiller.upods2.models.Track;
-import com.chickenkiller.upods2.utils.DataHolder;
 import com.chickenkiller.upods2.utils.decorators.DelayedOnClickListener;
 import com.chickenkiller.upods2.utils.enums.ContextMenuType;
 import com.chickenkiller.upods2.utils.enums.MediaItemType;
@@ -197,7 +197,7 @@ public class TracksAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                     myIntent.putExtra(ActivityPlayer.ACTIVITY_STARTED_FROM_IN_DEPTH, MediaItemType.PODCAST_SEARCH.ordinal());
                 }
                 myIntent.putExtra(ActivityPlayer.ACTIVITY_STARTED_FROM, MediaItemType.PODCAST.ordinal());
-                DataHolder.getInstance().save(ActivityPlayer.MEDIA_ITEM_EXTRA, iPlayableMediaItem);
+                UniversalPlayer.getInstance().setMediaItem(iPlayableMediaItem, true);
                 mContext.startActivity(myIntent);
                 ((Activity) mContext).finish();
             }

@@ -34,6 +34,7 @@ import com.chickenkiller.upods2.controllers.adaperts.TracksAdapter;
 import com.chickenkiller.upods2.controllers.app.ProfileManager;
 import com.chickenkiller.upods2.controllers.internet.BackendManager;
 import com.chickenkiller.upods2.controllers.internet.EpisodsXMLHandler;
+import com.chickenkiller.upods2.controllers.player.UniversalPlayer;
 import com.chickenkiller.upods2.interfaces.IContextMenuManager;
 import com.chickenkiller.upods2.interfaces.IFragmentsManager;
 import com.chickenkiller.upods2.interfaces.IMovable;
@@ -44,7 +45,6 @@ import com.chickenkiller.upods2.interfaces.ISimpleRequestCallback;
 import com.chickenkiller.upods2.interfaces.ITrackable;
 import com.chickenkiller.upods2.models.Episod;
 import com.chickenkiller.upods2.models.Podcast;
-import com.chickenkiller.upods2.utils.DataHolder;
 import com.chickenkiller.upods2.utils.GlobalUtils;
 import com.chickenkiller.upods2.utils.Logger;
 import com.chickenkiller.upods2.utils.decorators.DelayedOnClickListener;
@@ -201,7 +201,7 @@ public class FragmentMediaItemDetails extends Fragment implements View.OnTouchLi
             public void onClick(View view) {
                 if (GlobalUtils.isInternetConnected()) {
                     final Intent myIntent = new Intent(getActivity(), ActivityPlayer.class);
-                    DataHolder.getInstance().save(ActivityPlayer.MEDIA_ITEM_EXTRA, playableItem);
+                    UniversalPlayer.getInstance().setMediaItem(playableItem, true);
                     if (FragmentSearch.isActive) {
                         myIntent.putExtra(ActivityPlayer.ACTIVITY_STARTED_FROM_IN_DEPTH, MediaItemType.RADIO_SEARCH.ordinal());
                     }

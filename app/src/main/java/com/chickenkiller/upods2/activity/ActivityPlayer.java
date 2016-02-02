@@ -22,7 +22,6 @@ import com.chickenkiller.upods2.interfaces.IToolbarHolder;
 import com.chickenkiller.upods2.interfaces.ITrackable;
 import com.chickenkiller.upods2.models.RadioItem;
 import com.chickenkiller.upods2.utils.ContextMenuHelper;
-import com.chickenkiller.upods2.utils.DataHolder;
 import com.chickenkiller.upods2.utils.enums.ContextMenuType;
 
 public class ActivityPlayer extends BasicActivity implements IToolbarHolder, Toolbar.OnMenuItemClickListener {
@@ -47,17 +46,7 @@ public class ActivityPlayer extends BasicActivity implements IToolbarHolder, Too
         toolbar.setOnMenuItemClickListener(this);
         itemFavorites = (ActionMenuItemView) toolbar.findViewById(R.id.action_favorites_player);
 
-        if (DataHolder.getInstance().contains(MEDIA_ITEM_EXTRA)) {
-            currentMediaItem = (IPlayableMediaItem) DataHolder.getInstance().retrieve(MEDIA_ITEM_EXTRA);
-        } else if (getIntent().hasExtra(MEDIA_ITEM_EXTRA)) {
-            currentMediaItem = (IPlayableMediaItem) getIntent().getExtras().get(MEDIA_ITEM_EXTRA);
-        } else if (savedInstanceState != null && savedInstanceState.getParcelable(MEDIA_ITEM_EXTRA) != null) {
-            currentMediaItem = (IPlayableMediaItem) savedInstanceState.getSerializable(MEDIA_ITEM_EXTRA);
-        } else if (UniversalPlayer.getInstance().isPlaying()) {
-            currentMediaItem = UniversalPlayer.getInstance().getPlayingMediaItem();
-        } else if (currentMediaItem == null && UniversalPlayer.getInstance().getPlayingMediaItem() != null) {
-            currentMediaItem = UniversalPlayer.getInstance().getPlayingMediaItem();
-        }
+        currentMediaItem = UniversalPlayer.getInstance().getPlayingMediaItem();
         if (currentMediaItem == null) {
             throw new RuntimeException("Can't run activity player, MediaItem for play not set.");
         }
