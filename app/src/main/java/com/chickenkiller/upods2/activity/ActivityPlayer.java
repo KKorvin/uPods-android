@@ -2,6 +2,7 @@ package com.chickenkiller.upods2.activity;
 
 import android.app.FragmentManager;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v7.view.menu.ActionMenuItemView;
 import android.support.v7.widget.Toolbar;
@@ -17,16 +18,17 @@ import com.chickenkiller.upods2.controllers.player.UniversalPlayer;
 import com.chickenkiller.upods2.dialogs.DialogFragmentTrackInfo;
 import com.chickenkiller.upods2.fragments.FragmentMainFeatured;
 import com.chickenkiller.upods2.fragments.FragmentPlayer;
+import com.chickenkiller.upods2.fragments.FragmentVideoPlayer;
 import com.chickenkiller.upods2.interfaces.IPlayableMediaItem;
 import com.chickenkiller.upods2.interfaces.IToolbarHolder;
 import com.chickenkiller.upods2.interfaces.ITrackable;
 import com.chickenkiller.upods2.models.RadioItem;
 import com.chickenkiller.upods2.utils.ContextMenuHelper;
+import com.chickenkiller.upods2.utils.MediaUtils;
 import com.chickenkiller.upods2.utils.enums.ContextMenuType;
 
 public class ActivityPlayer extends BasicActivity implements IToolbarHolder, Toolbar.OnMenuItemClickListener {
 
-    public static final String MEDIA_ITEM_EXTRA = "mediaItem";
     public static final String ACTIVITY_STARTED_FROM = "startedFrom";
     public static final String ACTIVITY_STARTED_FROM_IN_DEPTH = "startedFromDepth"; //used if activity was started from depth fragment i.e search
 
@@ -44,6 +46,7 @@ public class ActivityPlayer extends BasicActivity implements IToolbarHolder, Too
         toolbar.setTitleTextColor(getResources().getColor(R.color.white));
         toolbar.inflateMenu(R.menu.menu_activity_player);
         toolbar.setOnMenuItemClickListener(this);
+        toolbar.setVisibility(View.VISIBLE);
         itemFavorites = (ActionMenuItemView) toolbar.findViewById(R.id.action_favorites_player);
 
         currentMediaItem = UniversalPlayer.getInstance().getPlayingMediaItem();
@@ -52,12 +55,18 @@ public class ActivityPlayer extends BasicActivity implements IToolbarHolder, Too
         }
 
         if (getFragmentManager().getBackStackEntryCount() == 0) {
-            fragmentPlayer = new FragmentPlayer();
-            fragmentPlayer.setPlayableItem(currentMediaItem);
-            showFragment(R.id.fl_window, fragmentPlayer, FragmentMainFeatured.TAG);
+            if (currentMediaItem instanceof ITrackable && MediaUtils.isVideoUrl(currentMediaItem.getAudeoLink())) {
+                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+                FragmentVideoPlayer fragmentVideoPlayer = new FragmentVideoPlayer();
+                fragmentVideoPlayer.setOnPlayingFailedCallback(MediaUtils.getPlayerFailCallback(this, currentMediaItem));
+                showFragment(R.id.fl_window, fragmentVideoPlayer, FragmentVideoPlayer.TAG);
+            } else {
+                fragmentPlayer = new FragmentPlayer();
+                fragmentPlayer.setPlayableItem(currentMediaItem);
+                showFragment(R.id.fl_window, fragmentPlayer, FragmentMainFeatured.TAG);
+            }
         }
     }
-
 
     @Override
     public void onBackPressed() {

@@ -1,7 +1,16 @@
 package com.chickenkiller.upods2.utils;
 
+import android.app.Activity;
+
+import com.chickenkiller.upods2.R;
 import com.chickenkiller.upods2.controllers.internet.BackendManager;
+import com.chickenkiller.upods2.controllers.player.UniversalPlayer;
+import com.chickenkiller.upods2.dialogs.DialogFragmentMessage;
 import com.chickenkiller.upods2.fragments.FragmentPlayer;
+import com.chickenkiller.upods2.interfaces.IFragmentsManager;
+import com.chickenkiller.upods2.interfaces.IOperationFinishCallback;
+import com.chickenkiller.upods2.interfaces.IPlayableMediaItem;
+import com.chickenkiller.upods2.models.Podcast;
 import com.chickenkiller.upods2.utils.enums.Direction;
 
 import org.json.JSONException;
@@ -79,5 +88,34 @@ public class MediaUtils {
         return changeTo;
     }
 
+    public static boolean isVideoUrl(String link) {
+        return link.matches(".*\\.(mpeg|avi|mp4|3gp|webm|mkv|ogg|wma)$");
+    }
+
+    public static IOperationFinishCallback getPlayerFailCallback(final Activity activity, final IPlayableMediaItem playableMediaItem) {
+        return new IOperationFinishCallback() {
+            @Override
+            public void operationFinished() {
+                StringBuilder mesStringBuilder = new StringBuilder();
+                mesStringBuilder.append(activity.getString(R.string.cant_play));
+                mesStringBuilder.append(" ");
+                mesStringBuilder.append(playableMediaItem instanceof Podcast
+                        ? activity.getString(R.string.podcast_small) : activity.getString(R.string.radio_station));
+                mesStringBuilder.append(":( ");
+                mesStringBuilder.append(activity.getString(R.string.please_try_later));
+                DialogFragmentMessage dialogFragmentMessage = new DialogFragmentMessage();
+                dialogFragmentMessage.setMessage(mesStringBuilder.toString());
+                dialogFragmentMessage.setTitle(activity.getString(R.string.oops));
+                dialogFragmentMessage.setOnOkClicked(new IOperationFinishCallback() {
+                    @Override
+                    public void operationFinished() {
+                        activity.onBackPressed();
+                        UniversalPlayer.getInstance().releasePlayer();
+                    }
+                });
+                ((IFragmentsManager) activity).showDialogFragment(dialogFragmentMessage);
+            }
+        };
+    }
 
 }

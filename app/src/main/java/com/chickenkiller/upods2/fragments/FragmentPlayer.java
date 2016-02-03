@@ -28,15 +28,12 @@ import com.chickenkiller.upods2.controllers.app.ProfileManager;
 import com.chickenkiller.upods2.controllers.player.PlayerPositionUpdater;
 import com.chickenkiller.upods2.controllers.player.Playlist;
 import com.chickenkiller.upods2.controllers.player.UniversalPlayer;
-import com.chickenkiller.upods2.dialogs.DialogFragmentMessage;
-import com.chickenkiller.upods2.interfaces.IFragmentsManager;
 import com.chickenkiller.upods2.interfaces.IOnPositionUpdatedCallback;
 import com.chickenkiller.upods2.interfaces.IOperationFinishCallback;
 import com.chickenkiller.upods2.interfaces.IPlayableMediaItem;
 import com.chickenkiller.upods2.interfaces.IPlayerStateListener;
 import com.chickenkiller.upods2.interfaces.IToolbarHolder;
 import com.chickenkiller.upods2.interfaces.ITrackable;
-import com.chickenkiller.upods2.models.Podcast;
 import com.chickenkiller.upods2.models.RadioItem;
 import com.chickenkiller.upods2.models.Track;
 import com.chickenkiller.upods2.utils.Logger;
@@ -342,29 +339,7 @@ public class FragmentPlayer extends Fragment implements IPlayerStateListener {
             }
         });
 
-        universalPlayer.setOnPlayingFailedCallback(new IOperationFinishCallback() {
-            @Override
-            public void operationFinished() {
-                StringBuilder mesStringBuilder = new StringBuilder();
-                mesStringBuilder.append(getActivity().getString(R.string.cant_play));
-                mesStringBuilder.append(" ");
-                mesStringBuilder.append(playableMediaItem instanceof Podcast
-                        ? getActivity().getString(R.string.podcast_small) : getActivity().getString(R.string.radio_station));
-                mesStringBuilder.append(":( ");
-                mesStringBuilder.append(getActivity().getString(R.string.please_try_later));
-                DialogFragmentMessage dialogFragmentMessage = new DialogFragmentMessage();
-                dialogFragmentMessage.setMessage(mesStringBuilder.toString());
-                dialogFragmentMessage.setTitle(getString(R.string.oops));
-                dialogFragmentMessage.setOnOkClicked(new IOperationFinishCallback() {
-                    @Override
-                    public void operationFinished() {
-                        getActivity().onBackPressed();
-                        UniversalPlayer.getInstance().releasePlayer();
-                    }
-                });
-                ((IFragmentsManager) getActivity()).showDialogFragment(dialogFragmentMessage);
-            }
-        });
+        universalPlayer.setOnPlayingFailedCallback(MediaUtils.getPlayerFailCallback(getActivity(), playableMediaItem));
     }
 
     private void runPositionUpdater() {
