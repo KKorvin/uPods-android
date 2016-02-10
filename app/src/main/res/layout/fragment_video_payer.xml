@@ -14,6 +14,76 @@
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:layout_gravity="center" />
+
+        <RelativeLayout
+            android:id="@+id/rlPlayerContorls"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:layout_gravity="bottom">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="@color/black_opacity"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:paddingTop="0dp">
+
+                <TextView
+                    android:id="@+id/tvVideoCurrent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:text="00:00"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/default_text_size_10" />
+
+                <SeekBar
+                    android:id="@+id/sbPlayerProgress"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginBottom="0dp"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="15dp"
+                    android:layout_toLeftOf="@+id/tvVideoDuration"
+                    android:layout_toRightOf="@+id/tvVideoCurrent"
+                    android:max="100"
+                    android:padding="0px"
+                    android:progress="0"
+                    android:thumbOffset="2dp" />
+
+                <TextView
+                    android:id="@+id/tvVideoDuration"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:text="00:00"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/default_text_size_10" />
+
+            </RelativeLayout>
+
+        </RelativeLayout>
+
+        <ImageButton
+            android:id="@+id/btnPlay"
+            android:layout_width="65dp"
+            android:layout_height="65dp"
+            android:layout_gravity="center"
+            android:visibility="gone"
+            android:background="@drawable/circle_rewind_btn"
+            android:src="@drawable/ic_pause_white" />
+
+        <ProgressBar
+            android:id="@id/pbLoading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center" />
+
     </FrameLayout>
 
 </LinearLayout>

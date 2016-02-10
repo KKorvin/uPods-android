@@ -12,7 +12,7 @@
     <color name="card_pressed_background">#EAEAEA</color>
     <color name="notification_grey">#878787</color>
     <color name="notification_background">#393631</color>
-
+    <color name="black_opacity">#641D262A</color>
 
     <!-- Social color -->
     <color name="fb_color_500">#3B5998</color>
@@ -21,6 +21,7 @@
     <color name="twitter_color_800">#0093C0</color>
     <color name="vk_color_500">#45668E</color>
     <color name="vk_color_800">#314865</color>
+
     <!-- Devider color -->
     <color name="sliding_menu_devider_color">#dcdcdc</color>
 
@@ -83,10 +84,9 @@
     <!-- Color for Icons in Sliding Menu -->
     <color name="pink_A200">#FF4081</color>
 
-    <!-- Color for Vidileniya in SlidingMenu -->
+    <!-- Color for selection in SlidingMenu -->
     <color name="grey_A200">#E0E0E0</color>
 
-    <!-- Color for text in TextView Middle Screen -->
     <!-- Color for Menu -->
     <color name="gray_202020">#212121</color>
     <color name="mini_player_blue">#0C424E</color>

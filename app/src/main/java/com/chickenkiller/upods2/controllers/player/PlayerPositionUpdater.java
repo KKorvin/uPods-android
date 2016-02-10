@@ -15,11 +15,11 @@ import com.chickenkiller.upods2.utils.Logger;
  */
 public class PlayerPositionUpdater extends AsyncTask<Void, Integer, Void> {
 
-    private static final long POSITION_UPDATE_RATE = 800;
-    private static final int SAVE_POSITION_RATE = 5;
+    protected static final long POSITION_UPDATE_RATE = 800;
+    protected static final int SAVE_POSITION_RATE = 5;
 
-    private IOnPositionUpdatedCallback positionUpdatedCallback;
-    private UniversalPlayer universalPlayer;
+    protected IOnPositionUpdatedCallback positionUpdatedCallback;
+    protected UniversalPlayer universalPlayer;
     private long radioOfset;
 
     public PlayerPositionUpdater(IOnPositionUpdatedCallback positionUpdatedCallback) {
