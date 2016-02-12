@@ -18,6 +18,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.chickenkiller.upods2.R;
+import com.chickenkiller.upods2.controllers.app.SettingsManager;
 import com.chickenkiller.upods2.controllers.player.UniversalPlayer;
 import com.chickenkiller.upods2.controllers.player.VideoPlayerPositionUpdater;
 import com.chickenkiller.upods2.interfaces.IOnPositionUpdatedCallback;
@@ -33,21 +34,21 @@ import org.videolan.libvlc.LibVLC;
 import org.videolan.libvlc.Media;
 import org.videolan.libvlc.MediaPlayer;
 
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
 
 /**
  * Created by alonzilberman on 7/27/15.
  */
-public class FragmentVideoPlayer extends Fragment implements IVLCVout.Callback, LibVLC.HardwareAccelerationError {
+public class FragmentVideoPlayer extends Fragment implements IVLCVout.Callback, LibVLC.HardwareAccelerationError, MediaPlayer.EventListener {
 
     public static String TAG = "FragmentVideoPlayer";
 
     // display surface
-    private SurfaceView mSurface;
-    private SurfaceHolder mHolder;
+    private SurfaceView sfVideo;
+    private SurfaceHolder shVideoHolder;
     private IOperationFinishCallback onPlayingFailedCallback;
+    private boolean isVideoPlayerReady = false;
 
     // media player
     private LibVLC libvlc;
@@ -66,48 +67,20 @@ public class FragmentVideoPlayer extends Fragment implements IVLCVout.Callback, 
     private TextView tvVideoCurrent;
     private SeekBar sbPlayerProgress;
 
-    private MediaPlayer.EventListener mPlayerListener = new MyPlayerListener(this);
-
-    private static class MyPlayerListener implements MediaPlayer.EventListener {
-        private WeakReference<FragmentVideoPlayer> mOwner;
-
-        public MyPlayerListener(FragmentVideoPlayer owner) {
-            mOwner = new WeakReference<FragmentVideoPlayer>(owner);
-        }
-
-        @Override
-        public void onEvent(MediaPlayer.Event event) {
-            FragmentVideoPlayer player = mOwner.get();
-            switch (event.type) {
-                case MediaPlayer.Event.EndReached:
-                    player.releasePlayer();
-                    mOwner.get().getActivity().onBackPressed();
-                    break;
-                case MediaPlayer.Event.Playing: {
-                    mOwner.get().pbLoading.setVisibility(View.GONE);
-                }
-                case MediaPlayer.Event.Paused:
-                case MediaPlayer.Event.Stopped:
-                default:
-                    break;
-            }
-        }
-    }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         View view = inflater.inflate(R.layout.fragment_video_payer, container, false);
         ((IToolbarHolder) getActivity()).getToolbar().setVisibility(View.GONE);
-        mSurface = (SurfaceView) view.findViewById(R.id.sfVideoPlayer);
+        sfVideo = (SurfaceView) view.findViewById(R.id.sfVideoPlayer);
         btnPlay = (ImageButton) view.findViewById(R.id.btnPlay);
         pbLoading = (ProgressBar) view.findViewById(R.id.pbLoading);
         rlVideoControls = (RelativeLayout) view.findViewById(R.id.rlPlayerContorls);
         tvVideoCurrent = (TextView) view.findViewById(R.id.tvVideoCurrent);
         tvVideoDuration = (TextView) view.findViewById(R.id.tvVideoDuration);
         sbPlayerProgress = (SeekBar) view.findViewById(R.id.sbPlayerProgress);
-        mHolder = mSurface.getHolder();
+        setVideoHolder();
 
         IPlayableMediaItem mediaItem = UniversalPlayer.getInstance().getPlayingMediaItem();
         if (mediaItem instanceof ITrackable) {
@@ -117,15 +90,26 @@ public class FragmentVideoPlayer extends Fragment implements IVLCVout.Callback, 
         return view;
     }
 
+    private void setVideoHolder() {
+        if (shVideoHolder == null && sfVideo != null) {
+            shVideoHolder = sfVideo.getHolder();
+        }
+    }
+
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
+        setVideoHolder();
         setSize(mVideoWidth, mVideoHeight);
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        if (pbLoading != null) {
+            pbLoading.setVisibility(View.VISIBLE);
+        }
+        setVideoHolder();
         createPlayer();
         setVideoPlayerPositionUpdater();
     }
@@ -184,7 +168,7 @@ public class FragmentVideoPlayer extends Fragment implements IVLCVout.Callback, 
             }
         });
 
-        mSurface.setOnClickListener(new View.OnClickListener() {
+        sfVideo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (pbLoading.getVisibility() == View.GONE) {
@@ -211,7 +195,7 @@ public class FragmentVideoPlayer extends Fragment implements IVLCVout.Callback, 
                 int progress = seekBar.getProgress();
                 int position = (int) ((maxDuration * progress) / 100);
                 seekBar.setProgress(progress);
-                mMediaPlayer.setPosition(position);
+                mMediaPlayer.setTime(position);
             }
         });
     }
@@ -222,7 +206,7 @@ public class FragmentVideoPlayer extends Fragment implements IVLCVout.Callback, 
         if (mVideoWidth * mVideoHeight <= 1)
             return;
 
-        if (mHolder == null || mSurface == null)
+        if (shVideoHolder == null || sfVideo == null)
             return;
 
         // get screen size
@@ -247,14 +231,14 @@ public class FragmentVideoPlayer extends Fragment implements IVLCVout.Callback, 
             w = (int) (h * videoAR);
 
         // force surface buffer size
-        mHolder.setFixedSize(mVideoWidth, mVideoHeight);
+        shVideoHolder.setFixedSize(mVideoWidth, mVideoHeight);
 
         // set display size
-        FrameLayout.LayoutParams lp = (FrameLayout.LayoutParams) mSurface.getLayoutParams();
+        FrameLayout.LayoutParams lp = (FrameLayout.LayoutParams) sfVideo.getLayoutParams();
         lp.width = w;
         lp.height = h;
-        mSurface.setLayoutParams(lp);
-        mSurface.invalidate();
+        sfVideo.setLayoutParams(lp);
+        sfVideo.invalidate();
     }
 
     private void createPlayer() {
@@ -269,15 +253,15 @@ public class FragmentVideoPlayer extends Fragment implements IVLCVout.Callback, 
             options.add("-vvv"); // verbosity
             libvlc = new LibVLC(options);
             libvlc.setOnHardwareAccelerationError(this);
-            mHolder.setKeepScreenOn(true);
+            shVideoHolder.setKeepScreenOn(true);
 
             // Create media player
             mMediaPlayer = new MediaPlayer(libvlc);
-            mMediaPlayer.setEventListener(mPlayerListener);
+            mMediaPlayer.setEventListener(this);
 
             // Set up video output
             final IVLCVout vout = mMediaPlayer.getVLCVout();
-            vout.setVideoView(mSurface);
+            vout.setVideoView(sfVideo);
             vout.addCallback(this);
             vout.attachViews();
 
@@ -300,12 +284,18 @@ public class FragmentVideoPlayer extends Fragment implements IVLCVout.Callback, 
         final IVLCVout vout = mMediaPlayer.getVLCVout();
         vout.removeCallback(this);
         vout.detachViews();
-        mHolder = null;
+        shVideoHolder = null;
         libvlc.release();
         libvlc = null;
 
         mVideoWidth = 0;
         mVideoHeight = 0;
+        isVideoPlayerReady = false;
+
+        if (rlVideoControls != null && btnPlay != null) {
+            rlVideoControls.setVisibility(View.GONE);
+            btnPlay.setVisibility(View.GONE);
+        }
     }
 
     public void setOnPlayingFailedCallback(IOperationFinishCallback onPlayingFailedCallback) {
@@ -331,6 +321,31 @@ public class FragmentVideoPlayer extends Fragment implements IVLCVout.Callback, 
         mVideoWidth = width;
         mVideoHeight = height;
         setSize(mVideoWidth, mVideoHeight);
+    }
+
+    @Override
+    public void onEvent(MediaPlayer.Event event) {
+        switch (event.type) {
+            case MediaPlayer.Event.EndReached:
+                releasePlayer();
+                getActivity().onBackPressed();
+                break;
+            case MediaPlayer.Event.Playing: {
+                if (!isVideoPlayerReady) {
+                    isVideoPlayerReady = true;
+                    pbLoading.setVisibility(View.GONE);
+                    String lastPosition = SettingsManager.getInstace().getPareSettingValue(SettingsManager.JS_EPISODS_POSITIONS,
+                            ((ITrackable) UniversalPlayer.getInstance().getPlayingMediaItem()).getSelectedTrack().getTitle());
+                    if (!lastPosition.isEmpty()) {
+                        mMediaPlayer.setTime(Integer.valueOf(lastPosition));
+                    }
+                }
+            }
+            case MediaPlayer.Event.Paused:
+            case MediaPlayer.Event.Stopped:
+            default:
+                break;
+        }
     }
 
     @Override

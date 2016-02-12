@@ -10,12 +10,14 @@ import com.chickenkiller.upods2.utils.Logger;
 import org.videolan.libvlc.MediaPlayer;
 
 import java.lang.ref.WeakReference;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by alonzilberman on 11/24/15.
  */
 public class VideoPlayerPositionUpdater extends PlayerPositionUpdater {
 
+    public static final float TIME_CONVERTER_FACTOR = 1000;
     private WeakReference<MediaPlayer> mediaPlayer;
 
     public VideoPlayerPositionUpdater(IOnPositionUpdatedCallback positionUpdatedCallback, MediaPlayer mPlayer) {
@@ -31,12 +33,14 @@ public class VideoPlayerPositionUpdater extends PlayerPositionUpdater {
     protected Void doInBackground(Void... params) {
         try {
             while (!isCancelled() && positionUpdatedCallback != null) {
-                if(mediaPlayer.get() != null) {
-                    int position = (int) mediaPlayer.get().getPosition();
-                       if(position>0) {
-                           publishProgress(position);
-                       }
-                    if (universalPlayer.getPlayingMediaItem() != null && position>0 &&
+                if (mediaPlayer.get() != null) {
+                    int position = (int) (mediaPlayer.get().getPosition() * TIME_CONVERTER_FACTOR);
+                    position = (int) TimeUnit.SECONDS.toMillis(position);
+
+                    if (position > 0) {
+                        publishProgress(position);
+                    }
+                    if (universalPlayer.getPlayingMediaItem() != null && position > 0 &&
                             universalPlayer.getPlayingMediaItem() instanceof ITrackable && position % SAVE_POSITION_RATE == 0) {
                         Pair<String, String> trackPosition = new Pair<>(((ITrackable) universalPlayer.getPlayingMediaItem()).getSelectedTrack().getTitle(),
                                 String.valueOf(position));
