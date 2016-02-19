@@ -42,14 +42,17 @@ public class LoginMaster {
     private static final String LOG_TAG = "LoginMaster";
     private static final String TWITTER_CONSUMER_KEY = "wr8t6lPMxtC09uMpIEayM5FBC";
     private static final String TWITTER_CONSUMER_SECRET = "dtnTy4RQfnowu60XGHToj830j4AYsKxDA82PWZBijgSdk0gnlk";
+    private static final int MAX_GET_USERS_RETRY = 5;
 
     private static LoginMaster loginMaster;
 
 
+    private int getUserRetries;
     private UserProfile userProfile;
 
     private LoginMaster() {
         this.userProfile = null;
+        this.getUserRetries = 0;
     }
 
 
@@ -102,6 +105,13 @@ public class LoginMaster {
                 @Override
                 public void operationFinished(Object data) {
                     try {
+                        if (getUserRetries >= MAX_GET_USERS_RETRY) {
+                            return;
+                        }
+                        if (getLoginType() != SyncMaster.TYPE_GLOBAL) {//Don't sync until global token obteined
+                            getUserRetries++;
+                            syncWithCloud(iOperationFinishCallback);
+                        }
                         if (((JSONObject) data).has("result")) {
                             if (((JSONObject) data).getJSONObject("result").has("profile")) {
                                 JSONObject profile = new JSONObject(((JSONObject) data).getJSONObject("result").getString("profile"));
@@ -246,7 +256,7 @@ public class LoginMaster {
                         userProfile = new UserProfile();
                         userProfile.setName(user.screenName);
                         String profileImage = user.profileImageUrlHttps;
-                        profileImage = profileImage.replace("_normal","");
+                        profileImage = profileImage.replace("_normal", "");
                         userProfile.setProfileImageUrl(profileImage);
                         profileFetched.operationFinished(userProfile);
                     }
