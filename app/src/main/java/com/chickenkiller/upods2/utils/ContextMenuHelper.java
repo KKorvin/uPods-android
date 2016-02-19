@@ -127,8 +127,8 @@ public class ContextMenuHelper {
                         while (iter.hasNext()) {
                             String key = iter.next();
                             try {
-                                info.append("<b>" + GlobalUtils.upperCase((String) jResponse.get(key))
-                                            + ":</b>  " + jResponse.get(key) + "<br>");
+                                info.append("<b>" + GlobalUtils.upperCase(jResponse.getString(key))
+                                        + ":</b>  " + jResponse.getString(key) + "<br>");
                             } catch (JSONException e) {
                             }
                         }
