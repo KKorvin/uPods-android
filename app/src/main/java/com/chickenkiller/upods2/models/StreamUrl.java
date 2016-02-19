@@ -86,7 +86,9 @@ public class StreamUrl implements Serializable {
 
     public static StreamUrl getBestStreamUrl(Set<StreamUrl> allUrls) {
         final List<StreamUrl> list = new ArrayList<StreamUrl>();
-        String alreadySetQuality = SettingsManager.getInstace().getPareSettingValue(SettingsManager.JS_SELECTED_STREAM_QUALITY,
+        SettingsManager settingsManager = SettingsManager.getInstace();
+
+        String alreadySetQuality = settingsManager.getPareSettingValue(SettingsManager.JS_SELECTED_STREAM_QUALITY,
                 UniversalPlayer.getInstance().getPlayingMediaItem().getName());
         for (StreamUrl streamUrl : allUrls) {
             if (streamUrl.isAlive && streamUrl.hasBitrate()) {
@@ -97,7 +99,9 @@ public class StreamUrl implements Serializable {
             }
         }
         if (list.size() > 0) { //It contains streams with stream quality -> take them
-            final String neededQuality = SettingsManager.getInstace().getStringSettingValue(SettingsManager.JS_STREAM_QUALITY);
+            String tempQuality = settingsManager.getStringSettingValue(SettingsManager.JS_STREAM_QUALITY);
+            final String neededQuality = tempQuality.isEmpty() ? SettingsManager.DEFAULT_STREAM_QUALITY : tempQuality;
+
             Collections.sort(list, new Comparator<StreamUrl>() {
                 public int compare(StreamUrl a, StreamUrl b) {
                     if (neededQuality.equals(SettingsManager.DEFAULT_STREAM_QUALITY)) {
