@@ -48,7 +48,7 @@ public class Category {
                 int id = jsonCategories.getJSONObject(i).has("id") ? jsonCategories.getJSONObject(i).getInt("id") : -1;
                 categories.add(new Category(name, id));
             }
-        } catch (JSONException e) {
+        } catch (Exception e) {
             Logger.printInfo(CATEGORIES_LOG, "Can't get podcasts categories from shared prefs");
             e.printStackTrace();
         }
