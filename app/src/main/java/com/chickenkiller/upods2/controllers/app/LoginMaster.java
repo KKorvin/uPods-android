@@ -112,6 +112,7 @@ public class LoginMaster {
                             getUserRetries++;
                             syncWithCloud(iOperationFinishCallback);
                         }
+                        getUserRetries = 0;
                         if (((JSONObject) data).has("result")) {
                             if (((JSONObject) data).getJSONObject("result").has("profile")) {
                                 JSONObject profile = new JSONObject(((JSONObject) data).getJSONObject("result").getString("profile"));
@@ -288,7 +289,7 @@ public class LoginMaster {
                             String avatarUrl = "https://graph.facebook.com/" + object.getString("id") + "/picture?type=large";
                             userProfile.setProfileImageUrl(avatarUrl);
                             profileFetched.operationFinished(userProfile);
-                        } catch (JSONException e) {
+                        } catch (Exception e) {
                             e.printStackTrace();
                         }
                     }

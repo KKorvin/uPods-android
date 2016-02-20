@@ -3,6 +3,7 @@ package com.chickenkiller.upods2.fragments;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,15 +53,17 @@ public class FragmentMediaItemsGrid extends Fragment implements ICustumziedBackP
         vpMediaTabs = (TabLayout) view.findViewById(R.id.tlMediaTabs);
         vpMediaTabs.setBackgroundResource(R.color.color_primary);
 
+        Toolbar toolbar = ((IToolbarHolder) getActivity()).getToolbar();
+        toolbar.findViewById(R.id.action_search).setVisibility(View.VISIBLE);
         if (mediaItemType == MediaItemType.RADIO) {
             vpMediaTabs.setTabMode(TabLayout.MODE_FIXED);
             vpMedia.setPagingEnabled(false);
-            ((IToolbarHolder) getActivity()).getToolbar().setTitle(R.string.radio_main);
+            toolbar.setTitle(R.string.radio_main);
             ((ISlidingMenuHolder) getActivity()).setSlidingMenuHeader(getString(R.string.radio_main));
             ActivityMain.lastFragmentType = MediaItemType.RADIO.ordinal();
         } else {
             ActivityMain.lastFragmentType = MediaItemType.PODCAST.ordinal();
-            ((IToolbarHolder) getActivity()).getToolbar().setTitle(R.string.podcasts);
+            toolbar.setTitle(R.string.podcasts);
             ((ISlidingMenuHolder) getActivity()).setSlidingMenuHeader(getString(R.string.podcasts_main));
         }
 

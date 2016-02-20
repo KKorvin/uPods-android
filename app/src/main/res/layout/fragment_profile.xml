@@ -10,6 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
+        android:visibility="gone"
         android:weightSum="100">
 
         <ImageView
@@ -71,23 +72,70 @@
 
     <LinearLayout
         android:id="@+id/lnLogedIn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="20dp"
         android:orientation="vertical"
-        android:visibility="gone">
+        android:visibility="visible">
+
+        <ImageView
+            android:id="@+id/imgAvatar"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:layout_gravity="center_horizontal" />
+
+        <TextView
+            android:id="@+id/tvRadioCount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="80dp"
+            android:layout_marginTop="10dp"
+            android:text="@string/subscribed_radio_stations"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/tvPodcastsCount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="80dp"
+            android:layout_marginTop="10dp"
+            android:text="@string/podcasts_in_favorites"
+            android:textSize="16sp" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:text="You are loged in" />
+            android:layout_marginLeft="80dp"
+            android:layout_marginTop="10dp"
+            android:text="@string/last_sync_with_cloud"
+            android:textSize="16sp" />
 
-        <Button
-            android:id="@+id/btnLogout"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:text="Logout" />
+            android:layout_marginTop="50dp"
+            android:orientation="horizontal"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:weightSum="100">
+
+            <Button
+                android:id="@+id/btnLogout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="50"
+                android:text="@string/logout" />
+
+            <Button
+                android:id="@+id/btnSync"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="50"
+                android:text="@string/sync" />
+
+        </LinearLayout>
+
+
     </LinearLayout>
 
     <ProgressBar
