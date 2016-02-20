@@ -31,7 +31,9 @@ public class FragmentHelp extends Fragment implements ICustumziedBackPress {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_help, container, false);
 
-        ((IToolbarHolder) getActivity()).getToolbar().setVisibility(View.GONE);
+        if (((IToolbarHolder) getActivity()).getToolbar() != null) {
+            ((IToolbarHolder) getActivity()).getToolbar().setVisibility(View.GONE);
+        }
 
         vpHelp = (ViewPager) view.findViewById(R.id.vpHelp);
         indicatorHelp = (CircleIndicator) view.findViewById(R.id.indicatorHelp);

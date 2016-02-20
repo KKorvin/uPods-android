@@ -11,6 +11,7 @@ import android.view.View;
 
 import com.chickenkiller.upods2.R;
 import com.chickenkiller.upods2.interfaces.IContextMenuManager;
+import com.chickenkiller.upods2.interfaces.IControlStackHistory;
 import com.chickenkiller.upods2.interfaces.IFragmentsManager;
 import com.chickenkiller.upods2.interfaces.IOperationFinishCallback;
 import com.chickenkiller.upods2.interfaces.IOverlayable;
@@ -25,6 +26,7 @@ import java.util.Calendar;
 public class BasicActivity extends Activity implements IFragmentsManager, IContextMenuManager {
 
     protected final static String LOG_TAG = "BasicActivity";
+    private final static String DIALOG_TAG_START = "fr_dialog_";
 
     //For context menus
     protected Object currentContextMenuData;
@@ -54,7 +56,15 @@ public class BasicActivity extends Activity implements IFragmentsManager, IConte
             ft.replace(id, fragment, tag);
         }
         ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-        ft.addToBackStack(tag);
+
+        if (fragment instanceof IControlStackHistory) {//Decide ether fragment should be added to stack history
+            if (((IControlStackHistory) fragment).shouldBeAddedToStack()) {
+                ft.addToBackStack(tag);
+            }
+        } else {
+            ft.addToBackStack(tag);
+        }
+
         ft.commitAllowingStateLoss();
     }
 
@@ -66,7 +76,7 @@ public class BasicActivity extends Activity implements IFragmentsManager, IConte
     @Override
     public void showDialogFragment(DialogFragment dialogFragment) {
         long time = Calendar.getInstance().get(Calendar.MILLISECOND);
-        String tag = "fr_dialog_" + String.valueOf(time);
+        String tag = DIALOG_TAG_START + String.valueOf(time);
         dialogFragment.show(getFragmentManager(), tag);
     }
 

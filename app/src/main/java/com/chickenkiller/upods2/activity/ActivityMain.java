@@ -45,7 +45,7 @@ import java.util.Arrays;
 
 public class ActivityMain extends BasicActivity implements IOverlayable, IToolbarHolder, ISlidingMenuHolder, ILoginManager, Toolbar.OnMenuItemClickListener {
 
-    private static final int MIN_NUMBER_FRAGMENTS_IN_STACK = 2;
+    private static final int MIN_NUMBER_FRAGMENTS_IN_STACK = 1;
     private static final float MAX_OVERLAY_LEVEL = 0.8f;
     private static final int FRAGMENT_TRANSACTION_TIME = 300;
     private static final int WELLCOME_SCREEN_TIME = 2000;
@@ -172,8 +172,7 @@ public class ActivityMain extends BasicActivity implements IOverlayable, IToolba
         slidingMenu.getAdapter().clearRowSelections();
         slidingMenu.getAdapter().notifyDataSetChanged();
         Logger.printInfo(LOG_TAG, "Number fragments in stack: " + String.valueOf(getFragmentManager().getBackStackEntryCount()));
-        if (getFragmentManager().getBackStackEntryCount() > MIN_NUMBER_FRAGMENTS_IN_STACK
-                && !getLatestFragmentTag().equals(FragmentHelp.TAG)) {
+        if (getFragmentManager().getBackStackEntryCount() > MIN_NUMBER_FRAGMENTS_IN_STACK) {
             if (getLatestFragmentTag().equals(FragmentSearch.TAG)) {
                 toolbar.getMenu().findItem(R.id.action_search).collapseActionView();
                 getFragmentManager().popBackStack();
