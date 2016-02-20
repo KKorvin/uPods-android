@@ -83,7 +83,7 @@ public class FragmentPodcastFeatured extends Fragment implements IContentLoadLis
         mediaItemsAdapter.setContentLoadListener(this);
         //Featured recycle view
         rvMain.setHasFixedSize(true);
-        rvMain.setAdapter(new SlideInBottomAnimatorAdapter(mediaItemsAdapter,rvMain));
+        rvMain.setAdapter(new SlideInBottomAnimatorAdapter(mediaItemsAdapter, rvMain));
         rvMain.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
             @Override
             public int getSpanSize(int position) {
@@ -100,13 +100,7 @@ public class FragmentPodcastFeatured extends Fragment implements IContentLoadLis
 
         //Open search fragment backed from other activity which was started from search
         if (getActivity().getIntent().hasExtra(ActivityPlayer.ACTIVITY_STARTED_FROM_IN_DEPTH)) {
-            int startedFrom = getActivity().getIntent().getIntExtra(ActivityPlayer.ACTIVITY_STARTED_FROM_IN_DEPTH, -1);
-            if (startedFrom == MediaItemType.PODCAST_SEARCH.ordinal()) {
-                FragmentSearch fragmentSearch = new FragmentSearch();
-                fragmentSearch.setSearchType(MediaItemType.PODCAST);
-                ((IFragmentsManager) getActivity()).showFragment(R.id.fl_content, fragmentSearch, FragmentSearch.TAG);
-                getActivity().getIntent().removeExtra(ActivityPlayer.ACTIVITY_STARTED_FROM_IN_DEPTH);
-            }
+            FragmentSearch.openFromIntent(getActivity());
         }
         return view;
     }

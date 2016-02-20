@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 
 import com.chickenkiller.upods2.R;
 import com.chickenkiller.upods2.controllers.adaperts.HelpPagesAdapter;
+import com.chickenkiller.upods2.interfaces.IControlStackHistory;
 import com.chickenkiller.upods2.interfaces.ICustumziedBackPress;
 import com.chickenkiller.upods2.interfaces.IToolbarHolder;
 import com.chickenkiller.upods2.views.CircleIndicator;
@@ -17,7 +18,7 @@ import com.pixplicity.easyprefs.library.Prefs;
 /**
  * Created by alonzilberman on 8/8/15.
  */
-public class FragmentHelp extends Fragment implements ICustumziedBackPress {
+public class FragmentHelp extends Fragment implements ICustumziedBackPress, IControlStackHistory {
 
     public static final String TAG = "fragment_help";
     public static final String PREF_HELP_SHOWN = "help_shown";
@@ -26,6 +27,7 @@ public class FragmentHelp extends Fragment implements ICustumziedBackPress {
     private ViewPager vpHelp;
     private CircleIndicator indicatorHelp;
     private View.OnClickListener closeClickListener;
+    private boolean isFirstTime;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -35,9 +37,12 @@ public class FragmentHelp extends Fragment implements ICustumziedBackPress {
             ((IToolbarHolder) getActivity()).getToolbar().setVisibility(View.GONE);
         }
 
+        isFirstTime = Prefs.getBoolean(FragmentHelp.PREF_HELP_SHOWN, true);
+
         vpHelp = (ViewPager) view.findViewById(R.id.vpHelp);
         indicatorHelp = (CircleIndicator) view.findViewById(R.id.indicatorHelp);
         helpPagesAdapter = new HelpPagesAdapter(getChildFragmentManager());
+
         initCloseListener();
         helpPagesAdapter.setCloseClickListener(closeClickListener);
         vpHelp.setAdapter(helpPagesAdapter);
@@ -66,5 +71,10 @@ public class FragmentHelp extends Fragment implements ICustumziedBackPress {
     public boolean onBackPressed() {
         closeClickListener.onClick(null);
         return false;
+    }
+
+    @Override
+    public boolean shouldBeAddedToStack() {
+        return !isFirstTime; //don't add to history if first time screen
     }
 }
