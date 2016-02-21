@@ -3,11 +3,13 @@ package com.chickenkiller.upods2.fragments;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.chickenkiller.upods2.R;
+import com.chickenkiller.upods2.activity.ActivityMain;
 import com.chickenkiller.upods2.controllers.adaperts.MediaPagesAdapter;
 import com.chickenkiller.upods2.controllers.app.ProfileManager;
 import com.chickenkiller.upods2.controllers.player.SmallPlayer;
@@ -15,7 +17,6 @@ import com.chickenkiller.upods2.interfaces.ICustumziedBackPress;
 import com.chickenkiller.upods2.interfaces.IOperationFinishCallback;
 import com.chickenkiller.upods2.interfaces.ISlidingMenuHolder;
 import com.chickenkiller.upods2.interfaces.IToolbarHolder;
-import com.chickenkiller.upods2.utils.DataHolder;
 import com.chickenkiller.upods2.utils.enums.MediaItemType;
 import com.chickenkiller.upods2.views.MediaViewpager;
 
@@ -52,9 +53,18 @@ public class FragmentMediaItemsGrid extends Fragment implements ICustumziedBackP
         vpMediaTabs = (TabLayout) view.findViewById(R.id.tlMediaTabs);
         vpMediaTabs.setBackgroundResource(R.color.color_primary);
 
+        Toolbar toolbar = ((IToolbarHolder) getActivity()).getToolbar();
+        toolbar.findViewById(R.id.action_search).setVisibility(View.VISIBLE);
         if (mediaItemType == MediaItemType.RADIO) {
             vpMediaTabs.setTabMode(TabLayout.MODE_FIXED);
             vpMedia.setPagingEnabled(false);
+            toolbar.setTitle(R.string.radio_main);
+            ((ISlidingMenuHolder) getActivity()).setSlidingMenuHeader(getString(R.string.radio_main));
+            ActivityMain.lastFragmentType = MediaItemType.RADIO.ordinal();
+        } else {
+            ActivityMain.lastFragmentType = MediaItemType.PODCAST.ordinal();
+            toolbar.setTitle(R.string.podcasts);
+            ((ISlidingMenuHolder) getActivity()).setSlidingMenuHeader(getString(R.string.podcasts_main));
         }
 
         //Tabs color
@@ -69,14 +79,6 @@ public class FragmentMediaItemsGrid extends Fragment implements ICustumziedBackP
                 vpMediaTabs.setupWithViewPager(vpMedia);
             }
         });
-
-        if (mediaItemType == MediaItemType.PODCAST) {
-            ((IToolbarHolder) getActivity()).getToolbar().setTitle(R.string.podcasts);
-            ((ISlidingMenuHolder) getActivity()).setSlidingMenuHeader(getString(R.string.podcasts_main));
-        } else {
-            ((IToolbarHolder) getActivity()).getToolbar().setTitle(R.string.radio_main);
-            ((ISlidingMenuHolder) getActivity()).setSlidingMenuHeader(getString(R.string.radio_main));
-        }
 
         smallPlayer = new SmallPlayer(view, getActivity());
 
@@ -123,7 +125,7 @@ public class FragmentMediaItemsGrid extends Fragment implements ICustumziedBackP
         if (smallPlayer != null) {
             smallPlayer.onPause();
         }
-        DataHolder.getInstance().save(LAST_ITEM_POSITION, vpMedia.getCurrentItem());
+        ActivityMain.lastChildFragmentNumber = vpMedia.getCurrentItem();
         ProfileManager.getInstance().setProfileSavedCallback(null);
         super.onPause();
     }

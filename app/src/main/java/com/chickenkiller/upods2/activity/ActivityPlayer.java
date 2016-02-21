@@ -1,5 +1,6 @@
 package com.chickenkiller.upods2.activity;
 
+import android.app.Activity;
 import android.app.FragmentManager;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
@@ -18,6 +19,7 @@ import com.chickenkiller.upods2.controllers.player.UniversalPlayer;
 import com.chickenkiller.upods2.dialogs.DialogFragmentTrackInfo;
 import com.chickenkiller.upods2.fragments.FragmentMainFeatured;
 import com.chickenkiller.upods2.fragments.FragmentPlayer;
+import com.chickenkiller.upods2.fragments.FragmentSearch;
 import com.chickenkiller.upods2.fragments.FragmentVideoPlayer;
 import com.chickenkiller.upods2.interfaces.IPlayableMediaItem;
 import com.chickenkiller.upods2.interfaces.IToolbarHolder;
@@ -26,6 +28,7 @@ import com.chickenkiller.upods2.models.RadioItem;
 import com.chickenkiller.upods2.utils.ContextMenuHelper;
 import com.chickenkiller.upods2.utils.MediaUtils;
 import com.chickenkiller.upods2.utils.enums.ContextMenuType;
+import com.chickenkiller.upods2.utils.enums.MediaItemType;
 
 public class ActivityPlayer extends BasicActivity implements IToolbarHolder, Toolbar.OnMenuItemClickListener {
 
@@ -148,5 +151,25 @@ public class ActivityPlayer extends BasicActivity implements IToolbarHolder, Too
             ContextMenuHelper.showStreamInfoDialog(this);
         }
         return super.onContextItemSelected(item);
+    }
+
+    public static void openWithIntent(Activity activity) {
+        //Detect if starting from search -> if yes from which type
+        if (FragmentSearch.isActive) {
+            if (ActivityMain.lastFragmentType == MediaItemType.PODCAST.ordinal()) {
+                ActivityMain.lastChildFragmentType = MediaItemType.PODCAST_SEARCH.ordinal();
+            } else if (ActivityMain.lastFragmentType == MediaItemType.RADIO.ordinal()) {
+                ActivityMain.lastChildFragmentType = MediaItemType.RADIO_SEARCH.ordinal();
+            }
+        }
+
+        Intent myIntent = new Intent(activity, ActivityPlayer.class);
+        myIntent.putExtra(ActivityPlayer.ACTIVITY_STARTED_FROM, ActivityMain.lastFragmentType);
+        myIntent.putExtra(ActivityPlayer.ACTIVITY_STARTED_FROM_IN_DEPTH, ActivityMain.lastChildFragmentType);
+        activity.startActivity(myIntent);
+        activity.overridePendingTransition(R.anim.slide_in_bottom, R.anim.slide_out_bottom);
+        activity.finish();
+        ActivityMain.lastChildFragmentType = -1;
+        ActivityMain.lastChildFragmentType = -1;
     }
 }

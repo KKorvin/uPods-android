@@ -32,7 +32,6 @@ import com.chickenkiller.upods2.models.MediaItem;
 import com.chickenkiller.upods2.models.Podcast;
 import com.chickenkiller.upods2.models.Track;
 import com.chickenkiller.upods2.utils.ContextMenuHelper;
-import com.chickenkiller.upods2.utils.DataHolder;
 import com.chickenkiller.upods2.utils.Logger;
 import com.chickenkiller.upods2.utils.enums.ContextMenuType;
 import com.chickenkiller.upods2.utils.enums.MediaItemType;
@@ -45,15 +44,31 @@ import java.util.Arrays;
 
 public class ActivityMain extends BasicActivity implements IOverlayable, IToolbarHolder, ISlidingMenuHolder, ILoginManager, Toolbar.OnMenuItemClickListener {
 
-    private static final int MIN_NUMBER_FRAGMENTS_IN_STACK = 2;
+    private static final int MIN_NUMBER_FRAGMENTS_IN_STACK = 1;
     private static final float MAX_OVERLAY_LEVEL = 0.8f;
     private static final int FRAGMENT_TRANSACTION_TIME = 300;
     private static final int WELLCOME_SCREEN_TIME = 2000;
+
+    public static boolean isFirstRun = true;
+
+    /**
+     * Type of last fragment shown by activity
+     */
+    public static int lastFragmentType = -1;
+
+    /**
+     * Number of last fragment shown by activity (for view pagers)
+     */
+    public static int lastChildFragmentNumber = -1;
+
+    /**
+     * Type of last fragment's child i.e Search (child of main featured fragment)
+     */
+    public static int lastChildFragmentType = -1;
+
     private Toolbar toolbar;
     private SlidingMenu slidingMenu;
     private View vOverlay;
-
-    public static boolean isFirstRun = true;
 
     private int[] notificationsActions = {NetworkTasksService.NOTIFICATIONS_SHOW_PODCASTS_SUBSCRIBED};
     private CallbackManager callbackManager;
@@ -91,18 +106,14 @@ public class ActivityMain extends BasicActivity implements IOverlayable, IToolba
                         showHelpFragment();
                     } else {
                         toolbar.setVisibility(View.VISIBLE);
-                        showFragment(R.id.fl_content, getStartFrament(), FragmentMediaItemsGrid.TAG);
+                        showFragment(R.id.fl_content, getStartFragment(), FragmentMediaItemsGrid.TAG);
                     }
                 }
             }, WELLCOME_SCREEN_TIME);
         } else {
             toolbar.setVisibility(View.VISIBLE);
 
-            int startedFragmentNumber = -1;
-
-            //In order to return to fragment inside view pager which leaved activity
-            startedFragmentNumber = DataHolder.getInstance().contains(FragmentMediaItemsGrid.LAST_ITEM_POSITION) ?
-                    (int) DataHolder.getInstance().retrieve(FragmentMediaItemsGrid.LAST_ITEM_POSITION) : -1;
+            int startedFragmentNumber = ActivityMain.lastChildFragmentNumber;
 
             if (startedFrom == NetworkTasksService.NOTIFICATIONS_SHOW_PODCASTS_SUBSCRIBED) {
                 startedFragmentNumber = 1;
@@ -134,7 +145,7 @@ public class ActivityMain extends BasicActivity implements IOverlayable, IToolba
         showFragment(R.id.fl_content, fragmentHelp, FragmentHelp.TAG);
     }
 
-    private FragmentMediaItemsGrid getStartFrament() {
+    private FragmentMediaItemsGrid getStartFragment() {
         FragmentMediaItemsGrid fragmentMediaItemsGrid = new FragmentMediaItemsGrid();
         String startScreen = SettingsManager.getInstace().getStringSettingValue(SettingsManager.JS_START_SCREEN);
         if (startScreen.equals("rs_subscribed")) {
@@ -172,8 +183,7 @@ public class ActivityMain extends BasicActivity implements IOverlayable, IToolba
         slidingMenu.getAdapter().clearRowSelections();
         slidingMenu.getAdapter().notifyDataSetChanged();
         Logger.printInfo(LOG_TAG, "Number fragments in stack: " + String.valueOf(getFragmentManager().getBackStackEntryCount()));
-        if (getFragmentManager().getBackStackEntryCount() > MIN_NUMBER_FRAGMENTS_IN_STACK
-                && !getLatestFragmentTag().equals(FragmentHelp.TAG)) {
+        if (getFragmentManager().getBackStackEntryCount() > MIN_NUMBER_FRAGMENTS_IN_STACK) {
             if (getLatestFragmentTag().equals(FragmentSearch.TAG)) {
                 toolbar.getMenu().findItem(R.id.action_search).collapseActionView();
                 getFragmentManager().popBackStack();

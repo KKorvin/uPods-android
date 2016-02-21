@@ -1,7 +1,6 @@
 package com.chickenkiller.upods2.controllers.player;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.view.View;
@@ -154,9 +153,6 @@ public class SmallPlayer implements IPlayerStateListener, View.OnClickListener {
 
     @Override
     public void onClick(View view) {
-        Intent intentOpen = new Intent(mActivity, ActivityPlayer.class);
-        mActivity.startActivity(intentOpen);
-        mActivity.overridePendingTransition(R.anim.slide_in_bottom, R.anim.slide_out_bottom);
-        mActivity.finish();
+        ActivityPlayer.openWithIntent(mActivity);
     }
 }

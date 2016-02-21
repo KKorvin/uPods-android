@@ -135,13 +135,7 @@ public class FragmentMainFeatured extends Fragment implements IContentLoadListen
 
         //Open search fragment backed from other activity which was started from search
         if (getActivity().getIntent().hasExtra(ActivityPlayer.ACTIVITY_STARTED_FROM_IN_DEPTH)) {
-            int startedFrom = getActivity().getIntent().getIntExtra(ActivityPlayer.ACTIVITY_STARTED_FROM_IN_DEPTH, -1);
-            if (startedFrom == MediaItemType.RADIO_SEARCH.ordinal()) {
-                FragmentSearch fragmentSearch = new FragmentSearch();
-                fragmentSearch.setSearchType(MediaItemType.RADIO);
-                ((IFragmentsManager) getActivity()).showFragment(R.id.fl_content, fragmentSearch, FragmentSearch.TAG);
-                getActivity().getIntent().removeExtra(ActivityPlayer.ACTIVITY_STARTED_FROM_IN_DEPTH);
-            }
+            FragmentSearch.openFromIntent(getActivity());
         }
 
         currentRoundBtnMode = -1;

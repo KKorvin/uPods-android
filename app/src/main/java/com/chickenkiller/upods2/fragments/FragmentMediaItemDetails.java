@@ -1,7 +1,6 @@
 package com.chickenkiller.upods2.fragments;
 
 import android.app.Fragment;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
@@ -49,7 +48,6 @@ import com.chickenkiller.upods2.utils.GlobalUtils;
 import com.chickenkiller.upods2.utils.Logger;
 import com.chickenkiller.upods2.utils.decorators.DelayedOnClickListener;
 import com.chickenkiller.upods2.utils.enums.ContextMenuType;
-import com.chickenkiller.upods2.utils.enums.MediaItemType;
 import com.chickenkiller.upods2.utils.ui.LetterBitmap;
 import com.chickenkiller.upods2.utils.ui.UIHelper;
 import com.chickenkiller.upods2.views.DetailsScrollView;
@@ -200,18 +198,11 @@ public class FragmentMediaItemDetails extends Fragment implements View.OnTouchLi
             @Override
             public void onClick(View view) {
                 if (GlobalUtils.isInternetConnected()) {
-                    final Intent myIntent = new Intent(getActivity(), ActivityPlayer.class);
                     UniversalPlayer.getInstance().setMediaItem(playableItem, true);
-                    if (FragmentSearch.isActive) {
-                        myIntent.putExtra(ActivityPlayer.ACTIVITY_STARTED_FROM_IN_DEPTH, MediaItemType.RADIO_SEARCH.ordinal());
-                    }
-                    myIntent.putExtra(ActivityPlayer.ACTIVITY_STARTED_FROM, MediaItemType.RADIO.ordinal());
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            getActivity().startActivity(myIntent);
-                            getActivity().overridePendingTransition(R.anim.slide_in_bottom, R.anim.slide_out_bottom);
-                            getActivity().finish();
+                            ActivityPlayer.openWithIntent(getActivity());
                         }
                     });
                 } else {

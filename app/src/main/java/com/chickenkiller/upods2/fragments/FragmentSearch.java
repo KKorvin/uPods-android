@@ -1,5 +1,6 @@
 package com.chickenkiller.upods2.fragments;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -15,12 +16,12 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.chickenkiller.upods2.R;
+import com.chickenkiller.upods2.activity.ActivityPlayer;
 import com.chickenkiller.upods2.controllers.adaperts.MediaItemsAdapter;
 import com.chickenkiller.upods2.controllers.internet.BackendManager;
 import com.chickenkiller.upods2.controllers.player.SmallPlayer;
 import com.chickenkiller.upods2.interfaces.IFragmentsManager;
 import com.chickenkiller.upods2.interfaces.IRequestCallback;
-import com.chickenkiller.upods2.interfaces.ISlidingMenuHolder;
 import com.chickenkiller.upods2.interfaces.IToolbarHolder;
 import com.chickenkiller.upods2.models.MediaItem;
 import com.chickenkiller.upods2.models.Podcast;
@@ -78,7 +79,6 @@ public class FragmentSearch extends Fragment implements SearchView.OnQueryTextLi
         SearchView searchView = (SearchView) searchMenuItem.getActionView();
         searchView.setOnQueryTextListener(this);
         ((IToolbarHolder) getActivity()).getToolbar().setTitle(R.string.search_results);
-        ((ISlidingMenuHolder) getActivity()).setSlidingMenuHeader(getString(R.string.radio_main));
 
         //Featured adapter
         mediaItemsAdapter = new MediaItemsAdapter(getActivity(), R.layout.card_media_item_horizontal, R.layout.media_item_title);
@@ -87,7 +87,7 @@ public class FragmentSearch extends Fragment implements SearchView.OnQueryTextLi
         }
 
         //Featured recycle view
-        rvSearchResults.setAdapter(new SlideInBottomAnimatorAdapter(mediaItemsAdapter,rvSearchResults));
+        rvSearchResults.setAdapter(new SlideInBottomAnimatorAdapter(mediaItemsAdapter, rvSearchResults));
         rvSearchResults.setLayoutManager(layoutManager);
         rvSearchResults.setVisibility(View.INVISIBLE);
         tvStartTyping.setVisibility(View.VISIBLE);
@@ -205,5 +205,20 @@ public class FragmentSearch extends Fragment implements SearchView.OnQueryTextLi
         }
         loadSearchResults(query);
         return false;
+    }
+
+    public static void openFromIntent(Activity activity) {
+        int startedFrom = activity.getIntent().getIntExtra(ActivityPlayer.ACTIVITY_STARTED_FROM_IN_DEPTH, -1);
+        if (startedFrom == MediaItemType.RADIO_SEARCH.ordinal()) {
+            FragmentSearch fragmentSearch = new FragmentSearch();
+            fragmentSearch.setSearchType(MediaItemType.RADIO);
+            ((IFragmentsManager) activity).showFragment(R.id.fl_content, fragmentSearch, FragmentSearch.TAG);
+            activity.getIntent().removeExtra(ActivityPlayer.ACTIVITY_STARTED_FROM_IN_DEPTH);
+        } else if (startedFrom == MediaItemType.PODCAST_SEARCH.ordinal()) {
+            FragmentSearch fragmentSearch = new FragmentSearch();
+            fragmentSearch.setSearchType(MediaItemType.PODCAST);
+            ((IFragmentsManager) activity).showFragment(R.id.fl_content, fragmentSearch, FragmentSearch.TAG);
+            activity.getIntent().removeExtra(ActivityPlayer.ACTIVITY_STARTED_FROM_IN_DEPTH);
+        }
     }
 }

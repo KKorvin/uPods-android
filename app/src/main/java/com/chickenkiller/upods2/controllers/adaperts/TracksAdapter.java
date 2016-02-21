@@ -2,7 +2,6 @@ package com.chickenkiller.upods2.controllers.adaperts;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,7 +15,6 @@ import com.chickenkiller.upods2.controllers.app.ProfileManager;
 import com.chickenkiller.upods2.controllers.internet.DownloadMaster;
 import com.chickenkiller.upods2.controllers.player.UniversalPlayer;
 import com.chickenkiller.upods2.dialogs.DialogFragmentTrackInfo;
-import com.chickenkiller.upods2.fragments.FragmentSearch;
 import com.chickenkiller.upods2.interfaces.IContentLoadListener;
 import com.chickenkiller.upods2.interfaces.IContextMenuManager;
 import com.chickenkiller.upods2.interfaces.IFragmentsManager;
@@ -28,7 +26,6 @@ import com.chickenkiller.upods2.models.MediaItem;
 import com.chickenkiller.upods2.models.Track;
 import com.chickenkiller.upods2.utils.decorators.DelayedOnClickListener;
 import com.chickenkiller.upods2.utils.enums.ContextMenuType;
-import com.chickenkiller.upods2.utils.enums.MediaItemType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -192,14 +189,8 @@ public class TracksAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 if (ProfileManager.getInstance().isDownloaded(iPlayableMediaItem, track)) {
                     track.setAudeoUrl(ProfileManager.getInstance().getDownloadedTrackPath(iPlayableMediaItem, track));
                 }
-                Intent myIntent = new Intent(mContext, ActivityPlayer.class);
-                if (FragmentSearch.isActive) {
-                    myIntent.putExtra(ActivityPlayer.ACTIVITY_STARTED_FROM_IN_DEPTH, MediaItemType.PODCAST_SEARCH.ordinal());
-                }
-                myIntent.putExtra(ActivityPlayer.ACTIVITY_STARTED_FROM, MediaItemType.PODCAST.ordinal());
                 UniversalPlayer.getInstance().setMediaItem(iPlayableMediaItem, true);
-                mContext.startActivity(myIntent);
-                ((Activity) mContext).finish();
+                ActivityPlayer.openWithIntent((Activity) mContext);
             }
         };
     }

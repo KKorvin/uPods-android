@@ -2,20 +2,31 @@ package com.chickenkiller.upods2.fragments;
 
 import android.app.Fragment;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
+import android.support.v7.widget.Toolbar;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.chickenkiller.upods2.R;
 import com.chickenkiller.upods2.controllers.app.LoginMaster;
+import com.chickenkiller.upods2.controllers.app.ProfileManager;
 import com.chickenkiller.upods2.interfaces.ILoginManager;
 import com.chickenkiller.upods2.interfaces.IOperationFinishWithDataCallback;
 import com.chickenkiller.upods2.interfaces.ISlidingMenuHolder;
 import com.chickenkiller.upods2.interfaces.IToolbarHolder;
+import com.chickenkiller.upods2.models.UserProfile;
 import com.chickenkiller.upods2.utils.Logger;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
@@ -43,13 +54,15 @@ public class FragmentProfile extends Fragment {
     private static final String VK_SCOPE = "email";
 
     private LinearLayout lnLogein;
-    private LinearLayout lnLogedin;
+    private LinearLayout lnUsetLogedIn;
 
     private Button btnFacebookLogin;
     private Button btnTwitter;
     private ILoginManager loginManager;
     private ProgressBar progressBar;
     private TwitterAuthClient mTwitterAuthClient;
+
+    private View rootView;
 
     private FacebookCallback facebookCallback = new FacebookCallback<LoginResult>() {
         @Override
@@ -82,27 +95,26 @@ public class FragmentProfile extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        ((IToolbarHolder) getActivity()).getToolbar().setVisibility(View.GONE);
         mTwitterAuthClient = new TwitterAuthClient();
 
-        final View view = inflater.inflate(R.layout.fragment_profile, container, false);
+        rootView = inflater.inflate(R.layout.fragment_profile, container, false);
         loginManager = (ILoginManager) getActivity();
-        lnLogein = (LinearLayout) view.findViewById(R.id.lnLogin);
-        lnLogedin = (LinearLayout) view.findViewById(R.id.lnLogedIn);
-        progressBar = (ProgressBar) view.findViewById(R.id.pbLoading);
+        lnLogein = (LinearLayout) rootView.findViewById(R.id.lnLogin);
+        lnUsetLogedIn = (LinearLayout) rootView.findViewById(R.id.lnLogedIn);
+        progressBar = (ProgressBar) rootView.findViewById(R.id.pbLoading);
 
         progressBar.setVisibility(View.GONE);
 
-        view.findViewById(R.id.btnLogout).setOnClickListener(new View.OnClickListener() {
+        rootView.findViewById(R.id.btnLogout).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 LoginMaster.getInstance().logout();
                 ((ISlidingMenuHolder) getActivity()).getSlidingMenu().updateHeader(true);
-                initLoginUI(view);
+                initLoginUI(rootView);
             }
         });
 
-        view.findViewById(R.id.btnVklogin).setOnClickListener(new View.OnClickListener() {
+        rootView.findViewById(R.id.btnVklogin).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 VKSdk.login(FragmentProfile.this, VK_SCOPE);
@@ -111,11 +123,12 @@ public class FragmentProfile extends Fragment {
 
         if (LoginMaster.getInstance().isLogedIn()) {
             lnLogein.setVisibility(View.GONE);
-            lnLogedin.setVisibility(View.VISIBLE);
+            lnUsetLogedIn.setVisibility(View.VISIBLE);
+            initUserProfileUI();
         } else {
-            initLoginUI(view);
+            initLoginUI(rootView);
         }
-        return view;
+        return rootView;
     }
 
     @Override
@@ -153,7 +166,8 @@ public class FragmentProfile extends Fragment {
                     @Override
                     public void run() {
                         progressBar.setVisibility(View.GONE);
-                        lnLogedin.setVisibility(View.VISIBLE);
+                        lnUsetLogedIn.setVisibility(View.VISIBLE);
+                        initUserProfileUI();
                     }
                 });
             }
@@ -161,9 +175,53 @@ public class FragmentProfile extends Fragment {
         ((ISlidingMenuHolder) getActivity()).getSlidingMenu().updateHeader(true);
     }
 
+    private void initUserProfileUI() {
+        Toolbar toolbar = ((IToolbarHolder) getActivity()).getToolbar();
+        if (toolbar != null) {
+            toolbar.setVisibility(View.VISIBLE);
+            toolbar.setTitle(R.string.profile_my_profile);
+            toolbar.findViewById(R.id.action_search).setVisibility(View.GONE);
+        }
+        final ImageView imgAvatar = (ImageView) rootView.findViewById(R.id.imgAvatar);
+        LoginMaster.getInstance().initUserProfile(new IOperationFinishWithDataCallback() {
+            @Override
+            public void operationFinished(Object data) {
+                UserProfile userProfile = (UserProfile) data;
+                Glide.with(getActivity()).load(userProfile.getProfileImageUrl()).asBitmap().centerCrop().into(new BitmapImageViewTarget(imgAvatar) {
+                    @Override
+                    protected void setResource(Bitmap resource) {
+                        RoundedBitmapDrawable circularBitmapDrawable =
+                                RoundedBitmapDrawableFactory.create(getResources(), resource);
+                        circularBitmapDrawable.setCircular(true);
+                        imgAvatar.setImageDrawable(circularBitmapDrawable);
+                    }
+                });
+            }
+        }, false);
+
+        int radioCount = ProfileManager.getInstance().getSubscribedRadioItems().size();
+        int podcastsCount = ProfileManager.getInstance().getSubscribedPodcasts().size();
+
+        TextView tvRadioCount = (TextView) rootView.findViewById(R.id.tvRadioCount);
+        tvRadioCount.setText(Html.fromHtml(buildCountString(tvRadioCount.getText().toString(), radioCount)));
+
+        TextView tvPodcastsCount = (TextView) rootView.findViewById(R.id.tvPodcastsCount);
+        tvPodcastsCount.setText(Html.fromHtml(buildCountString(tvPodcastsCount.getText().toString(), podcastsCount)));
+    }
+
+    private String buildCountString(String text, int count) {
+        StringBuilder countsBuilder = new StringBuilder();
+        countsBuilder.append("<b>");
+        countsBuilder.append(text);
+        countsBuilder.append("</b>");
+        countsBuilder.append(count);
+        return countsBuilder.toString();
+    }
+
     public void initLoginUI(View rootView) {
+        ((IToolbarHolder) getActivity()).getToolbar().setVisibility(View.GONE);
         lnLogein.setVisibility(View.VISIBLE);
-        lnLogedin.setVisibility(View.GONE);
+        lnUsetLogedIn.setVisibility(View.GONE);
         btnFacebookLogin = (Button) rootView.findViewById(R.id.btnFacebookLogin);
         btnTwitter = (Button) rootView.findViewById(R.id.btnTwitterLogin);
         btnFacebookLogin.setOnClickListener(new View.OnClickListener() {
@@ -180,4 +238,5 @@ public class FragmentProfile extends Fragment {
             }
         });
     }
+
 }

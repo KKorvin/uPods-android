@@ -133,6 +133,11 @@
     <string name="show_notes">Show notes</string>
     <string name="fetching_info">Fetching Info</string>
     <string name="please_wait">Please Wait</string>
+    <string name="subscribed_radio_stations">Subscribed radio stations:</string>
+    <string name="podcasts_in_favorites">Podcasts in favorites:</string>
+    <string name="last_sync_with_cloud">Last sync with cloud:</string>
+    <string name="logout">Logout</string>
+    <string name="sync">Sync</string>
 
 
 </resources>
