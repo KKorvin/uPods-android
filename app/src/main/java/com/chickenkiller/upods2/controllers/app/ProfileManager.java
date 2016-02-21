@@ -366,4 +366,8 @@ public class ProfileManager {
         }
         return rootProfile;
     }
+
+    public void saveToDisk(JSONObject profile){
+        Prefs.putString(ProfileManager.PROFILE_PREF, profile.toString());
+    }
 }
