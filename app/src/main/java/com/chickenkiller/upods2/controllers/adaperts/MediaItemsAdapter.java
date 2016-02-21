@@ -75,13 +75,11 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         public RatingBar rbMediaItem;
         public CardView cvSquare;
         public ImageView imgCardMenuVert;
-        public ImageView imgCardStatusIcon;
 
         public ViewHolderCardItem(View view) {
             super(view);
             this.imgSquare = (ImageViewSquare) view.findViewById(R.id.imgSquare);
             this.imgCardMenuVert = (ImageView) view.findViewById(R.id.imgCardMenuVert);
-            this.imgCardStatusIcon = (ImageView) view.findViewById(R.id.imgCardStatusIcon);
             this.tvItemStatus = (TextView) view.findViewById(R.id.tvItemStatus);
             this.tvSquareTitle = (TextView) view.findViewById(R.id.tvSquareTitle);
             this.tvSquareSubTitle = (TextView) view.findViewById(R.id.tvSquareSubTitle);
@@ -272,14 +270,9 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                 ProfileManager.getInstance().isDownloaded(currentItem)) {
             holder.tvItemStatus.setText(R.string.downloaded);
             holder.tvItemStatus.setVisibility(View.VISIBLE);
-            if (holder.imgCardStatusIcon != null) {
-                holder.imgCardStatusIcon.setVisibility(View.VISIBLE);
-            }
+
         } else {
             holder.tvItemStatus.setVisibility(View.GONE);
-            if (holder.imgCardStatusIcon != null) {
-                holder.imgCardStatusIcon.setVisibility(View.GONE);
-            }
         }
     }
 

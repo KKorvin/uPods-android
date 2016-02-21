@@ -84,9 +84,9 @@
             android:maxLines="2"
             android:paddingLeft="7dp"
             android:text="DOWNLOADED"
-            android:textSize="12sp"
             android:textColor="@color/green_800"
             android:visibility="gone" />
+
 
         <TextView
             android:id="@+id/tvItemCount"
