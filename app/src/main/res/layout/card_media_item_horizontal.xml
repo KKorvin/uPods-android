@@ -87,16 +87,6 @@
             android:textColor="@color/green_800"
             android:visibility="gone" />
 
-        <ImageView
-            android:id="@+id/imgCardStatusIcon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_marginBottom="-3dp"
-            android:layout_toLeftOf="@+id/tvItemStatus"
-            android:src="@drawable/cloud_download48"
-
-            android:visibility="gone" />
 
         <TextView
             android:id="@+id/tvItemCount"
