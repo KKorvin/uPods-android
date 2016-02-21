@@ -29,9 +29,6 @@ import java.util.List;
  */
 public class SlidingMenu implements ISlidingMenuManager {
 
-    private final int DEVIDER_SIZE = 2;
-    private final int DEVIDER_MARGIN = 0;
-
     private Activity activity;
     private DrawerLayout mDrawerLayout;
     private RecyclerView rvDrawerList;

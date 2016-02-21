@@ -57,13 +57,15 @@ public class SyncMaster extends AsyncTask<Void, Void, Void> {
         try {
             Request request = null;
             if (task == TASK_SYNC) {
+                JSONObject jProfile = ProfileManager.getInstance().getAsJson();
+                //Logger.printInfo("jProfile", jProfile.toString());
                 RequestBody formBody = new FormBody.Builder().
                         add("token", token).
                         add("secret", secret).
                         add("type", type).
                         add("task", "sync").
                         add("settings", SettingsManager.getInstace().getAsJson().toString()).
-                        add("profile", ProfileManager.getInstance().getAsJson().toString()).build();
+                        add("profile", jProfile.toString()).build();
                 request = new Request.Builder().url(link.toString()).post(formBody).build();
             } else {
                 RequestBody formBody = new FormBody.Builder().
