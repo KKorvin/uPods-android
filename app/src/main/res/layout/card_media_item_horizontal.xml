@@ -87,19 +87,18 @@
             android:textColor="@color/green_800"
             android:visibility="gone" />
 
-
         <TextView
             android:id="@+id/tvItemCount"
             android:layout_width="wrap_content"
-            android:layout_height="26dp"
+            android:layout_height="20dp"
             android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"
             android:background="@drawable/circle_count"
             android:gravity="center"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
+            android:paddingLeft="7dp"
+            android:paddingRight="7dp"
             android:text="0"
             android:textColor="@color/white"
-            android:textSize="@dimen/default_text_size_16" />
+            android:textSize="@dimen/default_text_size_12" />
     </RelativeLayout>
 </android.support.v7.widget.CardView>
