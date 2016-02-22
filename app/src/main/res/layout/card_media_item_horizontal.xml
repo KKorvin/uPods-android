@@ -85,6 +85,7 @@
             android:paddingLeft="7dp"
             android:text="DOWNLOADED"
             android:textColor="@color/green_800"
+            android:textSize="@dimen/default_text_size_12"
             android:visibility="gone" />
 
         <TextView
