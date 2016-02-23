@@ -170,6 +170,8 @@ public class SettingsManager {
         }
     }
 
+
+
     public void initSettingsFromPreferences() {
         putSettingsValue(JS_NOTIFY_EPISODS, Prefs.getBoolean(JS_NOTIFY_EPISODS, DEFAULT_NOTIFY_EPISODS));
         putSettingsValue(JS_START_SCREEN, Prefs.getString(JS_START_SCREEN, DEFAULT_START_SCREEN));
@@ -184,7 +186,9 @@ public class SettingsManager {
     }
 
     public void saveToDisk(JSONObject settings) {
-        Prefs.putString(JS_SETTINGS, settings.toString());
+        if(settings!=null) {
+            Prefs.putString(JS_SETTINGS, settings.toString());
+        }
     }
 
 }

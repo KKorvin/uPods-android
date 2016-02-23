@@ -107,7 +107,6 @@ public class NetworkTasksService extends IntentService {
                     xr.parse(inputSource);
                     ArrayList<Episod> parsedEpisods = episodsXMLHandler.getParsedEpisods();
                     if (parsedEpisods.size() > podcast.getEpisodsCount()) {//
-                        Logger.printInfo("OLOLO", podcast.getNewEpisodsCount());
                         podcast.setNewEpisodsCount(parsedEpisods.size() - podcast.getEpisodsCount() + podcast.getNewEpisodsCount());
                         podcast.setEpisodsCount(parsedEpisods.size());
                         ProfileManager.getInstance().saveChanges(ProfileManager.ProfileItem.SUBSCRIBDED_PODCASTS);

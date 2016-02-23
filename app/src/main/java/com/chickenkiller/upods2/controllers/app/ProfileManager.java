@@ -368,6 +368,8 @@ public class ProfileManager {
     }
 
     public void saveToDisk(JSONObject profile){
-        Prefs.putString(ProfileManager.PROFILE_PREF, profile.toString());
+        if(profile!=null) {
+            Prefs.putString(ProfileManager.PROFILE_PREF, profile.toString());
+        }
     }
 }

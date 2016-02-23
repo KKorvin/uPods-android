@@ -32,6 +32,7 @@ public class Podcast extends MediaItem implements IPlayableMediaItem, ITrackable
     protected int episodsCount;
 
     protected ArrayList<Episod> episods;
+    protected ArrayList<String> newEpisodsTitles;
 
     public Podcast() {
         super();
@@ -54,6 +55,7 @@ public class Podcast extends MediaItem implements IPlayableMediaItem, ITrackable
         this();
         this.name = name.replace("\n", "").trim();
         this.feedUrl = feedUrl;
+        this.newEpisodsTitles = new ArrayList<>();
     }
 
     public Podcast(JSONObject jsonItem) {
@@ -62,6 +64,14 @@ public class Podcast extends MediaItem implements IPlayableMediaItem, ITrackable
             this.episodsCount = jsonItem.has("episodsCount") ? jsonItem.getInt("episodsCount") : 0;
             this.newEpisodsCount = jsonItem.has("newEpisodsCount") ? jsonItem.getInt("newEpisodsCount") : 0;
             this.description = jsonItem.has("description") ? jsonItem.getString("description") : "";
+
+            if (jsonItem.has("newEpisodsTitles")) {
+                JSONArray jNewEpisodsTitles = jsonItem.getJSONArray("newEpisodsTitles");
+                for (int i = 0; i < jNewEpisodsTitles.length(); i++) {
+                    this.newEpisodsTitles.add(jNewEpisodsTitles.getString(i));
+                }
+            }
+
             if (jsonItem.has("kind")) { //Itunes
                 this.id = jsonItem.has("trackId") ? jsonItem.getInt("trackId") : 0;
                 this.name = jsonItem.has("collectionName") ? jsonItem.getString("collectionName") : "";
@@ -144,6 +154,11 @@ public class Podcast extends MediaItem implements IPlayableMediaItem, ITrackable
             if (convertEpisods) {
                 podcast.put("episods", Episod.toJSONArray(this.episods));
             }
+            JSONArray jNewEpisodsTitles = new JSONArray();
+            for (String episodTitle : newEpisodsTitles) {
+                jNewEpisodsTitles.put(episodTitle);
+            }
+            podcast.put("newEpisodsTitles", jNewEpisodsTitles);
         } catch (JSONException e) {
             Logger.printError(PODCAST_LOG, "Can't convert podcast to json");
             e.printStackTrace();
@@ -315,6 +330,14 @@ public class Podcast extends MediaItem implements IPlayableMediaItem, ITrackable
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public void addNewEpisodsTitle(String episodTitle) {
+        newEpisodsTitles.add(episodTitle);
+    }
+
+    public boolean isNewEpisodTitle(String episodTitle) {
+        return newEpisodsTitles.contains(episodTitle);
     }
 
     @Override

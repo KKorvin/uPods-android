@@ -2,6 +2,7 @@ package com.chickenkiller.upods2.controllers.adaperts;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,6 +24,7 @@ import com.chickenkiller.upods2.interfaces.IPlayableMediaItem;
 import com.chickenkiller.upods2.interfaces.ITrackable;
 import com.chickenkiller.upods2.interfaces.IUIProgressUpdater;
 import com.chickenkiller.upods2.models.MediaItem;
+import com.chickenkiller.upods2.models.Podcast;
 import com.chickenkiller.upods2.models.Track;
 import com.chickenkiller.upods2.utils.decorators.DelayedOnClickListener;
 import com.chickenkiller.upods2.utils.enums.ContextMenuType;
@@ -98,12 +100,20 @@ public class TracksAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     @Override
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
         if (holder instanceof ViewHolderTrack) {
+            ViewHolderTrack viewHolderTrack = (ViewHolderTrack) holder;
             final Track currentTrack = tracks.get(position);
-            ((ViewHolderTrack) holder).tvTitle.setText(currentTrack.getTitle());
-            ((ViewHolderTrack) holder).tvSubTitle.setText(currentTrack.getSubTitle());
-            ((ViewHolderTrack) holder).tvDate.setText(currentTrack.getDate());
-            ((ViewHolderTrack) holder).setClickListner(getShowInfoClick(fragmentsManager, currentTrack, position));
-            ((ViewHolderTrack) holder).setLongClickListner(getTrackLongClickListener(currentTrack));
+
+            //Mark new episods
+            if (iPlayableMediaItem instanceof Podcast && ((Podcast) iPlayableMediaItem).isNewEpisodTitle(currentTrack.getTitle())) {
+                viewHolderTrack.tvTitle.setTypeface(viewHolderTrack.tvTitle.getTypeface(), Typeface.BOLD);
+            } else {
+                viewHolderTrack.tvTitle.setTypeface(viewHolderTrack.tvTitle.getTypeface(), Typeface.NORMAL);
+            }
+            viewHolderTrack.tvTitle.setText(currentTrack.getTitle());
+            viewHolderTrack.tvSubTitle.setText(currentTrack.getSubTitle());
+            viewHolderTrack.tvDate.setText(currentTrack.getDate());
+            viewHolderTrack.setClickListner(getShowInfoClick(fragmentsManager, currentTrack, position));
+            viewHolderTrack.setLongClickListner(getTrackLongClickListener(currentTrack));
             initDownloadBtn(holder, currentTrack, position);
             holder.itemView.setTag(currentTrack);
         }
