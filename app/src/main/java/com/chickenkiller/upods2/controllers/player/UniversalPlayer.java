@@ -99,8 +99,8 @@ public class UniversalPlayer implements MediaPlayer.EventListener {
      * @param needReset - if true will reset the player before changing the mediaItem
      * @param mediaItem
      */
-    public void setMediaItem(IPlayableMediaItem mediaItem, boolean needReset){
-        if(needReset && !isCurrentMediaItem(mediaItem)){
+    public void setMediaItem(IPlayableMediaItem mediaItem, boolean needReset) {
+        if (needReset && !isCurrentMediaItem(mediaItem)) {
             resetPlayer();
         }
         setMediaItem(mediaItem);
@@ -164,6 +164,8 @@ public class UniversalPlayer implements MediaPlayer.EventListener {
                 public void run() {
                     if (mediaItem instanceof RadioItem) {
                         ProfileManager.getInstance().addRecentMediaItem(mediaItem);
+                    } else if (mediaItem instanceof Podcast) {
+                        Podcast.manageNewTracks(mediaItem);
                     }
 
                     if (notificationPanel != null) {

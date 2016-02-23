@@ -122,7 +122,7 @@ public class LoginMaster {
                             if (((JSONObject) data).getJSONObject("result").has("settings")) {
                                 JSONObject settings = new JSONObject(((JSONObject) data).getJSONObject("result").getString("settings"));
                                 SettingsManager.getInstace().readSettings(settings);
-                                SettingsManager.getInstace().saveToDisk(settings);
+                                SettingsManager.getInstace().saveSettings(settings, false);
                             }
                         }
                         SyncMaster profileSyncMaster = new SyncMaster(getLoginType(), getToken(), getSecret(), SyncMaster.TASK_SYNC);

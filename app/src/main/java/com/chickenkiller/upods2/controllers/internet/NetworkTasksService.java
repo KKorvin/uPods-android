@@ -109,6 +109,9 @@ public class NetworkTasksService extends IntentService {
                     if (parsedEpisods.size() > podcast.getEpisodsCount()) {//
                         podcast.setNewEpisodsCount(parsedEpisods.size() - podcast.getEpisodsCount() + podcast.getNewEpisodsCount());
                         podcast.setEpisodsCount(parsedEpisods.size());
+                        for (int i = parsedEpisods.size() - podcast.getNewEpisodsCount(); i < parsedEpisods.size(); i++) {
+                            podcast.addNewEpisodsTitle(parsedEpisods.get(i).getTitle());
+                        }
                         ProfileManager.getInstance().saveChanges(ProfileManager.ProfileItem.SUBSCRIBDED_PODCASTS);
                         SimpleCacheManager.getInstance().removeFromCache(podcast.getFeedUrl());
                         sendNewEpisodsNotification(podcast);

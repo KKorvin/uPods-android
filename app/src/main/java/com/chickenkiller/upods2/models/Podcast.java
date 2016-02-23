@@ -37,6 +37,7 @@ public class Podcast extends MediaItem implements IPlayableMediaItem, ITrackable
     public Podcast() {
         super();
         this.episods = new ArrayList<>();
+        this.newEpisodsTitles = new ArrayList<>();
         this.name = "";
         this.censoredName = "";
         this.artistName = "";
@@ -55,7 +56,6 @@ public class Podcast extends MediaItem implements IPlayableMediaItem, ITrackable
         this();
         this.name = name.replace("\n", "").trim();
         this.feedUrl = feedUrl;
-        this.newEpisodsTitles = new ArrayList<>();
     }
 
     public Podcast(JSONObject jsonItem) {
@@ -132,6 +132,7 @@ public class Podcast extends MediaItem implements IPlayableMediaItem, ITrackable
         this.country = podcast.getCountry();
         this.genre = podcast.getGenre();
         this.episods = new ArrayList<Episod>(podcast.episods);
+        this.newEpisodsTitles = new ArrayList<String>(podcast.newEpisodsTitles);
     }
 
     public JSONObject toJSON(boolean convertEpisods) {
@@ -338,6 +339,24 @@ public class Podcast extends MediaItem implements IPlayableMediaItem, ITrackable
 
     public boolean isNewEpisodTitle(String episodTitle) {
         return newEpisodsTitles.contains(episodTitle);
+    }
+
+    /**
+     * Call it to mark current plying track as not new
+     */
+    public static void manageNewTracks(IPlayableMediaItem mediaItem) {
+        try {
+            Podcast podcast = (Podcast) MediaItem.getMediaItemByName(ProfileManager.getInstance().getSubscribedPodcasts(), mediaItem);
+            Track track = podcast.getSelectedTrack();
+            if (podcast.newEpisodsTitles.contains(track.getTitle())) {
+                podcast.newEpisodsTitles.remove(track.getTitle());
+                podcast.setEpisodsCount(podcast.getNewEpisodsCount() - 1);
+                ProfileManager.getInstance().saveChanges(ProfileManager.ProfileItem.SUBSCRIBDED_PODCASTS, false);
+            }
+        } catch (Exception e) {
+            Logger.printInfo(PODCAST_LOG, "Error in manageNewTracks: ");
+            e.printStackTrace();
+        }
     }
 
     @Override

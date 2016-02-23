@@ -178,7 +178,7 @@ public class ProfileManager {
                     recentRadioItems.remove(recentRadioItems.size() - 1);
                 }
                 recentRadioItems.add(0, (RadioItem) mediaItem);
-                saveChanges(ProfileItem.RECENT_RADIO);
+                saveChanges(ProfileItem.RECENT_RADIO, false);
             }
         }
     }
@@ -308,6 +308,10 @@ public class ProfileManager {
     }
 
     public void saveChanges(ProfileItem profileItem) {
+        saveChanges(profileItem, true);
+    }
+
+    public void saveChanges(ProfileItem profileItem, boolean needSync) {
         String profileJsonStr = Prefs.getString(PROFILE_PREF, null);
         if (profileJsonStr != null) {
             try {
@@ -336,7 +340,7 @@ public class ProfileManager {
                 });
             }
         }
-        if (LoginMaster.getInstance().isLogedIn()) {
+        if (needSync && LoginMaster.getInstance().isLogedIn()) {
             SyncMaster.saveToCloud();
         }
     }
@@ -367,8 +371,8 @@ public class ProfileManager {
         return rootProfile;
     }
 
-    public void saveToDisk(JSONObject profile){
-        if(profile!=null) {
+    public void saveToDisk(JSONObject profile) {
+        if (profile != null) {
             Prefs.putString(ProfileManager.PROFILE_PREF, profile.toString());
         }
     }

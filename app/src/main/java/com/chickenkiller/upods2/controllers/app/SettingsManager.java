@@ -76,13 +76,6 @@ public class SettingsManager {
         return null;
     }
 
-    private void saveSettings(JSONObject settingsObject) {
-        Prefs.putString(JS_SETTINGS, settingsObject.toString());
-        if (LoginMaster.getInstance().isLogedIn()) {
-            SyncMaster.saveToCloud();
-        }
-    }
-
     public int getIntSettingsValue(String key) {
         try {
             return readSettings().getInt(key);
@@ -132,6 +125,7 @@ public class SettingsManager {
         }
     }
 
+
     /**
      * Automaticly saves settings
      *
@@ -139,6 +133,16 @@ public class SettingsManager {
      * @param value
      */
     public void putSettingsValue(String key, Object value) {
+        putSettingsValue(key, value, true);
+    }
+
+    /**
+     * Automaticly saves settings
+     *
+     * @param key
+     * @param value
+     */
+    public void putSettingsValue(String key, Object value, boolean needSync) {
         try {
             JSONObject settingsObject = readSettings();
             if (value instanceof Integer) {
@@ -163,13 +167,12 @@ public class SettingsManager {
                 newStreamsArray.put(streamForItem);
                 settingsObject.put(key, newStreamsArray);
             }
-            saveSettings(settingsObject);
+            saveSettings(settingsObject, needSync);
         } catch (JSONException e) {
             Logger.printInfo(TAG, "Can't put value for key: " + key + " to json settings");
             e.printStackTrace();
         }
     }
-
 
 
     public void initSettingsFromPreferences() {
@@ -185,10 +188,18 @@ public class SettingsManager {
         return readSettings();
     }
 
-    public void saveToDisk(JSONObject settings) {
-        if(settings!=null) {
-            Prefs.putString(JS_SETTINGS, settings.toString());
+
+    public void saveSettings(JSONObject settingsObject, boolean needSync) {
+        if (settingsObject != null) {
+            Prefs.putString(JS_SETTINGS, settingsObject.toString());
+            if (needSync && LoginMaster.getInstance().isLogedIn()) {
+                SyncMaster.saveToCloud();
+            }
         }
+    }
+
+    public void saveSettings(JSONObject settings) {
+        saveSettings(settings, true);
     }
 
 }

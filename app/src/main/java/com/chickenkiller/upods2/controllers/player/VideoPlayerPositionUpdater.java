@@ -44,7 +44,7 @@ public class VideoPlayerPositionUpdater extends PlayerPositionUpdater {
                             universalPlayer.getPlayingMediaItem() instanceof ITrackable && position % SAVE_POSITION_RATE == 0) {
                         Pair<String, String> trackPosition = new Pair<>(((ITrackable) universalPlayer.getPlayingMediaItem()).getSelectedTrack().getTitle(),
                                 String.valueOf(position));
-                        SettingsManager.getInstace().putSettingsValue(SettingsManager.JS_EPISODS_POSITIONS, trackPosition);
+                        SettingsManager.getInstace().putSettingsValue(SettingsManager.JS_EPISODS_POSITIONS, trackPosition, false);
                     }
 
                     Thread.sleep(POSITION_UPDATE_RATE);
