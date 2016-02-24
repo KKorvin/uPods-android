@@ -319,10 +319,9 @@ public class Podcast extends MediaItem implements IPlayableMediaItem, ITrackable
     /**
      * Call it to mark current plying track as not new
      */
-    public static void manageNewTracks(IPlayableMediaItem mediaItem) {
+    public static void manageNewTracks(IPlayableMediaItem mediaItem, Track track) {
         try {
             Podcast podcast = (Podcast) MediaItem.getMediaItemByName(ProfileManager.getInstance().getSubscribedPodcasts(), mediaItem);
-            Track track = podcast.getSelectedTrack();
             if (podcast.newEpisodsTitles.contains(track.getTitle())) {
                 podcast.newEpisodsTitles.remove(track.getTitle());
                 ProfileManager.getInstance().saveChanges(ProfileManager.ProfileItem.SUBSCRIBDED_PODCASTS, false);
