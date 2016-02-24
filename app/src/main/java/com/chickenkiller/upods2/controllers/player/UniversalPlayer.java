@@ -164,8 +164,6 @@ public class UniversalPlayer implements MediaPlayer.EventListener {
                 public void run() {
                     if (mediaItem instanceof RadioItem) {
                         ProfileManager.getInstance().addRecentMediaItem(mediaItem);
-                    } else if (mediaItem instanceof Podcast) {
-                        Podcast.manageNewTracks(mediaItem);
                     }
 
                     if (notificationPanel != null) {
