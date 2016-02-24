@@ -39,7 +39,7 @@ public class SettingsManager {
         super();
     }
 
-    public static SettingsManager getInstace() {
+    public static synchronized SettingsManager getInstace() {
         if (settingsManager == null) {
             settingsManager = new SettingsManager();
         }

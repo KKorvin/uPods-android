@@ -56,7 +56,7 @@ public class LoginMaster {
     }
 
 
-    public static LoginMaster getInstance() {
+    public synchronized static LoginMaster getInstance() {
         if (loginMaster == null) {
             loginMaster = new LoginMaster();
         }

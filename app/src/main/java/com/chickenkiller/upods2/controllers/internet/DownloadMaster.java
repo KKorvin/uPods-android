@@ -57,7 +57,7 @@ public class DownloadMaster {
         this.allTasks = new ArrayList<>();
     }
 
-    public static DownloadMaster getInstance() {
+    public static synchronized DownloadMaster getInstance() {
         if (downloadMaster == null) {
             downloadMaster = new DownloadMaster();
         }

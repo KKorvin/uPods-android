@@ -75,7 +75,7 @@ public class ProfileManager {
         }
     }
 
-    public static ProfileManager getInstance() {
+    public synchronized static ProfileManager getInstance() {
         if (profileManager == null) {
             profileManager = new ProfileManager();
         }

@@ -68,7 +68,7 @@ public class UniversalPlayer implements MediaPlayer.EventListener {
     private UniversalPlayer() {
     }
 
-    public static UniversalPlayer getInstance() {
+    public static synchronized UniversalPlayer getInstance() {
         if (universalPlayer == null) {
             universalPlayer = new UniversalPlayer();
         }

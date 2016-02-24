@@ -58,7 +58,7 @@ public class BackendManager {
         this.client = new OkHttpClient();
     }
 
-    public static BackendManager getInstance() {
+    public static synchronized BackendManager getInstance() {
         if (backendManager == null) {
             backendManager = new BackendManager();
             backendManager.searchQueue = new ArrayList<>();

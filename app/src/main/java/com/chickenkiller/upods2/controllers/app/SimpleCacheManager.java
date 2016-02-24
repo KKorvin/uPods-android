@@ -34,7 +34,7 @@ public class SimpleCacheManager {
         }
     }
 
-    public static SimpleCacheManager getInstance() {
+    public static synchronized SimpleCacheManager getInstance() {
         if (cacheManager == null) {
             cacheManager = new SimpleCacheManager();
         }
