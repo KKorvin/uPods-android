@@ -58,7 +58,6 @@ public class SyncMaster extends AsyncTask<Void, Void, Void> {
             Request request = null;
             if (task == TASK_SYNC) {
                 JSONObject jProfile = ProfileManager.getInstance().getAsJson();
-                //Logger.printInfo("jProfile", jProfile.toString());
                 RequestBody formBody = new FormBody.Builder().
                         add("token", token).
                         add("secret", secret).

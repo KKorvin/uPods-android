@@ -95,8 +95,11 @@ public class FragmentMediaItemDetails extends Fragment implements View.OnTouchLi
     private FloatingActionButton fbDetailsPlay;
     private TracksAdapter tracksAdapter;
     private ProgressBar pbTracks;
+
     private int moveDeltaY;
     private int screenHeight;
+    private boolean isSubscribedToMediaItem;
+
 
     private View.OnClickListener frgamentCloseClickListener = new View.OnClickListener() {
         @Override
@@ -129,11 +132,12 @@ public class FragmentMediaItemDetails extends Fragment implements View.OnTouchLi
         moveDeltaY = 0;
 
         if (playableItem != null) {
+            isSubscribedToMediaItem = ProfileManager.getInstance().isSubscribedToMediaItem(playableItem);
             initImagesColors();
             tvDetailedHeader.setText(playableItem.getName());
             tvDetailedSubHeader.setText(playableItem.getSubHeader());
             tvBottomHeader.setText(playableItem.getBottomHeader());
-            btnSubscribe.setText(ProfileManager.getInstance().isSubscribedToMediaItem(playableItem) ? getString(R.string.unsubscribe) : getString(R.string.subscribe));
+            btnSubscribe.setText( isSubscribedToMediaItem ? getString(R.string.unsubscribe) : getString(R.string.subscribe));
             initSubscribeBtn();
 
             if (playableItem.hasTracks()) {
@@ -301,7 +305,11 @@ public class FragmentMediaItemDetails extends Fragment implements View.OnTouchLi
                                     }
                                     if (playableItem instanceof Podcast) {
                                         ((Podcast) playableItem).setDescription(episodsXMLHandler.getPodcastSummary());
-                                        ((Podcast) playableItem).setEpisodsCount(parsedEpisods.size());
+                                        ((Podcast) playableItem).setTrackCount(String.valueOf(parsedEpisods.size()));
+                                        if(isSubscribedToMediaItem){
+                                            //Save changes to disk to be sure we have recent count of provider's episodes
+                                            ProfileManager.getInstance().saveChanges(ProfileManager.ProfileItem.SUBSCRIBDED_PODCASTS, false);
+                                        }
                                     }
                                     tracksAdapter.addItems(parsedEpisods);
                                     rvTracks.setVisibility(View.VISIBLE);

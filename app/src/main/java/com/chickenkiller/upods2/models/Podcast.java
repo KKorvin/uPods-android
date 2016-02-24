@@ -28,8 +28,6 @@ public class Podcast extends MediaItem implements IPlayableMediaItem, ITrackable
     protected String genre;
     protected String description;
 
-    protected int newEpisodsCount;
-    protected int episodsCount;
 
     protected ArrayList<Episod> episods;
     protected ArrayList<String> newEpisodsTitles;
@@ -46,8 +44,6 @@ public class Podcast extends MediaItem implements IPlayableMediaItem, ITrackable
         this.releaseDate = "";
         this.explicitness = "";
         this.trackCount = "0";
-        this.episodsCount = 0;
-        this.newEpisodsCount = 0;
         this.genre = "";
         this.description = "";
     }
@@ -61,8 +57,6 @@ public class Podcast extends MediaItem implements IPlayableMediaItem, ITrackable
     public Podcast(JSONObject jsonItem) {
         this();
         try {
-            this.episodsCount = jsonItem.has("episodsCount") ? jsonItem.getInt("episodsCount") : 0;
-            this.newEpisodsCount = jsonItem.has("newEpisodsCount") ? jsonItem.getInt("newEpisodsCount") : 0;
             this.description = jsonItem.has("description") ? jsonItem.getString("description") : "";
 
             if (jsonItem.has("newEpisodsTitles")) {
@@ -120,8 +114,6 @@ public class Podcast extends MediaItem implements IPlayableMediaItem, ITrackable
 
     public Podcast(Podcast podcast) {
         this.name = podcast.getName().replace("\n", "").trim();
-        this.newEpisodsCount = podcast.newEpisodsCount;
-        this.episodsCount = podcast.episodsCount;
         this.censoredName = podcast.getCensoredName();
         this.artistName = podcast.getArtistName();
         this.feedUrl = podcast.getFeedUrl();
@@ -139,8 +131,6 @@ public class Podcast extends MediaItem implements IPlayableMediaItem, ITrackable
         JSONObject podcast = new JSONObject();
         try {
             podcast.put("id", this.id);
-            podcast.put("newEpisodsCount", this.newEpisodsCount);
-            podcast.put("episodsCount", this.episodsCount);
             podcast.put("name", this.name);
             podcast.put("censored_name", this.censoredName);
             podcast.put("artist_name", this.artistName);
@@ -152,6 +142,7 @@ public class Podcast extends MediaItem implements IPlayableMediaItem, ITrackable
             podcast.put("track_count", this.trackCount);
             podcast.put("genre", this.genre);
             podcast.put("description", this.description);
+
             if (convertEpisods) {
                 podcast.put("episods", Episod.toJSONArray(this.episods));
             }
@@ -235,22 +226,6 @@ public class Podcast extends MediaItem implements IPlayableMediaItem, ITrackable
     @Override
     public boolean hasTracks() {
         return true;
-    }
-
-    public int getNewEpisodsCount() {
-        return newEpisodsCount;
-    }
-
-    public void setNewEpisodsCount(int newEpisodsCount) {
-        this.newEpisodsCount = newEpisodsCount;
-    }
-
-    public int getEpisodsCount() {
-        return episodsCount;
-    }
-
-    public void setEpisodsCount(int episodsCount) {
-        this.episodsCount = episodsCount;
     }
 
     public void setName(String name) {
@@ -350,7 +325,6 @@ public class Podcast extends MediaItem implements IPlayableMediaItem, ITrackable
             Track track = podcast.getSelectedTrack();
             if (podcast.newEpisodsTitles.contains(track.getTitle())) {
                 podcast.newEpisodsTitles.remove(track.getTitle());
-                podcast.setEpisodsCount(podcast.getNewEpisodsCount() - 1);
                 ProfileManager.getInstance().saveChanges(ProfileManager.ProfileItem.SUBSCRIBDED_PODCASTS, false);
             }
         } catch (Exception e) {
@@ -392,4 +366,7 @@ public class Podcast extends MediaItem implements IPlayableMediaItem, ITrackable
     }
 
 
+    public int getNewEpisodsCount() {
+        return newEpisodsTitles.size();
+    }
 }

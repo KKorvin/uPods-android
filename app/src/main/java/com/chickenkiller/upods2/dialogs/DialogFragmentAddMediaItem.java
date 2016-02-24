@@ -85,7 +85,7 @@ public class DialogFragmentAddMediaItem extends DialogFragment {
             RadioItem radioItem = new RadioItem(etMediaName.getText().toString(), streamUrl, "");
             ProfileManager.getInstance().addSubscribedMediaItem(radioItem);
             Toast.makeText(getActivity(), getString(R.string.radio_added), Toast.LENGTH_SHORT).show();
-        }else  if (mediaItemType == MediaItemType.PODCAST) {
+        } else if (mediaItemType == MediaItemType.PODCAST) {
             Podcast podcast = new Podcast(etMediaName.getText().toString(), etMediaUrl.getText().toString());
             ProfileManager.getInstance().addSubscribedMediaItem(podcast);
             Toast.makeText(getActivity(), getString(R.string.podcast_added), Toast.LENGTH_SHORT).show();
