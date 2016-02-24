@@ -105,7 +105,7 @@ public class TracksAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             final Track currentTrack = tracks.get(position);
 
             //Mark new episods
-            if (iPlayableMediaItem instanceof Podcast && ((Episod) currentTrack).isNotNew &&
+            if (iPlayableMediaItem instanceof Podcast && !((Episod) currentTrack).isNotNew &&
                     ((Podcast) iPlayableMediaItem).isNewEpisodTitle(currentTrack.getTitle())) {
                 viewHolderTrack.tvTitle.setText(Html.fromHtml("<b>" + currentTrack.getTitle() + "</b>"));
             } else {
