@@ -23,6 +23,7 @@ import com.chickenkiller.upods2.interfaces.IOperationFinishCallback;
 import com.chickenkiller.upods2.interfaces.IPlayableMediaItem;
 import com.chickenkiller.upods2.interfaces.ITrackable;
 import com.chickenkiller.upods2.interfaces.IUIProgressUpdater;
+import com.chickenkiller.upods2.models.Episod;
 import com.chickenkiller.upods2.models.MediaItem;
 import com.chickenkiller.upods2.models.Podcast;
 import com.chickenkiller.upods2.models.Track;
@@ -104,7 +105,8 @@ public class TracksAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             final Track currentTrack = tracks.get(position);
 
             //Mark new episods
-            if (iPlayableMediaItem instanceof Podcast && ((Podcast) iPlayableMediaItem).isNewEpisodTitle(currentTrack.getTitle())) {
+            if (iPlayableMediaItem instanceof Podcast && ((Episod) currentTrack).isNotNew &&
+                    ((Podcast) iPlayableMediaItem).isNewEpisodTitle(currentTrack.getTitle())) {
                 viewHolderTrack.tvTitle.setText(Html.fromHtml("<b>" + currentTrack.getTitle() + "</b>"));
             } else {
                 viewHolderTrack.tvTitle.setText(currentTrack.getTitle());

@@ -23,6 +23,7 @@ public class Episod extends Track {
     private String btnDownloadText;
     private String date;
     private String pathOnDisk;
+    public boolean isNotNew; //Used to notify adaper about changes in new episodes
 
     public Episod() {
         super();
@@ -32,6 +33,7 @@ public class Episod extends Track {
         this.btnDownloadText = "";
         this.date = "";
         this.pathOnDisk = "";
+        this.isNotNew = false;
     }
 
     public Episod(JSONObject jsonItem) {

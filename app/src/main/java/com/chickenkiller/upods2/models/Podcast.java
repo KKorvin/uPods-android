@@ -324,6 +324,7 @@ public class Podcast extends MediaItem implements IPlayableMediaItem, ITrackable
             Podcast podcast = (Podcast) MediaItem.getMediaItemByName(ProfileManager.getInstance().getSubscribedPodcasts(), mediaItem);
             if (podcast.newEpisodsTitles.contains(track.getTitle())) {
                 podcast.newEpisodsTitles.remove(track.getTitle());
+                ((Episod) track).isNotNew = true;
                 ProfileManager.getInstance().saveChanges(ProfileManager.ProfileItem.SUBSCRIBDED_PODCASTS, false);
             }
         } catch (Exception e) {
