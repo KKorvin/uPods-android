@@ -2,8 +2,8 @@ package com.chickenkiller.upods2.controllers.adaperts;
 
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -105,11 +105,10 @@ public class TracksAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
             //Mark new episods
             if (iPlayableMediaItem instanceof Podcast && ((Podcast) iPlayableMediaItem).isNewEpisodTitle(currentTrack.getTitle())) {
-                viewHolderTrack.tvTitle.setTypeface(viewHolderTrack.tvTitle.getTypeface(), Typeface.BOLD);
+                viewHolderTrack.tvTitle.setText(Html.fromHtml("<b>" + currentTrack.getTitle() + "</b>"));
             } else {
-                viewHolderTrack.tvTitle.setTypeface(viewHolderTrack.tvTitle.getTypeface(), Typeface.NORMAL);
+                viewHolderTrack.tvTitle.setText(currentTrack.getTitle());
             }
-            viewHolderTrack.tvTitle.setText(currentTrack.getTitle());
             viewHolderTrack.tvSubTitle.setText(currentTrack.getSubTitle());
             viewHolderTrack.tvDate.setText(currentTrack.getDate());
             viewHolderTrack.setClickListner(getShowInfoClick(fragmentsManager, currentTrack, position));
@@ -199,7 +198,7 @@ public class TracksAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 if (ProfileManager.getInstance().isDownloaded(iPlayableMediaItem, track)) {
                     track.setAudeoUrl(ProfileManager.getInstance().getDownloadedTrackPath(iPlayableMediaItem, track));
                 }
-                Podcast.manageNewTracks(iPlayableMediaItem);
+                Podcast.manageNewTracks(iPlayableMediaItem, track);
                 notifyDataSetChanged();
                 UniversalPlayer.getInstance().setMediaItem(iPlayableMediaItem, true);
                 ActivityPlayer.openWithIntent((Activity) mContext);
@@ -229,7 +228,7 @@ public class TracksAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 dialogFragmentTrackInfo.setTrack(track);
                 dialogFragmentTrackInfo.setStreamClickListener(getPlayClickListener(position));
                 fragmentsManager.showDialogFragment(dialogFragmentTrackInfo);
-                Podcast.manageNewTracks(iPlayableMediaItem);
+                Podcast.manageNewTracks(iPlayableMediaItem, track);
                 notifyDataSetChanged();
             }
         };
