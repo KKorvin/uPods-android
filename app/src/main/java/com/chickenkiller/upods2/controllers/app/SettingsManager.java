@@ -25,6 +25,8 @@ public class SettingsManager {
 
     private static SettingsManager settingsManager;
 
+    public static final String PREFS_LAST_CLOUD_SYNC = "last_sync";
+
     public static final String JS_PODCASTS_UPDATE_TIME = "podcasts_update_time";
     public static final String JS_START_SCREEN = "start_screen";
     public static final String JS_NOTIFY_EPISODS = "notify_episods";

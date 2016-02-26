@@ -74,67 +74,77 @@
         android:id="@+id/lnLogedIn"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="20dp"
         android:orientation="vertical"
         android:visibility="visible">
 
-        <ImageView
-            android:id="@+id/imgAvatar"
-            android:layout_width="200dp"
-            android:layout_height="200dp"
-            android:layout_gravity="center_horizontal" />
-
-        <TextView
-            android:id="@+id/tvRadioCount"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="80dp"
-            android:layout_marginTop="10dp"
-            android:text="@string/subscribed_radio_stations"
-            android:textSize="16sp" />
-
-        <TextView
-            android:id="@+id/tvPodcastsCount"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="80dp"
-            android:layout_marginTop="10dp"
-            android:text="@string/podcasts_in_favorites"
-            android:textSize="16sp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="80dp"
-            android:layout_marginTop="10dp"
-            android:text="@string/last_sync_with_cloud"
-            android:textSize="16sp" />
-
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="50dp"
-            android:orientation="horizontal"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp"
-            android:weightSum="100">
+            android:background="@color/light_blue_800"
+            android:paddingTop="30dp">
 
-            <Button
-                android:id="@+id/btnLogout"
-                android:layout_width="0dp"
+            <ImageButton
+                android:id="@+id/imgProfileArrowLeft"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="50"
-                android:text="@string/logout" />
+                android:layout_alignParentLeft="true"
+                android:layout_marginLeft="10dp"
+                android:background="@drawable/selector_white_btn"
+                android:padding="10dp"
+                android:src="@drawable/ic_action_arrow_left" />
 
-            <Button
-                android:id="@+id/btnSync"
-                android:layout_width="0dp"
+            <ImageButton
+                android:id="@+id/imgProfileDots"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="50"
-                android:text="@string/sync" />
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="10dp"
+                android:background="@drawable/selector_white_btn"
+                android:padding="10dp"
+                android:src="@drawable/ic_dots_vertical_white_24dp" />
 
-        </LinearLayout>
+            <ImageView
+                android:id="@+id/imgAvatar"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_below="@+id/imgProfileArrowLeft"
+                android:layout_marginBottom="20dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="30dp"
+                android:src="@drawable/ic_temp" />
 
+            <TextView
+                android:id="@+id/tvUserName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/imgProfileArrowLeft"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="40dp"
+                android:layout_toRightOf="@+id/imgAvatar"
+                android:text="Test title"
+                android:textColor="@color/white"
+                android:textSize="@dimen/default_text_size_18" />
+
+            <TextView
+                android:id="@+id/tvUserStatus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tvUserName"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="5dp"
+                android:layout_toRightOf="@+id/imgAvatar"
+                android:text="Online"
+                android:textColor="@color/blue_grey_800"
+                android:textSize="@dimen/default_text_size_16" />
+        </RelativeLayout>
+
+        <ListView
+            android:id="@+id/lvProfile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="false"
+            android:focusable="false"
+            android:listSelector="@android:color/transparent"></ListView>
 
     </LinearLayout>
 

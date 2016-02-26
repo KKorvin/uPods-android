@@ -134,10 +134,13 @@
     <string name="fetching_info">Fetching Info</string>
     <string name="please_wait">Please Wait</string>
     <string name="subscribed_radio_stations">Subscribed radio stations:</string>
-    <string name="podcasts_in_favorites">Podcasts in favorites:</string>
+    <string name="subscribed_podcasts">Subscribed podcasts:</string>
+    <string name="downloaded_podcasts">Downloaded podcasts:</string>
     <string name="last_sync_with_cloud">Last sync with cloud:</string>
     <string name="logout">Logout</string>
     <string name="sync">Sync</string>
+    <string name="syncing">Syncing...</string>
+    <string name="profile">Profile</string>
 
 
 </resources>

@@ -13,6 +13,7 @@ import com.chickenkiller.upods2.R;
 import com.chickenkiller.upods2.controllers.app.ProfileManager;
 import com.chickenkiller.upods2.controllers.app.SettingsManager;
 import com.chickenkiller.upods2.controllers.internet.BackendManager;
+import com.chickenkiller.upods2.controllers.internet.SyncMaster;
 import com.chickenkiller.upods2.controllers.player.UniversalPlayer;
 import com.chickenkiller.upods2.dialogs.DialogFragmentAddMediaItem;
 import com.chickenkiller.upods2.dialogs.DialogFragmentConfarmation;
@@ -20,6 +21,7 @@ import com.chickenkiller.upods2.dialogs.DialogFragmentMessage;
 import com.chickenkiller.upods2.fragments.FragmentPlayer;
 import com.chickenkiller.upods2.interfaces.IFragmentsManager;
 import com.chickenkiller.upods2.interfaces.IOperationFinishCallback;
+import com.chickenkiller.upods2.interfaces.IOperationFinishWithDataCallback;
 import com.chickenkiller.upods2.interfaces.IPlayableMediaItem;
 import com.chickenkiller.upods2.interfaces.IRequestCallback;
 import com.chickenkiller.upods2.models.Podcast;
@@ -154,4 +156,21 @@ public class ContextMenuHelper {
         });
     }
 
+
+    public static void syncWithCloud(Activity activity, final IOperationFinishCallback onContextItemSelected) {
+        final MaterialDialog progressDialog = new MaterialDialog.Builder(activity)
+                .title(R.string.syncing)
+                .content(R.string.please_wait)
+                .progress(true, 0)
+                .show();
+        SyncMaster.saveToCloud(new IOperationFinishWithDataCallback() {
+            @Override
+            public void operationFinished(Object data) {
+                progressDialog.dismiss();
+                if (onContextItemSelected != null) {
+                    onContextItemSelected.operationFinished();
+                }
+            }
+        });
+    }
 }

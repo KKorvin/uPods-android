@@ -12,9 +12,11 @@ import com.chickenkiller.upods2.controllers.app.UpodsApplication;
 import java.io.File;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -25,15 +27,10 @@ import java.util.regex.Pattern;
  */
 public class GlobalUtils {
 
-    public static String parserDateToUS(String date) {
-        try {
-            SimpleDateFormat dateFormat = new SimpleDateFormat("EEE, dd MMM yyyy hh:mm:ss Z");
-            Date inputDate = dateFormat.parse(date);
-            dateFormat = new SimpleDateFormat("MMM dd,yyyy hh:mm a");
-            date = dateFormat.format(inputDate);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+    public static String getCurrentDateTimeUS() {
+        DateFormat df = new SimpleDateFormat("d MMM, HH:mm");
+        String date = df.format(Calendar.getInstance().getTime());
+        Logger.printInfo("Sync date", date);
         return date;
     }
 
@@ -138,4 +135,6 @@ public class GlobalUtils {
         str = rackingSystemSb.toString();
         return str;
     }
+
+
 }

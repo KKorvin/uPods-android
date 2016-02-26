@@ -100,7 +100,8 @@ public class LoginMaster {
 
 
     public void syncWithCloud(final IOperationFinishWithDataCallback iOperationFinishCallback) {
-        if (isLogedIn()) {
+        boolean isLoggedIn = isLogedIn();
+        if (isLoggedIn) {
             IOperationFinishWithDataCallback syncFinishedCallback = new IOperationFinishWithDataCallback() {
                 @Override
                 public void operationFinished(Object data) {

@@ -6,28 +6,34 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
-import android.support.v7.widget.Toolbar;
-import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.chickenkiller.upods2.R;
+import com.chickenkiller.upods2.controllers.adaperts.ProfileItemsAdapter;
 import com.chickenkiller.upods2.controllers.app.LoginMaster;
-import com.chickenkiller.upods2.controllers.app.ProfileManager;
+import com.chickenkiller.upods2.interfaces.IContextMenuManager;
+import com.chickenkiller.upods2.interfaces.IControlStackHistory;
+import com.chickenkiller.upods2.interfaces.IFragmentsManager;
 import com.chickenkiller.upods2.interfaces.ILoginManager;
+import com.chickenkiller.upods2.interfaces.IOperationFinishCallback;
 import com.chickenkiller.upods2.interfaces.IOperationFinishWithDataCallback;
 import com.chickenkiller.upods2.interfaces.ISlidingMenuHolder;
 import com.chickenkiller.upods2.interfaces.IToolbarHolder;
+import com.chickenkiller.upods2.models.ProfileItem;
 import com.chickenkiller.upods2.models.UserProfile;
 import com.chickenkiller.upods2.utils.Logger;
+import com.chickenkiller.upods2.utils.decorators.DelayedOnClickListener;
+import com.chickenkiller.upods2.utils.enums.ContextMenuType;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.login.LoginManager;
@@ -47,7 +53,7 @@ import java.util.Arrays;
 /**
  * Created by alonzilberman on 8/8/15.
  */
-public class FragmentProfile extends Fragment {
+public class FragmentProfile extends Fragment implements IControlStackHistory {
 
     public static final String TAG = "fragment_profile";
     private static final String FB_PERMISSIONS = "public_profile";
@@ -61,6 +67,7 @@ public class FragmentProfile extends Fragment {
     private ILoginManager loginManager;
     private ProgressBar progressBar;
     private TwitterAuthClient mTwitterAuthClient;
+    private boolean skipAddingToHistory;
 
     private View rootView;
 
@@ -96,6 +103,7 @@ public class FragmentProfile extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mTwitterAuthClient = new TwitterAuthClient();
+        ((IToolbarHolder) getActivity()).getToolbar().setVisibility(View.GONE);
 
         rootView = inflater.inflate(R.layout.fragment_profile, container, false);
         loginManager = (ILoginManager) getActivity();
@@ -104,15 +112,6 @@ public class FragmentProfile extends Fragment {
         progressBar = (ProgressBar) rootView.findViewById(R.id.pbLoading);
 
         progressBar.setVisibility(View.GONE);
-
-        rootView.findViewById(R.id.btnLogout).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                LoginMaster.getInstance().logout();
-                ((ISlidingMenuHolder) getActivity()).getSlidingMenu().updateHeader(true);
-                initLoginUI(rootView);
-            }
-        });
 
         rootView.findViewById(R.id.btnVklogin).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -176,17 +175,12 @@ public class FragmentProfile extends Fragment {
     }
 
     private void initUserProfileUI() {
-        Toolbar toolbar = ((IToolbarHolder) getActivity()).getToolbar();
-        if (toolbar != null) {
-            toolbar.setVisibility(View.VISIBLE);
-            toolbar.setTitle(R.string.profile_my_profile);
-            toolbar.findViewById(R.id.action_search).setVisibility(View.GONE);
-        }
         final ImageView imgAvatar = (ImageView) rootView.findViewById(R.id.imgAvatar);
         LoginMaster.getInstance().initUserProfile(new IOperationFinishWithDataCallback() {
             @Override
             public void operationFinished(Object data) {
                 UserProfile userProfile = (UserProfile) data;
+                ((TextView) rootView.findViewById(R.id.tvUserName)).setText(((UserProfile) data).getName());
                 Glide.with(getActivity()).load(userProfile.getProfileImageUrl()).asBitmap().centerCrop().into(new BitmapImageViewTarget(imgAvatar) {
                     @Override
                     protected void setResource(Bitmap resource) {
@@ -199,27 +193,41 @@ public class FragmentProfile extends Fragment {
             }
         }, false);
 
-        int radioCount = ProfileManager.getInstance().getSubscribedRadioItems().size();
-        int podcastsCount = ProfileManager.getInstance().getSubscribedPodcasts().size();
+        LayoutInflater inflater = LayoutInflater.from(getActivity());
+        View lvHeaderView = inflater.inflate(R.layout.profile_item_header, null, false);
 
-        TextView tvRadioCount = (TextView) rootView.findViewById(R.id.tvRadioCount);
-        tvRadioCount.setText(Html.fromHtml(buildCountString(tvRadioCount.getText().toString(), radioCount)));
 
-        TextView tvPodcastsCount = (TextView) rootView.findViewById(R.id.tvPodcastsCount);
-        tvPodcastsCount.setText(Html.fromHtml(buildCountString(tvPodcastsCount.getText().toString(), podcastsCount)));
-    }
+        ListView lvProfile = (ListView) rootView.findViewById(R.id.lvProfile);
+        lvProfile.addHeaderView(lvHeaderView);
+        lvProfile.setHeaderDividersEnabled(false);
+        ProfileItemsAdapter profileItemsAdapter = new ProfileItemsAdapter(getActivity(), R.layout.profile_item);
+        profileItemsAdapter.addAll(ProfileItem.fromLoggedinUser(getActivity()));
+        lvProfile.setAdapter(profileItemsAdapter);
 
-    private String buildCountString(String text, int count) {
-        StringBuilder countsBuilder = new StringBuilder();
-        countsBuilder.append("<b>");
-        countsBuilder.append(text);
-        countsBuilder.append("</b>");
-        countsBuilder.append(count);
-        return countsBuilder.toString();
+        rootView.findViewById(R.id.imgProfileArrowLeft).setOnClickListener(new DelayedOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getActivity().onBackPressed();
+            }
+        }));
+
+        rootView.findViewById(R.id.imgProfileDots).setOnClickListener(new DelayedOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((IContextMenuManager) getActivity()).openContextMenu(v, ContextMenuType.PROFILE,
+                        null, new IOperationFinishCallback() {
+                            @Override
+                            public void operationFinished() {
+                                FragmentProfile fragmentProfile = new FragmentProfile();
+                                fragmentProfile.skipAddingToHistory = true;
+                                ((IFragmentsManager) getActivity()).showFragment(R.id.fl_content, fragmentProfile, TAG);
+                            }
+                        });
+            }
+        }));
     }
 
     public void initLoginUI(View rootView) {
-        ((IToolbarHolder) getActivity()).getToolbar().setVisibility(View.GONE);
         lnLogein.setVisibility(View.VISIBLE);
         lnUsetLogedIn.setVisibility(View.GONE);
         btnFacebookLogin = (Button) rootView.findViewById(R.id.btnFacebookLogin);
@@ -239,4 +247,8 @@ public class FragmentProfile extends Fragment {
         });
     }
 
+    @Override
+    public boolean shouldBeAddedToStack() {
+        return !skipAddingToHistory;
+    }
 }

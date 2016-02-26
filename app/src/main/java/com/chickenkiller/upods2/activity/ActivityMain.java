@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.chickenkiller.upods2.R;
+import com.chickenkiller.upods2.controllers.app.LoginMaster;
 import com.chickenkiller.upods2.controllers.app.ProfileManager;
 import com.chickenkiller.upods2.controllers.app.SettingsManager;
 import com.chickenkiller.upods2.controllers.internet.NetworkTasksService;
@@ -284,6 +285,8 @@ public class ActivityMain extends BasicActivity implements IOverlayable, IToolba
             if (ProfileManager.getInstance().isDownloaded((IPlayableMediaItem) mediaItem, track)) {
                 menu.add(getString(R.string.delete));
             }
+        } else if (contextMenuType == ContextMenuType.PROFILE) {
+            inflater.inflate(R.menu.menu_logedin_profile, menu);
         } else {
             inflater.inflate(R.menu.menu_activity_main, menu);
         }
@@ -306,6 +309,14 @@ public class ActivityMain extends BasicActivity implements IOverlayable, IToolba
             MediaItem mediaItem = ((MediaItem.MediaItemBucket) currentContextMenuData).mediaItem;
             Track track = ((MediaItem.MediaItemBucket) currentContextMenuData).track;
             ContextMenuHelper.removeDonwloadedTrack(this, track, (IPlayableMediaItem) mediaItem, onContextItemSelected);
+        } else if (id == R.id.itemLogout) {
+            LoginMaster.getInstance().logout();
+            getSlidingMenu().updateHeader(true);
+            if (onContextItemSelected != null) {
+                onContextItemSelected.operationFinished();
+            }
+        } else if (id == R.id.itemSync) {
+            ContextMenuHelper.syncWithCloud(this, onContextItemSelected);
         }
         return super.onContextItemSelected(item);
     }

@@ -6,6 +6,7 @@ import com.chickenkiller.upods2.controllers.app.LoginMaster;
 import com.chickenkiller.upods2.controllers.app.ProfileManager;
 import com.chickenkiller.upods2.controllers.app.SettingsManager;
 import com.chickenkiller.upods2.interfaces.IOperationFinishWithDataCallback;
+import com.chickenkiller.upods2.utils.GlobalUtils;
 import com.chickenkiller.upods2.utils.Logger;
 import com.chickenkiller.upods2.utils.ServerApi;
 import com.pixplicity.easyprefs.library.Prefs;
@@ -81,6 +82,7 @@ public class SyncMaster extends AsyncTask<Void, Void, Void> {
                     String token = result.getString("global_token");
                     Prefs.putString(GLOBAL_TOKEN, token);
                 }
+                Prefs.putString(SettingsManager.PREFS_LAST_CLOUD_SYNC, GlobalUtils.getCurrentDateTimeUS());
             } else {
                 if (result.has("result") && result.getJSONObject("result").has("global_token")) {
                     String token = result.getJSONObject("result").getString("global_token");
@@ -107,10 +109,18 @@ public class SyncMaster extends AsyncTask<Void, Void, Void> {
         }
     }
 
-    public static void saveToCloud() {
+
+    public static void saveToCloud(IOperationFinishWithDataCallback operationFinishCallback) {
         LoginMaster loginMaster = LoginMaster.getInstance();
         SyncMaster profileSyncMaster = new SyncMaster(loginMaster.getLoginType(),
                 loginMaster.getToken(), loginMaster.getSecret(), SyncMaster.TASK_SYNC);
+        if (operationFinishCallback != null) {
+            profileSyncMaster.setProfileSyncedCallback(operationFinishCallback);
+        }
         profileSyncMaster.execute();
+    }
+
+    public static void saveToCloud() {
+        saveToCloud(null);
     }
 }
