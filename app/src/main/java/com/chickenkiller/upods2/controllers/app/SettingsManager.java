@@ -152,7 +152,7 @@ public class SettingsManager {
             } else if (value instanceof Boolean) {
                 settingsObject.put(key, (boolean) value);
             } else if (value instanceof String) {
-                settingsObject.put(key, (String) value);
+                settingsObject.put(key, value);
             } else if (value instanceof Pair) {
                 String pairKey = (String) ((Pair) value).first;
                 String pairValue = (String) ((Pair) value).second;

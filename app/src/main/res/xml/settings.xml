@@ -43,6 +43,13 @@
             android:summary="%s"
             android:title="@string/checking_new_episods_rate" />
 
+        <Preference
+            android:defaultValue="/airtune"
+            android:key="podcasts_default_folder"
+            android:title="@string/downloaded_pod_folder">
+
+        </Preference>
+
     </PreferenceCategory>
 
 </PreferenceScreen>

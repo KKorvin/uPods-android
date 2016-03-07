@@ -18,12 +18,12 @@
     <com.chickenkiller.upods2.views.CircleIndicator
         android:id="@+id/indicatorHelp"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:layout_marginBottom="120dp"
-        CircleIndicator:ci_background="@color/whiteGray"
+        android:layout_height="20dp"
+        android:layout_marginBottom="60dp"
+        CircleIndicator:ci_background="@color/grey_300"
         CircleIndicator:ci_gravity="center"
-        CircleIndicator:ci_margin="5dp"
+        CircleIndicator:ci_margin="4dp"
         CircleIndicator:ci_mode="outside"
-        CircleIndicator:ci_radius="10dp"
+        CircleIndicator:ci_radius="4dp"
         CircleIndicator:ci_selected_background="@color/pink_A400" />
 </LinearLayout>

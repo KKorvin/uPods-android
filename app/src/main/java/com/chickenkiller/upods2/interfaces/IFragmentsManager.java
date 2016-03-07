@@ -9,9 +9,9 @@ import android.app.Fragment;
  */
 public interface IFragmentsManager {
 
-    public static enum FragmentOpenType {REPLACE, OVERLAY}
+    enum FragmentOpenType {REPLACE, OVERLAY}
 
-    public static enum FragmentAnimationType {DEFAULT, BOTTOM_TOP}
+    enum FragmentAnimationType {DEFAULT, BOTTOM_TOP}
 
 
     void showFragment(int id, Fragment fragment, String tag, FragmentOpenType openType, FragmentAnimationType animationType);

@@ -7,7 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.chickenkiller.upods2.R;
 
@@ -26,6 +26,8 @@ public class FragmentHelpItem extends Fragment {
     }
 
     private ImageView imgHelpTip;
+    private TextView tvHelpTitle;
+    private TextView tvHelpText;
     private Button btnCloseHelp;
     private View.OnClickListener closeClickListener;
 
@@ -36,6 +38,8 @@ public class FragmentHelpItem extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_help_item, container, false);
         imgHelpTip = (ImageView) view.findViewById(R.id.imgHelpTip);
+        tvHelpTitle = (TextView) view.findViewById(R.id.tvHelpTitle);
+        tvHelpText = (TextView) view.findViewById(R.id.tvHelpText);
         btnCloseHelp = (Button) view.findViewById(R.id.btnCloseHelp);
         if (closeClickListener != null) {
             btnCloseHelp.setVisibility(View.VISIBLE);
@@ -55,17 +59,26 @@ public class FragmentHelpItem extends Fragment {
 
     private void setCurrentTipImage() {
         switch (index) {
-            case 0:
-                imgHelpTip.setImageResource(R.drawable.tw__share_email_header);
+            case 0: {
+                imgHelpTip.setImageResource(R.drawable.help_itunes);
+                tvHelpTitle.setText(getString(R.string.enjoy_free_music));
+                tvHelpText.setText(getString(R.string.help_free_music));
                 break;
+            }
             case 1:
-                imgHelpTip.setImageResource(R.drawable.tw__share_email_header);
+                imgHelpTip.setImageResource(R.drawable.help_twitter);
+                tvHelpTitle.setText(getString(R.string.handmade_tops));
+                tvHelpText.setText(getString(R.string.help_handmade_tops));
                 break;
             case 2:
-                imgHelpTip.setImageResource(R.drawable.tw__share_email_header);
+                imgHelpTip.setImageResource(R.drawable.help_sketch);
+                tvHelpTitle.setText(getString(R.string.zero_ads));
+                tvHelpText.setText(getString(R.string.help_zero_ads));
                 break;
             case 3:
-                imgHelpTip.setImageResource(R.drawable.tw__share_email_header);
+                imgHelpTip.setImageResource(R.drawable.help_cloud);
+                tvHelpTitle.setText(getString(R.string.help_cloud_sync_title));
+                tvHelpText.setText(getString(R.string.help_cloud_sync));
                 break;
         }
     }

@@ -29,7 +29,7 @@ public class HelpPagesAdapter extends FragmentStatePagerAdapter {
         Fragment currentFragment = new FragmentHelpItem();
         ((FragmentHelpItem) currentFragment).setIndex(position);
         Logger.printInfo("position", String.valueOf(position));
-        if (position == HELP_PAGES_COUNT-1) {
+        if (position == HELP_PAGES_COUNT - 1) {
             ((FragmentHelpItem) currentFragment).setCloseClickListener(closeClickListener);
         }
         return currentFragment;

@@ -7,6 +7,6 @@ import android.support.v7.widget.Toolbar;
  */
 public interface IToolbarHolder {
 
-    public Toolbar getToolbar();
+    Toolbar getToolbar();
 
 }

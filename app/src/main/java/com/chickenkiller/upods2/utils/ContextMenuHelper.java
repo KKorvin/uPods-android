@@ -93,7 +93,7 @@ public class ContextMenuHelper {
         } else {
             new MaterialDialog.Builder(activity).title(R.string.select_stream_quality)
                     .items(availableStreams)
-                    .itemsCallbackSingleChoice(((RadioItem) playableMediaItem).getSelectedStreamAsNumber(availableStreams),
+                    .itemsCallbackSingleChoice(playableMediaItem.getSelectedStreamAsNumber(availableStreams),
                             new MaterialDialog.ListCallbackSingleChoice() {
                                 @Override
                                 public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
