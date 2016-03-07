@@ -150,4 +150,8 @@
     <string name="help_zero_ads">We are not showing any annoying advertise in our app. At all.</string>
     <string name="help_cloud_sync_title">Cloud Sync</string>
     <string name="help_cloud_sync">Sync your profile across all devices. Desktop and IOS versions are coming soon.</string>
+    <string name="empty_dowloaded_podcasts">All your downloaded podcasts will be shown here</string>
+    <string name="empty_favorite_podcasts">Add podcasts to favorite and it will be shown here</string>
+    <string name="empty_radio_subscribed">Your subscribed radio stations will be here</string>
+    <string name="empty_radio_recent">Start listening radio stations. Your recent one will be added here.</string>
 </resources>
