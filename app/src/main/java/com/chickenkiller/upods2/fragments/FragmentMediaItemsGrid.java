@@ -54,7 +54,9 @@ public class FragmentMediaItemsGrid extends Fragment implements ICustumziedBackP
         vpMediaTabs.setBackgroundResource(R.color.color_primary);
 
         Toolbar toolbar = ((IToolbarHolder) getActivity()).getToolbar();
+        toolbar.setVisibility(View.VISIBLE);
         toolbar.findViewById(R.id.action_search).setVisibility(View.VISIBLE);
+
         if (mediaItemType == MediaItemType.RADIO) {
             vpMediaTabs.setTabMode(TabLayout.MODE_FIXED);
             vpMedia.setPagingEnabled(false);
