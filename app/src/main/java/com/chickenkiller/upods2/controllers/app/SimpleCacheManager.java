@@ -41,7 +41,7 @@ public class SimpleCacheManager {
         return cacheManager;
     }
 
-    private String shortifyFileName(String fileName) {
+    public String shortifyFileName(String fileName) {
         return fileName.replaceAll(FILE_NAME_SHORTIFY_REGEX, "");
     }
 

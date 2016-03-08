@@ -28,13 +28,12 @@ public class Podcast extends MediaItem implements IPlayableMediaItem, ITrackable
     protected String genre;
     protected String description;
 
-
-    protected ArrayList<Episod> episods;
+    protected ArrayList<Episode> episodes;
     protected ArrayList<String> newEpisodsTitles;
 
     public Podcast() {
         super();
-        this.episods = new ArrayList<>();
+        this.episodes = new ArrayList<>();
         this.newEpisodsTitles = new ArrayList<>();
         this.name = "";
         this.censoredName = "";
@@ -98,10 +97,10 @@ public class Podcast extends MediaItem implements IPlayableMediaItem, ITrackable
                 if (jsonItem.has("genres") && jsonItem.getJSONArray("genres").length() > 0) {
                     this.genre = jsonItem.getJSONArray("genres").getString(0);
                 }
-                if (jsonItem.has("episods")) {
-                    JSONArray jsonEpisods = jsonItem.getJSONArray("episods");
-                    for (int i = 0; i < jsonEpisods.length(); i++) {
-                        this.episods.add(new Episod(jsonEpisods.getJSONObject(i)));
+                if (jsonItem.has("episodes")) {
+                    JSONArray jsonEpisodes = jsonItem.getJSONArray("episodes");
+                    for (int i = 0; i < jsonEpisodes.length(); i++) {
+                        this.episodes.add(new Episode(jsonEpisodes.getJSONObject(i)));
                     }
                 }
             }
@@ -123,7 +122,7 @@ public class Podcast extends MediaItem implements IPlayableMediaItem, ITrackable
         this.trackCount = podcast.getTrackCount();
         this.country = podcast.getCountry();
         this.genre = podcast.getGenre();
-        this.episods = new ArrayList<Episod>(podcast.episods);
+        this.episodes = new ArrayList<Episode>(podcast.episodes);
         this.newEpisodsTitles = new ArrayList<String>(podcast.newEpisodsTitles);
     }
 
@@ -144,7 +143,7 @@ public class Podcast extends MediaItem implements IPlayableMediaItem, ITrackable
             podcast.put("description", this.description);
 
             if (convertEpisods) {
-                podcast.put("episods", Episod.toJSONArray(this.episods));
+                podcast.put("episodes", Episode.toJSONArray(this.episodes));
             }
             JSONArray jNewEpisodsTitles = new JSONArray();
             for (String episodTitle : newEpisodsTitles) {
@@ -207,15 +206,15 @@ public class Podcast extends MediaItem implements IPlayableMediaItem, ITrackable
 
     @Override
     public String getAudeoLink() {
-        for (Episod episod : episods) {
-            if (episod.isSelected) {
-                if (ProfileManager.getInstance().isDownloaded(this, episod)) {
-                    episod.setPathOnDisk(ProfileManager.getInstance().getDownloadedTrackPath(this, episod));
+        for (Episode episode : episodes) {
+            if (episode.isSelected) {
+                if (ProfileManager.getInstance().isDownloaded(this, episode)) {
+                    episode.setPathOnDisk(ProfileManager.getInstance().getDownloadedTrackPath(this, episode));
                 }
-                return episod.getAudeoUrl();
+                return episode.getAudeoUrl();
             }
         }
-        return episods.get(0).getAudeoUrl();
+        return episodes.get(0).getAudeoUrl();
     }
 
     @Override
@@ -300,16 +299,16 @@ public class Podcast extends MediaItem implements IPlayableMediaItem, ITrackable
         this.genre = genre;
     }
 
-    public ArrayList<Episod> getEpisods() {
-        return episods;
+    public ArrayList<Episode> getEpisodes() {
+        return episodes;
     }
 
     public void setDescription(String description) {
         this.description = description;
     }
 
-    public void addNewEpisodsTitle(String episodTitle) {
-        newEpisodsTitles.add(episodTitle);
+    public void addNewEpisodsTitle(String episodeTitle) {
+        newEpisodsTitles.add(episodeTitle);
     }
 
     public boolean isNewEpisodTitle(String episodTitle) {
@@ -324,7 +323,7 @@ public class Podcast extends MediaItem implements IPlayableMediaItem, ITrackable
             Podcast podcast = (Podcast) MediaItem.getMediaItemByName(ProfileManager.getInstance().getSubscribedPodcasts(), mediaItem);
             if (podcast.newEpisodsTitles.contains(track.getTitle())) {
                 podcast.newEpisodsTitles.remove(track.getTitle());
-                ((Episod) track).isNotNew = true;
+                ((Episode) track).isNotNew = true;
                 ProfileManager.getInstance().saveChanges(ProfileManager.ProfileItem.SUBSCRIBDED_PODCASTS, false);
             }
         } catch (Exception e) {
@@ -335,12 +334,12 @@ public class Podcast extends MediaItem implements IPlayableMediaItem, ITrackable
 
     @Override
     public void setTracks(ArrayList<? extends Track> tracks) {
-        this.episods = (ArrayList<Episod>) tracks;
+        this.episodes = (ArrayList<Episode>) tracks;
     }
 
     @Override
     public ArrayList<? extends Track> getTracks() {
-        return this.episods;
+        return this.episodes;
     }
 
     @Override
@@ -350,9 +349,9 @@ public class Podcast extends MediaItem implements IPlayableMediaItem, ITrackable
 
     @Override
     public Track getSelectedTrack() {
-        for (Episod episod : episods) {
-            if (episod.isSelected) {
-                return episod;
+        for (Episode episode : episodes) {
+            if (episode.isSelected) {
+                return episode;
             }
         }
         return null;
@@ -360,8 +359,8 @@ public class Podcast extends MediaItem implements IPlayableMediaItem, ITrackable
 
     @Override
     public void selectTrack(Track track) {
-        for (Episod episod : episods) {
-            episod.isSelected = episod.equals(track) ? true : false;
+        for (Episode episode : episodes) {
+            episode.isSelected = episode.equals(track) ? true : false;
         }
     }
 
@@ -369,4 +368,10 @@ public class Podcast extends MediaItem implements IPlayableMediaItem, ITrackable
     public int getNewEpisodsCount() {
         return newEpisodsTitles.size();
     }
+
+    public void cleanNewEpisodesTitles() {
+        newEpisodsTitles.clear();
+    }
+
+
 }

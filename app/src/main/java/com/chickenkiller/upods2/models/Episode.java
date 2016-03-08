@@ -15,8 +15,8 @@ import java.util.ArrayList;
 /**
  * Created by alonzilberman on 8/31/15.
  */
-public class Episod extends Track {
-    private static String EPISOD_LOG = "EPISOD";
+public class Episode extends Track {
+    private static String EPISODE_LOG = "EPISODE";
     private String summary;
     private String length;
     private String duration;
@@ -25,7 +25,7 @@ public class Episod extends Track {
     private String pathOnDisk;
     public boolean isNotNew; //Used to notify adaper about changes in new episodes
 
-    public Episod() {
+    public Episode() {
         super();
         this.summary = "";
         this.length = "";
@@ -36,7 +36,7 @@ public class Episod extends Track {
         this.isNotNew = false;
     }
 
-    public Episod(JSONObject jsonItem) {
+    public Episode(JSONObject jsonItem) {
         this();
         try {
             this.title = jsonItem.has("title") ? jsonItem.getString("title") : "";
@@ -48,25 +48,25 @@ public class Episod extends Track {
             this.pathOnDisk = jsonItem.has("pathOnDisk") ? jsonItem.getString("pathOnDisk") : "";
             this.audeoUrl = jsonItem.has("audeoUrl") ? jsonItem.getString("audeoUrl") : "";
         } catch (JSONException e) {
-            Logger.printError(EPISOD_LOG, "Can't parse episod from json");
+            Logger.printError(EPISODE_LOG, "Can't parse episod from json");
             e.printStackTrace();
         }
 
     }
 
-    public static boolean hasEpisodWithTitle(ArrayList<Episod> episods, Episod episodToCheck) {
-        for (Episod episod : episods) {
-            if (episod.getTitle().replace("\n", "").equals(episodToCheck.getTitle().replace("\n", ""))) {
+    public static boolean hasEpisodWithTitle(ArrayList<Episode> episodes, Episode episodeToCheck) {
+        for (Episode episode : episodes) {
+            if (episode.getTitle().replace("\n", "").equals(episodeToCheck.getTitle().replace("\n", ""))) {
                 return true;
             }
         }
         return false;
     }
 
-    public static Episod getEpisodByTitle(ArrayList<Episod> episods, Episod episodToCheck) {
-        for (Episod episod : episods) {
-            if (episod.getTitle().equals(episodToCheck.getTitle())) {
-                return episod;
+    public static Episode getEpisodByTitle(ArrayList<Episode> episodes, Episode episodeToCheck) {
+        for (Episode episode : episodes) {
+            if (episode.getTitle().equals(episodeToCheck.getTitle())) {
+                return episode;
             }
         }
         return null;
@@ -83,18 +83,18 @@ public class Episod extends Track {
             jsonEpisod.put("pathOnDisk", this.pathOnDisk);
             jsonEpisod.put("audeoUrl", this.audeoUrl);
         } catch (JSONException e) {
-            Logger.printError(EPISOD_LOG, "Can't save episod to json");
+            Logger.printError(EPISODE_LOG, "Can't save episod to json");
             e.printStackTrace();
         }
         return jsonEpisod;
     }
 
-    public static JSONArray toJSONArray(ArrayList<Episod> episods) {
-        JSONArray episodsJson = new JSONArray();
-        for (Episod episod : episods) {
-            episodsJson.put(episod.toJson());
+    public static JSONArray toJSONArray(ArrayList<Episode> episodes) {
+        JSONArray episodesJson = new JSONArray();
+        for (Episode episode : episodes) {
+            episodesJson.put(episode.toJson());
         }
-        return episodsJson;
+        return episodesJson;
     }
 
 

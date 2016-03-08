@@ -5,7 +5,7 @@ import android.os.Handler;
 import com.chickenkiller.upods2.controllers.internet.SyncMaster;
 import com.chickenkiller.upods2.interfaces.IOperationFinishCallback;
 import com.chickenkiller.upods2.interfaces.IPlayableMediaItem;
-import com.chickenkiller.upods2.models.Episod;
+import com.chickenkiller.upods2.models.Episode;
 import com.chickenkiller.upods2.models.MediaItem;
 import com.chickenkiller.upods2.models.Podcast;
 import com.chickenkiller.upods2.models.RadioItem;
@@ -184,28 +184,28 @@ public class ProfileManager {
     }
 
     public void addDownloadedTrack(IPlayableMediaItem mediaItem, Track track) {
-        if (mediaItem instanceof Podcast && track instanceof Episod) {
+        if (mediaItem instanceof Podcast && track instanceof Episode) {
             if (!MediaItem.hasMediaItemWithName(downloadedPodcasts, mediaItem)) {
                 Podcast podcast = new Podcast((Podcast) mediaItem);
-                podcast.getEpisods().clear();
-                podcast.getEpisods().add((Episod) track);
+                podcast.getEpisodes().clear();
+                podcast.getEpisodes().add((Episode) track);
                 downloadedPodcasts.add(podcast);
             } else {
                 Podcast podcast = (Podcast) MediaItem.getMediaItemByName(downloadedPodcasts, mediaItem);
-                podcast.getEpisods().add((Episod) track);
+                podcast.getEpisodes().add((Episode) track);
             }
             saveChanges(ProfileItem.DOWNLOADED_PODCASTS);
         }
     }
 
     public void removeDownloadedTrack(IPlayableMediaItem mediaItem, Track track) {
-        if (mediaItem instanceof Podcast && track instanceof Episod) {
+        if (mediaItem instanceof Podcast && track instanceof Episode) {
             if (MediaItem.hasMediaItemWithName(downloadedPodcasts, mediaItem)) {
                 Podcast podcast = (Podcast) MediaItem.getMediaItemByName(downloadedPodcasts, mediaItem);
-                if (podcast.getEpisods().size() == 1) {
+                if (podcast.getEpisodes().size() == 1) {
                     downloadedPodcasts.remove(podcast);
                 } else {
-                    podcast.getEpisods().remove(Episod.getEpisodByTitle(podcast.getEpisods(), (Episod) track));
+                    podcast.getEpisodes().remove(Episode.getEpisodByTitle(podcast.getEpisodes(), (Episode) track));
                 }
                 saveChanges(ProfileItem.DOWNLOADED_PODCASTS);
             }
@@ -236,8 +236,8 @@ public class ProfileManager {
         if (mediaItem instanceof Podcast) {
             if (MediaItem.hasMediaItemWithName(downloadedPodcasts, mediaItem)) {
                 Podcast podcast = (Podcast) MediaItem.getMediaItemByName(downloadedPodcasts, mediaItem);
-                for (Episod episod : podcast.getEpisods()) {
-                    return episod.getAudeoUrl().replaceFirst("/.[^/]+mp3$", "");
+                for (Episode episode : podcast.getEpisodes()) {
+                    return episode.getAudeoUrl().replaceFirst("/.[^/]+mp3$", "");
                 }
             }
         }
@@ -245,12 +245,12 @@ public class ProfileManager {
     }
 
     public String getDownloadedTrackPath(IPlayableMediaItem mediaItem, Track track) {
-        if (mediaItem instanceof Podcast && track instanceof Episod) {
+        if (mediaItem instanceof Podcast && track instanceof Episode) {
             if (MediaItem.hasMediaItemWithName(downloadedPodcasts, mediaItem)) {
                 Podcast podcast = (Podcast) MediaItem.getMediaItemByName(downloadedPodcasts, mediaItem);
-                for (Episod episod : podcast.getEpisods()) {
-                    if (episod.getTitle().equals(track.getTitle())) {
-                        return episod.getAudeoUrl();
+                for (Episode episode : podcast.getEpisodes()) {
+                    if (episode.getTitle().equals(track.getTitle())) {
+                        return episode.getAudeoUrl();
                     }
                 }
             }
@@ -259,10 +259,10 @@ public class ProfileManager {
     }
 
     public boolean isDownloaded(IPlayableMediaItem mediaItem, Track track) {
-        if (mediaItem instanceof Podcast && track instanceof Episod) {
+        if (mediaItem instanceof Podcast && track instanceof Episode) {
             if (Podcast.hasMediaItemWithName(downloadedPodcasts, mediaItem)) {
                 Podcast podcast = (Podcast) Podcast.getMediaItemByName(downloadedPodcasts, mediaItem);
-                return Episod.hasEpisodWithTitle(podcast.getEpisods(), (Episod) track);
+                return Episode.hasEpisodWithTitle(podcast.getEpisodes(), (Episode) track);
             }
         }
         return false;

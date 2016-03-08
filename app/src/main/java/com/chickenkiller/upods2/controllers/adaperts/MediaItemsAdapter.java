@@ -277,7 +277,7 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     }
 
     /**
-     * Inits cpunt block (number in circle, i.e new episods)
+     * Inits cpunt block (number in circle, i.e new episodes)
      */
     private void initCountBlock(ViewHolderCardItem holder, IPlayableMediaItem currentItem) {
         if (mediaItemType == MediaItemType.PODCAST_FAVORITE && currentItem instanceof Podcast &&

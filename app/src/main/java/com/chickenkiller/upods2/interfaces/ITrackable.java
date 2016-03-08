@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 /**
  * Created by alonzilberman on 8/31/15.
- * Implement it if item has nested tracks/episods
+ * Implement it if item has nested tracks/episodes
  */
 public interface ITrackable {
 

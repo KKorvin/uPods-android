@@ -85,9 +85,9 @@
     <string name="stream">Stream</string>
     <string name="about_podcast">About podcast</string>
     <string name="open_on_disk">Open on disk</string>
-    <string name="remove_all_episods">Remove all episods</string>
+    <string name="remove_all_episods">Remove all episodes</string>
     <string name="cancel">Cancel</string>
-    <string name="remove_podcast_conformation">Are you sure you want to delete all downloaded episods for this podcast?</string>
+    <string name="remove_podcast_conformation">Are you sure you want to delete all downloaded episodes for this podcast?</string>
     <string name="delete">Delete</string>
     <string name="episod_removed">Episod removed</string>
     <string name="marks_as_played">Mark played</string>
@@ -109,10 +109,10 @@
     <string name="global">Global</string>
     <string name="start_screen">Start screen</string>
     <string name="radio_station_ucfirst">Radio Stations</string>
-    <string name="checking_new_episods_rate">Checking for new episods rate</string>
-    <string name="notify_episods">Notify about new episods</string>
+    <string name="checking_new_episods_rate">Checking for new episodes rate</string>
+    <string name="notify_episods">Notify about new episodes</string>
     <string name="there_are">"There are   "</string>
-    <string name="new_episods">new episods</string>
+    <string name="new_episods">new episodes</string>
     <string name="add_radio_station">Add radio station</string>
     <string name="login_with_facebook">Login with Facebook</string>
     <string name="login_with_twitter">Login with Twitter</string>

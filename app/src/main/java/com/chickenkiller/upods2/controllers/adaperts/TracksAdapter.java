@@ -23,10 +23,11 @@ import com.chickenkiller.upods2.interfaces.IOperationFinishCallback;
 import com.chickenkiller.upods2.interfaces.IPlayableMediaItem;
 import com.chickenkiller.upods2.interfaces.ITrackable;
 import com.chickenkiller.upods2.interfaces.IUIProgressUpdater;
-import com.chickenkiller.upods2.models.Episod;
+import com.chickenkiller.upods2.models.Episode;
 import com.chickenkiller.upods2.models.MediaItem;
 import com.chickenkiller.upods2.models.Podcast;
 import com.chickenkiller.upods2.models.Track;
+import com.chickenkiller.upods2.utils.GlobalUtils;
 import com.chickenkiller.upods2.utils.decorators.DelayedOnClickListener;
 import com.chickenkiller.upods2.utils.enums.ContextMenuType;
 
@@ -104,15 +105,15 @@ public class TracksAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             ViewHolderTrack viewHolderTrack = (ViewHolderTrack) holder;
             final Track currentTrack = tracks.get(position);
 
-            //Mark new episods
-            if (iPlayableMediaItem instanceof Podcast && !((Episod) currentTrack).isNotNew &&
+            //Mark new episodes
+            if (iPlayableMediaItem instanceof Podcast && !((Episode) currentTrack).isNotNew &&
                     ((Podcast) iPlayableMediaItem).isNewEpisodTitle(currentTrack.getTitle())) {
                 viewHolderTrack.tvTitle.setText(Html.fromHtml("<b>" + currentTrack.getTitle() + "</b>"));
             } else {
                 viewHolderTrack.tvTitle.setText(currentTrack.getTitle());
             }
             viewHolderTrack.tvSubTitle.setText(currentTrack.getSubTitle());
-            viewHolderTrack.tvDate.setText(currentTrack.getDate());
+            viewHolderTrack.tvDate.setText(GlobalUtils.parserDateToMonth(currentTrack.getDate()));
             viewHolderTrack.setClickListner(getShowInfoClick(fragmentsManager, currentTrack, position));
             viewHolderTrack.setLongClickListner(getTrackLongClickListener(currentTrack));
             initDownloadBtn(holder, currentTrack, position);

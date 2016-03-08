@@ -15,8 +15,8 @@ import com.chickenkiller.upods2.R;
 import com.chickenkiller.upods2.activity.ActivityMain;
 import com.chickenkiller.upods2.activity.ActivityPlayer;
 import com.chickenkiller.upods2.controllers.app.ProfileManager;
-import com.chickenkiller.upods2.controllers.app.SimpleCacheManager;
-import com.chickenkiller.upods2.models.Episod;
+import com.chickenkiller.upods2.models.Episode;
+import com.chickenkiller.upods2.models.Feed;
 import com.chickenkiller.upods2.models.Podcast;
 import com.chickenkiller.upods2.utils.Logger;
 import com.chickenkiller.upods2.utils.ui.LetterBitmap;
@@ -86,10 +86,10 @@ public class NetworkTasksService extends IntentService {
 
 
     /**
-     * Will check for new episods by fetching full episods list for each subscribed podcast
+     * Will check for new episodes by fetching full episodes list for each subscribed podcast
      */
     private void checkForNewEpisods() {
-        Logger.printInfo(TAG, "Checking for new episods...");
+        Logger.printInfo(TAG, "Checking for new episodes...");
         ArrayList<Podcast> subscribedPodcasts = ProfileManager.getInstance().getSubscribedPodcasts();
         if (subscribedPodcasts.size() > 0) {
             for (Podcast podcast : subscribedPodcasts) {
@@ -99,23 +99,15 @@ public class NetworkTasksService extends IntentService {
                     SAXParserFactory spf = SAXParserFactory.newInstance();
                     SAXParser sp = spf.newSAXParser();
                     XMLReader xr = sp.getXMLReader();
-                    EpisodsXMLHandler episodsXMLHandler = new EpisodsXMLHandler();
-                    xr.setContentHandler(episodsXMLHandler);
+                    EpisodesXMLHandler episodesXMLHandler = new EpisodesXMLHandler();
+                    xr.setContentHandler(episodesXMLHandler);
 
                     //TODO could be encoding problem
                     InputSource inputSource = new InputSource(new StringReader(response));
                     xr.parse(inputSource);
-                    ArrayList<Episod> parsedEpisods = episodsXMLHandler.getParsedEpisods();
-                    int episodesCount = Integer.valueOf(podcast.getTrackCount());
-                    if (episodesCount != 0 && parsedEpisods.size() > episodesCount) {//
-                        int newEpisodesCount = parsedEpisods.size() - episodesCount + podcast.getNewEpisodsCount();
-                        for (int i = parsedEpisods.size() - newEpisodesCount; i < parsedEpisods.size(); i++) {
-                            podcast.addNewEpisodsTitle(parsedEpisods.get(i).getTitle());
-                        }
-                        ProfileManager.getInstance().saveChanges(ProfileManager.ProfileItem.SUBSCRIBDED_PODCASTS);
-                        SimpleCacheManager.getInstance().removeFromCache(podcast.getFeedUrl());
+                    ArrayList<Episode> parsedEpisodes = episodesXMLHandler.getParsedEpisods();
+                    if (Feed.handleUpdates(parsedEpisodes, podcast)) {
                         sendNewEpisodsNotification(podcast);
-                        //TODO automaticly download new episods here
                     }
                 } catch (Exception e) {
                     Logger.printError(TAG, "Can't check for updates for podcast with url: " + podcast.getFeedUrl());

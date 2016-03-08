@@ -1,7 +1,6 @@
 package com.chickenkiller.upods2.controllers.internet;
 
-import com.chickenkiller.upods2.controllers.app.ProfileManager;
-import com.chickenkiller.upods2.models.Episod;
+import com.chickenkiller.upods2.models.Episode;
 import com.chickenkiller.upods2.utils.GlobalUtils;
 
 import org.xml.sax.Attributes;
@@ -13,7 +12,7 @@ import java.util.ArrayList;
 /**
  * Created by alonzilberman on 8/31/15.
  */
-public class EpisodsXMLHandler extends DefaultHandler {
+public class EpisodesXMLHandler extends DefaultHandler {
     private final String ITEM_TITLE = "item";
     private final String TITLE = "title";
     private final String LENGTH = "length";
@@ -31,14 +30,14 @@ public class EpisodsXMLHandler extends DefaultHandler {
     private boolean isItem = false;
 
     private StringBuilder elementValue = new StringBuilder("");
-    private Episod episod = null;
-    private ArrayList<Episod> allEpisods;
+    private Episode episode = null;
+    private ArrayList<Episode> allEpisodes;
 
     private String podcastSummary;
 
-    public EpisodsXMLHandler() {
+    public EpisodesXMLHandler() {
         this.podcastSummary = "";
-        allEpisods = new ArrayList<>();
+        allEpisodes = new ArrayList<>();
     }
 
     /**
@@ -50,13 +49,13 @@ public class EpisodsXMLHandler extends DefaultHandler {
         elementValue = new StringBuilder("");
         elementOn = true;
         if (localName.equals(ITEM_TITLE)) {
-            episod = new Episod();
-            episod.setBtnDownloadText("");
+            episode = new Episode();
+            episode.setBtnDownloadText("");
             isItem = true;
         }
         if (localName.equalsIgnoreCase(MP3_1) && isItem) {
-            episod.setLength(attributes.getValue(LENGTH));
-            episod.setAudeoUrl(attributes.getValue(MP3_3));
+            episode.setLength(attributes.getValue(LENGTH));
+            episode.setAudeoUrl(attributes.getValue(MP3_3));
         }
 
     }
@@ -70,24 +69,24 @@ public class EpisodsXMLHandler extends DefaultHandler {
 
         if (isItem) {
             if (localName.equalsIgnoreCase(TITLE))
-                episod.setTitle(elementValue.toString());
+                episode.setTitle(elementValue.toString());
             else if (qName.equalsIgnoreCase(SUMMARY1))
-                episod.setSummary(elementValue.toString());
-            else if (localName.equalsIgnoreCase(SUMMARY2) && episod.getSummary().isEmpty())
-                episod.setSummary(elementValue.toString());
+                episode.setSummary(elementValue.toString());
+            else if (localName.equalsIgnoreCase(SUMMARY2) && episode.getSummary().isEmpty())
+                episode.setSummary(elementValue.toString());
             else if (qName.equalsIgnoreCase(SUMMARY3)
-                    && episod.getSummary().equals(""))
-                episod.setSummary(elementValue.toString());
+                    && episode.getSummary().equals(""))
+                episode.setSummary(elementValue.toString());
             else if (localName.equalsIgnoreCase(MP3_2)
-                    && episod.getAudeoUrl().isEmpty())
-                episod.setAudeoUrl(elementValue.toString());
+                    && episode.getAudeoUrl().isEmpty())
+                episode.setAudeoUrl(elementValue.toString());
             else if (qName.equalsIgnoreCase(DURATION1))
-                episod.setDuration(elementValue.toString());
+                episode.setDuration(elementValue.toString());
             else if (localName.equalsIgnoreCase(DURATION2)
-                    && episod.getDuration().isEmpty())
-                episod.setDuration(elementValue.toString());
+                    && episode.getDuration().isEmpty())
+                episode.setDuration(elementValue.toString());
             else if (localName.equalsIgnoreCase(PUBDATE))
-                episod.setDate(GlobalUtils.parserDateToMonth(elementValue.toString()));
+                episode.setDate(elementValue.toString());
         } else {
             if (qName.equalsIgnoreCase(SUMMARY1))
                 podcastSummary = elementValue.toString();
@@ -99,7 +98,7 @@ public class EpisodsXMLHandler extends DefaultHandler {
         }
         if (localName.equals(ITEM_TITLE)) {
             isItem = false;
-            allEpisods.add(episod);
+            allEpisodes.add(episode);
         }
         elementValue = new StringBuilder("");
         elementOn = false;
@@ -117,8 +116,8 @@ public class EpisodsXMLHandler extends DefaultHandler {
         }
     }
 
-    public ArrayList<Episod> getParsedEpisods() {
-        return this.allEpisods;
+    public ArrayList<Episode> getParsedEpisods() {
+        return this.allEpisodes;
     }
 
     public String getPodcastSummary() {

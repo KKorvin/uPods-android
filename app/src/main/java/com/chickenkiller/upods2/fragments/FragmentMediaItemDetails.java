@@ -32,7 +32,7 @@ import com.chickenkiller.upods2.activity.ActivityPlayer;
 import com.chickenkiller.upods2.controllers.adaperts.TracksAdapter;
 import com.chickenkiller.upods2.controllers.app.ProfileManager;
 import com.chickenkiller.upods2.controllers.internet.BackendManager;
-import com.chickenkiller.upods2.controllers.internet.EpisodsXMLHandler;
+import com.chickenkiller.upods2.controllers.internet.EpisodesXMLHandler;
 import com.chickenkiller.upods2.controllers.player.UniversalPlayer;
 import com.chickenkiller.upods2.interfaces.IContextMenuManager;
 import com.chickenkiller.upods2.interfaces.IFragmentsManager;
@@ -42,7 +42,8 @@ import com.chickenkiller.upods2.interfaces.IOverlayable;
 import com.chickenkiller.upods2.interfaces.IPlayableMediaItem;
 import com.chickenkiller.upods2.interfaces.ISimpleRequestCallback;
 import com.chickenkiller.upods2.interfaces.ITrackable;
-import com.chickenkiller.upods2.models.Episod;
+import com.chickenkiller.upods2.models.Episode;
+import com.chickenkiller.upods2.models.Feed;
 import com.chickenkiller.upods2.models.Podcast;
 import com.chickenkiller.upods2.utils.GlobalUtils;
 import com.chickenkiller.upods2.utils.Logger;
@@ -137,7 +138,7 @@ public class FragmentMediaItemDetails extends Fragment implements View.OnTouchLi
             tvDetailedHeader.setText(playableItem.getName());
             tvDetailedSubHeader.setText(playableItem.getSubHeader());
             tvBottomHeader.setText(playableItem.getBottomHeader());
-            btnSubscribe.setText( isSubscribedToMediaItem ? getString(R.string.unsubscribe) : getString(R.string.subscribe));
+            btnSubscribe.setText(isSubscribedToMediaItem ? getString(R.string.unsubscribe) : getString(R.string.subscribe));
             initSubscribeBtn();
 
             if (playableItem.hasTracks()) {
@@ -173,7 +174,6 @@ public class FragmentMediaItemDetails extends Fragment implements View.OnTouchLi
         loadTracks();
 
         if (playableItem instanceof Podcast) {
-            //((Podcast) playableItem).setNewEpisodsCount(0);
             btnMediaMore.setOnClickListener(new DelayedOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -277,8 +277,8 @@ public class FragmentMediaItemDetails extends Fragment implements View.OnTouchLi
     }
 
     private void loadTracks() {
-        if (playableItem instanceof Podcast && !((Podcast) playableItem).getEpisods().isEmpty()) {
-            tracksAdapter.addItems(((Podcast) playableItem).getEpisods());
+        if (playableItem instanceof Podcast && !((Podcast) playableItem).getEpisodes().isEmpty()) {
+            tracksAdapter.addItems(((Podcast) playableItem).getEpisodes());
             rvTracks.setVisibility(View.VISIBLE);
             pbTracks.setVisibility(View.GONE);
             return;
@@ -294,24 +294,28 @@ public class FragmentMediaItemDetails extends Fragment implements View.OnTouchLi
                                     SAXParserFactory spf = SAXParserFactory.newInstance();
                                     SAXParser sp = spf.newSAXParser();
                                     XMLReader xr = sp.getXMLReader();
-                                    EpisodsXMLHandler episodsXMLHandler = new EpisodsXMLHandler();
-                                    xr.setContentHandler(episodsXMLHandler);
+                                    EpisodesXMLHandler episodesXMLHandler = new EpisodesXMLHandler();
+                                    xr.setContentHandler(episodesXMLHandler);
                                     //TODO could be encoding problem
                                     InputSource inputSource = new InputSource(new StringReader(response));
                                     xr.parse(inputSource);
-                                    ArrayList<Episod> parsedEpisods = episodsXMLHandler.getParsedEpisods();
+                                    ArrayList<Episode> parsedEpisodes = episodesXMLHandler.getParsedEpisods();
+                                    if (playableItem instanceof Podcast) {
+                                        Feed.handleUpdates(parsedEpisodes, (Podcast) playableItem);
+                                    }
                                     if (playableItem instanceof ITrackable) {
-                                        ((ITrackable) playableItem).setTracks(parsedEpisods);
+                                        ((ITrackable) playableItem).setTracks(parsedEpisodes);
                                     }
                                     if (playableItem instanceof Podcast) {
-                                        ((Podcast) playableItem).setDescription(episodsXMLHandler.getPodcastSummary());
-                                        ((Podcast) playableItem).setTrackCount(String.valueOf(parsedEpisods.size()));
-                                        if(isSubscribedToMediaItem){
+                                        Podcast podcast = ((Podcast) playableItem);
+                                        podcast.setDescription(episodesXMLHandler.getPodcastSummary());
+                                        podcast.setTrackCount(String.valueOf(parsedEpisodes.size()));
+                                        if (isSubscribedToMediaItem) {
                                             //Save changes to disk to be sure we have recent count of provider's episodes
                                             ProfileManager.getInstance().saveChanges(ProfileManager.ProfileItem.SUBSCRIBDED_PODCASTS, false);
                                         }
                                     }
-                                    tracksAdapter.addItems(parsedEpisods);
+                                    tracksAdapter.addItems(parsedEpisodes);
                                     rvTracks.setVisibility(View.VISIBLE);
                                     pbTracks.setVisibility(View.GONE);
                                 } catch (Exception e) {
