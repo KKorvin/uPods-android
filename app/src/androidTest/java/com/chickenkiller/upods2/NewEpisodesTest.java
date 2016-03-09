@@ -35,9 +35,12 @@ import static org.junit.Assert.assertTrue;
 @SmallTest
 public class NewEpisodesTest {
 
+    private static final String REAL_PODCAST_FEED = "http://feeds.feedburner.com/FoxNewsRadio";
+
     private static final String TEST_FEED = "https://upods.io/static/podcasts/feed/test_podcast.xml";
     private static final String TEST_FEED_CONTROL = "https://upods.io/upods/api/v1.0/podcasts/test/feed?task=";
     private static final int NEW_EPISODES_ADDED = 2;
+    private static final int EPISODES_TO_REMOVE = 1;
 
 
     public ArrayList<Episode> parseEpisodes(String url) throws Exception {
@@ -55,6 +58,10 @@ public class NewEpisodesTest {
 
     @Test
     public void checkBasicNewEpisodesScenario() {
+
+        boolean hasUpdates = false;
+        int newEpisodesCount = -1;
+
         try {
             Request resetRequest = new Request.Builder().url(TEST_FEED_CONTROL + "reset").get().build();
             BackendManager.getInstance().sendSynchronicRequest(resetRequest);
@@ -75,15 +82,45 @@ public class NewEpisodesTest {
             Logger.printInfo("checkBasicNewEpisodesScenario", "2 new episodes added to remote feed...");
 
             ArrayList<Episode> afterUpdateparsedEpisodes = parseEpisodes(podcast.getFeedUrl());
-            boolean hasUpdates = Feed.handleUpdates(afterUpdateparsedEpisodes, podcast);
-            int newEpisodesCount = podcast.getNewEpisodsCount();
+            hasUpdates = Feed.handleUpdates(afterUpdateparsedEpisodes, podcast);
+            newEpisodesCount = podcast.getNewEpisodsCount();
             Logger.printInfo("checkBasicNewEpisodesScenario", "Checked for updates...");
-            assertTrue(hasUpdates);
-            assertThat(newEpisodesCount, is(NEW_EPISODES_ADDED));
 
         } catch (Exception e) {
             e.printStackTrace();
         }
 
+        assertTrue(hasUpdates);
+        assertThat(newEpisodesCount, is(NEW_EPISODES_ADDED));
+    }
+
+    @Test
+    public void checkRealPodcastNewEpisodesScenario() {
+        boolean hasUpdates = false;
+        int newEpisodesCount = -1;
+
+        try {
+            String podcastName = String.valueOf(System.currentTimeMillis()) + "_podcast";
+            Podcast podcast = new Podcast(podcastName, REAL_PODCAST_FEED);
+
+            ArrayList<Episode> parsedEpisodes = parseEpisodes(podcast.getFeedUrl());
+            parsedEpisodes.remove(parsedEpisodes.size() - EPISODES_TO_REMOVE);
+
+            Logger.printInfo("checkRealPodcastNewEpisodesScenario", "Parsed episodes + removed last one...");
+
+            Feed.saveAsFeed(podcast.getFeedUrl(), parsedEpisodes);
+            Logger.printInfo("checkRealPodcastNewEpisodesScenario", "Feed saved locally...");
+
+            ArrayList<Episode> afterUpdateparsedEpisodes = parseEpisodes(podcast.getFeedUrl());
+            hasUpdates = Feed.handleUpdates(afterUpdateparsedEpisodes, podcast);
+            newEpisodesCount = podcast.getNewEpisodsCount();
+            Logger.printInfo("checkRealPodcastNewEpisodesScenario", "Checked for updates...");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        assertTrue(hasUpdates);
+        assertThat(newEpisodesCount, is(EPISODES_TO_REMOVE));
     }
 }
