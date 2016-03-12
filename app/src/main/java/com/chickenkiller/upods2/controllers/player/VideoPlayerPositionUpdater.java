@@ -4,7 +4,7 @@ import android.util.Pair;
 
 import com.chickenkiller.upods2.controllers.app.SettingsManager;
 import com.chickenkiller.upods2.interfaces.IOnPositionUpdatedCallback;
-import com.chickenkiller.upods2.interfaces.ITrackable;
+import com.chickenkiller.upods2.models.Podcast;
 import com.chickenkiller.upods2.utils.Logger;
 
 import org.videolan.libvlc.MediaPlayer;
@@ -41,8 +41,8 @@ public class VideoPlayerPositionUpdater extends PlayerPositionUpdater {
                         publishProgress(position);
                     }
                     if (universalPlayer.getPlayingMediaItem() != null && position > 0 &&
-                            universalPlayer.getPlayingMediaItem() instanceof ITrackable && position % SAVE_POSITION_RATE == 0) {
-                        Pair<String, String> trackPosition = new Pair<>(((ITrackable) universalPlayer.getPlayingMediaItem()).getSelectedTrack().getTitle(),
+                            universalPlayer.getPlayingMediaItem() instanceof Podcast && position % SAVE_POSITION_RATE == 0) {
+                        Pair<String, String> trackPosition = new Pair<>(((Podcast) universalPlayer.getPlayingMediaItem()).getSelectedTrack().getTitle(),
                                 String.valueOf(position));
                         SettingsManager.getInstace().putSettingsValue(SettingsManager.JS_EPISODS_POSITIONS, trackPosition, false);
                     }

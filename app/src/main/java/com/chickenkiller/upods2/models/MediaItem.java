@@ -1,15 +1,14 @@
 package com.chickenkiller.upods2.models;
 
-import com.chickenkiller.upods2.interfaces.IPlayableMediaItem;
+import com.chickenkiller.upods2.interfaces.IMediaItemView;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  * Created by alonzilberman on 7/3/15.
  * Basic class for any media item, can be show in feature screen.
  */
-public abstract class MediaItem implements Serializable {
+public abstract class MediaItem implements IMediaItemView {
 
     /**
      * Created by alonzilberman on 10/23/15.
@@ -21,6 +20,9 @@ public abstract class MediaItem implements Serializable {
     }
 
     protected int id;
+    protected String name;
+    protected String coverImageUrl;
+
 
     public MediaItem() {
     }
@@ -29,20 +31,51 @@ public abstract class MediaItem implements Serializable {
         return id;
     }
 
+    public String getCoverImageUrl() {
+        return coverImageUrl;
+    }
 
-    public static boolean hasMediaItemWithName(ArrayList<? extends IPlayableMediaItem> mediaItems, IPlayableMediaItem mediaItemToCheck) {
-        for (IPlayableMediaItem iPlayableMediaItem : mediaItems) {
-            if (iPlayableMediaItem.getName().equals(mediaItemToCheck.getName())) {
+    public String getName() {
+        return name;
+    }
+
+    public String getSubHeader() {
+        return "";
+    }
+
+    public String getBottomHeader() {
+        return "";
+    }
+
+    public boolean hasTracks() {
+        return false;
+    }
+
+    public String getDescription() {
+        return "";
+    }
+
+    public String getAudeoLink() {
+        return null;
+    }
+
+    public String getBitrate() {
+        return "";
+    }
+
+    public static boolean hasMediaItemWithName(ArrayList<? extends MediaItem> mediaItems, MediaItem mediaItemToCheck) {
+        for (MediaItem mediaItem : mediaItems) {
+            if (mediaItem.getName().equals(mediaItemToCheck.getName())) {
                 return true;
             }
         }
         return false;
     }
 
-    public static IPlayableMediaItem getMediaItemByName(ArrayList<? extends IPlayableMediaItem> mediaItems, IPlayableMediaItem mediaItemTarget) {
-        for (IPlayableMediaItem iPlayableMediaItem : mediaItems) {
-            if (iPlayableMediaItem.getName().equals(mediaItemTarget.getName())) {
-                return iPlayableMediaItem;
+    public static MediaItem getMediaItemByName(ArrayList<? extends MediaItem> mediaItems, MediaItem mediaItemTarget) {
+        for (MediaItem mediaItem : mediaItems) {
+            if (mediaItem.getName().equals(mediaItemTarget.getName())) {
+                return mediaItem;
             }
         }
         return null;

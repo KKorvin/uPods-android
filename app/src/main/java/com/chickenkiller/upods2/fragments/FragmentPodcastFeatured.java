@@ -16,10 +16,10 @@ import com.chickenkiller.upods2.controllers.adaperts.MediaItemsAdapter;
 import com.chickenkiller.upods2.controllers.internet.BackendManager;
 import com.chickenkiller.upods2.interfaces.IContentLoadListener;
 import com.chickenkiller.upods2.interfaces.IFragmentsManager;
+import com.chickenkiller.upods2.interfaces.IMediaItemView;
 import com.chickenkiller.upods2.interfaces.IRequestCallback;
 import com.chickenkiller.upods2.interfaces.ISlidingMenuHolder;
 import com.chickenkiller.upods2.interfaces.IToolbarHolder;
-import com.chickenkiller.upods2.models.MediaItem;
 import com.chickenkiller.upods2.models.MediaItemTitle;
 import com.chickenkiller.upods2.models.Podcast;
 import com.chickenkiller.upods2.utils.ServerApi;
@@ -113,7 +113,7 @@ public class FragmentPodcastFeatured extends Fragment implements IContentLoadLis
                             @Override
                             public void run() {
                                 try {
-                                    ArrayList<MediaItem> topPodcasts = new ArrayList<MediaItem>();
+                                    ArrayList<IMediaItemView> topPodcasts = new ArrayList<IMediaItemView>();
                                     MediaItemTitle mediaItemTitle = new MediaItemTitle(getString(R.string.top40_podcasts), getString(R.string.top40_podcasts_long));
                                     mediaItemTitle.showButton = true;
                                     topPodcasts.add(mediaItemTitle);

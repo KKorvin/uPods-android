@@ -4,7 +4,6 @@ import android.os.Handler;
 
 import com.chickenkiller.upods2.controllers.internet.SyncMaster;
 import com.chickenkiller.upods2.interfaces.IOperationFinishCallback;
-import com.chickenkiller.upods2.interfaces.IPlayableMediaItem;
 import com.chickenkiller.upods2.models.Episode;
 import com.chickenkiller.upods2.models.MediaItem;
 import com.chickenkiller.upods2.models.Podcast;
@@ -157,7 +156,7 @@ public class ProfileManager {
         Logger.printInfo(PROFILE, "Fetcheed " + String.valueOf(radioItems.length()) + podcastType + "radio items from json profile");
     }
 
-    public void addSubscribedMediaItem(IPlayableMediaItem mediaItem) {
+    public void addSubscribedMediaItem(MediaItem mediaItem) {
         if (mediaItem instanceof Podcast) {
             if (!MediaItem.hasMediaItemWithName(subscribedPodcasts, mediaItem)) {
                 subscribedPodcasts.add((Podcast) mediaItem);
@@ -171,7 +170,7 @@ public class ProfileManager {
         }
     }
 
-    public void addRecentMediaItem(IPlayableMediaItem mediaItem) {
+    public void addRecentMediaItem(MediaItem mediaItem) {
         if (mediaItem instanceof RadioItem) {
             if (!MediaItem.hasMediaItemWithName(recentRadioItems, mediaItem)) {
                 if (recentRadioItems.size() == RECTNT_RADIO_STATIONS_LIMIT) {
@@ -183,7 +182,7 @@ public class ProfileManager {
         }
     }
 
-    public void addDownloadedTrack(IPlayableMediaItem mediaItem, Track track) {
+    public void addDownloadedTrack(MediaItem mediaItem, Track track) {
         if (mediaItem instanceof Podcast && track instanceof Episode) {
             if (!MediaItem.hasMediaItemWithName(downloadedPodcasts, mediaItem)) {
                 Podcast podcast = new Podcast((Podcast) mediaItem);
@@ -198,7 +197,7 @@ public class ProfileManager {
         }
     }
 
-    public void removeDownloadedTrack(IPlayableMediaItem mediaItem, Track track) {
+    public void removeDownloadedTrack(MediaItem mediaItem, Track track) {
         if (mediaItem instanceof Podcast && track instanceof Episode) {
             if (MediaItem.hasMediaItemWithName(downloadedPodcasts, mediaItem)) {
                 Podcast podcast = (Podcast) MediaItem.getMediaItemByName(downloadedPodcasts, mediaItem);
@@ -212,7 +211,7 @@ public class ProfileManager {
         }
     }
 
-    public void removeDownloadedMediaItem(IPlayableMediaItem mediaItem) {
+    public void removeDownloadedMediaItem(MediaItem mediaItem) {
         if (mediaItem instanceof Podcast) {
             if (MediaItem.hasMediaItemWithName(downloadedPodcasts, mediaItem)) {
                 Podcast podcast = (Podcast) MediaItem.getMediaItemByName(downloadedPodcasts, mediaItem);
@@ -222,7 +221,7 @@ public class ProfileManager {
         }
     }
 
-    public void removeRecentMediaItem(IPlayableMediaItem mediaItem) {
+    public void removeRecentMediaItem(MediaItem mediaItem) {
         if (mediaItem instanceof RadioItem) {
             if (MediaItem.hasMediaItemWithName(recentRadioItems, mediaItem)) {
                 RadioItem radioItem = (RadioItem) MediaItem.getMediaItemByName(recentRadioItems, mediaItem);
@@ -232,7 +231,7 @@ public class ProfileManager {
         }
     }
 
-    public String getDownloadedMediaItemPath(IPlayableMediaItem mediaItem) {
+    public String getDownloadedMediaItemPath(MediaItem mediaItem) {
         if (mediaItem instanceof Podcast) {
             if (MediaItem.hasMediaItemWithName(downloadedPodcasts, mediaItem)) {
                 Podcast podcast = (Podcast) MediaItem.getMediaItemByName(downloadedPodcasts, mediaItem);
@@ -244,7 +243,7 @@ public class ProfileManager {
         return "";
     }
 
-    public String getDownloadedTrackPath(IPlayableMediaItem mediaItem, Track track) {
+    public String getDownloadedTrackPath(MediaItem mediaItem, Track track) {
         if (mediaItem instanceof Podcast && track instanceof Episode) {
             if (MediaItem.hasMediaItemWithName(downloadedPodcasts, mediaItem)) {
                 Podcast podcast = (Podcast) MediaItem.getMediaItemByName(downloadedPodcasts, mediaItem);
@@ -258,7 +257,7 @@ public class ProfileManager {
         return "";
     }
 
-    public boolean isDownloaded(IPlayableMediaItem mediaItem, Track track) {
+    public boolean isDownloaded(MediaItem mediaItem, Track track) {
         if (mediaItem instanceof Podcast && track instanceof Episode) {
             if (Podcast.hasMediaItemWithName(downloadedPodcasts, mediaItem)) {
                 Podcast podcast = (Podcast) Podcast.getMediaItemByName(downloadedPodcasts, mediaItem);
@@ -268,14 +267,14 @@ public class ProfileManager {
         return false;
     }
 
-    public boolean isDownloaded(IPlayableMediaItem mediaItem) {
+    public boolean isDownloaded(MediaItem mediaItem) {
         if (mediaItem instanceof Podcast) {
             return MediaItem.hasMediaItemWithName(downloadedPodcasts, mediaItem);
         }
         return false;
     }
 
-    public boolean isSubscribedToMediaItem(IPlayableMediaItem mediaItem) {
+    public boolean isSubscribedToMediaItem(MediaItem mediaItem) {
         if (mediaItem instanceof Podcast) {
             return MediaItem.hasMediaItemWithName(subscribedPodcasts, mediaItem);
         } else if (mediaItem instanceof RadioItem) {
@@ -284,14 +283,14 @@ public class ProfileManager {
         return false;
     }
 
-    public boolean isRecentMediaItem(IPlayableMediaItem mediaItem) {
+    public boolean isRecentMediaItem(MediaItem mediaItem) {
         if (mediaItem instanceof RadioItem) {
             return MediaItem.hasMediaItemWithName(recentRadioItems, mediaItem);
         }
         return false;
     }
 
-    public void removeSubscribedMediaItem(IPlayableMediaItem mediaItem) {
+    public void removeSubscribedMediaItem(MediaItem mediaItem) {
         if (mediaItem instanceof Podcast) {
             if (MediaItem.hasMediaItemWithName(subscribedPodcasts, mediaItem)) {
                 Podcast podcast = (Podcast) Podcast.getMediaItemByName(subscribedPodcasts, mediaItem);
@@ -299,7 +298,7 @@ public class ProfileManager {
                 saveChanges(ProfileItem.SUBSCRIBDED_PODCASTS);
             }
         } else if (mediaItem instanceof RadioItem) {
-            if (RadioItem.hasMediaItemWithName(subscribedRadioItems, mediaItem)) {
+            if (MediaItem.hasMediaItemWithName(subscribedRadioItems, mediaItem)) {
                 RadioItem radioItem = (RadioItem) MediaItem.getMediaItemByName(subscribedRadioItems, mediaItem);
                 subscribedRadioItems.remove(radioItem);
                 saveChanges(ProfileItem.SUBSCRIBDED_RADIO);

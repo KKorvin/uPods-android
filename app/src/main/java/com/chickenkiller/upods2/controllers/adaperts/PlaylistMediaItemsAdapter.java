@@ -11,18 +11,18 @@ import android.widget.TextView;
 import com.chickenkiller.upods2.R;
 import com.chickenkiller.upods2.controllers.player.UniversalPlayer;
 import com.chickenkiller.upods2.interfaces.INowPlayingItemPosiontGetter;
-import com.chickenkiller.upods2.interfaces.IPlayableMediaItem;
+import com.chickenkiller.upods2.models.MediaItem;
 
 import java.util.List;
 
 /**
  * Created by alonzilberman on 10/7/15.
  */
-public class PlaylistMediaItemsAdapter extends ArrayAdapter<IPlayableMediaItem> implements INowPlayingItemPosiontGetter {
+public class PlaylistMediaItemsAdapter extends ArrayAdapter<MediaItem> implements INowPlayingItemPosiontGetter {
 
     private int layaoutId;
     private UniversalPlayer universalPlayer;
-    private List<IPlayableMediaItem> mediaItems;
+    private List<? extends MediaItem> mediaItems;
 
 
     private static class ViewHolder {
@@ -32,7 +32,7 @@ public class PlaylistMediaItemsAdapter extends ArrayAdapter<IPlayableMediaItem> 
         public TextView tvPlTrackDuration;
     }
 
-    public PlaylistMediaItemsAdapter(Context context, int layaoutId, List<IPlayableMediaItem> mediaItems) {
+    public PlaylistMediaItemsAdapter(Context context, int layaoutId, List<MediaItem> mediaItems) {
         super(context, layaoutId, mediaItems);
         this.layaoutId = layaoutId;
         this.universalPlayer = UniversalPlayer.getInstance();
@@ -41,7 +41,7 @@ public class PlaylistMediaItemsAdapter extends ArrayAdapter<IPlayableMediaItem> 
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        IPlayableMediaItem mediaItem = getItem(position);
+        MediaItem mediaItem = getItem(position);
         ViewHolder viewHolder;
 
         if (convertView == null) {
@@ -69,7 +69,7 @@ public class PlaylistMediaItemsAdapter extends ArrayAdapter<IPlayableMediaItem> 
     @Override
     public int getNowPlayingItemPosition() {
         for (int i = 0; i < mediaItems.size(); i++) {
-            IPlayableMediaItem iPlayableMediaItem = mediaItems.get(i);
+            MediaItem iPlayableMediaItem = mediaItems.get(i);
             if (iPlayableMediaItem.getName().equals(universalPlayer.getPlayingMediaItem().getName())) {
                 return i;
             }

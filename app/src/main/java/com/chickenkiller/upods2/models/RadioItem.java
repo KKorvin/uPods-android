@@ -3,8 +3,8 @@ package com.chickenkiller.upods2.models;
 import android.content.Context;
 import android.os.AsyncTask;
 
+import com.chickenkiller.upods2.interfaces.IMediaItemView;
 import com.chickenkiller.upods2.interfaces.IOperationFinishCallback;
-import com.chickenkiller.upods2.interfaces.IPlayableMediaItem;
 import com.chickenkiller.upods2.utils.GlobalUtils;
 import com.chickenkiller.upods2.utils.Logger;
 import com.chickenkiller.upods2.utils.MediaUtils;
@@ -23,16 +23,14 @@ import java.util.Set;
 /**
  * Created by alonzilberman on 7/3/15.
  */
-public class RadioItem extends MediaItem implements IPlayableMediaItem {
+public class RadioItem extends MediaItem {
 
     private final static String DEFAULT_IMAGE = "https://upods.io/static/radio_stations/default/no_image.png";
     private final static String RADIO_LOG = "RADIO_LOG";
     private final static int MAX_URLS = 5;
 
-    protected String name;
     protected Set<StreamUrl> streamUrls;
     protected StreamUrl selectedStreamUrl;
-    protected String coverImageUrl;
     protected String bannerImageUrl;
     protected String description;
     protected String website;
@@ -111,8 +109,8 @@ public class RadioItem extends MediaItem implements IPlayableMediaItem {
         }
     }
 
-    public static ArrayList<MediaItem> withOnlyBannersHeader() {
-        ArrayList<MediaItem> items = new ArrayList<MediaItem>();
+    public static ArrayList<IMediaItemView> withOnlyBannersHeader() {
+        ArrayList<IMediaItemView> items = new ArrayList<IMediaItemView>();
         items.add(new BannersLayoutItem());
         return items;
     }
@@ -144,11 +142,6 @@ public class RadioItem extends MediaItem implements IPlayableMediaItem {
             return selectedStreamUrl.getBitrate();
         }
         return StreamUrl.getBestStreamUrl(streamUrls).getBitrate();
-    }
-
-    @Override
-    public boolean hasTracks() {
-        return false;
     }
 
     @Override
@@ -292,11 +285,6 @@ public class RadioItem extends MediaItem implements IPlayableMediaItem {
     @Override
     public String getSubHeader() {
         return this.country;
-    }
-
-    @Override
-    public String getBottomHeader() {
-        return null;
     }
 
     @Override

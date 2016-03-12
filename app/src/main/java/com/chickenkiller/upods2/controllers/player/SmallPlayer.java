@@ -16,9 +16,8 @@ import com.chickenkiller.upods2.activity.ActivityPlayer;
 import com.chickenkiller.upods2.fragments.FragmentPlayer;
 import com.chickenkiller.upods2.interfaces.IOnPositionUpdatedCallback;
 import com.chickenkiller.upods2.interfaces.IOperationFinishCallback;
-import com.chickenkiller.upods2.interfaces.IPlayableMediaItem;
 import com.chickenkiller.upods2.interfaces.IPlayerStateListener;
-import com.chickenkiller.upods2.interfaces.ITrackable;
+import com.chickenkiller.upods2.models.MediaItem;
 import com.chickenkiller.upods2.models.Podcast;
 import com.chickenkiller.upods2.models.Track;
 import com.chickenkiller.upods2.utils.MediaUtils;
@@ -77,9 +76,9 @@ public class SmallPlayer implements IPlayerStateListener, View.OnClickListener {
         if (universalPlayer.isPrepaired) {
             this.rlSmallPLayer.setVisibility(View.VISIBLE);
             this.btnPlay.setImageResource(universalPlayer.isPlaying() ? R.drawable.ic_pause_white : R.drawable.ic_play_white);
-            IPlayableMediaItem playingMediaItem = universalPlayer.getPlayingMediaItem();
-            if (playingMediaItem instanceof ITrackable) {
-                tvTitle.setText(((ITrackable) playingMediaItem).getSelectedTrack().getTitle());
+            MediaItem playingMediaItem = universalPlayer.getPlayingMediaItem();
+            if (playingMediaItem instanceof Podcast) {
+                tvTitle.setText(((Podcast) playingMediaItem).getSelectedTrack().getTitle());
             } else {
                 tvTitle.setText(playingMediaItem.getName());
             }
@@ -111,7 +110,7 @@ public class SmallPlayer implements IPlayerStateListener, View.OnClickListener {
             @Override
             public void poistionUpdated(int currentPoistion) {
                 if (maxDuration < 0) {
-                    IPlayableMediaItem playingMediaItem = UniversalPlayer.getInstance().getPlayingMediaItem();
+                    MediaItem playingMediaItem = UniversalPlayer.getInstance().getPlayingMediaItem();
                     if (playingMediaItem instanceof Podcast) {
                         Track track = ((Podcast) playingMediaItem).getSelectedTrack();
                         maxDuration = MediaUtils.timeStringToLong(track.getDuration());

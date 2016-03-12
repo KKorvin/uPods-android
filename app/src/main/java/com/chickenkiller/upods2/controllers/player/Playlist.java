@@ -22,8 +22,8 @@ import com.chickenkiller.upods2.controllers.adaperts.PlaylistTracksAdapter;
 import com.chickenkiller.upods2.controllers.app.ProfileManager;
 import com.chickenkiller.upods2.interfaces.INowPlayingItemPosiontGetter;
 import com.chickenkiller.upods2.interfaces.IOperationFinishCallback;
-import com.chickenkiller.upods2.interfaces.IPlayableMediaItem;
-import com.chickenkiller.upods2.interfaces.ITrackable;
+import com.chickenkiller.upods2.models.MediaItem;
+import com.chickenkiller.upods2.models.Podcast;
 import com.chickenkiller.upods2.models.RadioItem;
 import com.chickenkiller.upods2.models.Track;
 import com.chickenkiller.upods2.utils.Logger;
@@ -107,13 +107,13 @@ public class Playlist implements AdapterView.OnItemClickListener {
 
     private void initPlaylist() {
         UniversalPlayer universalPlayer = UniversalPlayer.getInstance();
-        if (universalPlayer.getPlayingMediaItem() instanceof ITrackable) {
-            List<Track> tracks = (List<Track>) ((ITrackable) universalPlayer.getPlayingMediaItem()).getTracks();
+        if (universalPlayer.getPlayingMediaItem() instanceof Podcast) {
+            List<Track> tracks = (List<Track>) ((Podcast) universalPlayer.getPlayingMediaItem()).getTracks();
             playlistAdapter = new PlaylistTracksAdapter(mContext, R.layout.playlist_item, tracks);
 
         } else if (universalPlayer.getPlayingMediaItem() instanceof RadioItem) {
-            List<? extends IPlayableMediaItem> mediaItems = ProfileManager.getInstance().getRecentRadioItems();
-            playlistAdapter = new PlaylistMediaItemsAdapter(mContext, R.layout.playlist_item, (List<IPlayableMediaItem>) mediaItems);
+            List<? extends MediaItem> mediaItems = ProfileManager.getInstance().getRecentRadioItems();
+            playlistAdapter = new PlaylistMediaItemsAdapter(mContext, R.layout.playlist_item, (List<MediaItem>) mediaItems);
         }
         lvPlaylist.setAdapter(playlistAdapter);
         lvPlaylist.setOnItemClickListener(this);
@@ -253,7 +253,7 @@ public class Playlist implements AdapterView.OnItemClickListener {
     private void changeTrack(int position) {
         UniversalPlayer universalPlayer = UniversalPlayer.getInstance();
         if (playlistAdapter instanceof PlaylistMediaItemsAdapter) {
-            IPlayableMediaItem clickedIPlayableMediaItem = ((PlaylistMediaItemsAdapter) playlistAdapter).getItem(position);
+            MediaItem clickedIPlayableMediaItem = ((PlaylistMediaItemsAdapter) playlistAdapter).getItem(position);
             if (universalPlayer.isCurrentMediaItem(clickedIPlayableMediaItem)) {
                 universalPlayer.toggle();
                 Logger.printInfo(LOG_TAG, "Clicked on current trcack -> toogling it");
@@ -268,10 +268,10 @@ public class Playlist implements AdapterView.OnItemClickListener {
                 universalPlayer.toggle();
                 Logger.printInfo(LOG_TAG, "Clicked on current trcack -> toogling it");
             } else {
-                ITrackable trackable = (ITrackable) universalPlayer.getPlayingMediaItem();
+                Podcast trackable = (Podcast) universalPlayer.getPlayingMediaItem();
                 trackable.selectTrack(clieckedTrack);
                 universalPlayer.resetPlayer();
-                UniversalPlayer.getInstance().setMediaItem((IPlayableMediaItem) trackable);
+                UniversalPlayer.getInstance().setMediaItem(trackable);
                 Logger.printInfo(LOG_TAG, "Track switched to: " + clieckedTrack.getTitle());
             }
         }

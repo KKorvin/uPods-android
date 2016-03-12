@@ -23,9 +23,9 @@ import com.chickenkiller.upods2.controllers.player.UniversalPlayer;
 import com.chickenkiller.upods2.controllers.player.VideoPlayerPositionUpdater;
 import com.chickenkiller.upods2.interfaces.IOnPositionUpdatedCallback;
 import com.chickenkiller.upods2.interfaces.IOperationFinishCallback;
-import com.chickenkiller.upods2.interfaces.IPlayableMediaItem;
 import com.chickenkiller.upods2.interfaces.IToolbarHolder;
-import com.chickenkiller.upods2.interfaces.ITrackable;
+import com.chickenkiller.upods2.models.MediaItem;
+import com.chickenkiller.upods2.models.Podcast;
 import com.chickenkiller.upods2.utils.Logger;
 import com.chickenkiller.upods2.utils.MediaUtils;
 
@@ -82,9 +82,9 @@ public class FragmentVideoPlayer extends Fragment implements IVLCVout.Callback, 
         sbPlayerProgress = (SeekBar) view.findViewById(R.id.sbPlayerProgress);
         setVideoHolder();
 
-        IPlayableMediaItem mediaItem = UniversalPlayer.getInstance().getPlayingMediaItem();
-        if (mediaItem instanceof ITrackable) {
-            tvVideoDuration.setText(((ITrackable) mediaItem).getSelectedTrack().getDuration());
+        MediaItem mediaItem = UniversalPlayer.getInstance().getPlayingMediaItem();
+        if (mediaItem instanceof Podcast) {
+            tvVideoDuration.setText(((Podcast) mediaItem).getSelectedTrack().getDuration());
         }
         setListeners();
         return view;
@@ -335,7 +335,7 @@ public class FragmentVideoPlayer extends Fragment implements IVLCVout.Callback, 
                     isVideoPlayerReady = true;
                     pbLoading.setVisibility(View.GONE);
                     String lastPosition = SettingsManager.getInstace().getPareSettingValue(SettingsManager.JS_EPISODS_POSITIONS,
-                            ((ITrackable) UniversalPlayer.getInstance().getPlayingMediaItem()).getSelectedTrack().getTitle());
+                            ((Podcast) UniversalPlayer.getInstance().getPlayingMediaItem()).getSelectedTrack().getTitle());
                     if (!lastPosition.isEmpty()) {
                         mMediaPlayer.setTime(Integer.valueOf(lastPosition));
                     }

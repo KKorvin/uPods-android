@@ -21,9 +21,9 @@ import com.chickenkiller.upods2.controllers.adaperts.MediaItemsAdapter;
 import com.chickenkiller.upods2.controllers.internet.BackendManager;
 import com.chickenkiller.upods2.controllers.player.SmallPlayer;
 import com.chickenkiller.upods2.interfaces.IFragmentsManager;
+import com.chickenkiller.upods2.interfaces.IMediaItemView;
 import com.chickenkiller.upods2.interfaces.IRequestCallback;
 import com.chickenkiller.upods2.interfaces.IToolbarHolder;
-import com.chickenkiller.upods2.models.MediaItem;
 import com.chickenkiller.upods2.models.Podcast;
 import com.chickenkiller.upods2.models.RadioItem;
 import com.chickenkiller.upods2.utils.GlobalUtils;
@@ -123,7 +123,7 @@ public class FragmentSearch extends Fragment implements SearchView.OnQueryTextLi
                             @Override
                             public void run() {
                                 try {
-                                    ArrayList<MediaItem> resultMediaItems = new ArrayList<MediaItem>();
+                                    ArrayList<IMediaItemView> resultMediaItems = new ArrayList<IMediaItemView>();
                                     if (mediaItemType == MediaItemType.RADIO) {
                                         resultMediaItems.addAll(RadioItem.withJsonArray(jResponse.getJSONArray("result"), getActivity()));
                                     } else {

@@ -1,8 +1,6 @@
 package com.chickenkiller.upods2.models;
 
 import com.chickenkiller.upods2.controllers.app.ProfileManager;
-import com.chickenkiller.upods2.interfaces.IPlayableMediaItem;
-import com.chickenkiller.upods2.interfaces.ITrackable;
 import com.chickenkiller.upods2.utils.Logger;
 
 import org.json.JSONArray;
@@ -14,7 +12,7 @@ import java.util.ArrayList;
 /**
  * Created by alonzilberman on 8/24/15.
  */
-public class Podcast extends MediaItem implements IPlayableMediaItem, ITrackable {
+public class Podcast extends MediaItem {
     private static String PODCAST_LOG = "PODCAST";
     protected String name;
     protected String censoredName;
@@ -318,7 +316,7 @@ public class Podcast extends MediaItem implements IPlayableMediaItem, ITrackable
     /**
      * Call it to mark current plying track as not new
      */
-    public static void manageNewTracks(IPlayableMediaItem mediaItem, Track track) {
+    public static void manageNewTracks(MediaItem mediaItem, Track track) {
         try {
             Podcast podcast = (Podcast) MediaItem.getMediaItemByName(ProfileManager.getInstance().getSubscribedPodcasts(), mediaItem);
             if (podcast.newEpisodsTitles.contains(track.getTitle())) {
@@ -332,22 +330,18 @@ public class Podcast extends MediaItem implements IPlayableMediaItem, ITrackable
         }
     }
 
-    @Override
     public void setTracks(ArrayList<? extends Track> tracks) {
         this.episodes = (ArrayList<Episode>) tracks;
     }
 
-    @Override
     public ArrayList<? extends Track> getTracks() {
         return this.episodes;
     }
 
-    @Override
     public String getTracksFeed() {
         return this.feedUrl;
     }
 
-    @Override
     public Track getSelectedTrack() {
         for (Episode episode : episodes) {
             if (episode.isSelected) {
@@ -357,7 +351,6 @@ public class Podcast extends MediaItem implements IPlayableMediaItem, ITrackable
         return null;
     }
 
-    @Override
     public void selectTrack(Track track) {
         for (Episode episode : episodes) {
             episode.isSelected = episode.equals(track) ? true : false;

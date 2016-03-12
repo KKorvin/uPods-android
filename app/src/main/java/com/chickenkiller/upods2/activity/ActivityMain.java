@@ -26,7 +26,6 @@ import com.chickenkiller.upods2.fragments.FragmentWellcome;
 import com.chickenkiller.upods2.interfaces.ICustumziedBackPress;
 import com.chickenkiller.upods2.interfaces.ILoginManager;
 import com.chickenkiller.upods2.interfaces.IOverlayable;
-import com.chickenkiller.upods2.interfaces.IPlayableMediaItem;
 import com.chickenkiller.upods2.interfaces.ISlidingMenuHolder;
 import com.chickenkiller.upods2.interfaces.IToolbarHolder;
 import com.chickenkiller.upods2.models.MediaItem;
@@ -260,8 +259,8 @@ public class ActivityMain extends BasicActivity implements IOverlayable, IToolba
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if (currentContextMenuData != null && currentContextMenuData instanceof IPlayableMediaItem) {
-            Toast.makeText(this, ((IPlayableMediaItem) currentContextMenuData).getName(), Toast.LENGTH_SHORT).show();
+        if (currentContextMenuData != null && currentContextMenuData instanceof MediaItem) {
+            Toast.makeText(this, ((MediaItem) currentContextMenuData).getName(), Toast.LENGTH_SHORT).show();
         }
         return super.onOptionsItemSelected(item);
     }
@@ -282,7 +281,7 @@ public class ActivityMain extends BasicActivity implements IOverlayable, IToolba
             menu.add(getString(R.string.marks_as_played));
             MediaItem mediaItem = ((MediaItem.MediaItemBucket) currentContextMenuData).mediaItem;
             Track track = ((MediaItem.MediaItemBucket) currentContextMenuData).track;
-            if (ProfileManager.getInstance().isDownloaded((IPlayableMediaItem) mediaItem, track)) {
+            if (ProfileManager.getInstance().isDownloaded((MediaItem) mediaItem, track)) {
                 menu.add(getString(R.string.delete));
             }
         } else if (contextMenuType == ContextMenuType.PROFILE) {
@@ -300,7 +299,7 @@ public class ActivityMain extends BasicActivity implements IOverlayable, IToolba
             ContextMenuHelper.showAboutPodcastDialog((Podcast) currentContextMenuData, this);
         } else if (currentContextMenuData != null && currentContextMenuData instanceof Podcast
                 && item.getTitle().equals(getString(R.string.open_on_disk))) {
-            ContextMenuHelper.showPodcastInFolder((IPlayableMediaItem) currentContextMenuData, this);
+            ContextMenuHelper.showPodcastInFolder((MediaItem) currentContextMenuData, this);
         } else if (currentContextMenuData != null && currentContextMenuData instanceof Podcast
                 && item.getTitle().equals(getString(R.string.remove_all_episods))) {
             ContextMenuHelper.removeAllDonwloadedEpisods(this, (Podcast) currentContextMenuData, onContextItemSelected);
@@ -308,7 +307,7 @@ public class ActivityMain extends BasicActivity implements IOverlayable, IToolba
                 && item.getTitle().equals(getString(R.string.delete))) {
             MediaItem mediaItem = ((MediaItem.MediaItemBucket) currentContextMenuData).mediaItem;
             Track track = ((MediaItem.MediaItemBucket) currentContextMenuData).track;
-            ContextMenuHelper.removeDonwloadedTrack(this, track, (IPlayableMediaItem) mediaItem, onContextItemSelected);
+            ContextMenuHelper.removeDonwloadedTrack(this, track, (MediaItem) mediaItem, onContextItemSelected);
         } else if (id == R.id.itemLogout) {
             LoginMaster.getInstance().logout();
             getSlidingMenu().updateHeader(true);

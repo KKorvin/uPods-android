@@ -11,7 +11,7 @@ import android.widget.TextView;
 import com.chickenkiller.upods2.R;
 import com.chickenkiller.upods2.controllers.player.UniversalPlayer;
 import com.chickenkiller.upods2.interfaces.INowPlayingItemPosiontGetter;
-import com.chickenkiller.upods2.interfaces.ITrackable;
+import com.chickenkiller.upods2.models.Podcast;
 import com.chickenkiller.upods2.models.Track;
 
 import java.util.List;
@@ -69,9 +69,9 @@ public class PlaylistTracksAdapter extends ArrayAdapter<Track> implements INowPl
 
     @Override
     public int getNowPlayingItemPosition() {
-        Track currentTrack = ((ITrackable) universalPlayer.getPlayingMediaItem()).getSelectedTrack();
+        Track currentTrack = ((Podcast) universalPlayer.getPlayingMediaItem()).getSelectedTrack();
         for (int i = 0; i < tracks.size(); i++) {
-            if(currentTrack.getTitle().equals(tracks.get(i).getTitle())){
+            if (currentTrack.getTitle().equals(tracks.get(i).getTitle())) {
                 return i;
             }
         }

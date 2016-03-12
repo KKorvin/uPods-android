@@ -10,9 +10,8 @@ import com.chickenkiller.upods2.controllers.app.ProfileManager;
 import com.chickenkiller.upods2.controllers.app.SettingsManager;
 import com.chickenkiller.upods2.controllers.app.UpodsApplication;
 import com.chickenkiller.upods2.interfaces.IOperationFinishCallback;
-import com.chickenkiller.upods2.interfaces.IPlayableMediaItem;
 import com.chickenkiller.upods2.interfaces.IPlayerStateListener;
-import com.chickenkiller.upods2.interfaces.ITrackable;
+import com.chickenkiller.upods2.models.MediaItem;
 import com.chickenkiller.upods2.models.Podcast;
 import com.chickenkiller.upods2.models.RadioItem;
 import com.chickenkiller.upods2.models.Track;
@@ -57,7 +56,7 @@ public class UniversalPlayer implements MediaPlayer.EventListener {
     private IOperationFinishCallback onPlayingFailedCallback;
     private IPlayerStateListener playerStateListener;
 
-    private IPlayableMediaItem mediaItem;
+    private MediaItem mediaItem;
     private PlayerNotificationPanel notificationPanel;
 
     private TimerTask autoReconector;
@@ -80,7 +79,7 @@ public class UniversalPlayer implements MediaPlayer.EventListener {
      *
      * @param mediaItem
      */
-    public void setMediaItem(IPlayableMediaItem mediaItem) {
+    public void setMediaItem(MediaItem mediaItem) {
         if (isCurrentMediaItem(mediaItem)) {
             return;
         }
@@ -99,7 +98,7 @@ public class UniversalPlayer implements MediaPlayer.EventListener {
      * @param needReset - if true will reset the player before changing the mediaItem
      * @param mediaItem
      */
-    public void setMediaItem(IPlayableMediaItem mediaItem, boolean needReset) {
+    public void setMediaItem(MediaItem mediaItem, boolean needReset) {
         if (needReset && !isCurrentMediaItem(mediaItem)) {
             resetPlayer();
         }
@@ -291,17 +290,17 @@ public class UniversalPlayer implements MediaPlayer.EventListener {
     }
 
 
-    public IPlayableMediaItem getPlayingMediaItem() {
+    public MediaItem getPlayingMediaItem() {
         return mediaItem;
     }
 
 
-    public boolean isCurrentMediaItem(IPlayableMediaItem mediaItem) {
+    public boolean isCurrentMediaItem(MediaItem mediaItem) {
         if (this.mediaItem == null) {
             return false;
         }
-        if (this.mediaItem instanceof ITrackable && mediaItem instanceof ITrackable) {
-            return ((ITrackable) this.mediaItem).getSelectedTrack().getTitle().equals(((ITrackable) mediaItem).getSelectedTrack().getTitle());
+        if (this.mediaItem instanceof Podcast && mediaItem instanceof Podcast) {
+            return ((Podcast) this.mediaItem).getSelectedTrack().getTitle().equals(((Podcast) mediaItem).getSelectedTrack().getTitle());
         }
 
         return this.mediaItem.getName().equals(mediaItem.getName());
@@ -309,10 +308,10 @@ public class UniversalPlayer implements MediaPlayer.EventListener {
     }
 
     public boolean isCurrentTrack(Track track) {
-        if (this.mediaItem == null || !(this.mediaItem instanceof ITrackable)) {
+        if (this.mediaItem == null || !(this.mediaItem instanceof Podcast)) {
             return false;
         }
-        return ((ITrackable) this.mediaItem).getSelectedTrack().getTitle().equals(track.getTitle());
+        return ((Podcast) this.mediaItem).getSelectedTrack().getTitle().equals(track.getTitle());
     }
 
     public void seekTo(int ms) {
@@ -322,7 +321,7 @@ public class UniversalPlayer implements MediaPlayer.EventListener {
     }
 
     public void changeTrackToDirection(Direction direction) {
-        if (universalPlayer.getPlayingMediaItem() instanceof ITrackable) {
+        if (universalPlayer.getPlayingMediaItem() instanceof Podcast) {
             changeTrackToDirectionTrackable(direction);
         } else if (universalPlayer.getPlayingMediaItem() instanceof RadioItem) {
             changeTrackToDirectionRadio(direction);
@@ -333,12 +332,12 @@ public class UniversalPlayer implements MediaPlayer.EventListener {
     }
 
     private void changeTrackToDirectionTrackable(Direction direction) {
-        Track currentTrack = ((ITrackable) mediaItem).getSelectedTrack();
-        ArrayList<? extends Track> tracks = ((ITrackable) mediaItem).getTracks();
+        Track currentTrack = ((Podcast) mediaItem).getSelectedTrack();
+        ArrayList<? extends Track> tracks = ((Podcast) mediaItem).getTracks();
         for (int i = 0; i < tracks.size(); i++) {
             if (currentTrack.getTitle().equals(tracks.get(i).getTitle())) {
                 int changeTo = MediaUtils.calculateNextTrackNumber(direction, i, tracks.size() - 1);
-                ((ITrackable) mediaItem).selectTrack(tracks.get(changeTo));
+                ((Podcast) mediaItem).selectTrack(tracks.get(changeTo));
                 resetPlayer();
                 setMediaItem(mediaItem);
                 prepare();
@@ -348,9 +347,9 @@ public class UniversalPlayer implements MediaPlayer.EventListener {
     }
 
     private void changeTrackToDirectionRadio(Direction direction) {
-        List<? extends IPlayableMediaItem> mediaItems = ProfileManager.getInstance().getRecentRadioItems();
+        List<? extends MediaItem> mediaItems = ProfileManager.getInstance().getRecentRadioItems();
         for (int i = 0; i < mediaItems.size(); i++) {
-            IPlayableMediaItem iPlayableMediaItem = mediaItems.get(i);
+            MediaItem iPlayableMediaItem = mediaItems.get(i);
             if (iPlayableMediaItem.getName().equals(mediaItem.getName())) {
                 int changeTo = MediaUtils.calculateNextTrackNumber(direction, i, mediaItems.size() - 1);
                 resetPlayer();
@@ -387,9 +386,9 @@ public class UniversalPlayer implements MediaPlayer.EventListener {
 
     @Override
     public void onEvent(MediaPlayer.Event event) {
-        if (!isPrepaired && mediaItem instanceof ITrackable) {//Try to continue for last position
+        if (!isPrepaired && mediaItem instanceof Podcast) {//Try to continue for last position
             String lastPosition = SettingsManager.getInstace().getPareSettingValue(SettingsManager.JS_EPISODS_POSITIONS,
-                    ((ITrackable) mediaItem).getSelectedTrack().getTitle());
+                    ((Podcast) mediaItem).getSelectedTrack().getTitle());
             if (!lastPosition.isEmpty()) {
                 seekTo(Integer.valueOf(lastPosition));
             }
@@ -410,9 +409,9 @@ public class UniversalPlayer implements MediaPlayer.EventListener {
                 if (onPlayingFailedCallback != null) {
                     onPlayingFailedCallback.operationFinished();
                 }
-            } else {
+            } /*else {
                 changeTrackToDirection(Direction.RIGHT);
-            }
+            }*/
         } else if (event.type == MediaPlayer.Event.EncounteredError) {
             if (!GlobalUtils.isInternetConnected()) {
                 runReconnectTask();

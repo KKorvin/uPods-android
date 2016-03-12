@@ -21,9 +21,9 @@ import com.chickenkiller.upods2.fragments.FragmentMainFeatured;
 import com.chickenkiller.upods2.fragments.FragmentPlayer;
 import com.chickenkiller.upods2.fragments.FragmentSearch;
 import com.chickenkiller.upods2.fragments.FragmentVideoPlayer;
-import com.chickenkiller.upods2.interfaces.IPlayableMediaItem;
 import com.chickenkiller.upods2.interfaces.IToolbarHolder;
-import com.chickenkiller.upods2.interfaces.ITrackable;
+import com.chickenkiller.upods2.models.MediaItem;
+import com.chickenkiller.upods2.models.Podcast;
 import com.chickenkiller.upods2.models.RadioItem;
 import com.chickenkiller.upods2.utils.ContextMenuHelper;
 import com.chickenkiller.upods2.utils.MediaUtils;
@@ -35,7 +35,7 @@ public class ActivityPlayer extends BasicActivity implements IToolbarHolder, Too
     public static final String ACTIVITY_STARTED_FROM = "startedFrom";
     public static final String ACTIVITY_STARTED_FROM_IN_DEPTH = "startedFromDepth"; //used if activity was started from depth fragment i.e search
 
-    private IPlayableMediaItem currentMediaItem;
+    private MediaItem currentMediaItem;
     private Toolbar toolbar;
     private ActionMenuItemView itemFavorites;
     private FragmentPlayer fragmentPlayer;
@@ -58,7 +58,7 @@ public class ActivityPlayer extends BasicActivity implements IToolbarHolder, Too
         }
 
         if (getFragmentManager().getBackStackEntryCount() == 0) {
-            if (currentMediaItem instanceof ITrackable && MediaUtils.isVideoUrl(currentMediaItem.getAudeoLink())) {
+            if (currentMediaItem instanceof Podcast && MediaUtils.isVideoUrl(currentMediaItem.getAudeoLink())) {
                 setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
                 FragmentVideoPlayer fragmentVideoPlayer = new FragmentVideoPlayer();
                 fragmentVideoPlayer.setOnPlayingFailedCallback(MediaUtils.getPlayerFailCallback(this, currentMediaItem));
@@ -121,7 +121,7 @@ public class ActivityPlayer extends BasicActivity implements IToolbarHolder, Too
 
     @Override
     public boolean onMenuItemClick(MenuItem item) {
-        IPlayableMediaItem mediaItem = UniversalPlayer.getInstance().getPlayingMediaItem();
+        MediaItem mediaItem = UniversalPlayer.getInstance().getPlayingMediaItem();
         if (item.getItemId() == R.id.action_favorites_player) {
             if (ProfileManager.getInstance().isSubscribedToMediaItem(mediaItem)) {
                 itemFavorites.setIcon(getResources().getDrawable(R.drawable.ic_heart_white_24dp));
@@ -144,7 +144,7 @@ public class ActivityPlayer extends BasicActivity implements IToolbarHolder, Too
             ContextMenuHelper.selectRadioStreamQuality(this, fragmentPlayer, (RadioItem) currentMediaItem);
         } else if (item.getTitle().equals("Show notes")) {
             DialogFragmentTrackInfo dialogFragmentTrackInfo = new DialogFragmentTrackInfo();
-            dialogFragmentTrackInfo.setTrack(((ITrackable) UniversalPlayer.getInstance().getPlayingMediaItem()).getSelectedTrack());
+            dialogFragmentTrackInfo.setTrack(((Podcast) UniversalPlayer.getInstance().getPlayingMediaItem()).getSelectedTrack());
             dialogFragmentTrackInfo.enableStream = false;
             showDialogFragment(dialogFragmentTrackInfo);
         } else if (item.getTitle().equals(getString(R.string.stream_info))) {

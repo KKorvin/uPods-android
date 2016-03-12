@@ -9,7 +9,7 @@ import com.chickenkiller.upods2.dialogs.DialogFragmentMessage;
 import com.chickenkiller.upods2.fragments.FragmentPlayer;
 import com.chickenkiller.upods2.interfaces.IFragmentsManager;
 import com.chickenkiller.upods2.interfaces.IOperationFinishCallback;
-import com.chickenkiller.upods2.interfaces.IPlayableMediaItem;
+import com.chickenkiller.upods2.models.MediaItem;
 import com.chickenkiller.upods2.models.Podcast;
 import com.chickenkiller.upods2.utils.enums.Direction;
 
@@ -92,7 +92,7 @@ public class MediaUtils {
         return link.matches(".*\\.(mpeg|avi|mp4|3gp|webm|mkv|ogg|wma)$");
     }
 
-    public static IOperationFinishCallback getPlayerFailCallback(final Activity activity, final IPlayableMediaItem playableMediaItem) {
+    public static IOperationFinishCallback getPlayerFailCallback(final Activity activity, final MediaItem playableMediaItem) {
         return new IOperationFinishCallback() {
             @Override
             public void operationFinished() {

@@ -30,10 +30,10 @@ import com.chickenkiller.upods2.controllers.player.Playlist;
 import com.chickenkiller.upods2.controllers.player.UniversalPlayer;
 import com.chickenkiller.upods2.interfaces.IOnPositionUpdatedCallback;
 import com.chickenkiller.upods2.interfaces.IOperationFinishCallback;
-import com.chickenkiller.upods2.interfaces.IPlayableMediaItem;
 import com.chickenkiller.upods2.interfaces.IPlayerStateListener;
 import com.chickenkiller.upods2.interfaces.IToolbarHolder;
-import com.chickenkiller.upods2.interfaces.ITrackable;
+import com.chickenkiller.upods2.models.MediaItem;
+import com.chickenkiller.upods2.models.Podcast;
 import com.chickenkiller.upods2.models.RadioItem;
 import com.chickenkiller.upods2.models.Track;
 import com.chickenkiller.upods2.utils.Logger;
@@ -52,7 +52,7 @@ public class FragmentPlayer extends Fragment implements IPlayerStateListener {
     private static final float TOOLBAR_TEXT_SIZE = 20f;
     private static final int COVER_IMAGE_SIZE = UIHelper.dpToPixels(100);
 
-    private IPlayableMediaItem playableMediaItem;
+    private MediaItem playableMediaItem;
     private UniversalPlayer universalPlayer;
     private Playlist playlist;
     private PlayerPositionUpdater playerPositionUpdater;
@@ -186,7 +186,7 @@ public class FragmentPlayer extends Fragment implements IPlayerStateListener {
         super.onDestroy();
     }
 
-    public void setPlayableItem(IPlayableMediaItem iPlayableMediaItem) {
+    public void setPlayableItem(MediaItem iPlayableMediaItem) {
         this.playableMediaItem = iPlayableMediaItem;
     }
 
@@ -195,8 +195,8 @@ public class FragmentPlayer extends Fragment implements IPlayerStateListener {
      * Inits player UI accorfing to current MediaItem
      */
     private void initPlayerUI() {
-        if (playableMediaItem instanceof ITrackable) {
-            tvPlayerTitle.setText(((ITrackable) playableMediaItem).getSelectedTrack().getTitle().trim());
+        if (playableMediaItem instanceof Podcast) {
+            tvPlayerTitle.setText(((Podcast) playableMediaItem).getSelectedTrack().getTitle().trim());
         } else {
             tvPlayerTitle.setText(playableMediaItem.getName().trim());
         }
@@ -218,8 +218,8 @@ public class FragmentPlayer extends Fragment implements IPlayerStateListener {
                 }
             });
         }
-        if (playableMediaItem instanceof ITrackable) {
-            Track selectedTrack = ((ITrackable) playableMediaItem).getSelectedTrack();
+        if (playableMediaItem instanceof Podcast) {
+            Track selectedTrack = ((Podcast) playableMediaItem).getSelectedTrack();
             tvTrackDuration.setText(selectedTrack.getDuration());
             sbPlayerProgress.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
                 @Override

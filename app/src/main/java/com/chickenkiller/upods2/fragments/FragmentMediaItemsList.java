@@ -15,8 +15,8 @@ import com.chickenkiller.upods2.R;
 import com.chickenkiller.upods2.controllers.adaperts.MediaItemsAdapter;
 import com.chickenkiller.upods2.controllers.app.ProfileManager;
 import com.chickenkiller.upods2.interfaces.IFragmentsManager;
+import com.chickenkiller.upods2.interfaces.IMediaItemView;
 import com.chickenkiller.upods2.interfaces.IUpdateableFragment;
-import com.chickenkiller.upods2.models.MediaItem;
 import com.chickenkiller.upods2.models.MediaItemTitle;
 import com.chickenkiller.upods2.models.Podcast;
 import com.chickenkiller.upods2.models.RadioItem;
@@ -51,7 +51,7 @@ public class FragmentMediaItemsList extends Fragment implements IUpdateableFragm
 
         TextView tvEmptyScreenText = (TextView) view.findViewById(R.id.tvEmptyScreenText);
 
-        ArrayList<MediaItem> allItems = new ArrayList<>();
+        ArrayList<IMediaItemView> allItems = new ArrayList<>();
         MediaItemTitle mediaItemTitle = null;
 
         if (mediaItemType == MediaItemType.PODCAST_DOWNLOADED || mediaItemType == null) {
@@ -107,7 +107,7 @@ public class FragmentMediaItemsList extends Fragment implements IUpdateableFragm
 
     @Override
     public void update() {
-        ArrayList<MediaItem> allItems = new ArrayList<>();
+        ArrayList<IMediaItemView> allItems = new ArrayList<>();
         allItems.add(mediaItemsAdapter.getItemAt(0));
         if (mediaItemType == MediaItemType.PODCAST_DOWNLOADED || mediaItemType == null) {
             ArrayList<Podcast> downloadedPodcasts = ProfileManager.getInstance().getDownloadedPodcasts();

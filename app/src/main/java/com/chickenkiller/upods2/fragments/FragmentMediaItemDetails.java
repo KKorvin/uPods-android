@@ -39,11 +39,10 @@ import com.chickenkiller.upods2.interfaces.IFragmentsManager;
 import com.chickenkiller.upods2.interfaces.IMovable;
 import com.chickenkiller.upods2.interfaces.IOperationFinishCallback;
 import com.chickenkiller.upods2.interfaces.IOverlayable;
-import com.chickenkiller.upods2.interfaces.IPlayableMediaItem;
 import com.chickenkiller.upods2.interfaces.ISimpleRequestCallback;
-import com.chickenkiller.upods2.interfaces.ITrackable;
 import com.chickenkiller.upods2.models.Episode;
 import com.chickenkiller.upods2.models.Feed;
+import com.chickenkiller.upods2.models.MediaItem;
 import com.chickenkiller.upods2.models.Podcast;
 import com.chickenkiller.upods2.utils.GlobalUtils;
 import com.chickenkiller.upods2.utils.Logger;
@@ -76,7 +75,7 @@ public class FragmentMediaItemDetails extends Fragment implements View.OnTouchLi
     private static int topScrollBorder;
     public static String TAG = "media_details";
 
-    private IPlayableMediaItem playableItem;
+    private MediaItem playableItem;
 
     private RelativeLayout rlDetailedContent;
     private LinearLayout lnInternetError;
@@ -284,7 +283,7 @@ public class FragmentMediaItemDetails extends Fragment implements View.OnTouchLi
             return;
         }
 
-        BackendManager.getInstance().sendRequest(((ITrackable) playableItem).getTracksFeed(), new ISimpleRequestCallback() {
+        BackendManager.getInstance().sendRequest(((Podcast) playableItem).getTracksFeed(), new ISimpleRequestCallback() {
                     @Override
                     public void onRequestSuccessed(final String response) {
                         getActivity().runOnUiThread(new Runnable() {
@@ -303,8 +302,8 @@ public class FragmentMediaItemDetails extends Fragment implements View.OnTouchLi
                                     if (playableItem instanceof Podcast) {
                                         Feed.handleUpdates(parsedEpisodes, (Podcast) playableItem);
                                     }
-                                    if (playableItem instanceof ITrackable) {
-                                        ((ITrackable) playableItem).setTracks(parsedEpisodes);
+                                    if (playableItem instanceof Podcast) {
+                                        ((Podcast) playableItem).setTracks(parsedEpisodes);
                                     }
                                     if (playableItem instanceof Podcast) {
                                         Podcast podcast = ((Podcast) playableItem);
@@ -338,7 +337,7 @@ public class FragmentMediaItemDetails extends Fragment implements View.OnTouchLi
     }
 
 
-    public void setPlayableItem(IPlayableMediaItem mediaItem) {
+    public void setPlayableItem(MediaItem mediaItem) {
         this.playableItem = mediaItem;
     }
 
@@ -371,7 +370,7 @@ public class FragmentMediaItemDetails extends Fragment implements View.OnTouchLi
                 if (lParams.topMargin >= bottomScrollBorder) {
                     getActivity().onBackPressed();
                 } else {
-                    if (!(playableItem instanceof ITrackable)) {
+                    if (!(playableItem instanceof Podcast)) {
                         fbDetailsPlay.setVisibility(View.VISIBLE);
                     }
                     svDetails.setEnabled(false);

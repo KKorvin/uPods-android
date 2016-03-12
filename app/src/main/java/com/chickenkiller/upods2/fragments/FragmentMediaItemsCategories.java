@@ -18,14 +18,14 @@ import com.chickenkiller.upods2.controllers.adaperts.MediaItemsAdapter;
 import com.chickenkiller.upods2.controllers.internet.BackendManager;
 import com.chickenkiller.upods2.interfaces.ICustumziedBackPress;
 import com.chickenkiller.upods2.interfaces.IFragmentsManager;
+import com.chickenkiller.upods2.interfaces.IMediaItemView;
 import com.chickenkiller.upods2.interfaces.IRequestCallback;
 import com.chickenkiller.upods2.models.Category;
-import com.chickenkiller.upods2.models.MediaItem;
 import com.chickenkiller.upods2.models.MediaItemTitle;
 import com.chickenkiller.upods2.models.Podcast;
 import com.chickenkiller.upods2.utils.Logger;
-import com.chickenkiller.upods2.utils.enums.MediaItemType;
 import com.chickenkiller.upods2.utils.ServerApi;
+import com.chickenkiller.upods2.utils.enums.MediaItemType;
 import com.chickenkiller.upods2.views.AutofitRecyclerView;
 import com.chickenkiller.upods2.views.GridSpacingItemDecoration;
 
@@ -128,7 +128,7 @@ public class FragmentMediaItemsCategories extends Fragment implements AdapterVie
                             @Override
                             public void run() {
                                 try {
-                                    ArrayList<MediaItem> podcastsByCategory = new ArrayList<MediaItem>();
+                                    ArrayList<IMediaItemView> podcastsByCategory = new ArrayList<IMediaItemView>();
                                     MediaItemTitle mediaItemTitle = new MediaItemTitle(category.getName());
                                     mediaItemTitle.showButton = false;
                                     podcastsByCategory.add(mediaItemTitle);

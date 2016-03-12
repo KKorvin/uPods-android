@@ -15,7 +15,7 @@ import com.chickenkiller.upods2.R;
 import com.chickenkiller.upods2.activity.ActivityPlayer;
 import com.chickenkiller.upods2.controllers.app.MainBroadcastRecivier;
 import com.chickenkiller.upods2.controllers.player.UniversalPlayer;
-import com.chickenkiller.upods2.interfaces.IPlayableMediaItem;
+import com.chickenkiller.upods2.models.MediaItem;
 import com.chickenkiller.upods2.utils.ui.LetterBitmap;
 import com.chickenkiller.upods2.utils.ui.UIHelper;
 
@@ -30,7 +30,7 @@ public class DefaultNotificationPanel extends PlayerNotificationPanel {
     private PendingIntent forwardIntent;
     private PendingIntent backwardIntent;
 
-    public DefaultNotificationPanel(Context mContext, IPlayableMediaItem playableMediaItem) {
+    public DefaultNotificationPanel(Context mContext, MediaItem playableMediaItem) {
         super(mContext, playableMediaItem);
         this.nBuilder = new NotificationCompat.Builder(mContext);
         this.nBuilder.setContentTitle(playableMediaItem.getName());

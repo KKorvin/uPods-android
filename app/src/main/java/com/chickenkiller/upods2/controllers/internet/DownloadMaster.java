@@ -10,8 +10,8 @@ import android.os.Environment;
 import com.chickenkiller.upods2.controllers.app.ProfileManager;
 import com.chickenkiller.upods2.controllers.app.UpodsApplication;
 import com.chickenkiller.upods2.interfaces.IContentLoadListener;
-import com.chickenkiller.upods2.interfaces.IPlayableMediaItem;
 import com.chickenkiller.upods2.interfaces.IUIProgressUpdater;
+import com.chickenkiller.upods2.models.MediaItem;
 import com.chickenkiller.upods2.models.Track;
 import com.chickenkiller.upods2.utils.GlobalUtils;
 import com.chickenkiller.upods2.utils.Logger;
@@ -34,7 +34,7 @@ public class DownloadMaster {
     private TimerTask progressUpdateTask;
 
     public static class DownloadTask {
-        public IPlayableMediaItem mediaItem;
+        public MediaItem mediaItem;
         public String filePath;
         public Track track;
         public long downloadId;

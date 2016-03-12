@@ -20,8 +20,6 @@ import com.chickenkiller.upods2.interfaces.IContentLoadListener;
 import com.chickenkiller.upods2.interfaces.IContextMenuManager;
 import com.chickenkiller.upods2.interfaces.IFragmentsManager;
 import com.chickenkiller.upods2.interfaces.IOperationFinishCallback;
-import com.chickenkiller.upods2.interfaces.IPlayableMediaItem;
-import com.chickenkiller.upods2.interfaces.ITrackable;
 import com.chickenkiller.upods2.interfaces.IUIProgressUpdater;
 import com.chickenkiller.upods2.models.Episode;
 import com.chickenkiller.upods2.models.MediaItem;
@@ -45,7 +43,7 @@ public class TracksAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     private int itemLayout;
 
     private List<Track> tracks;
-    private IPlayableMediaItem iPlayableMediaItem;
+    private MediaItem iPlayableMediaItem;
     private Context mContext;
     private IFragmentsManager fragmentsManager;
 
@@ -79,7 +77,7 @@ public class TracksAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     }
 
 
-    public TracksAdapter(IPlayableMediaItem iPlayableMediaItem, Context mContext, int itemLayout) {
+    public TracksAdapter(MediaItem iPlayableMediaItem, Context mContext, int itemLayout) {
         super();
         this.iPlayableMediaItem = iPlayableMediaItem;
         this.tracks = new ArrayList<>();
@@ -195,8 +193,8 @@ public class TracksAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             public void onClick(View view) {
                 DownloadMaster.getInstance().cleanProgressInterfaces();
                 Track track = tracks.get(position);
-                if (iPlayableMediaItem instanceof ITrackable) {
-                    ((ITrackable) iPlayableMediaItem).selectTrack(track);
+                if (iPlayableMediaItem instanceof Podcast) {
+                    ((Podcast) iPlayableMediaItem).selectTrack(track);
                 }
                 if (ProfileManager.getInstance().isDownloaded(iPlayableMediaItem, track)) {
                     track.setAudeoUrl(ProfileManager.getInstance().getDownloadedTrackPath(iPlayableMediaItem, track));

@@ -1,9 +1,11 @@
 package com.chickenkiller.upods2.models;
 
+import com.chickenkiller.upods2.interfaces.IMediaItemView;
+
 /**
  * Created by alonzilberman on 7/7/15.
  */
-public class MediaItemTitle extends MediaItem {
+public class MediaItemTitle implements IMediaItemView {
 
     private String title;
     private String subTitle;

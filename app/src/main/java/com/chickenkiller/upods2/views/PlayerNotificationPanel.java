@@ -6,7 +6,7 @@ import android.support.v7.app.NotificationCompat;
 import android.widget.RemoteViews;
 
 import com.chickenkiller.upods2.controllers.player.UniversalPlayer;
-import com.chickenkiller.upods2.interfaces.IPlayableMediaItem;
+import com.chickenkiller.upods2.models.MediaItem;
 
 /**
  * Created by alonzilberman on 7/31/15.
@@ -20,9 +20,9 @@ public abstract class PlayerNotificationPanel {
     protected NotificationManager nManager;
     protected NotificationCompat.Builder nBuilder;
     protected RemoteViews remoteView;
-    protected IPlayableMediaItem mediaItem;
+    protected MediaItem mediaItem;
 
-    public PlayerNotificationPanel(Context mContext, IPlayableMediaItem mediaItem) {
+    public PlayerNotificationPanel(Context mContext, MediaItem mediaItem) {
         this.mContext = mContext;
         this.mediaItem = mediaItem;
     }

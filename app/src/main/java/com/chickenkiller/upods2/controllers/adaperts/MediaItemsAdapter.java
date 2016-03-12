@@ -22,8 +22,8 @@ import com.chickenkiller.upods2.fragments.FragmentMediaItemDetails;
 import com.chickenkiller.upods2.interfaces.IContentLoadListener;
 import com.chickenkiller.upods2.interfaces.IContextMenuManager;
 import com.chickenkiller.upods2.interfaces.IFragmentsManager;
+import com.chickenkiller.upods2.interfaces.IMediaItemView;
 import com.chickenkiller.upods2.interfaces.IOperationFinishWithDataCallback;
-import com.chickenkiller.upods2.interfaces.IPlayableMediaItem;
 import com.chickenkiller.upods2.models.BannersLayoutItem;
 import com.chickenkiller.upods2.models.MediaItem;
 import com.chickenkiller.upods2.models.MediaItemTitle;
@@ -58,7 +58,7 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     private int roundedButtonsLayout;
     private int currentContentLevel;
 
-    private List<MediaItem> items;
+    private List<IMediaItemView> items;
     private Context mContext;
     private IFragmentsManager fragmentsManager;
     private IContentLoadListener iContentLoadListener;
@@ -148,7 +148,7 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     }
 
-    public MediaItemsAdapter(Context mContext, int itemLayout, List<MediaItem> items) {
+    public MediaItemsAdapter(Context mContext, int itemLayout, List<IMediaItemView> items) {
         super();
         this.items = items;
         this.itemLayout = itemLayout;
@@ -156,13 +156,13 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         this.mediaItemType = MediaItemType.DEFAULT;
     }
 
-    public MediaItemsAdapter(Context mContext, int itemLayout, int titleLayout, ArrayList<MediaItem> items) {
+    public MediaItemsAdapter(Context mContext, int itemLayout, int titleLayout, ArrayList<IMediaItemView> items) {
         this(mContext, itemLayout, items);
         this.titleLayout = titleLayout;
     }
 
     public MediaItemsAdapter(Context mContext, int itemLayout, int titleLayout) {
-        this(mContext, itemLayout, new ArrayList<MediaItem>());
+        this(mContext, itemLayout, new ArrayList<IMediaItemView>());
         this.titleLayout = titleLayout;
     }
 
@@ -238,7 +238,7 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     }
 
     private void bindCardViewHolder(RecyclerView.ViewHolder holder, int position) {
-        IPlayableMediaItem currentItem = (IPlayableMediaItem) items.get(position);
+        MediaItem currentItem = (MediaItem) items.get(position);
         if (currentItem.getCoverImageUrl() == null) {
             final LetterBitmap letterBitmap = new LetterBitmap(mContext);
             Bitmap letterTile = letterBitmap.getLetterTile(currentItem.getName(), currentItem.getName(), COVER_IMAGE_SIZE, COVER_IMAGE_SIZE);
@@ -265,7 +265,7 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     /**
      * Inits status block (icon + text, i.e downloaded)
      */
-    private void initStatusBlock(ViewHolderCardItem holder, IPlayableMediaItem currentItem) {
+    private void initStatusBlock(ViewHolderCardItem holder, MediaItem currentItem) {
         if (mediaItemType == MediaItemType.PODCAST_DOWNLOADED &&
                 ProfileManager.getInstance().isDownloaded(currentItem)) {
             holder.tvItemStatus.setText(R.string.downloaded);
@@ -279,7 +279,7 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     /**
      * Inits cpunt block (number in circle, i.e new episodes)
      */
-    private void initCountBlock(ViewHolderCardItem holder, IPlayableMediaItem currentItem) {
+    private void initCountBlock(ViewHolderCardItem holder, MediaItem currentItem) {
         if (mediaItemType == MediaItemType.PODCAST_FAVORITE && currentItem instanceof Podcast &&
                 ((Podcast) currentItem).getNewEpisodsCount() > 0) {//only for podcasts in favorites
             int newEpisodesCount = ((Podcast) currentItem).getNewEpisodsCount();
@@ -295,10 +295,8 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             @Override
             public void onClick(View view) {
                 FragmentMediaItemDetails fragmentMediaItemDetails = new FragmentMediaItemDetails();
-                if (items.get(position) instanceof IPlayableMediaItem) {
-                    fragmentMediaItemDetails.setPlayableItem((IPlayableMediaItem) items.get(position));
-                }
-                if (!fragmentsManager.hasFragment(FragmentMediaItemDetails.TAG)) {
+                if (items.get(position) instanceof MediaItem && !fragmentsManager.hasFragment(FragmentMediaItemDetails.TAG)) {
+                    fragmentMediaItemDetails.setPlayableItem((MediaItem) items.get(position));
                     fragmentsManager.showFragment(R.id.fl_window, fragmentMediaItemDetails, FragmentMediaItemDetails.TAG,
                             IFragmentsManager.FragmentOpenType.OVERLAY, IFragmentsManager.FragmentAnimationType.BOTTOM_TOP);
                 }
@@ -310,7 +308,7 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (items.get(position) instanceof IPlayableMediaItem && mContext instanceof IContextMenuManager) {
+                if (items.get(position) instanceof MediaItem && mContext instanceof IContextMenuManager) {
                     ((IContextMenuManager) mContext).openContextMenu(view, ContextMenuType.CARD_DEFAULT, items.get(position), null);
                 }
             }
@@ -333,7 +331,7 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         return items.size();
     }
 
-    public void addItems(ArrayList<MediaItem> items) {
+    public void addItems(ArrayList<IMediaItemView> items) {
         this.items.addAll(items);
         this.notifyDataSetChanged();
     }
@@ -346,7 +344,7 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         this.items.clear();
     }
 
-    public MediaItem getItemAt(int position) {
+    public IMediaItemView getItemAt(int position) {
         return this.items.get(position);
     }
 

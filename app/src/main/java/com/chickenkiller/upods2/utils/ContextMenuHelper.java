@@ -22,8 +22,8 @@ import com.chickenkiller.upods2.fragments.FragmentPlayer;
 import com.chickenkiller.upods2.interfaces.IFragmentsManager;
 import com.chickenkiller.upods2.interfaces.IOperationFinishCallback;
 import com.chickenkiller.upods2.interfaces.IOperationFinishWithDataCallback;
-import com.chickenkiller.upods2.interfaces.IPlayableMediaItem;
 import com.chickenkiller.upods2.interfaces.IRequestCallback;
+import com.chickenkiller.upods2.models.MediaItem;
 import com.chickenkiller.upods2.models.Podcast;
 import com.chickenkiller.upods2.models.RadioItem;
 import com.chickenkiller.upods2.models.Track;
@@ -48,7 +48,7 @@ public class ContextMenuHelper {
         fragmentsManager.showDialogFragment(dialogFragmentMessage);
     }
 
-    public static void showPodcastInFolder(IPlayableMediaItem mediaItemData, Activity activity) {
+    public static void showPodcastInFolder(MediaItem mediaItemData, Activity activity) {
         String path = ProfileManager.getInstance().getDownloadedMediaItemPath(mediaItemData);
         Uri selectedUri = Uri.parse(path);
         Intent intent = new Intent(Intent.ACTION_VIEW);
@@ -72,7 +72,7 @@ public class ContextMenuHelper {
         ((IFragmentsManager) activity).showDialogFragment(dialogFragmentConfarmation);
     }
 
-    public static void removeDonwloadedTrack(Activity activity, Track track, IPlayableMediaItem mediaItem,
+    public static void removeDonwloadedTrack(Activity activity, Track track, MediaItem mediaItem,
                                              final IOperationFinishCallback contextItemSelected) {
         ProfileManager.getInstance().removeDownloadedTrack(mediaItem, track);
         contextItemSelected.operationFinished();

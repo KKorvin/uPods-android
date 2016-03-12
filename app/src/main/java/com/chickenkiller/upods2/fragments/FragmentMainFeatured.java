@@ -21,11 +21,11 @@ import com.chickenkiller.upods2.controllers.internet.BackendManager;
 import com.chickenkiller.upods2.interfaces.IContentLoadListener;
 import com.chickenkiller.upods2.interfaces.ICustumziedBackPress;
 import com.chickenkiller.upods2.interfaces.IFragmentsManager;
+import com.chickenkiller.upods2.interfaces.IMediaItemView;
 import com.chickenkiller.upods2.interfaces.IOperationFinishWithDataCallback;
 import com.chickenkiller.upods2.interfaces.IRequestCallback;
 import com.chickenkiller.upods2.interfaces.IToolbarHolder;
 import com.chickenkiller.upods2.models.Category;
-import com.chickenkiller.upods2.models.MediaItem;
 import com.chickenkiller.upods2.models.MediaItemTitle;
 import com.chickenkiller.upods2.models.RadioItem;
 import com.chickenkiller.upods2.models.RoundedButtonsLayoutItem;
@@ -190,7 +190,7 @@ public class FragmentMainFeatured extends Fragment implements IContentLoadListen
                             @Override
                             public void run() {
                                 try {
-                                    ArrayList<MediaItem> topRadioStations = new ArrayList<MediaItem>();
+                                    ArrayList<IMediaItemView> topRadioStations = new ArrayList<IMediaItemView>();
                                     MediaItemTitle mediaItemTitle = new MediaItemTitle(getString(R.string.top40_chanels), getString(R.string.top40_chanels_subheader));
                                     mediaItemTitle.showButton = true;
                                     RoundedButtonsLayoutItem roundedButtonsLayoutItem = new RoundedButtonsLayoutItem();
@@ -214,7 +214,7 @@ public class FragmentMainFeatured extends Fragment implements IContentLoadListen
         );
     }
 
-    private void updateMediaItems(ArrayList<MediaItem> radioStations) {
+    private void updateMediaItems(ArrayList<IMediaItemView> radioStations) {
         mediaItemsAdapter.addItems(radioStations);
         mediaItemsAdapter.notifyContentLoadingStatus();
         rvMain.post(new Runnable() {
@@ -239,7 +239,7 @@ public class FragmentMainFeatured extends Fragment implements IContentLoadListen
                     @Override
                     public void run() {
                         try {
-                            ArrayList<MediaItem> radiosStations = new ArrayList<MediaItem>();
+                            ArrayList<IMediaItemView> radiosStations = new ArrayList<IMediaItemView>();
                             MediaItemTitle mediaItemTitle = new MediaItemTitle(category.getName());
                             mediaItemTitle.showButton = false;
                             radiosStations.add(mediaItemTitle);
