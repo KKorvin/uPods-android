@@ -1,6 +1,7 @@
 package com.chickenkiller.upods2.models;
 
 import com.chickenkiller.upods2.interfaces.IMediaItemView;
+import com.chickenkiller.upods2.utils.GlobalUtils;
 
 import java.util.ArrayList;
 
@@ -24,7 +25,8 @@ public abstract class MediaItem implements IMediaItemView {
     protected String coverImageUrl;
 
 
-    public MediaItem() {}
+    public MediaItem() {
+    }
 
     public int getId() {
         return id;
@@ -73,7 +75,7 @@ public abstract class MediaItem implements IMediaItemView {
 
     public static MediaItem getMediaItemByName(ArrayList<? extends MediaItem> mediaItems, MediaItem mediaItemTarget) {
         for (MediaItem mediaItem : mediaItems) {
-            if (mediaItem.getName().equals(mediaItemTarget.getName())) {
+            if (GlobalUtils.safeTitleEquals(mediaItem.getName(), mediaItemTarget.getName())) {
                 return mediaItem;
             }
         }

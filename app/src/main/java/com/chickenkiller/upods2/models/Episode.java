@@ -3,6 +3,7 @@ package com.chickenkiller.upods2.models;
 import android.text.format.Formatter;
 
 import com.chickenkiller.upods2.controllers.app.UpodsApplication;
+import com.chickenkiller.upods2.utils.GlobalUtils;
 import com.chickenkiller.upods2.utils.Logger;
 import com.chickenkiller.upods2.utils.MediaUtils;
 
@@ -56,7 +57,7 @@ public class Episode extends Track {
 
     public static boolean hasEpisodWithTitle(ArrayList<Episode> episodes, Episode episodeToCheck) {
         for (Episode episode : episodes) {
-            if (episode.getTitle().replace("\n", "").equals(episodeToCheck.getTitle().replace("\n", ""))) {
+            if (GlobalUtils.safeTitleEquals(episode.getTitle(), episodeToCheck.getTitle())) {
                 return true;
             }
         }

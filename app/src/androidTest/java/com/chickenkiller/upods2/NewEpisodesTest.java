@@ -35,13 +35,21 @@ import static org.junit.Assert.assertTrue;
 @SmallTest
 public class NewEpisodesTest {
 
-    private static final String REAL_PODCAST_FEED = "http://feeds.feedburner.com/FoxNewsRadio";
+    private static final String REAL_PODCAST_FEED_RU = "http://wylsa.com/PODCAST/podcast.xml";
+
+    private static final String REAL_PODCAST_FEED_ENG = "http://feeds.feedburner.com/FoxNewsRadio";
+    private static final String REAL_PODCAST_FEED_ENG2 = "http://www.npr.org/rss/podcast.php?id=510019&uid=n1qe4e85742c986fdb81d2d38ffa0d5d53";
 
     private static final String TEST_FEED = "https://upods.io/static/podcasts/feed/test_podcast.xml";
     private static final String TEST_FEED_CONTROL = "https://upods.io/upods/api/v1.0/podcasts/test/feed?task=";
     private static final int NEW_EPISODES_ADDED = 2;
     private static final int EPISODES_TO_REMOVE = 1;
 
+
+    public static class ResultBucket {
+        boolean hasUpdates;
+        int newEpisodesCount;
+    }
 
     public ArrayList<Episode> parseEpisodes(String url) throws Exception {
         Request episodesRequest = new Request.Builder().url(url).build();
@@ -54,6 +62,43 @@ public class NewEpisodesTest {
         InputSource inputSource = new InputSource(new StringReader(response));
         xr.parse(inputSource);
         return episodesXMLHandler.getParsedEpisods();
+    }
+
+    private ResultBucket checkNoUpdates(String feed) {
+        ResultBucket resultBucket = new ResultBucket();
+        try {
+            String podcastName = String.valueOf(System.currentTimeMillis()) + "_podcast";
+            Podcast podcast = new Podcast(podcastName, feed);
+
+            ArrayList<Episode> parsedEpisodes = parseEpisodes(podcast.getFeedUrl());
+            Feed.saveAsFeed(podcast.getFeedUrl(), parsedEpisodes);
+            Logger.printInfo("checkNoUpdatesENGScenario", "Feed saved locally...");
+
+            ArrayList<Episode> afterUpdateparsedEpisodes = parseEpisodes(podcast.getFeedUrl());
+            resultBucket.hasUpdates = Feed.handleUpdates(afterUpdateparsedEpisodes, podcast);
+            resultBucket.newEpisodesCount = podcast.getNewEpisodsCount();
+            Logger.printInfo("checkNoUpdatesENGScenario", "Checked for updates...");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return resultBucket;
+    }
+
+
+    @Test
+    public void checkNoUpdatesENGScenario() {
+        ResultBucket resultBucket = checkNoUpdates(REAL_PODCAST_FEED_ENG2);
+        assertTrue(!resultBucket.hasUpdates);
+        assertThat(resultBucket.newEpisodesCount, is(0));
+    }
+
+    @Test
+    public void checkNoUpdatesRUScenario() {
+        ResultBucket resultBucket = checkNoUpdates(REAL_PODCAST_FEED_RU);
+        assertTrue(!resultBucket.hasUpdates);
+        assertThat(resultBucket.newEpisodesCount, is(0));
     }
 
     @Test
@@ -101,7 +146,7 @@ public class NewEpisodesTest {
 
         try {
             String podcastName = String.valueOf(System.currentTimeMillis()) + "_podcast";
-            Podcast podcast = new Podcast(podcastName, REAL_PODCAST_FEED);
+            Podcast podcast = new Podcast(podcastName, REAL_PODCAST_FEED_ENG);
 
             ArrayList<Episode> parsedEpisodes = parseEpisodes(podcast.getFeedUrl());
             parsedEpisodes.remove(parsedEpisodes.size() - EPISODES_TO_REMOVE);

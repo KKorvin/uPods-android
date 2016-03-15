@@ -15,7 +15,6 @@ import com.chickenkiller.upods2.R;
 import com.chickenkiller.upods2.activity.ActivityMain;
 import com.chickenkiller.upods2.activity.ActivityPlayer;
 import com.chickenkiller.upods2.controllers.app.ProfileManager;
-import com.chickenkiller.upods2.controllers.app.UpodsApplication;
 import com.chickenkiller.upods2.models.Episode;
 import com.chickenkiller.upods2.models.Feed;
 import com.chickenkiller.upods2.models.Podcast;
@@ -94,8 +93,8 @@ public class NetworkTasksService extends IntentService {
         ArrayList<Podcast> subscribedPodcasts = ProfileManager.getInstance().getSubscribedPodcasts();
         if (subscribedPodcasts.size() > 0) {
             for (Podcast podcast : subscribedPodcasts) {
-                Request request = new Request.Builder().url(podcast.getFeedUrl()).build();
                 try {
+                    Request request = new Request.Builder().url(podcast.getFeedUrl()).build();
                     String response = BackendManager.getInstance().sendSimpleSynchronicRequest(request);
                     SAXParserFactory spf = SAXParserFactory.newInstance();
                     SAXParser sp = spf.newSAXParser();
