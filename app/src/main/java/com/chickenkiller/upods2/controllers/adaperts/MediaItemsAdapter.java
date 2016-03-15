@@ -1,5 +1,6 @@
 package com.chickenkiller.upods2.controllers.adaperts;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.PorterDuff;
@@ -9,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RatingBar;
@@ -296,6 +298,8 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             public void onClick(View view) {
                 FragmentMediaItemDetails fragmentMediaItemDetails = new FragmentMediaItemDetails();
                 if (items.get(position) instanceof MediaItem && !fragmentsManager.hasFragment(FragmentMediaItemDetails.TAG)) {
+                    InputMethodManager imm = (InputMethodManager) mContext.getSystemService(Activity.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.RESULT_UNCHANGED_SHOWN);
                     fragmentMediaItemDetails.setPlayableItem((MediaItem) items.get(position));
                     fragmentsManager.showFragment(R.id.fl_window, fragmentMediaItemDetails, FragmentMediaItemDetails.TAG,
                             IFragmentsManager.FragmentOpenType.OVERLAY, IFragmentsManager.FragmentAnimationType.BOTTOM_TOP);

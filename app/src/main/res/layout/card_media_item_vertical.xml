@@ -20,8 +20,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:adjustViewBounds="true"
-            android:scaleType="fitXY"
-            android:src="@drawable/ic_temp" />
+            android:scaleType="fitXY" />
 
         <TextView
             android:id="@+id/tvSquareTitle"

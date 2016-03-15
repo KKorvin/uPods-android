@@ -26,8 +26,7 @@
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:adjustViewBounds="true"
-            android:scaleType="fitXY"
-            android:src="@drawable/ic_temp" />
+            android:scaleType="fitXY" />
 
         <TextView
             android:id="@+id/tvSquareTitle"
@@ -98,8 +97,8 @@
             android:paddingLeft="7dp"
             android:paddingRight="7dp"
             android:text="0"
-            android:visibility="gone"
             android:textColor="@color/white"
-            android:textSize="@dimen/default_text_size_12" />
+            android:textSize="@dimen/default_text_size_12"
+            android:visibility="gone" />
     </RelativeLayout>
 </android.support.v7.widget.CardView>

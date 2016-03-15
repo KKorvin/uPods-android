@@ -13,8 +13,7 @@
         android:layout_height="64dp"
         android:layout_alignParentLeft="true"
         android:adjustViewBounds="true"
-        android:scaleType="fitXY"
-        android:src="@drawable/bedolaga" />
+        android:scaleType="fitXY" />
 
 
     <TextView
@@ -56,8 +55,8 @@
         android:layout_alignParentRight="true"
         android:layout_marginRight="7dp"
         android:layout_marginTop="10dp"
-        android:src="@drawable/ic_play_white"
         android:background="@drawable/circle_rewind_btn"
+        android:src="@drawable/ic_play_white"
         android:text="Play" />
 
     <SeekBar

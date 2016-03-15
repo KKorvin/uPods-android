@@ -10,10 +10,10 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/drawer_rv_user_ln_width"
-        android:layout_marginLeft="@dimen/drawer_rv_user_ln_margin_left"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
+        android:layout_marginLeft="@dimen/drawer_rv_user_ln_margin_left"
         android:orientation="vertical">
 
         <TextView
@@ -45,6 +45,5 @@
         android:layout_width="@dimen/img_user_avatar_size"
         android:layout_height="@dimen/img_user_avatar_size"
         android:layout_marginLeft="@dimen/img_user_m_left"
-        android:layout_marginTop="@dimen/img_user_m_top"
-        android:src="@drawable/ic_temp" />
+        android:layout_marginTop="@dimen/img_user_m_top" />
 </RelativeLayout>

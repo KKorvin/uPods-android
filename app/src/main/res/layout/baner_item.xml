@@ -12,8 +12,7 @@
         android:layout_height="@dimen/rv_banners_height"
         android:clickable="true"
         android:focusable="true"
-        android:scaleType="fitXY"
-        android:src="@drawable/ic_temp" />
+        android:scaleType="fitXY" />
 </LinearLayout>
 
 
