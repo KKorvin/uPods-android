@@ -15,6 +15,7 @@ import com.chickenkiller.upods2.R;
 import com.chickenkiller.upods2.activity.ActivityMain;
 import com.chickenkiller.upods2.activity.ActivityPlayer;
 import com.chickenkiller.upods2.controllers.app.ProfileManager;
+import com.chickenkiller.upods2.controllers.app.UpodsApplication;
 import com.chickenkiller.upods2.models.Episode;
 import com.chickenkiller.upods2.models.Feed;
 import com.chickenkiller.upods2.models.Podcast;

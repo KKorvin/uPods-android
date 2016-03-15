@@ -15,6 +15,8 @@ import com.pixplicity.easyprefs.library.Prefs;
 
 import java.util.concurrent.TimeUnit;
 
+import io.paperdb.Paper;
+
 /**
  * Created by alonzilberman on 7/31/15.
  */
@@ -22,11 +24,14 @@ public class UpodsApplication extends Application {
 
     private static final int CHECK_NEW_EPISODS_INTENT_CODE = 2302;
     private static final String TAG = "UpodsApplication";
+    private static final String DB_NAME = "upods";
     private static Context applicationContext;
+
 
     @Override
     public void onCreate() {
         applicationContext = getApplicationContext();
+        Paper.init(applicationContext);
         FacebookSdk.sdkInitialize(applicationContext);
         LoginMaster.getInstance().init();
         new Prefs.Builder()
@@ -40,7 +45,6 @@ public class UpodsApplication extends Application {
         SimpleCacheManager.getInstance().removeExpiredCache();
 
         super.onCreate();
-
         runNetworkTasksService();
         runMainService();
         setAlarmManagerTasks();

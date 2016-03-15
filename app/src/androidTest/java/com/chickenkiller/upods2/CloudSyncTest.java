@@ -60,7 +60,6 @@ public class CloudSyncTest {
                             if (((JSONObject) data).getJSONObject("result").has("profile")) {
                                 JSONObject profile = new JSONObject(((JSONObject) data).getJSONObject("result").getString("profile"));
                                 ProfileManager.getInstance().readFromJson(profile);
-                                ProfileManager.getInstance().saveToDisk(profile);
                                 isRadiotInFavorites = ProfileManager.getInstance().isSubscribedToMediaItem(radioItem);
                             }
                         } catch (JSONException e) {
@@ -73,7 +72,7 @@ public class CloudSyncTest {
             }
         });
         profileSyncMasterSYNC.execute();
-        while (profileSyncMasterGET.getStatus() != AsyncTask.Status.FINISHED){
+        while (profileSyncMasterGET.getStatus() != AsyncTask.Status.FINISHED) {
             try {
                 Thread.sleep(300);
             } catch (InterruptedException e) {

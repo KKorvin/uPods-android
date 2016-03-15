@@ -39,18 +39,25 @@ public class RadioItem extends MediaItem {
     protected String country;
     protected String genre;
 
-    public RadioItem(String name, StreamUrl streamUrl, String coverImageUrl) {
-        this.name = name;
+    public RadioItem() {
+        super();
+        this.name = "";
         this.selectedStreamUrl = null;
         this.streamUrls = new HashSet<>();
-        this.streamUrls.add(streamUrl);
-        this.coverImageUrl = coverImageUrl;
+        this.coverImageUrl = "";
         this.bannerImageUrl = "";
         this.website = "";
         this.facebook = "";
         this.twitter = "";
         this.country = "";
         this.genre = "";
+    }
+
+    public RadioItem(String name, StreamUrl streamUrl, String coverImageUrl) {
+        this();
+        this.name = name;
+        this.streamUrls.add(streamUrl);
+        this.coverImageUrl = coverImageUrl;
     }
 
     public RadioItem(RadioItem item) {

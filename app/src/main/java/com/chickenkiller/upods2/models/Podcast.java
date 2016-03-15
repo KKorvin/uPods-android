@@ -14,7 +14,6 @@ import java.util.ArrayList;
  */
 public class Podcast extends MediaItem {
     private static String PODCAST_LOG = "PODCAST";
-    protected String name;
     protected String censoredName;
     protected String artistName;
     protected String feedUrl;
@@ -31,8 +30,7 @@ public class Podcast extends MediaItem {
 
     public Podcast() {
         super();
-        this.episodes = new ArrayList<>();
-        this.newEpisodsTitles = new ArrayList<>();
+
         this.name = "";
         this.censoredName = "";
         this.artistName = "";
@@ -43,6 +41,9 @@ public class Podcast extends MediaItem {
         this.trackCount = "0";
         this.genre = "";
         this.description = "";
+
+        this.episodes = new ArrayList<>();
+        this.newEpisodsTitles = new ArrayList<>();
     }
 
     public Podcast(String name, String feedUrl) {
@@ -313,21 +314,9 @@ public class Podcast extends MediaItem {
         return newEpisodsTitles.contains(episodTitle);
     }
 
-    /**
-     * Call it to mark current plying track as not new
-     */
-    public static void manageNewTracks(MediaItem mediaItem, Track track) {
-        try {
-            Podcast podcast = (Podcast) MediaItem.getMediaItemByName(ProfileManager.getInstance().getSubscribedPodcasts(), mediaItem);
-            if (podcast.newEpisodsTitles.contains(track.getTitle())) {
-                podcast.newEpisodsTitles.remove(track.getTitle());
-                ((Episode) track).isNotNew = true;
-                ProfileManager.getInstance().saveChanges(ProfileManager.ProfileItem.SUBSCRIBDED_PODCASTS, false);
-            }
-        } catch (Exception e) {
-            Logger.printInfo(PODCAST_LOG, "Error in manageNewTracks: ");
-            e.printStackTrace();
-        }
+
+    public ArrayList<String> getNewEpisodsTitles() {
+        return newEpisodsTitles;
     }
 
     public void setTracks(ArrayList<? extends Track> tracks) {

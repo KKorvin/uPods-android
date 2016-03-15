@@ -27,10 +27,16 @@ public class StreamUrl implements Serializable {
     private String bitrate;
     public boolean isAlive;
 
-    public StreamUrl(String url) {
-        this.url = url;
+    public StreamUrl() {
+        super();
         this.isAlive = true;
         this.bitrate = "";
+        this.url = "";
+    }
+
+    public StreamUrl(String url) {
+        this();
+        this.url = url;
     }
 
     public StreamUrl(JSONObject jsonItem) {

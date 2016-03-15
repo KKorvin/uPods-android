@@ -199,7 +199,7 @@ public class TracksAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 if (ProfileManager.getInstance().isDownloaded(iPlayableMediaItem, track)) {
                     track.setAudeoUrl(ProfileManager.getInstance().getDownloadedTrackPath(iPlayableMediaItem, track));
                 }
-                Podcast.manageNewTracks(iPlayableMediaItem, track);
+                ProfileManager.getInstance().markDownloadedTrackListened(iPlayableMediaItem, track);
                 notifyItemChanged(position);
                 UniversalPlayer.getInstance().setMediaItem(iPlayableMediaItem, true);
                 ActivityPlayer.openWithIntent((Activity) mContext);
@@ -225,7 +225,7 @@ public class TracksAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Podcast.manageNewTracks(iPlayableMediaItem, track);
+                ProfileManager.getInstance().markDownloadedTrackListened(iPlayableMediaItem, track);
                 notifyItemChanged(position);
                 DialogFragmentTrackInfo dialogFragmentTrackInfo = new DialogFragmentTrackInfo();
                 dialogFragmentTrackInfo.setTrack(track);

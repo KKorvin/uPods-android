@@ -24,8 +24,7 @@ public abstract class MediaItem implements IMediaItemView {
     protected String coverImageUrl;
 
 
-    public MediaItem() {
-    }
+    public MediaItem() {}
 
     public int getId() {
         return id;

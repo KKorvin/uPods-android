@@ -308,11 +308,6 @@ public class FragmentMediaItemDetails extends Fragment implements View.OnTouchLi
                                     if (playableItem instanceof Podcast) {
                                         Podcast podcast = ((Podcast) playableItem);
                                         podcast.setDescription(episodesXMLHandler.getPodcastSummary());
-                                        podcast.setTrackCount(String.valueOf(parsedEpisodes.size()));
-                                        if (isSubscribedToMediaItem) {
-                                            //Save changes to disk to be sure we have recent count of provider's episodes
-                                            ProfileManager.getInstance().saveChanges(ProfileManager.ProfileItem.SUBSCRIBDED_PODCASTS, false);
-                                        }
                                     }
                                     tracksAdapter.addItems(parsedEpisodes);
                                     rvTracks.setVisibility(View.VISIBLE);
