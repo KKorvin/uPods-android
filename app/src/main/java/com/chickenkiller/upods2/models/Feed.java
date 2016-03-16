@@ -4,7 +4,6 @@ import com.chickenkiller.upods2.controllers.app.ProfileManager;
 import com.chickenkiller.upods2.controllers.app.SimpleCacheManager;
 import com.chickenkiller.upods2.controllers.app.UpodsApplication;
 import com.chickenkiller.upods2.utils.Logger;
-import com.chickenkiller.upods2.utils.enums.MediaItemType;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -120,17 +119,13 @@ public class Feed {
         boolean hasUpdates = false;
         Feed feed = getFeedIfExists(podcast.getFeedUrl());
         if (feed != null) {
-            int i=0;
             for (Episode latestEpisode : latestEpisodes) {
                 if (!Episode.hasEpisodWithTitle(feed.episodes, latestEpisode)) {//Check if new eipsod is not saved in local feed
-                    //Logger.printInfo("OLOOL1", latestEpisode.getTitle());
-                    //Logger.printInfo("OLOOL2", feed.episodes.get(i).getTitle());
                     podcast.addNewEpisodsTitle(latestEpisode.getTitle());
-                    ProfileManager.getInstance().replaceMediaItem(MediaItemType.PODCAST_FAVORITE, podcast);
                     hasUpdates = true;
                 }
-                i++;
             }
+            ProfileManager.getInstance().saveChanges(ProfileManager.ProfileItem.SUBSCRIBDED_PODCASTS);
             SimpleCacheManager.getInstance().removeFromCache(podcast.getFeedUrl());
         }
         saveAsFeed(podcast.getFeedUrl(), latestEpisodes);

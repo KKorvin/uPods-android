@@ -50,7 +50,6 @@ dependencies {
     compile 'com.github.bumptech.glide:glide:3.6.1'
     compile 'com.squareup.okhttp3:okhttp:3.0.1'
     compile "de.mrmaffen:vlc-android-sdk:3.0.0"
-    compile 'io.paperdb:paperdb:1.1'
 
     //Dependencies for UI components
     compile 'com.lsjwzh:recyclerviewpager:+'

@@ -118,6 +118,7 @@ public class LoginMaster {
                             if (((JSONObject) data).getJSONObject("result").has("profile")) {
                                 JSONObject profile = new JSONObject(((JSONObject) data).getJSONObject("result").getString("profile"));
                                 ProfileManager.getInstance().readFromJson(profile);
+                                ProfileManager.getInstance().saveToDisk(profile);
                             }
                             if (((JSONObject) data).getJSONObject("result").has("settings")) {
                                 JSONObject settings = new JSONObject(((JSONObject) data).getJSONObject("result").getString("settings"));
