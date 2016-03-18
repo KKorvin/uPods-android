@@ -113,6 +113,8 @@ public class FragmentMediaItemsList extends Fragment {
                     && profileUpdateEvent.updateListType == MediaListItem.DOWNLOADED) {
                 if (profileUpdateEvent.isRemoved) {
                     mediaItemsAdapter.removeItem(mediaItem);
+                } else {
+                    mediaItemsAdapter.addItem(mediaItem);
                 }
                 mediaItemsAdapter.notifyDataSetChanged();
                 notifyPlaceHolder();
@@ -120,6 +122,8 @@ public class FragmentMediaItemsList extends Fragment {
                     && profileUpdateEvent.updateListType == MediaListItem.SUBSCRIBED) {
                 if (profileUpdateEvent.isRemoved) {
                     mediaItemsAdapter.removeItem(mediaItem);
+                } else {
+                    mediaItemsAdapter.addItem(mediaItem);
                 }
                 mediaItemsAdapter.notifyDataSetChanged();
                 notifyPlaceHolder();
@@ -127,6 +131,8 @@ public class FragmentMediaItemsList extends Fragment {
                     && profileUpdateEvent.updateListType == MediaListItem.SUBSCRIBED) {
                 if (profileUpdateEvent.isRemoved) {
                     mediaItemsAdapter.removeItem(mediaItem);
+                } else {
+                    mediaItemsAdapter.addItem(mediaItem);
                 }
                 mediaItemsAdapter.notifyDataSetChanged();
                 notifyPlaceHolder();
@@ -134,6 +140,8 @@ public class FragmentMediaItemsList extends Fragment {
                     && profileUpdateEvent.updateListType == MediaListItem.RECENT) {
                 if (profileUpdateEvent.isRemoved) {
                     mediaItemsAdapter.removeItem(mediaItem);
+                } else {
+                    mediaItemsAdapter.addItem(mediaItem);
                 }
                 mediaItemsAdapter.notifyDataSetChanged();
                 notifyPlaceHolder();

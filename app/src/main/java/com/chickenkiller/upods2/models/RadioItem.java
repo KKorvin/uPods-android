@@ -79,6 +79,9 @@ public class RadioItem extends MediaItem {
         this.facebook = item.facebook;
         this.twitter = item.twitter;
         this.country = item.country;
+        this.isExistsInDb = item.isExistsInDb;
+        this.isRecent = item.isRecent;
+        this.isSubscribed = item.isSubscribed;
     }
 
     public long save() {

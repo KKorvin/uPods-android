@@ -66,7 +66,6 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     private IOperationFinishWithDataCallback iRoundButtonClicked;
     private MediaItemType mediaItemType;
 
-
     private static class ViewHolderCardItem extends RecyclerView.ViewHolder {
         public ImageViewSquare imgSquare;
         public TextView tvSquareTitle;
@@ -358,6 +357,9 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         this.iContentLoadListener = contentLoadListener;
     }
 
+    public void addItem(MediaItem mediaItem) {
+        items.add(mediaItem);
+    }
 
     /**
      * Function to synchronize adapter content loading . Call it every time, when part of content was loaded.

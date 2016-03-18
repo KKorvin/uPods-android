@@ -126,6 +126,10 @@ public class Podcast extends MediaItem {
         this.trackCount = podcast.getTrackCount();
         this.country = podcast.getCountry();
         this.genre = podcast.getGenre();
+        this.isExistsInDb = podcast.isExistsInDb;
+        this.isSubscribed = podcast.isSubscribed;
+        this.isDownloaded = podcast.isDownloaded;
+        this.hasNewEpisodes = podcast.hasNewEpisodes;
         this.episodes = new ArrayList<Episode>(podcast.episodes);
     }
 
