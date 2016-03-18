@@ -104,8 +104,7 @@ public class TracksAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             final Track currentTrack = tracks.get(position);
 
             //Mark new episodes
-            if (iPlayableMediaItem instanceof Podcast && !((Episode) currentTrack).isNotNew &&
-                    ((Podcast) iPlayableMediaItem).isNewEpisodTitle(currentTrack.getTitle())) {
+            if (iPlayableMediaItem instanceof Podcast && ((Episode) currentTrack).isNew) {
                 viewHolderTrack.tvTitle.setText(Html.fromHtml("<b>" + currentTrack.getTitle() + "</b>"));
             } else {
                 viewHolderTrack.tvTitle.setText(currentTrack.getTitle());
@@ -127,8 +126,7 @@ public class TracksAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
      * @param position
      */
     private void initDownloadBtn(final RecyclerView.ViewHolder holder, final Track currentTrack, final int position) {
-        final boolean isDownloaed = ProfileManager.getInstance().isDownloaded(iPlayableMediaItem, currentTrack);
-        if (isDownloaed) {//Already downloaded item
+        if (currentTrack instanceof Episode && ((Episode) currentTrack).isDownloaded) {//Already downloaded item
             ((ViewHolderTrack) holder).btnDownload.setVisibility(View.VISIBLE);
             ((ViewHolderTrack) holder).cvDownloadProgress.setVisibility(View.INVISIBLE);
             ((ViewHolderTrack) holder).btnDownload.setText(mContext.getString(R.string.play));
@@ -196,10 +194,7 @@ public class TracksAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 if (iPlayableMediaItem instanceof Podcast) {
                     ((Podcast) iPlayableMediaItem).selectTrack(track);
                 }
-                if (ProfileManager.getInstance().isDownloaded(iPlayableMediaItem, track)) {
-                    track.setAudeoUrl(ProfileManager.getInstance().getDownloadedTrackPath(iPlayableMediaItem, track));
-                }
-                Podcast.manageNewTracks(iPlayableMediaItem, track);
+                ProfileManager.getInstance().removeNewTrack(iPlayableMediaItem, track);
                 notifyItemChanged(position);
                 UniversalPlayer.getInstance().setMediaItem(iPlayableMediaItem, true);
                 ActivityPlayer.openWithIntent((Activity) mContext);
@@ -225,7 +220,7 @@ public class TracksAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Podcast.manageNewTracks(iPlayableMediaItem, track);
+                ProfileManager.getInstance().removeNewTrack(iPlayableMediaItem, track);
                 notifyItemChanged(position);
                 DialogFragmentTrackInfo dialogFragmentTrackInfo = new DialogFragmentTrackInfo();
                 dialogFragmentTrackInfo.setTrack(track);

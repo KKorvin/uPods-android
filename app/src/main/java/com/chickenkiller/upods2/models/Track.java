@@ -1,17 +1,16 @@
 package com.chickenkiller.upods2.models;
 
-import java.io.Serializable;
-
 /**
  * Created by alonzilberman on 8/31/15.
  */
-public abstract class Track implements Serializable {
+public abstract class Track extends SQLModel {
 
     protected String title;
     protected String audeoUrl;
+
     protected boolean isSelected;
 
-    public Track(){
+    public Track() {
         this.title = "";
         this.audeoUrl = "";
         this.isSelected = false;

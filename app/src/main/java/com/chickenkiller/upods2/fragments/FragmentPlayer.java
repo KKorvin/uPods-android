@@ -24,7 +24,6 @@ import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
 import com.chickenkiller.upods2.R;
-import com.chickenkiller.upods2.controllers.app.ProfileManager;
 import com.chickenkiller.upods2.controllers.player.PlayerPositionUpdater;
 import com.chickenkiller.upods2.controllers.player.Playlist;
 import com.chickenkiller.upods2.controllers.player.UniversalPlayer;
@@ -251,7 +250,7 @@ public class FragmentPlayer extends Fragment implements IPlayerStateListener {
             });
         }
 
-        if (ProfileManager.getInstance().isSubscribedToMediaItem(playableMediaItem)) {
+        if (playableMediaItem.isSubscribed) {
             itemFavorites.setIcon(getResources().getDrawable(R.drawable.ic_heart_black_24dp));
         } else {
             itemFavorites.setIcon(getResources().getDrawable(R.drawable.ic_heart_white_24dp));

@@ -109,15 +109,18 @@ public class FragmentPodcastFeatured extends Fragment implements IContentLoadLis
         BackendManager.getInstance().loadTops(BackendManager.TopType.MAIN_PODCAST, ServerApi.PODCASTS_TOP, new IRequestCallback() {
                     @Override
                     public void onRequestSuccessed(final JSONObject jResponse) {
-                        getActivity().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                try {
-                                    ArrayList<IMediaItemView> topPodcasts = new ArrayList<IMediaItemView>();
-                                    MediaItemTitle mediaItemTitle = new MediaItemTitle(getString(R.string.top40_podcasts), getString(R.string.top40_podcasts_long));
-                                    mediaItemTitle.showButton = true;
-                                    topPodcasts.add(mediaItemTitle);
-                                    topPodcasts.addAll(Podcast.withJsonArray(jResponse.getJSONArray("result")));
+                        try {
+                            final ArrayList<IMediaItemView> topPodcasts = new ArrayList<IMediaItemView>();
+                            ArrayList<Podcast> topPodcastsItems = Podcast.withJsonArray(jResponse.getJSONArray("result"));
+                            Podcast.syncWithDb(topPodcastsItems);
+                            MediaItemTitle mediaItemTitle = new MediaItemTitle(getString(R.string.top40_podcasts), getString(R.string.top40_podcasts_long));
+                            mediaItemTitle.showButton = true;
+                            topPodcasts.add(mediaItemTitle);
+                            topPodcasts.addAll(topPodcastsItems);
+
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
                                     mediaItemsAdapter.addItems(topPodcasts);
                                     rvMain.post(new Runnable() {
                                         @Override
@@ -129,11 +132,11 @@ public class FragmentPodcastFeatured extends Fragment implements IContentLoadLis
                                             mediaItemsAdapter.notifyContentLoadingStatus();
                                         }
                                     });
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
                                 }
-                            }
-                        });
+                            });
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                     }
 
                     @Override
@@ -162,4 +165,9 @@ public class FragmentPodcastFeatured extends Fragment implements IContentLoadLis
         rvMain.setVisibility(View.VISIBLE);
     }
 
+    public void notifyDataChanged() {
+        if (mediaItemsAdapter != null) {
+            mediaItemsAdapter.notifyDataSetChanged();
+        }
+    }
 }

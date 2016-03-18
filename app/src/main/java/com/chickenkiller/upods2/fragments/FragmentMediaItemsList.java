@@ -16,8 +16,9 @@ import com.chickenkiller.upods2.controllers.adaperts.MediaItemsAdapter;
 import com.chickenkiller.upods2.controllers.app.ProfileManager;
 import com.chickenkiller.upods2.interfaces.IFragmentsManager;
 import com.chickenkiller.upods2.interfaces.IMediaItemView;
-import com.chickenkiller.upods2.interfaces.IUpdateableFragment;
+import com.chickenkiller.upods2.models.MediaItem;
 import com.chickenkiller.upods2.models.MediaItemTitle;
+import com.chickenkiller.upods2.models.MediaListItem;
 import com.chickenkiller.upods2.models.Podcast;
 import com.chickenkiller.upods2.models.RadioItem;
 import com.chickenkiller.upods2.utils.enums.MediaItemType;
@@ -30,7 +31,7 @@ import it.gmariotti.recyclerview.adapter.SlideInBottomAnimatorAdapter;
 /**
  * Created by alonzilberman on 8/8/15.
  */
-public class FragmentMediaItemsList extends Fragment implements IUpdateableFragment {
+public class FragmentMediaItemsList extends Fragment {
 
     public static final String TAG;
     private RecyclerView rvMediaItems;
@@ -105,8 +106,42 @@ public class FragmentMediaItemsList extends Fragment implements IUpdateableFragm
         this.mediaItemType = mediaItemType;
     }
 
-    @Override
-    public void update() {
+    public void notifyMediaItemChanges(ProfileManager.ProfileUpdateEvent profileUpdateEvent) {
+        if (mediaItemsAdapter != null) {
+            MediaItem mediaItem = profileUpdateEvent.mediaItem;
+            if (mediaItemType == MediaItemType.PODCAST_DOWNLOADED && mediaItem instanceof Podcast
+                    && profileUpdateEvent.updateListType == MediaListItem.DOWNLOADED) {
+                if (profileUpdateEvent.isRemoved) {
+                    mediaItemsAdapter.removeItem(mediaItem);
+                }
+                mediaItemsAdapter.notifyDataSetChanged();
+                notifyPlaceHolder();
+            } else if (mediaItemType == MediaItemType.PODCAST_FAVORITE && mediaItem instanceof Podcast
+                    && profileUpdateEvent.updateListType == MediaListItem.SUBSCRIBED) {
+                if (profileUpdateEvent.isRemoved) {
+                    mediaItemsAdapter.removeItem(mediaItem);
+                }
+                mediaItemsAdapter.notifyDataSetChanged();
+                notifyPlaceHolder();
+            } else if (mediaItemType == MediaItemType.RADIO_SUBSCRIBED && mediaItem instanceof RadioItem
+                    && profileUpdateEvent.updateListType == MediaListItem.SUBSCRIBED) {
+                if (profileUpdateEvent.isRemoved) {
+                    mediaItemsAdapter.removeItem(mediaItem);
+                }
+                mediaItemsAdapter.notifyDataSetChanged();
+                notifyPlaceHolder();
+            } else if (mediaItemType == MediaItemType.RADIO_RECENT && mediaItem instanceof RadioItem
+                    && profileUpdateEvent.updateListType == MediaListItem.RECENT) {
+                if (profileUpdateEvent.isRemoved) {
+                    mediaItemsAdapter.removeItem(mediaItem);
+                }
+                mediaItemsAdapter.notifyDataSetChanged();
+                notifyPlaceHolder();
+            }
+        }
+    }
+
+    public void reloadAllData() {
         ArrayList<IMediaItemView> allItems = new ArrayList<>();
         allItems.add(mediaItemsAdapter.getItemAt(0));
         if (mediaItemType == MediaItemType.PODCAST_DOWNLOADED || mediaItemType == null) {
@@ -125,7 +160,10 @@ public class FragmentMediaItemsList extends Fragment implements IUpdateableFragm
         mediaItemsAdapter.clearItems();
         mediaItemsAdapter.addItems(allItems);
         mediaItemsAdapter.notifyDataSetChanged();
+        notifyPlaceHolder();
+    }
 
+    private void notifyPlaceHolder() {
         if (mediaItemsAdapter.getItemCount() < 2) {
             rvMediaItems.setVisibility(View.GONE);
             lnEmptyScreen.setVisibility(View.VISIBLE);

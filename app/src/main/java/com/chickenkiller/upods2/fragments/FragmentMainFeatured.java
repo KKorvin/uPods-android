@@ -186,23 +186,27 @@ public class FragmentMainFeatured extends Fragment implements IContentLoadListen
         BackendManager.getInstance().loadTops(BackendManager.TopType.MAIN_FEATURED, ServerApi.RADIO_TOP, new IRequestCallback() {
                     @Override
                     public void onRequestSuccessed(final JSONObject jResponse) {
-                        getActivity().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                try {
-                                    ArrayList<IMediaItemView> topRadioStations = new ArrayList<IMediaItemView>();
-                                    MediaItemTitle mediaItemTitle = new MediaItemTitle(getString(R.string.top40_chanels), getString(R.string.top40_chanels_subheader));
-                                    mediaItemTitle.showButton = true;
-                                    RoundedButtonsLayoutItem roundedButtonsLayoutItem = new RoundedButtonsLayoutItem();
-                                    topRadioStations.add(roundedButtonsLayoutItem);
-                                    topRadioStations.add(mediaItemTitle);
-                                    topRadioStations.addAll(RadioItem.withJsonArray(jResponse.getJSONArray("result"), getActivity()));
+                        try {
+                            final ArrayList<IMediaItemView> topRadioStations = new ArrayList<IMediaItemView>();
+                            ArrayList<RadioItem> topItems = RadioItem.withJsonArray(jResponse.getJSONArray("result"), getActivity());
+                            RadioItem.syncWithDb(topItems);
+                            MediaItemTitle mediaItemTitle = new MediaItemTitle(getString(R.string.top40_chanels), getString(R.string.top40_chanels_subheader));
+                            mediaItemTitle.showButton = true;
+                            RoundedButtonsLayoutItem roundedButtonsLayoutItem = new RoundedButtonsLayoutItem();
+                            topRadioStations.add(roundedButtonsLayoutItem);
+                            topRadioStations.add(mediaItemTitle);
+                            topRadioStations.addAll(topItems);
+
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
                                     updateMediaItems(topRadioStations);
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
                                 }
-                            }
-                        });
+                            });
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                     }
 
                     @Override
@@ -308,6 +312,12 @@ public class FragmentMainFeatured extends Fragment implements IContentLoadListen
                 lnInternetError.setVisibility(View.VISIBLE);
             }
         });
+    }
+
+    public void notifyDataChanged() {
+        if (mediaItemsAdapter != null) {
+            mediaItemsAdapter.notifyDataSetChanged();
+        }
     }
 
     @Override

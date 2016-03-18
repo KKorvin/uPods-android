@@ -1,8 +1,12 @@
 package com.chickenkiller.upods2.models;
 
+import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 
+import com.chickenkiller.upods2.controllers.app.UpodsApplication;
 import com.chickenkiller.upods2.interfaces.IMediaItemView;
 import com.chickenkiller.upods2.interfaces.IOperationFinishCallback;
 import com.chickenkiller.upods2.utils.GlobalUtils;
@@ -25,9 +29,8 @@ import java.util.Set;
  */
 public class RadioItem extends MediaItem {
 
-    private final static String DEFAULT_IMAGE = "https://upods.io/static/radio_stations/default/no_image.png";
+    public static final String TABLE = "radio_stations";
     private final static String RADIO_LOG = "RADIO_LOG";
-    private final static int MAX_URLS = 5;
 
     protected Set<StreamUrl> streamUrls;
     protected StreamUrl selectedStreamUrl;
@@ -38,6 +41,9 @@ public class RadioItem extends MediaItem {
     protected String twitter;
     protected String country;
     protected String genre;
+
+    //Not in DB
+    public boolean isRecent;
 
     public RadioItem() {
         super();
@@ -56,6 +62,7 @@ public class RadioItem extends MediaItem {
     public RadioItem(String name, StreamUrl streamUrl, String coverImageUrl) {
         this();
         this.name = name;
+        this.name = this.name.replace("\n", "").trim();
         this.streamUrls.add(streamUrl);
         this.coverImageUrl = coverImageUrl;
     }
@@ -74,11 +81,31 @@ public class RadioItem extends MediaItem {
         this.country = item.country;
     }
 
+    public long save() {
+        SQLiteDatabase database = UpodsApplication.getDatabaseManager().getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("name", name);
+        values.put("description", description);
+        values.put("website", website);
+        values.put("facebook", facebook);
+        values.put("twitter", twitter);
+        values.put("cover_image_url", coverImageUrl);
+        values.put("country", country);
+        values.put("genre", genre);
+
+        id = database.insert(TABLE, null, values);
+        isExistsInDb = true;
+        StreamUrl.saveSet(streamUrls, id);
+
+        return id;
+    }
+
     public RadioItem(JSONObject jsonItem) {
         try {
             this.streamUrls = new HashSet<>();
             this.id = jsonItem.has("id") ? jsonItem.getInt("id") : 0;
             this.name = jsonItem.has("name") ? jsonItem.getString("name") : "";
+            this.name = name.replace("\n", "").trim();
             this.description = jsonItem.has("description") ? jsonItem.getString("description") : "";
             this.website = jsonItem.has("website") ? jsonItem.getString("website") : "";
             this.facebook = jsonItem.has("facebook") ? jsonItem.getString("facebook") : "";
@@ -116,25 +143,6 @@ public class RadioItem extends MediaItem {
         }
     }
 
-    public static ArrayList<IMediaItemView> withOnlyBannersHeader() {
-        ArrayList<IMediaItemView> items = new ArrayList<IMediaItemView>();
-        items.add(new BannersLayoutItem());
-        return items;
-    }
-
-    public static ArrayList<RadioItem> withJsonArray(JSONArray jsonRadioItems, Context mContext) {
-        ArrayList<RadioItem> items = new ArrayList<RadioItem>();
-        try {
-            for (int i = 0; i < jsonRadioItems.length(); i++) {
-                JSONObject jsonRadionItem = (JSONObject) jsonRadioItems.get(i);
-                items.add(new RadioItem(jsonRadionItem));
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return items;
-    }
-
     @Override
     public String getAudeoLink() {
         if (selectedStreamUrl != null) {
@@ -160,6 +168,41 @@ public class RadioItem extends MediaItem {
     public String getCoverImageUrl() {
         return coverImageUrl != null && coverImageUrl.isEmpty() ? null : coverImageUrl;
     }
+
+    @Override
+    public String getSubHeader() {
+        return this.country;
+    }
+
+    @Override
+    public String getDescription() {
+        return description;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getFacebook() {
+        return facebook;
+    }
+
+    public void setFacebook(String facebook) {
+        this.facebook = facebook;
+    }
+
+    public String getTwitter() {
+        return twitter;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public String getBannerImageUrl() {
+        return bannerImageUrl;
+    }
+
 
     public JSONObject toJSON() {
         JSONObject radioItem = new JSONObject();
@@ -188,7 +231,6 @@ public class RadioItem extends MediaItem {
         }
         return radioItem;
     }
-
 
     /**
      * Fixes current RadioItem link (formail, isAlive) if needed.
@@ -237,13 +279,6 @@ public class RadioItem extends MediaItem {
         });
     }
 
-    public static JSONArray toJsonArray(ArrayList<RadioItem> radioItems) {
-        JSONArray jsonRadioItems = new JSONArray();
-        for (RadioItem radioItem : radioItems) {
-            jsonRadioItems.put(radioItem.toJSON());
-        }
-        return jsonRadioItems;
-    }
 
     public String[] getAvailableStreams() {
         Set<String> availableStreams = StreamUrl.getAllAvailableStreams(streamUrls);
@@ -289,65 +324,64 @@ public class RadioItem extends MediaItem {
     }
 
 
-    @Override
-    public String getSubHeader() {
-        return this.country;
+    public static JSONArray toJsonArray(ArrayList<RadioItem> radioItems) {
+        JSONArray jsonRadioItems = new JSONArray();
+        for (RadioItem radioItem : radioItems) {
+            jsonRadioItems.put(radioItem.toJSON());
+        }
+        return jsonRadioItems;
     }
 
-    @Override
-    public String getDescription() {
-        return description;
+    public static ArrayList<IMediaItemView> withOnlyBannersHeader() {
+        ArrayList<IMediaItemView> items = new ArrayList<IMediaItemView>();
+        items.add(new BannersLayoutItem());
+        return items;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public static ArrayList<RadioItem> withJsonArray(JSONArray jsonRadioItems, Context mContext) {
+        ArrayList<RadioItem> items = new ArrayList<RadioItem>();
+        try {
+            for (int i = 0; i < jsonRadioItems.length(); i++) {
+                JSONObject jsonRadionItem = (JSONObject) jsonRadioItems.get(i);
+                items.add(new RadioItem(jsonRadionItem));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return items;
     }
 
-    public void setCoverImageUrl(String coverImageUrl) {
-        this.coverImageUrl = coverImageUrl;
+    public static void syncWithDb(ArrayList<RadioItem> radioItems) {
+        ArrayList<MediaListItem> listItems = MediaListItem.withMediaType(MediaListItem.TYPE_RADIO);
+        for (MediaListItem listItem : listItems) {
+            MediaItem mediaItem = MediaItem.getMediaItemByName(radioItems, listItem.mediaItemName);
+            if (mediaItem != null) {
+                mediaItem.id = listItem.id;
+                mediaItem.isExistsInDb = true;
+                if (listItem.listType == MediaListItem.SUBSCRIBED) {
+                    mediaItem.isSubscribed = true;
+                } else if (listItem.listType == MediaListItem.RECENT) {
+                    ((RadioItem) mediaItem).isRecent = true;
+                }
+            }
+        }
     }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
+    public static RadioItem withCursor(Cursor cursor) {
+        RadioItem radioItem = new RadioItem();
+        radioItem.isExistsInDb = true;
+        radioItem.id = cursor.getLong(cursor.getColumnIndex("id"));
+        radioItem.name = cursor.getString(cursor.getColumnIndex("name"));
+        radioItem.website = cursor.getString(cursor.getColumnIndex("website"));
+        radioItem.facebook = cursor.getString(cursor.getColumnIndex("facebook"));
+        radioItem.description = cursor.getString(cursor.getColumnIndex("description"));
+        radioItem.twitter = cursor.getString(cursor.getColumnIndex("twitter"));
+        radioItem.coverImageUrl = cursor.getString(cursor.getColumnIndex("cover_image_url"));
+        radioItem.country = cursor.getString(cursor.getColumnIndex("country"));
+        radioItem.genre = cursor.getString(cursor.getColumnIndex("genre"));
 
-    public String getWebsite() {
-        return website;
-    }
+        radioItem.streamUrls.addAll(StreamUrl.withRaioItemId(radioItem.id));
 
-    public void setWebsite(String website) {
-        this.website = website;
-    }
-
-    public String getFacebook() {
-        return facebook;
-    }
-
-    public void setFacebook(String facebook) {
-        this.facebook = facebook;
-    }
-
-    public String getTwitter() {
-        return twitter;
-    }
-
-    public void setTwitter(String twitter) {
-        this.twitter = twitter;
-    }
-
-    public String getCountry() {
-        return country;
-    }
-
-    public void setCountry(String country) {
-        this.country = country;
-    }
-
-    public String getBannerImageUrl() {
-        return bannerImageUrl;
-    }
-
-    public void setBannerImageUrl(String bannerImageUrl) {
-        this.bannerImageUrl = bannerImageUrl;
+        return radioItem;
     }
 }

@@ -15,7 +15,6 @@ import android.widget.Toast;
 
 import com.chickenkiller.upods2.R;
 import com.chickenkiller.upods2.controllers.app.LoginMaster;
-import com.chickenkiller.upods2.controllers.app.ProfileManager;
 import com.chickenkiller.upods2.controllers.app.SettingsManager;
 import com.chickenkiller.upods2.controllers.internet.NetworkTasksService;
 import com.chickenkiller.upods2.fragments.FragmentHelp;
@@ -28,6 +27,7 @@ import com.chickenkiller.upods2.interfaces.ILoginManager;
 import com.chickenkiller.upods2.interfaces.IOverlayable;
 import com.chickenkiller.upods2.interfaces.ISlidingMenuHolder;
 import com.chickenkiller.upods2.interfaces.IToolbarHolder;
+import com.chickenkiller.upods2.models.Episode;
 import com.chickenkiller.upods2.models.MediaItem;
 import com.chickenkiller.upods2.models.Podcast;
 import com.chickenkiller.upods2.models.Track;
@@ -272,16 +272,15 @@ public class ActivityMain extends BasicActivity implements IOverlayable, IToolba
         if (contextMenuType == ContextMenuType.PODCAST_MIDDLE_SCREEN) {
             inflater.inflate(R.menu.menu_basic_sceleton, menu);
             menu.add(getString(R.string.about_podcast));
-            if (ProfileManager.getInstance().isDownloaded((Podcast) currentContextMenuData)) {
+            if (((Podcast) currentContextMenuData).isDownloaded) {
                 menu.add(getString(R.string.open_on_disk));
                 menu.add(getString(R.string.remove_all_episods));
             }
         } else if (contextMenuType == ContextMenuType.EPISODE_MIDDLE_SCREEN) {
             inflater.inflate(R.menu.menu_basic_sceleton, menu);
             menu.add(getString(R.string.marks_as_played));
-            MediaItem mediaItem = ((MediaItem.MediaItemBucket) currentContextMenuData).mediaItem;
             Track track = ((MediaItem.MediaItemBucket) currentContextMenuData).track;
-            if (ProfileManager.getInstance().isDownloaded((MediaItem) mediaItem, track)) {
+            if (((Episode) track).isDownloaded) {
                 menu.add(getString(R.string.delete));
             }
         } else if (contextMenuType == ContextMenuType.PROFILE) {

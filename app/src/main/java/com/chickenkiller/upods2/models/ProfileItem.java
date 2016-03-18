@@ -34,4 +34,5 @@ public class ProfileItem {
         profileItems.add(new ProfileItem(activity.getString(R.string.last_sync_with_cloud), Prefs.getString(SettingsManager.PREFS_LAST_CLOUD_SYNC, "")));
         return profileItems;
     }
+
 }

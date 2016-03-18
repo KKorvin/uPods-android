@@ -1,16 +1,18 @@
 package com.chickenkiller.upods2.controllers.app;
 
-import android.os.Handler;
+import android.content.ContentValues;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 
-import com.chickenkiller.upods2.controllers.internet.SyncMaster;
-import com.chickenkiller.upods2.interfaces.IOperationFinishCallback;
+import com.chickenkiller.upods2.controllers.database.SQLdatabaseManager;
+import com.chickenkiller.upods2.interfaces.IOperationFinishWithDataCallback;
 import com.chickenkiller.upods2.models.Episode;
+import com.chickenkiller.upods2.models.Feed;
 import com.chickenkiller.upods2.models.MediaItem;
+import com.chickenkiller.upods2.models.MediaListItem;
 import com.chickenkiller.upods2.models.Podcast;
 import com.chickenkiller.upods2.models.RadioItem;
 import com.chickenkiller.upods2.models.Track;
-import com.chickenkiller.upods2.utils.Logger;
-import com.pixplicity.easyprefs.library.Prefs;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -28,50 +30,26 @@ public class ProfileManager {
     public static final String JS_SUBSCRIBED_STATIONS = "subscribedStations";
     public static final String JS_RECENT_STATIONS = "recentStations";
 
-    private static final String PROFILE = "PROFILE";
-    private static final String PROFILE_PREF = "profile_pref";
     private static final int RECTNT_RADIO_STATIONS_LIMIT = 10;
 
-    public enum ProfileItem {DOWNLOADED_PODCASTS, SUBSCRIBDED_PODCASTS, SUBSCRIBDED_RADIO, RECENT_RADIO, SUBSCRIBED_STATIONS}
-
     public static ProfileManager profileManager;
-    private IOperationFinishCallback profileSavedCallback;
+    private IOperationFinishWithDataCallback profileSavedCallback;
 
-    private ArrayList<Podcast> downloadedPodcasts;
-    private ArrayList<Podcast> subscribedPodcasts;
-    private ArrayList<RadioItem> subscribedRadioItems;
-    private ArrayList<RadioItem> recentRadioItems;
+
+    public static class ProfileUpdateEvent {
+        public String updateListType;
+        public MediaItem mediaItem;
+        public boolean isRemoved;
+
+        public ProfileUpdateEvent(String updateListType, MediaItem mediaItem, boolean isRemoved) {
+            this.updateListType = updateListType;
+            this.mediaItem = mediaItem;
+            this.isRemoved = isRemoved;
+        }
+    }
 
     private ProfileManager() {
-        this.downloadedPodcasts = new ArrayList<>();
-        this.subscribedPodcasts = new ArrayList<>();
-        this.subscribedRadioItems = new ArrayList<>();
-        this.recentRadioItems = new ArrayList<>();
-        String profileJsonStr = Prefs.getString(PROFILE_PREF, null);
-        if (profileJsonStr == null) {
-            JSONObject rootProfile = new JSONObject();
-            JSONArray downloadedPodcasts = new JSONArray();
-            JSONArray subscribedPodcasts = new JSONArray();
-            JSONArray subscribedRadioStations = new JSONArray();
-            JSONArray recentRadioStations = new JSONArray();
-            try {
-                rootProfile.put(JS_DOWNLOADED_PODCASTS, downloadedPodcasts);
-                rootProfile.put(JS_SUBSCRIBED_PODCASTS, subscribedPodcasts);
-                rootProfile.put(JS_SUBSCRIBED_STATIONS, subscribedRadioStations);
-                rootProfile.put(JS_RECENT_STATIONS, recentRadioStations);
-            } catch (JSONException e) {
-                Logger.printError(PROFILE, "Can't create empty profile object");
-                e.printStackTrace();
-            }
-            profileJsonStr = rootProfile.toString();
-            Prefs.putString(PROFILE_PREF, profileJsonStr);
-        }
-        try {
-            readFromJson(new JSONObject(profileJsonStr));
-        } catch (JSONException e) {
-            Logger.printError(PROFILE, "Can't parse profile string to json: " + profileJsonStr);
-            e.printStackTrace();
-        }
+
     }
 
     public synchronized static ProfileManager getInstance() {
@@ -81,298 +59,335 @@ public class ProfileManager {
         return profileManager;
     }
 
-    public void setProfileSavedCallback(IOperationFinishCallback profileSavedCallback) {
+    public void setProfileSavedCallback(IOperationFinishWithDataCallback profileSavedCallback) {
         this.profileSavedCallback = profileSavedCallback;
     }
 
+
+    private ArrayList<Long> getMediaListIds(String mediaType, String listType) {
+        SQLiteDatabase database = UpodsApplication.getDatabaseManager().getReadableDatabase();
+        String[] args1 = {mediaType, listType};
+        ArrayList<Long> ids = new ArrayList<>();
+        Cursor cursor = database.rawQuery("SELECT p.id FROM podcasts as p\n" +
+                "LEFT JOIN media_list as ml\n" +
+                "ON p.id = ml.media_id\n" +
+                "WHERE ml.media_type = ? and ml.list_type = ?", args1);
+        while (cursor.moveToNext()) {
+            ids.add(cursor.getLong(cursor.getColumnIndex("id")));
+        }
+        cursor.close();
+        return ids;
+    }
+
+    private ArrayList<Podcast> getPodcastsForMediaType(String mediaType) {
+        SQLiteDatabase database = UpodsApplication.getDatabaseManager().getReadableDatabase();
+        ArrayList<Long> ids = getMediaListIds(MediaListItem.TYPE_PODCAST,
+                mediaType == MediaListItem.DOWNLOADED ? MediaListItem.SUBSCRIBED : MediaListItem.DOWNLOADED);
+        ArrayList<Podcast> podcasts = new ArrayList<>();
+        String[] args2 = {MediaListItem.TYPE_PODCAST, mediaType};
+        Cursor cursor = database.rawQuery("SELECT p.* FROM podcasts as p\n" +
+                "LEFT JOIN media_list as ml\n" +
+                "ON p.id = ml.media_id\n" +
+                "WHERE ml.media_type = ? and ml.list_type = ?", args2);
+        while (cursor.moveToNext()) {
+            Podcast podcast = Podcast.withCursor(cursor);
+            if (mediaType == MediaListItem.DOWNLOADED) {
+                podcast.isDownloaded = true;
+                if (ids.contains(podcast.id)) {
+                    podcast.isSubscribed = true;
+                }
+            } else if (mediaType == MediaListItem.SUBSCRIBED) {
+                podcast.isSubscribed = true;
+                if (ids.contains(podcast.id)) {
+                    podcast.isDownloaded = true;
+                }
+            }
+            podcasts.add(podcast);
+        }
+        cursor.close();
+        return podcasts;
+    }
+
+    private ArrayList<RadioItem> getRadioStationsForMediaType(String mediaType) {
+        SQLiteDatabase database = UpodsApplication.getDatabaseManager().getReadableDatabase();
+        ArrayList<Long> ids = getMediaListIds(MediaListItem.TYPE_RADIO,
+                mediaType == MediaListItem.RECENT ? MediaListItem.SUBSCRIBED : MediaListItem.RECENT);
+        ArrayList<RadioItem> radioItems = new ArrayList<>();
+        String[] args2 = {MediaListItem.TYPE_RADIO, mediaType};
+
+        Cursor cursor = database.rawQuery("SELECT r.* FROM radio_stations as r\n" +
+                "LEFT JOIN media_list as ml\n" +
+                "ON r.id = ml.media_id\n" +
+                "WHERE ml.media_type = ? and ml.list_type = ?", args2);
+
+        while (cursor.moveToNext()) {
+            RadioItem radioItem = RadioItem.withCursor(cursor);
+            if (mediaType == MediaListItem.RECENT) {
+                radioItem.isRecent = true;
+                if (ids.contains(radioItem.id)) {
+                    radioItem.isSubscribed = true;
+                }
+            } else if (mediaType == MediaListItem.SUBSCRIBED) {
+                radioItem.isSubscribed = true;
+                if (ids.contains(radioItem.id)) {
+                    radioItem.isRecent = true;
+                }
+            }
+            radioItems.add(radioItem);
+        }
+        cursor.close();
+        return radioItems;
+    }
+
+    private void addTrack(MediaItem mediaItem, Track track, String listType) {
+        if (mediaItem instanceof Podcast && track instanceof Episode) {
+            Podcast podcast = (Podcast) mediaItem;
+            Episode episode = (Episode) track;
+
+            if (listType == MediaListItem.DOWNLOADED) {
+                episode.isDownloaded = true;
+                podcast.isDownloaded = true;
+            } else if (listType == MediaListItem.NEW) {
+                episode.isNew = true;
+                podcast.hasNewEpisodes = true;
+            }
+
+            SQLiteDatabase database = UpodsApplication.getDatabaseManager().getWritableDatabase();
+            if (!podcast.isExistsInDb) {
+                podcast.save(); //If podcast doesn't exists save() will save it and all his new or downloaded episodes
+                ContentValues values = new ContentValues();
+                values.put("media_id", mediaItem.id);
+                values.put("media_type", MediaListItem.TYPE_PODCAST);
+                values.put("list_type", listType);
+                database.insert("media_list", null, values);
+                notifyChanges(new ProfileUpdateEvent(MediaListItem.DOWNLOADED, mediaItem, false));
+            } else {
+                if (!episode.isExistsInDb) {
+                    episode.save(podcast.id); //If episode doesn't exists save() will both save it and create podcasts_episodes_rel
+                } else {
+                    ContentValues values = new ContentValues();
+                    values.put("podcast_id", podcast.id);
+                    values.put("episode_id", episode.id);
+                    values.put("type", listType);
+                    database.insert("podcasts_episodes_rel", null, values);
+                }
+            }
+        }
+    }
+
+    private void removeTrack(MediaItem mediaItem, Track track, String listType) {
+        if (mediaItem instanceof Podcast && track instanceof Episode) {
+            SQLiteDatabase database = UpodsApplication.getDatabaseManager().getWritableDatabase();
+            Podcast podcast = (Podcast) mediaItem;
+            Episode episode = (Episode) track;
+            String type = Episode.DOWNLOADED;
+
+            if (listType == MediaListItem.DOWNLOADED) {
+                episode.isDownloaded = false;
+            } else if (listType == MediaListItem.NEW) {
+                episode.isNew = false;
+                type = Episode.NEW;
+            }
+
+            String args[] = {String.valueOf(podcast.id), String.valueOf(episode.id), type};
+            database.delete("podcasts_episodes_rel", "podcast_id = ? AND episode_id = ? AND type = ?", args);
+
+            if (listType == MediaListItem.DOWNLOADED && podcast.getDownloadedEpisodsCount() == 0) {
+                String args2[] = {String.valueOf(podcast.id), MediaListItem.TYPE_PODCAST, MediaListItem.DOWNLOADED};
+                database.delete("media_list", "media_id = ? AND media_type = ? AND list_type = ?", args2);
+                podcast.isDownloaded = false;
+                notifyChanges(new ProfileUpdateEvent(MediaListItem.DOWNLOADED, mediaItem, true));
+            } else if (listType == MediaListItem.NEW && podcast.getDownloadedEpisodsCount() == 0) {
+                String args2[] = {String.valueOf(podcast.id), MediaListItem.TYPE_PODCAST, MediaListItem.NEW};
+                database.delete("media_list", "media_id = ? AND media_type = ? AND list_type = ?", args2);
+            }
+        }
+    }
+
     public ArrayList<Podcast> getDownloadedPodcasts() {
-        return this.downloadedPodcasts;
+        return getPodcastsForMediaType(MediaListItem.DOWNLOADED);
     }
 
     public ArrayList<Podcast> getSubscribedPodcasts() {
-        return this.subscribedPodcasts;
+        return getPodcastsForMediaType(MediaListItem.SUBSCRIBED);
     }
 
     public ArrayList<RadioItem> getSubscribedRadioItems() {
-        return this.subscribedRadioItems;
+        return getRadioStationsForMediaType(MediaListItem.SUBSCRIBED);
     }
 
     public ArrayList<RadioItem> getRecentRadioItems() {
-        return this.recentRadioItems;
+        return getRadioStationsForMediaType(MediaListItem.RECENT);
     }
 
-
-    private void initProfilePodcastItem(JSONArray podcasts, ProfileItem profileItem) {
-        for (int i = 0; i < podcasts.length(); i++) {
-            try {
-                Podcast podcast = new Podcast(podcasts.getJSONObject(i));
-                if (profileItem == ProfileItem.DOWNLOADED_PODCASTS) {
-                    if (!MediaItem.hasMediaItemWithName(downloadedPodcasts, podcast)) {
-                        downloadedPodcasts.add(podcast);
-                    }
-                } else if (profileItem == ProfileItem.SUBSCRIBDED_PODCASTS) {
-                    if (!MediaItem.hasMediaItemWithName(subscribedPodcasts, podcast)) {
-                        subscribedPodcasts.add(podcast);
-                    }
-                }
-            } catch (JSONException e) {
-                Logger.printError(PROFILE, "Can't fetch podcast from json object at index" + String.valueOf(i));
-                e.printStackTrace();
-            }
-        }
-        String podcastType = "";
-        if (profileItem == ProfileItem.DOWNLOADED_PODCASTS) {
-            podcastType = " downloaded ";
-        } else if (profileItem == ProfileItem.SUBSCRIBDED_PODCASTS) {
-            podcastType = " subscribded ";
-        }
-        Logger.printInfo(PROFILE, "Fetcheed " + String.valueOf(podcasts.length()) + podcastType + "podcasts from json profile");
-    }
-
-    private void initProfileRadioItems(JSONArray radioItems, ProfileItem profileItem) {
-        for (int i = 0; i < radioItems.length(); i++) {
-            try {
-                RadioItem radioItem = new RadioItem(radioItems.getJSONObject(i));
-                if (profileItem == ProfileItem.SUBSCRIBDED_RADIO) {
-                    if (!MediaItem.hasMediaItemWithName(subscribedRadioItems, radioItem)) {
-                        subscribedRadioItems.add(radioItem);
-                    }
-                } else if (profileItem == ProfileItem.RECENT_RADIO) {
-                    if (!MediaItem.hasMediaItemWithName(recentRadioItems, radioItem)) {
-                        recentRadioItems.add(radioItem);
-                    }
-                }
-            } catch (JSONException e) {
-                Logger.printError(PROFILE, "Can't fetch radio item from json object at index" + String.valueOf(i));
-                e.printStackTrace();
-            }
-        }
-        String podcastType = "";
-        if (profileItem == ProfileItem.SUBSCRIBDED_RADIO) {
-            podcastType = " subscribded ";
-        } else if (profileItem == ProfileItem.RECENT_RADIO) {
-            podcastType = " recent ";
-        }
-        Logger.printInfo(PROFILE, "Fetcheed " + String.valueOf(radioItems.length()) + podcastType + "radio items from json profile");
-    }
 
     public void addSubscribedMediaItem(MediaItem mediaItem) {
-        if (mediaItem instanceof Podcast) {
-            if (!MediaItem.hasMediaItemWithName(subscribedPodcasts, mediaItem)) {
-                subscribedPodcasts.add((Podcast) mediaItem);
-                saveChanges(ProfileItem.SUBSCRIBDED_PODCASTS);
+        if (!mediaItem.isSubscribed) {
+            String mediaType = MediaListItem.TYPE_RADIO;
+            if (mediaItem instanceof Podcast) {
+                mediaType = MediaListItem.TYPE_PODCAST;
+                Podcast podcast = ((Podcast) mediaItem);
+                if (!mediaItem.isExistsInDb) {
+                    podcast.save();
+                }
+                Feed.saveAsFeed(podcast.getFeedUrl(), podcast.getEpisodes(), true);
+
+            } else if (mediaItem instanceof RadioItem) {
+                if (!mediaItem.isExistsInDb) {
+                    ((RadioItem) mediaItem).save();
+                }
             }
-        } else if (mediaItem instanceof RadioItem) {
-            if (!MediaItem.hasMediaItemWithName(subscribedRadioItems, mediaItem)) {
-                subscribedRadioItems.add((RadioItem) mediaItem);
-                saveChanges(ProfileItem.SUBSCRIBDED_RADIO);
-            }
+            ContentValues values = new ContentValues();
+            values.put("media_id", mediaItem.id);
+            values.put("media_type", mediaType);
+            values.put("list_type", MediaListItem.SUBSCRIBED);
+            UpodsApplication.getDatabaseManager().getWritableDatabase().insert("media_list", null, values);
+            mediaItem.isSubscribed = true;
         }
+        notifyChanges(new ProfileUpdateEvent(MediaListItem.SUBSCRIBED, mediaItem, false));
     }
 
     public void addRecentMediaItem(MediaItem mediaItem) {
         if (mediaItem instanceof RadioItem) {
-            if (!MediaItem.hasMediaItemWithName(recentRadioItems, mediaItem)) {
-                if (recentRadioItems.size() == RECTNT_RADIO_STATIONS_LIMIT) {
-                    recentRadioItems.remove(recentRadioItems.size() - 1);
+            if (!((RadioItem) mediaItem).isRecent) {
+                if (!mediaItem.isExistsInDb) {
+                    ((RadioItem) mediaItem).save();
                 }
-                recentRadioItems.add(0, (RadioItem) mediaItem);
-                saveChanges(ProfileItem.RECENT_RADIO, false);
+                ContentValues values = new ContentValues();
+                values.put("media_id", mediaItem.id);
+                values.put("media_type", MediaListItem.TYPE_RADIO);
+                values.put("list_type", MediaListItem.RECENT);
+                UpodsApplication.getDatabaseManager().getWritableDatabase().insert("media_list", null, values);
+                ((RadioItem) mediaItem).isRecent = true;
             }
         }
+        notifyChanges(new ProfileUpdateEvent(MediaListItem.RECENT, mediaItem, false));
+    }
+
+    public void addNewTrack(MediaItem mediaItem, Track track) {
+        addTrack(mediaItem, track, MediaListItem.NEW);
     }
 
     public void addDownloadedTrack(MediaItem mediaItem, Track track) {
-        if (mediaItem instanceof Podcast && track instanceof Episode) {
-            if (!MediaItem.hasMediaItemWithName(downloadedPodcasts, mediaItem)) {
-                Podcast podcast = new Podcast((Podcast) mediaItem);
-                podcast.getEpisodes().clear();
-                podcast.getEpisodes().add((Episode) track);
-                downloadedPodcasts.add(podcast);
-            } else {
-                Podcast podcast = (Podcast) MediaItem.getMediaItemByName(downloadedPodcasts, mediaItem);
-                podcast.getEpisodes().add((Episode) track);
-            }
-            saveChanges(ProfileItem.DOWNLOADED_PODCASTS);
-        }
+        addTrack(mediaItem, track, MediaListItem.DOWNLOADED);
+    }
+
+    public void removeNewTrack(MediaItem mediaItem, Track track) {
+        removeTrack(mediaItem, track, MediaListItem.NEW);
     }
 
     public void removeDownloadedTrack(MediaItem mediaItem, Track track) {
-        if (mediaItem instanceof Podcast && track instanceof Episode) {
-            if (MediaItem.hasMediaItemWithName(downloadedPodcasts, mediaItem)) {
-                Podcast podcast = (Podcast) MediaItem.getMediaItemByName(downloadedPodcasts, mediaItem);
-                if (podcast.getEpisodes().size() == 1) {
-                    downloadedPodcasts.remove(podcast);
-                } else {
-                    podcast.getEpisodes().remove(Episode.getEpisodByTitle(podcast.getEpisodes(), (Episode) track));
-                }
-                saveChanges(ProfileItem.DOWNLOADED_PODCASTS);
-            }
-        }
-    }
-
-    public void removeDownloadedMediaItem(MediaItem mediaItem) {
-        if (mediaItem instanceof Podcast) {
-            if (MediaItem.hasMediaItemWithName(downloadedPodcasts, mediaItem)) {
-                Podcast podcast = (Podcast) MediaItem.getMediaItemByName(downloadedPodcasts, mediaItem);
-                downloadedPodcasts.remove(podcast);
-                saveChanges(ProfileItem.DOWNLOADED_PODCASTS);
-            }
-        }
+        removeTrack(mediaItem, track, MediaListItem.DOWNLOADED);
     }
 
     public void removeRecentMediaItem(MediaItem mediaItem) {
         if (mediaItem instanceof RadioItem) {
-            if (MediaItem.hasMediaItemWithName(recentRadioItems, mediaItem)) {
-                RadioItem radioItem = (RadioItem) MediaItem.getMediaItemByName(recentRadioItems, mediaItem);
-                recentRadioItems.remove(radioItem);
-                saveChanges(ProfileItem.RECENT_RADIO);
-            }
+            SQLiteDatabase database = UpodsApplication.getDatabaseManager().getWritableDatabase();
+            String args[] = {String.valueOf(mediaItem.id), MediaListItem.TYPE_RADIO, MediaListItem.RECENT};
+            database.delete("media_list", "media_id = ? AND media_type = ? AND list_type = ?", args);
+            ((RadioItem) mediaItem).isRecent = false;
         }
-    }
-
-    public String getDownloadedMediaItemPath(MediaItem mediaItem) {
-        if (mediaItem instanceof Podcast) {
-            if (MediaItem.hasMediaItemWithName(downloadedPodcasts, mediaItem)) {
-                Podcast podcast = (Podcast) MediaItem.getMediaItemByName(downloadedPodcasts, mediaItem);
-                for (Episode episode : podcast.getEpisodes()) {
-                    return episode.getAudeoUrl().replaceFirst("/.[^/]+mp3$", "");
-                }
-            }
-        }
-        return "";
-    }
-
-    public String getDownloadedTrackPath(MediaItem mediaItem, Track track) {
-        if (mediaItem instanceof Podcast && track instanceof Episode) {
-            if (MediaItem.hasMediaItemWithName(downloadedPodcasts, mediaItem)) {
-                Podcast podcast = (Podcast) MediaItem.getMediaItemByName(downloadedPodcasts, mediaItem);
-                for (Episode episode : podcast.getEpisodes()) {
-                    if (episode.getTitle().equals(track.getTitle())) {
-                        return episode.getAudeoUrl();
-                    }
-                }
-            }
-        }
-        return "";
-    }
-
-    public boolean isDownloaded(MediaItem mediaItem, Track track) {
-        if (mediaItem instanceof Podcast && track instanceof Episode) {
-            if (Podcast.hasMediaItemWithName(downloadedPodcasts, mediaItem)) {
-                Podcast podcast = (Podcast) Podcast.getMediaItemByName(downloadedPodcasts, mediaItem);
-                return Episode.hasEpisodWithTitle(podcast.getEpisodes(), (Episode) track);
-            }
-        }
-        return false;
-    }
-
-    public boolean isDownloaded(MediaItem mediaItem) {
-        if (mediaItem instanceof Podcast) {
-            return MediaItem.hasMediaItemWithName(downloadedPodcasts, mediaItem);
-        }
-        return false;
-    }
-
-    public boolean isSubscribedToMediaItem(MediaItem mediaItem) {
-        if (mediaItem instanceof Podcast) {
-            return MediaItem.hasMediaItemWithName(subscribedPodcasts, mediaItem);
-        } else if (mediaItem instanceof RadioItem) {
-            return MediaItem.hasMediaItemWithName(subscribedRadioItems, mediaItem);
-        }
-        return false;
-    }
-
-    public boolean isRecentMediaItem(MediaItem mediaItem) {
-        if (mediaItem instanceof RadioItem) {
-            return MediaItem.hasMediaItemWithName(recentRadioItems, mediaItem);
-        }
-        return false;
+        notifyChanges(new ProfileUpdateEvent(MediaListItem.SUBSCRIBED, mediaItem, true));
     }
 
     public void removeSubscribedMediaItem(MediaItem mediaItem) {
+        SQLiteDatabase database = UpodsApplication.getDatabaseManager().getWritableDatabase();
+        String type = MediaListItem.TYPE_RADIO;
         if (mediaItem instanceof Podcast) {
-            if (MediaItem.hasMediaItemWithName(subscribedPodcasts, mediaItem)) {
-                Podcast podcast = (Podcast) Podcast.getMediaItemByName(subscribedPodcasts, mediaItem);
-                subscribedPodcasts.remove(podcast);
-                saveChanges(ProfileItem.SUBSCRIBDED_PODCASTS);
-            }
-        } else if (mediaItem instanceof RadioItem) {
-            if (MediaItem.hasMediaItemWithName(subscribedRadioItems, mediaItem)) {
-                RadioItem radioItem = (RadioItem) MediaItem.getMediaItemByName(subscribedRadioItems, mediaItem);
-                subscribedRadioItems.remove(radioItem);
-                saveChanges(ProfileItem.SUBSCRIBDED_RADIO);
-            }
+            type = MediaListItem.TYPE_PODCAST;
+        }
+        mediaItem.isSubscribed = false;
+        String args[] = {String.valueOf(mediaItem.id), type, MediaListItem.SUBSCRIBED};
+        database.delete("media_list", "media_id = ? AND media_type = ? AND list_type = ?", args);
+        notifyChanges(new ProfileUpdateEvent(MediaListItem.SUBSCRIBED, mediaItem, true));
+    }
+
+    public void notifyChanges(ProfileUpdateEvent updateEvent) {
+        if (profileSavedCallback != null) {
+            profileSavedCallback.operationFinished(updateEvent);
         }
     }
 
-    public void saveChanges(ProfileItem profileItem) {
-        saveChanges(profileItem, true);
-    }
-
-    public void saveChanges(ProfileItem profileItem, boolean needSync) {
-        String profileJsonStr = Prefs.getString(PROFILE_PREF, null);
-        if (profileJsonStr != null) {
-            try {
-                JSONObject rootProfile = new JSONObject(profileJsonStr);
-                if (profileItem == ProfileItem.DOWNLOADED_PODCASTS) {
-                    rootProfile.put(JS_DOWNLOADED_PODCASTS, Podcast.toJsonArray(downloadedPodcasts, true));
-                } else if (profileItem == ProfileItem.SUBSCRIBDED_PODCASTS) {
-                    rootProfile.put(JS_SUBSCRIBED_PODCASTS, Podcast.toJsonArray(subscribedPodcasts, false));
-                } else if (profileItem == ProfileItem.SUBSCRIBDED_RADIO) {
-                    rootProfile.put(JS_SUBSCRIBED_STATIONS, RadioItem.toJsonArray(subscribedRadioItems));
-                } else if (profileItem == ProfileItem.RECENT_RADIO) {
-                    rootProfile.put(JS_RECENT_STATIONS, RadioItem.toJsonArray(recentRadioItems));
+    private void initSubscribedPodcasts(JSONArray jSubscribedPodcasts) {
+        try {
+            SQLiteDatabase database = UpodsApplication.getDatabaseManager().getWritableDatabase();
+            ArrayList<Podcast> subscribedPodcasts = new ArrayList<>();
+            for (int i = 0; i < jSubscribedPodcasts.length(); i++) {
+                Podcast podcast = new Podcast(jSubscribedPodcasts.getJSONObject(i));
+                subscribedPodcasts.add(podcast);
+            }
+            Podcast.syncWithDb(subscribedPodcasts);
+            for (Podcast podcast : subscribedPodcasts) {
+                if (!podcast.isExistsInDb) {
+                    addSubscribedMediaItem(podcast);
                 }
-                Prefs.putString(PROFILE_PREF, rootProfile.toString());
-                Logger.printInfo(PROFILE_PREF, rootProfile.toString());
-            } catch (JSONException e) {
-                Logger.printInfo(PROFILE, "Can't parse profile string to json: " + profileJsonStr);
-                e.printStackTrace();
             }
-            if (profileSavedCallback != null) {
-                new Handler(UpodsApplication.getContext().getMainLooper()).post(new Runnable() {
-                    @Override
-                    public void run() {
-                        profileSavedCallback.operationFinished();
-                    }
-                });
-            }
+            ArrayList<String> args = new ArrayList<>();
+            args.add(MediaListItem.TYPE_PODCAST);
+            args.add(MediaListItem.SUBSCRIBED);
+            args.addAll(MediaItem.getIds(subscribedPodcasts));
+            database.delete("media_list", "media_type = ? AND list_type = ? AND media_id in " + SQLdatabaseManager.makePlaceholders(args.size()),
+                    (String[]) args.toArray());
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        if (needSync && LoginMaster.getInstance().isLogedIn()) {
-            SyncMaster.saveToCloud();
+    }
+
+    private void initRadioStations(JSONArray jStations, String listType) {
+        try {
+            SQLiteDatabase database = UpodsApplication.getDatabaseManager().getWritableDatabase();
+            ArrayList<RadioItem> radioStations = new ArrayList<>();
+            for (int i = 0; i < jStations.length(); i++) {
+                RadioItem radioItem = new RadioItem(jStations.getJSONObject(i));
+                radioStations.add(radioItem);
+            }
+            RadioItem.syncWithDb(radioStations);
+            for (RadioItem radioItem : radioStations) {
+                if (!radioItem.isExistsInDb) {
+                    if (listType == MediaListItem.SUBSCRIBED) {
+                        addSubscribedMediaItem(radioItem);
+                    } else {
+                        addRecentMediaItem(radioItem);
+                    }
+                }
+            }
+            ArrayList<String> args = new ArrayList<>();
+            args.add(MediaListItem.TYPE_RADIO);
+            args.add(listType);
+            args.addAll(MediaItem.getIds(radioStations));
+            database.delete("media_list", "media_type = ? AND list_type = ? AND media_id in " + SQLdatabaseManager.makePlaceholders(args.size()),
+                    (String[]) args.toArray());
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
     public void readFromJson(JSONObject rootProfile) {
         try {
-            initProfilePodcastItem(rootProfile.getJSONArray(JS_DOWNLOADED_PODCASTS), ProfileItem.DOWNLOADED_PODCASTS);
-            initProfilePodcastItem(rootProfile.getJSONArray(JS_SUBSCRIBED_PODCASTS), ProfileItem.SUBSCRIBDED_PODCASTS);
-            initProfileRadioItems(rootProfile.getJSONArray(JS_SUBSCRIBED_STATIONS), ProfileItem.SUBSCRIBDED_RADIO);
-            initProfileRadioItems(rootProfile.getJSONArray(JS_RECENT_STATIONS), ProfileItem.RECENT_RADIO);
+            //Read from JSON -> syncWithDB -> save all which not exists -> remove all which not in JSON
+
+            initSubscribedPodcasts(rootProfile.getJSONArray(JS_SUBSCRIBED_PODCASTS));
+            initRadioStations(rootProfile.getJSONArray(JS_SUBSCRIBED_STATIONS), MediaListItem.SUBSCRIBED);
+            initRadioStations(rootProfile.getJSONArray(JS_RECENT_STATIONS), MediaListItem.RECENT);
+
+            //TODO notify UI here
+
         } catch (JSONException e) {
             e.printStackTrace();
         }
     }
 
+
     public JSONObject getAsJson() {
-        JSONObject rootProfile = null;
+        JSONObject rootProfile = new JSONObject();
         try {
-            String profileJsonStr = Prefs.getString(PROFILE_PREF, null);
-            if (profileJsonStr == null) {
-                rootProfile = new JSONObject();
-            } else {
-                rootProfile = new JSONObject(profileJsonStr);
-            }
-        } catch (Exception exception) {
-            exception.printStackTrace();
+            rootProfile.put(JS_RECENT_STATIONS, RadioItem.toJsonArray(getRecentRadioItems()));
+            rootProfile.put(JS_SUBSCRIBED_STATIONS, RadioItem.toJsonArray(getSubscribedRadioItems()));
+            rootProfile.put(JS_SUBSCRIBED_PODCASTS, Podcast.toJsonArray(getSubscribedPodcasts()));
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
         return rootProfile;
     }
 
-    public void saveToDisk(JSONObject profile) {
-        if (profile != null) {
-            Prefs.putString(ProfileManager.PROFILE_PREF, profile.toString());
-        }
-    }
 }

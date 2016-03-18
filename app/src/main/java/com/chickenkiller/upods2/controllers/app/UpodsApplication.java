@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.Intent;
 
+import com.chickenkiller.upods2.controllers.database.SQLdatabaseManager;
 import com.chickenkiller.upods2.controllers.internet.NetworkTasksService;
 import com.chickenkiller.upods2.models.Category;
 import com.chickenkiller.upods2.utils.Logger;
@@ -23,10 +24,12 @@ public class UpodsApplication extends Application {
     private static final int CHECK_NEW_EPISODS_INTENT_CODE = 2302;
     private static final String TAG = "UpodsApplication";
     private static Context applicationContext;
+    private static SQLdatabaseManager databaseManager;
 
     @Override
     public void onCreate() {
         applicationContext = getApplicationContext();
+        databaseManager = new SQLdatabaseManager(applicationContext);
         FacebookSdk.sdkInitialize(applicationContext);
         LoginMaster.getInstance().init();
         new Prefs.Builder()
@@ -87,5 +90,9 @@ public class UpodsApplication extends Application {
 
     public static Context getContext() {
         return applicationContext;
+    }
+
+    public static SQLdatabaseManager getDatabaseManager() {
+        return databaseManager;
     }
 }

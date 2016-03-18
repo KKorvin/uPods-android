@@ -1,13 +1,17 @@
 package com.chickenkiller.upods2.models;
 
+import android.content.ContentValues;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+
 import com.chickenkiller.upods2.controllers.app.SettingsManager;
+import com.chickenkiller.upods2.controllers.app.UpodsApplication;
 import com.chickenkiller.upods2.controllers.player.UniversalPlayer;
 import com.chickenkiller.upods2.utils.Logger;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -18,8 +22,9 @@ import java.util.Set;
 /**
  * Created by alonzilberman on 12/11/15.
  */
-public class StreamUrl implements Serializable {
+public class StreamUrl extends SQLModel {
 
+    public static final String TABLE = "stream_link";
     private static final String STREAM_URL_LOG = "StreamUrl";
     private static final String[] bestStreamPatterns = {".+\\.mp3", ".+[^.]{4}$"};
 
@@ -61,18 +66,6 @@ public class StreamUrl implements Serializable {
         }
     }
 
-    public JSONObject toJSON() {
-        JSONObject jsonItem = new JSONObject();
-        try {
-            jsonItem.put("url", this.url);
-            jsonItem.put("bitrate", this.bitrate);
-        } catch (JSONException e) {
-            Logger.printError(STREAM_URL_LOG, "Can't convert StreamUrl to json");
-            e.printStackTrace();
-        }
-        return jsonItem;
-    }
-
     public String getUrl() {
         return url;
     }
@@ -89,6 +82,17 @@ public class StreamUrl implements Serializable {
         return bitrate != null && !bitrate.isEmpty();
     }
 
+    public JSONObject toJSON() {
+        JSONObject jsonItem = new JSONObject();
+        try {
+            jsonItem.put("url", this.url);
+            jsonItem.put("bitrate", this.bitrate);
+        } catch (JSONException e) {
+            Logger.printError(STREAM_URL_LOG, "Can't convert StreamUrl to json");
+            e.printStackTrace();
+        }
+        return jsonItem;
+    }
 
     public static StreamUrl getBestStreamUrl(Set<StreamUrl> allUrls) {
         final List<StreamUrl> list = new ArrayList<StreamUrl>();
@@ -149,6 +153,37 @@ public class StreamUrl implements Serializable {
                 return;
             }
         }
+    }
+
+    public static void saveSet(Set<StreamUrl> streamUrlSet, long radioStationId) {
+        SQLiteDatabase database = UpodsApplication.getDatabaseManager().getWritableDatabase();
+        database.beginTransaction();
+        for (StreamUrl streamUrl : streamUrlSet) {
+            ContentValues values = new ContentValues();
+            values.put("radio_station_id", radioStationId);
+            values.put("url", streamUrl.getUrl());
+            values.put("bitrate", streamUrl.getBitrate());
+            streamUrl.id = database.insert(TABLE, null, values);
+            streamUrl.isExistsInDb = true;
+        }
+        database.endTransaction();
+    }
+
+    public static Set<StreamUrl> withRaioItemId(long radioId) {
+        SQLiteDatabase database = UpodsApplication.getDatabaseManager().getWritableDatabase();
+        Set<StreamUrl> streamUrls = new HashSet<>();
+
+        String args[] = {String.valueOf(radioId)};
+        Cursor cursor = database.rawQuery("SELECT * FROM stream_link WHERE radio_station_id = ?", args);
+        while (cursor.moveToNext()) {
+            StreamUrl streamUrl = new StreamUrl();
+            streamUrl.isExistsInDb = true;
+            streamUrl.id = cursor.getLong(cursor.getColumnIndex("id"));
+            streamUrl.url = cursor.getString(cursor.getColumnIndex("url"));
+            streamUrl.bitrate = cursor.getString(cursor.getColumnIndex("bitrate"));
+            streamUrls.add(streamUrl);
+        }
+        return streamUrls;
     }
 }
 

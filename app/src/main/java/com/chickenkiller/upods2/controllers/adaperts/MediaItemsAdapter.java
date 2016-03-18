@@ -19,7 +19,6 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.chickenkiller.upods2.R;
-import com.chickenkiller.upods2.controllers.app.ProfileManager;
 import com.chickenkiller.upods2.fragments.FragmentMediaItemDetails;
 import com.chickenkiller.upods2.interfaces.IContentLoadListener;
 import com.chickenkiller.upods2.interfaces.IContextMenuManager;
@@ -268,8 +267,7 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
      * Inits status block (icon + text, i.e downloaded)
      */
     private void initStatusBlock(ViewHolderCardItem holder, MediaItem currentItem) {
-        if (mediaItemType == MediaItemType.PODCAST_DOWNLOADED &&
-                ProfileManager.getInstance().isDownloaded(currentItem)) {
+        if (mediaItemType == MediaItemType.PODCAST_DOWNLOADED && ((Podcast) currentItem).isDownloaded) {
             holder.tvItemStatus.setText(R.string.downloaded);
             holder.tvItemStatus.setVisibility(View.VISIBLE);
 
@@ -350,6 +348,10 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     public IMediaItemView getItemAt(int position) {
         return this.items.get(position);
+    }
+
+    public boolean removeItem(IMediaItemView mediaItemView) {
+        return items.remove(mediaItemView);
     }
 
     public void setContentLoadListener(IContentLoadListener contentLoadListener) {

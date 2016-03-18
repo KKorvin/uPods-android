@@ -6,12 +6,13 @@ import android.app.FragmentManager;
 import android.support.v13.app.FragmentStatePagerAdapter;
 
 import com.chickenkiller.upods2.R;
+import com.chickenkiller.upods2.controllers.app.ProfileManager;
 import com.chickenkiller.upods2.controllers.app.UpodsApplication;
 import com.chickenkiller.upods2.fragments.FragmentMainFeatured;
 import com.chickenkiller.upods2.fragments.FragmentMediaItemsCategories;
 import com.chickenkiller.upods2.fragments.FragmentMediaItemsList;
 import com.chickenkiller.upods2.fragments.FragmentPodcastFeatured;
-import com.chickenkiller.upods2.interfaces.IUpdateableFragment;
+import com.chickenkiller.upods2.models.MediaItem;
 import com.chickenkiller.upods2.utils.enums.MediaItemType;
 
 /**
@@ -47,14 +48,6 @@ public class MediaPagesAdapter extends FragmentStatePagerAdapter {
             currentFragment = getPodcastFragment(position);
         }
         return currentFragment;
-    }
-
-    @Override
-    public int getItemPosition(Object object) {
-        if (object instanceof IUpdateableFragment) {
-            ((IUpdateableFragment) object).update();
-        }
-        return super.getItemPosition(object);
     }
 
     @Override
@@ -134,9 +127,30 @@ public class MediaPagesAdapter extends FragmentStatePagerAdapter {
         return "";
     }
 
-
     @Override
     public int getCount() {
         return pagesCount;
+    }
+
+    public void notifyChangesInFragments(ProfileManager.ProfileUpdateEvent profileUpdateEvent) {
+        for (int i = 0; i < getCount(); i++) {
+            Fragment fragment = getItem(i);
+            if (fragment instanceof FragmentMediaItemsList) {
+                ((FragmentMediaItemsList) fragment).notifyMediaItemChanges(profileUpdateEvent);
+            } else if (fragment instanceof FragmentPodcastFeatured) {
+                ((FragmentPodcastFeatured) fragment).notifyDataChanged();
+            } else if (fragment instanceof FragmentMainFeatured) {
+                ((FragmentMainFeatured) fragment).notifyDataChanged();
+            }
+        }
+    }
+
+    public void reloadAllFragmentsData() {
+        for (int i = 0; i < getCount(); i++) {
+            Fragment fragment = getItem(i);
+            if (fragment instanceof FragmentMediaItemsList) {
+                ((FragmentMediaItemsList) fragment).reloadAllData();
+            }
+        }
     }
 }

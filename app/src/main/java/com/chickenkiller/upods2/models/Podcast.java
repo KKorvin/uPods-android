@@ -1,6 +1,10 @@
 package com.chickenkiller.upods2.models;
 
-import com.chickenkiller.upods2.controllers.app.ProfileManager;
+import android.content.ContentValues;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+
+import com.chickenkiller.upods2.controllers.app.UpodsApplication;
 import com.chickenkiller.upods2.utils.Logger;
 
 import org.json.JSONArray;
@@ -13,12 +17,12 @@ import java.util.ArrayList;
  * Created by alonzilberman on 8/24/15.
  */
 public class Podcast extends MediaItem {
+    public static final String TABLE = "podcasts";
     private static String PODCAST_LOG = "PODCAST";
     protected String name;
     protected String censoredName;
     protected String artistName;
     protected String feedUrl;
-    protected String imageUrl;
     protected String releaseDate;
     protected String explicitness;
     protected String trackCount;
@@ -27,17 +31,16 @@ public class Podcast extends MediaItem {
     protected String description;
 
     protected ArrayList<Episode> episodes;
-    protected ArrayList<String> newEpisodsTitles;
+
+    public boolean isDownloaded;
+    public boolean hasNewEpisodes;
 
     public Podcast() {
         super();
         this.episodes = new ArrayList<>();
-        this.newEpisodsTitles = new ArrayList<>();
-        this.name = "";
         this.censoredName = "";
         this.artistName = "";
         this.feedUrl = "";
-        this.imageUrl = "";
         this.releaseDate = "";
         this.explicitness = "";
         this.trackCount = "0";
@@ -51,30 +54,32 @@ public class Podcast extends MediaItem {
         this.feedUrl = feedUrl;
     }
 
+
     public Podcast(JSONObject jsonItem) {
         this();
         try {
             this.description = jsonItem.has("description") ? jsonItem.getString("description") : "";
 
-            if (jsonItem.has("newEpisodsTitles")) {
-                JSONArray jNewEpisodsTitles = jsonItem.getJSONArray("newEpisodsTitles");
-                for (int i = 0; i < jNewEpisodsTitles.length(); i++) {
-                    this.newEpisodsTitles.add(jNewEpisodsTitles.getString(i));
+            if (jsonItem.has("episodes")) {
+                JSONArray jepisodes = jsonItem.getJSONArray("episodes");
+                for (int i = 0; i < jepisodes.length(); i++) {
+                    episodes.add(new Episode(jepisodes.getJSONObject(i)));
                 }
             }
 
             if (jsonItem.has("kind")) { //Itunes
                 this.id = jsonItem.has("trackId") ? jsonItem.getInt("trackId") : 0;
                 this.name = jsonItem.has("collectionName") ? jsonItem.getString("collectionName") : "";
+                this.name = name.replace("\n", "").trim();
                 this.censoredName = jsonItem.has("collectionCensoredName") ? jsonItem.getString("collectionCensoredName") : "";
                 this.artistName = jsonItem.has("artistName") ? jsonItem.getString("artistName") : "";
                 this.feedUrl = jsonItem.has("feedUrl") ? jsonItem.getString("feedUrl") : "";
-                this.imageUrl = jsonItem.has("artworkUrl600") ? jsonItem.getString("artworkUrl600") : "";
-                if (this.imageUrl.isEmpty()) {
-                    this.imageUrl = jsonItem.has("artworkUrl100") ? jsonItem.getString("artworkUrl100") : "";
+                this.coverImageUrl = jsonItem.has("artworkUrl600") ? jsonItem.getString("artworkUrl600") : "";
+                if (this.coverImageUrl.isEmpty()) {
+                    this.coverImageUrl = jsonItem.has("artworkUrl100") ? jsonItem.getString("artworkUrl100") : "";
                 }
-                if (this.imageUrl.isEmpty()) {
-                    this.imageUrl = jsonItem.has("artworkUrl60") ? jsonItem.getString("artworkUrl60") : "";
+                if (this.coverImageUrl.isEmpty()) {
+                    this.coverImageUrl = jsonItem.has("artworkUrl60") ? jsonItem.getString("artworkUrl60") : "";
                 }
                 this.country = jsonItem.has("country") ? jsonItem.getString("country") : "";
                 this.releaseDate = jsonItem.has("releaseDate") ? jsonItem.getString("releaseDate") : "";
@@ -84,10 +89,11 @@ public class Podcast extends MediaItem {
             } else {//Our backend
                 this.id = jsonItem.has("id") ? jsonItem.getInt("id") : 0;
                 this.name = jsonItem.has("name") ? jsonItem.getString("name") : "";
+                this.name = name.replace("\n", "").trim();
                 this.censoredName = jsonItem.has("censored_name") ? jsonItem.getString("censored_name") : "";
                 this.artistName = jsonItem.has("artist_name") ? jsonItem.getString("artist_name") : "";
                 this.feedUrl = jsonItem.has("feed_url") ? jsonItem.getString("feed_url") : "";
-                this.imageUrl = jsonItem.has("image_url") ? jsonItem.getString("image_url") : "";
+                this.coverImageUrl = jsonItem.has("image_url") ? jsonItem.getString("image_url") : "";
                 this.country = jsonItem.has("country") ? jsonItem.getString("country") : "";
                 this.releaseDate = jsonItem.has("release_date") ? jsonItem.getString("release_date") : "";
                 this.explicitness = jsonItem.has("explicitness") ? jsonItem.getString("explicitness") : "";
@@ -114,116 +120,15 @@ public class Podcast extends MediaItem {
         this.censoredName = podcast.getCensoredName();
         this.artistName = podcast.getArtistName();
         this.feedUrl = podcast.getFeedUrl();
-        this.imageUrl = podcast.getCoverImageUrl();
+        this.coverImageUrl = podcast.getCoverImageUrl();
         this.releaseDate = podcast.getReleaseDate();
         this.explicitness = podcast.getExplicitness();
         this.trackCount = podcast.getTrackCount();
         this.country = podcast.getCountry();
         this.genre = podcast.getGenre();
         this.episodes = new ArrayList<Episode>(podcast.episodes);
-        this.newEpisodsTitles = new ArrayList<String>(podcast.newEpisodsTitles);
     }
 
-    public JSONObject toJSON(boolean convertEpisods) {
-        JSONObject podcast = new JSONObject();
-        try {
-            podcast.put("id", this.id);
-            podcast.put("name", this.name);
-            podcast.put("censored_name", this.censoredName);
-            podcast.put("artist_name", this.artistName);
-            podcast.put("feed_url", this.feedUrl);
-            podcast.put("image_url", this.imageUrl);
-            podcast.put("country", this.country);
-            podcast.put("release_date", this.releaseDate);
-            podcast.put("explicitness", this.explicitness);
-            podcast.put("track_count", this.trackCount);
-            podcast.put("genre", this.genre);
-            podcast.put("description", this.description);
-
-            if (convertEpisods) {
-                podcast.put("episodes", Episode.toJSONArray(this.episodes));
-            }
-            JSONArray jNewEpisodsTitles = new JSONArray();
-            for (String episodTitle : newEpisodsTitles) {
-                jNewEpisodsTitles.put(episodTitle);
-            }
-            podcast.put("newEpisodsTitles", jNewEpisodsTitles);
-        } catch (JSONException e) {
-            Logger.printError(PODCAST_LOG, "Can't convert podcast to json");
-            e.printStackTrace();
-        }
-        return podcast;
-    }
-
-    public static JSONArray toJsonArray(ArrayList<Podcast> podcasts, boolean convertEpisods) {
-        JSONArray jsonPodcasts = new JSONArray();
-        for (Podcast podcast : podcasts) {
-            jsonPodcasts.put(podcast.toJSON(convertEpisods));
-        }
-        return jsonPodcasts;
-    }
-
-
-    public static ArrayList<Podcast> withJsonArray(JSONArray jsonPodcastsItems) {
-        ArrayList<Podcast> items = new ArrayList<Podcast>();
-        try {
-            for (int i = 0; i < jsonPodcastsItems.length(); i++) {
-                JSONObject podcastItem = (JSONObject) jsonPodcastsItems.get(i);
-                items.add(new Podcast(podcastItem));
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return items;
-    }
-
-    @Override
-    public String getName() {
-        return name;
-    }
-
-    @Override
-    public String getCoverImageUrl() {
-        return imageUrl != null && imageUrl.isEmpty() ? null : imageUrl;
-    }
-
-    @Override
-    public String getSubHeader() {
-        return this.artistName;
-    }
-
-    @Override
-    public String getBottomHeader() {
-        return this.country;
-    }
-
-    @Override
-    public String getDescription() {
-        return description;
-    }
-
-    @Override
-    public String getAudeoLink() {
-        for (Episode episode : episodes) {
-            if (episode.isSelected) {
-                if (ProfileManager.getInstance().isDownloaded(this, episode)) {
-                    episode.setPathOnDisk(ProfileManager.getInstance().getDownloadedTrackPath(this, episode));
-                }
-                return episode.getAudeoUrl();
-            }
-        }
-        return episodes.get(0).getAudeoUrl();
-    }
-
-    @Override
-    public String getBitrate() {
-        return "";
-    }
-
-    @Override
-    public boolean hasTracks() {
-        return true;
-    }
 
     public void setName(String name) {
         this.name = name;
@@ -233,32 +138,16 @@ public class Podcast extends MediaItem {
         return censoredName;
     }
 
-    public void setCensoredName(String censoredName) {
-        this.censoredName = censoredName;
-    }
-
     public String getFeedUrl() {
         return feedUrl;
-    }
-
-    public void setFeedUrl(String feedUrl) {
-        this.feedUrl = feedUrl;
     }
 
     public String getArtistName() {
         return artistName;
     }
 
-    public void setArtistName(String artistName) {
-        this.artistName = artistName;
-    }
-
     public String getReleaseDate() {
         return releaseDate;
-    }
-
-    public void setReleaseDate(String releaseDate) {
-        this.releaseDate = releaseDate;
     }
 
     public String getTrackCount() {
@@ -269,32 +158,16 @@ public class Podcast extends MediaItem {
         this.trackCount = trackCount;
     }
 
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
-    }
-
     public String getExplicitness() {
         return explicitness;
-    }
-
-    public void setExplicitness(String explicitness) {
-        this.explicitness = explicitness;
     }
 
     public String getCountry() {
         return country;
     }
 
-    public void setCountry(String country) {
-        this.country = country;
-    }
-
     public String getGenre() {
         return genre;
-    }
-
-    public void setGenre(String genre) {
-        this.genre = genre;
     }
 
     public ArrayList<Episode> getEpisodes() {
@@ -303,31 +176,6 @@ public class Podcast extends MediaItem {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public void addNewEpisodsTitle(String episodeTitle) {
-        newEpisodsTitles.add(episodeTitle);
-    }
-
-    public boolean isNewEpisodTitle(String episodTitle) {
-        return newEpisodsTitles.contains(episodTitle);
-    }
-
-    /**
-     * Call it to mark current plying track as not new
-     */
-    public static void manageNewTracks(MediaItem mediaItem, Track track) {
-        try {
-            Podcast podcast = (Podcast) MediaItem.getMediaItemByName(ProfileManager.getInstance().getSubscribedPodcasts(), mediaItem);
-            if (podcast.newEpisodsTitles.contains(track.getTitle())) {
-                podcast.newEpisodsTitles.remove(track.getTitle());
-                ((Episode) track).isNotNew = true;
-                ProfileManager.getInstance().saveChanges(ProfileManager.ProfileItem.SUBSCRIBDED_PODCASTS, false);
-            }
-        } catch (Exception e) {
-            Logger.printInfo(PODCAST_LOG, "Error in manageNewTracks: ");
-            e.printStackTrace();
-        }
     }
 
     public void setTracks(ArrayList<? extends Track> tracks) {
@@ -351,20 +199,205 @@ public class Podcast extends MediaItem {
         return null;
     }
 
+    public int getNewEpisodsCount() {
+        int count = 0;
+        for (Episode episode : episodes) {
+            if (episode.isNew) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    public int getDownloadedEpisodsCount() {
+        int count = 0;
+        for (Episode episode : episodes) {
+            if (episode.isDownloaded) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    public String getDownloadedDirectory() {
+        for (Episode episode : episodes) {
+            if (episode.isDownloaded) {
+                return episode.getAudeoUrl();
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public String getName() {
+        return name;
+    }
+
+    @Override
+    public String getCoverImageUrl() {
+        return coverImageUrl != null && coverImageUrl.isEmpty() ? null : coverImageUrl;
+    }
+
+    @Override
+    public String getSubHeader() {
+        return this.artistName;
+    }
+
+    @Override
+    public String getBottomHeader() {
+        return this.country;
+    }
+
+    @Override
+    public String getDescription() {
+        return description;
+    }
+
+    @Override
+    public String getAudeoLink() {
+        for (Episode episode : episodes) {
+            if (episode.isSelected) {
+                return episode.getAudeoUrl();
+            }
+        }
+        return episodes.get(0).getAudeoUrl();
+    }
+
+    @Override
+    public String getBitrate() {
+        return "";
+    }
+
+    @Override
+    public boolean hasTracks() {
+        return true;
+    }
+
+    public long save() {
+        SQLiteDatabase database = UpodsApplication.getDatabaseManager().getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("name", name);
+        values.put("censored_name", censoredName);
+        values.put("artist_name", artistName);
+        values.put("description", description);
+        values.put("feed_url", feedUrl);
+        values.put("cover_image_url", coverImageUrl);
+        values.put("release_date", releaseDate);
+        values.put("explicitness", explicitness);
+        values.put("country", country);
+        values.put("genre", genre);
+        values.put("track_count", trackCount);
+
+        id = database.insert(TABLE, null, values);
+        isExistsInDb = true;
+
+        return id;
+    }
+
+    public JSONObject toJSON() {
+        JSONObject podcast = new JSONObject();
+        try {
+            podcast.put("id", this.id);
+            podcast.put("name", this.name);
+            podcast.put("censored_name", this.censoredName);
+            podcast.put("artist_name", this.artistName);
+            podcast.put("feed_url", this.feedUrl);
+            podcast.put("image_url", this.coverImageUrl);
+            podcast.put("country", this.country);
+            podcast.put("release_date", this.releaseDate);
+            podcast.put("explicitness", this.explicitness);
+            podcast.put("track_count", this.trackCount);
+            podcast.put("genre", this.genre);
+            podcast.put("description", this.description);
+            //podcast.put("episodes", Episode.toJSONArray(this.episodes, true));
+        } catch (JSONException e) {
+            Logger.printError(PODCAST_LOG, "Can't convert podcast to json");
+            e.printStackTrace();
+        }
+        return podcast;
+    }
+
     public void selectTrack(Track track) {
         for (Episode episode : episodes) {
             episode.isSelected = episode.equals(track) ? true : false;
         }
     }
 
-
-    public int getNewEpisodsCount() {
-        return newEpisodsTitles.size();
+    public static boolean isExistsWithName(String name) {
+        SQLiteDatabase database = UpodsApplication.getDatabaseManager().getReadableDatabase();
+        String[] args = {name};
+        Cursor cursor = database.rawQuery("SELECT * from podcasts where name = ? LIMIT 1", args);
+        cursor.moveToFirst();
+        return cursor.getCount() > 0;
     }
 
-    public void cleanNewEpisodesTitles() {
-        newEpisodsTitles.clear();
+    public static JSONArray toJsonArray(ArrayList<Podcast> podcasts) {
+        JSONArray jsonPodcasts = new JSONArray();
+        for (Podcast podcast : podcasts) {
+            jsonPodcasts.put(podcast.toJSON());
+        }
+        return jsonPodcasts;
     }
 
+    public static Podcast withCursor(Cursor cursor) {
+        Podcast podcast = new Podcast();
+        podcast.isExistsInDb = true;
+        podcast.id = cursor.getLong(cursor.getColumnIndex("id"));
+        podcast.name = cursor.getString(cursor.getColumnIndex("name"));
+        podcast.censoredName = cursor.getString(cursor.getColumnIndex("censored_name"));
+        podcast.artistName = cursor.getString(cursor.getColumnIndex("artist_name"));
+        podcast.description = cursor.getString(cursor.getColumnIndex("description"));
+        podcast.feedUrl = cursor.getString(cursor.getColumnIndex("feed_url"));
+        podcast.coverImageUrl = cursor.getString(cursor.getColumnIndex("cover_image_url"));
+        podcast.releaseDate = cursor.getString(cursor.getColumnIndex("release_date"));
+        podcast.explicitness = cursor.getString(cursor.getColumnIndex("explicitness"));
+        podcast.country = cursor.getString(cursor.getColumnIndex("country"));
+        podcast.genre = cursor.getString(cursor.getColumnIndex("genre"));
+        podcast.trackCount = cursor.getString(cursor.getColumnIndex("track_count"));
 
+        podcast.episodes.addAll(Episode.withPodcastId(podcast.id));
+
+        return podcast;
+    }
+
+    public static ArrayList<Podcast> withJsonArray(JSONArray jsonPodcastsItems) {
+        ArrayList<Podcast> items = new ArrayList<Podcast>();
+        try {
+            for (int i = 0; i < jsonPodcastsItems.length(); i++) {
+                JSONObject podcastItem = (JSONObject) jsonPodcastsItems.get(i);
+                items.add(new Podcast(podcastItem));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return items;
+    }
+
+    public static void syncWithDb(ArrayList<Podcast> podcasts) {
+        ArrayList<MediaListItem> listItems = MediaListItem.withMediaType(MediaListItem.TYPE_PODCAST);
+        for (MediaListItem listItem : listItems) {
+            Podcast podcast = (Podcast) MediaItem.getMediaItemByName(podcasts, listItem.mediaItemName);
+            if (podcast != null) {
+                podcast.id = listItem.id;
+                podcast.isExistsInDb = true;
+                if (listItem.listType == MediaListItem.SUBSCRIBED) {
+                    podcast.isSubscribed = true;
+                } else if (listItem.listType == MediaListItem.DOWNLOADED) {
+                    podcast.isDownloaded = true;
+                } else if (listItem.listType == MediaListItem.NEW) {
+                    podcast.hasNewEpisodes = true;
+                }
+                ArrayList<Episode> existingEpisodes = Episode.withPodcastId(podcast.id);
+                for (Episode episode : existingEpisodes) {
+                    Episode podcastEpisode = Episode.getEpisodByTitle(podcast.episodes, episode.getTitle());
+                    if (podcastEpisode == null) {
+                        podcast.episodes.add(episode);
+                    } else {
+                        podcastEpisode.isDownloaded = episode.isDownloaded;
+                        podcastEpisode.isNew = episode.isNew;
+                    }
+                }
+            }
+        }
+    }
 }

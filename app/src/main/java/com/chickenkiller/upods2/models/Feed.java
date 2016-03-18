@@ -66,11 +66,24 @@ public class Feed {
         JSONObject feedJsonObject = new JSONObject();
         try {
             feedJsonObject.put("url", url);
-            feedJsonObject.put("episodes", Episode.toJSONArray(episodes));
+            feedJsonObject.put("episodes", Episode.toJSONArray(episodes, false));
         } catch (JSONException e) {
             e.printStackTrace();
         }
         return feedJsonObject;
+    }
+
+    public static void saveAsFeed(final String url, final ArrayList<Episode> episodes, boolean isInBackground) {
+        if (isInBackground) {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    saveAsFeed(url, episodes);
+                }
+            }).run();
+        } else {
+            saveAsFeed(url, episodes);
+        }
     }
 
     public static void saveAsFeed(String url, ArrayList<Episode> episodes) {
@@ -121,11 +134,10 @@ public class Feed {
         if (feed != null) {
             for (Episode latestEpisode : latestEpisodes) {
                 if (!Episode.hasEpisodWithTitle(feed.episodes, latestEpisode)) {//Check if new eipsod is not saved in local feed
-                    podcast.addNewEpisodsTitle(latestEpisode.getTitle());
+                    ProfileManager.getInstance().addNewTrack(podcast, latestEpisode);
                     hasUpdates = true;
                 }
             }
-            ProfileManager.getInstance().saveChanges(ProfileManager.ProfileItem.SUBSCRIBDED_PODCASTS);
             SimpleCacheManager.getInstance().removeFromCache(podcast.getFeedUrl());
         }
         saveAsFeed(podcast.getFeedUrl(), latestEpisodes);

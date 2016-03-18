@@ -5,6 +5,7 @@ import android.test.suitebuilder.annotation.SmallTest;
 
 import com.chickenkiller.upods2.controllers.app.ProfileManager;
 import com.chickenkiller.upods2.models.Episode;
+import com.chickenkiller.upods2.models.MediaItem;
 import com.chickenkiller.upods2.models.Podcast;
 import com.chickenkiller.upods2.models.RadioItem;
 import com.chickenkiller.upods2.models.StreamUrl;
@@ -32,12 +33,12 @@ public class ProfileTest {
         Podcast podcast = new Podcast(podcastName, TEST_FEED);
 
         ProfileManager.getInstance().addSubscribedMediaItem(podcast);
-        boolean isPodcastInFavorites = ProfileManager.getInstance().isSubscribedToMediaItem(podcast);
+        boolean isPodcastInFavorites = MediaItem.hasMediaItemWithName(ProfileManager.getInstance().getSubscribedPodcasts(), podcast);
         Logger.printInfo("testSubscribed", "Testing adding podcast to subscribed");
         assertTrue(isPodcastInFavorites);
 
         ProfileManager.getInstance().removeSubscribedMediaItem(podcast);
-        isPodcastInFavorites = ProfileManager.getInstance().isSubscribedToMediaItem(podcast);
+        isPodcastInFavorites = MediaItem.hasMediaItemWithName(ProfileManager.getInstance().getSubscribedPodcasts(), podcast);
         Logger.printInfo("testSubscribed", "Testing removing podcast from subscribed");
         assertTrue(!isPodcastInFavorites);
 
@@ -46,12 +47,12 @@ public class ProfileTest {
         RadioItem radioItem = new RadioItem(radioName, new StreamUrl(""), "");
 
         ProfileManager.getInstance().addSubscribedMediaItem(radioItem);
-        boolean isRadiotInFavorites = ProfileManager.getInstance().isSubscribedToMediaItem(radioItem);
+        boolean isRadiotInFavorites = MediaItem.hasMediaItemWithName(ProfileManager.getInstance().getSubscribedRadioItems(), radioItem);
         Logger.printInfo("testSubscribed", "Testing adding radio to subscribed");
         assertTrue(isRadiotInFavorites);
 
         ProfileManager.getInstance().removeSubscribedMediaItem(radioItem);
-        isRadiotInFavorites = ProfileManager.getInstance().isSubscribedToMediaItem(radioItem);
+        isRadiotInFavorites = MediaItem.hasMediaItemWithName(ProfileManager.getInstance().getSubscribedRadioItems(), radioItem);
         Logger.printInfo("testSubscribed", "Testing removing radio to subscribed");
         assertTrue(!isRadiotInFavorites);
 
@@ -68,12 +69,12 @@ public class ProfileTest {
         episode.setTitle(episodeName);
 
         ProfileManager.getInstance().addDownloadedTrack(podcast, episode);
-        boolean isEpisodeDownloaded = ProfileManager.getInstance().isDownloaded(podcast, episode);
+        boolean isEpisodeDownloaded = MediaItem.hasMediaItemWithName(ProfileManager.getInstance().getDownloadedPodcasts(), podcast);
         Logger.printInfo("checkDownloadedScenario", "Testing adding downloaded episode");
         assertTrue(isEpisodeDownloaded);
 
         ProfileManager.getInstance().removeDownloadedTrack(podcast, episode);
-        isEpisodeDownloaded = ProfileManager.getInstance().isDownloaded(podcast, episode);
+        isEpisodeDownloaded = MediaItem.hasMediaItemWithName(ProfileManager.getInstance().getDownloadedPodcasts(), podcast);
         Logger.printInfo("checkDownloadedScenario", "Testing removing downloaded episode");
         assertTrue(!isEpisodeDownloaded);
     }
@@ -85,12 +86,12 @@ public class ProfileTest {
         RadioItem radioItem = new RadioItem(radioName, new StreamUrl(""), "");
 
         ProfileManager.getInstance().addRecentMediaItem(radioItem);
-        boolean isRecentStation = ProfileManager.getInstance().isRecentMediaItem(radioItem);
+        boolean isRecentStation = MediaItem.hasMediaItemWithName(ProfileManager.getInstance().getRecentRadioItems(), radioItem);
         Logger.printInfo("checkRecentScenario", "Testing adding radio to recent");
         assertTrue(isRecentStation);
 
         ProfileManager.getInstance().removeRecentMediaItem(radioItem);
-        isRecentStation = ProfileManager.getInstance().isSubscribedToMediaItem(radioItem);
+        isRecentStation = MediaItem.hasMediaItemWithName(ProfileManager.getInstance().getRecentRadioItems(), radioItem);
         Logger.printInfo("checkRecentScenario", "Testing removing radio from recent");
         assertTrue(!isRecentStation);
     }

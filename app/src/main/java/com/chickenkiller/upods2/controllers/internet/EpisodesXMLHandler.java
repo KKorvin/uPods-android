@@ -50,7 +50,6 @@ public class EpisodesXMLHandler extends DefaultHandler {
         elementOn = true;
         if (localName.equals(ITEM_TITLE)) {
             episode = new Episode();
-            episode.setBtnDownloadText("");
             isItem = true;
         }
         if (localName.equalsIgnoreCase(MP3_1) && isItem) {

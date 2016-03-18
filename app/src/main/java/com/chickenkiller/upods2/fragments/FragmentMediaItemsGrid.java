@@ -14,7 +14,7 @@ import com.chickenkiller.upods2.controllers.adaperts.MediaPagesAdapter;
 import com.chickenkiller.upods2.controllers.app.ProfileManager;
 import com.chickenkiller.upods2.controllers.player.SmallPlayer;
 import com.chickenkiller.upods2.interfaces.ICustumziedBackPress;
-import com.chickenkiller.upods2.interfaces.IOperationFinishCallback;
+import com.chickenkiller.upods2.interfaces.IOperationFinishWithDataCallback;
 import com.chickenkiller.upods2.interfaces.ISlidingMenuHolder;
 import com.chickenkiller.upods2.interfaces.IToolbarHolder;
 import com.chickenkiller.upods2.utils.enums.MediaItemType;
@@ -108,11 +108,11 @@ public class FragmentMediaItemsGrid extends Fragment implements ICustumziedBackP
     @Override
     public void onResume() {
         //Set callback for ProviderProfileManager
-        ProfileManager.getInstance().setProfileSavedCallback(new IOperationFinishCallback() {
+        ProfileManager.getInstance().setProfileSavedCallback(new IOperationFinishWithDataCallback() {
             @Override
-            public void operationFinished() {
-                if (isAdded() && mediaPagesAdapter != null) {
-                    mediaPagesAdapter.notifyDataSetChanged();
+            public void operationFinished(Object data) {
+                if (isAdded() && mediaPagesAdapter != null && data != null) {
+                    mediaPagesAdapter.notifyChangesInFragments((ProfileManager.ProfileUpdateEvent) data);
                 }
             }
         });

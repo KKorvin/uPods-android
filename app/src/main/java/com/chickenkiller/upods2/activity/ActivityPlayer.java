@@ -123,7 +123,7 @@ public class ActivityPlayer extends BasicActivity implements IToolbarHolder, Too
     public boolean onMenuItemClick(MenuItem item) {
         MediaItem mediaItem = UniversalPlayer.getInstance().getPlayingMediaItem();
         if (item.getItemId() == R.id.action_favorites_player) {
-            if (ProfileManager.getInstance().isSubscribedToMediaItem(mediaItem)) {
+            if (mediaItem.isSubscribed) {
                 itemFavorites.setIcon(getResources().getDrawable(R.drawable.ic_heart_white_24dp));
                 ProfileManager.getInstance().removeSubscribedMediaItem(mediaItem);
                 Toast.makeText(this, getString(R.string.removed_from_favorites), Toast.LENGTH_SHORT).show();

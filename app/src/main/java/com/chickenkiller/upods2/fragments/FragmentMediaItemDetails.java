@@ -98,7 +98,6 @@ public class FragmentMediaItemDetails extends Fragment implements View.OnTouchLi
 
     private int moveDeltaY;
     private int screenHeight;
-    private boolean isSubscribedToMediaItem;
 
 
     private View.OnClickListener frgamentCloseClickListener = new View.OnClickListener() {
@@ -132,12 +131,11 @@ public class FragmentMediaItemDetails extends Fragment implements View.OnTouchLi
         moveDeltaY = 0;
 
         if (playableItem != null) {
-            isSubscribedToMediaItem = ProfileManager.getInstance().isSubscribedToMediaItem(playableItem);
             initImagesColors();
             tvDetailedHeader.setText(playableItem.getName());
             tvDetailedSubHeader.setText(playableItem.getSubHeader());
             tvBottomHeader.setText(playableItem.getBottomHeader());
-            btnSubscribe.setText(isSubscribedToMediaItem ? getString(R.string.unsubscribe) : getString(R.string.subscribe));
+            btnSubscribe.setText(playableItem.isSubscribed ? getString(R.string.unsubscribe) : getString(R.string.subscribe));
             initSubscribeBtn();
 
             if (playableItem.hasTracks()) {
@@ -250,7 +248,7 @@ public class FragmentMediaItemDetails extends Fragment implements View.OnTouchLi
         btnSubscribe.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (ProfileManager.getInstance().isSubscribedToMediaItem(playableItem)) {
+                if (playableItem.isSubscribed) {
                     ProfileManager.getInstance().removeSubscribedMediaItem(playableItem);
                     btnSubscribe.setText(getString(R.string.subscribe));
                 } else {
@@ -299,19 +297,14 @@ public class FragmentMediaItemDetails extends Fragment implements View.OnTouchLi
                                     InputSource inputSource = new InputSource(new StringReader(response));
                                     xr.parse(inputSource);
                                     ArrayList<Episode> parsedEpisodes = episodesXMLHandler.getParsedEpisods();
-                                    if (playableItem instanceof Podcast) {
-                                        Feed.handleUpdates(parsedEpisodes, (Podcast) playableItem);
-                                    }
-                                    if (playableItem instanceof Podcast) {
-                                        ((Podcast) playableItem).setTracks(parsedEpisodes);
-                                    }
+
                                     if (playableItem instanceof Podcast) {
                                         Podcast podcast = ((Podcast) playableItem);
                                         podcast.setDescription(episodesXMLHandler.getPodcastSummary());
                                         podcast.setTrackCount(String.valueOf(parsedEpisodes.size()));
-                                        if (isSubscribedToMediaItem) {
-                                            //Save changes to disk to be sure we have recent count of provider's episodes
-                                            ProfileManager.getInstance().saveChanges(ProfileManager.ProfileItem.SUBSCRIBDED_PODCASTS, false);
+                                        podcast.setTracks(parsedEpisodes);
+                                        if (podcast.isSubscribed) {
+                                            Feed.saveAsFeed(podcast.getFeedUrl(), podcast.getEpisodes(), true);
                                         }
                                     }
                                     tracksAdapter.addItems(parsedEpisodes);

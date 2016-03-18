@@ -9,7 +9,7 @@ import java.util.ArrayList;
  * Created by alonzilberman on 7/3/15.
  * Basic class for any media item, can be show in feature screen.
  */
-public abstract class MediaItem implements IMediaItemView {
+public abstract class MediaItem extends SQLModel implements IMediaItemView {
 
     /**
      * Created by alonzilberman on 10/23/15.
@@ -20,16 +20,13 @@ public abstract class MediaItem implements IMediaItemView {
         public Track track;
     }
 
-    protected int id;
     protected String name;
     protected String coverImageUrl;
 
 
-    public MediaItem() {
-    }
+    public boolean isSubscribed;
 
-    public int getId() {
-        return id;
+    public MediaItem() {
     }
 
     public String getCoverImageUrl() {
@@ -74,13 +71,23 @@ public abstract class MediaItem implements IMediaItemView {
     }
 
     public static MediaItem getMediaItemByName(ArrayList<? extends MediaItem> mediaItems, MediaItem mediaItemTarget) {
+        return getMediaItemByName(mediaItems, mediaItemTarget.getName());
+    }
+
+    public static MediaItem getMediaItemByName(ArrayList<? extends MediaItem> mediaItems, String targetName) {
         for (MediaItem mediaItem : mediaItems) {
-            if (GlobalUtils.safeTitleEquals(mediaItem.getName(), mediaItemTarget.getName())) {
+            if (GlobalUtils.safeTitleEquals(mediaItem.getName(), targetName)) {
                 return mediaItem;
             }
         }
         return null;
     }
 
-
+    public static ArrayList<String> getIds(ArrayList<? extends MediaItem> mediaItems) {
+        ArrayList<String> ids = new ArrayList<>();
+        for (MediaItem mediaItem : mediaItems) {
+            ids.add(String.valueOf(mediaItem.id));
+        }
+        return ids;
+    }
 }

@@ -7,7 +7,6 @@ import android.support.v13.app.FragmentStatePagerAdapter;
 import android.view.View;
 
 import com.chickenkiller.upods2.fragments.FragmentHelpItem;
-import com.chickenkiller.upods2.interfaces.IUpdateableFragment;
 import com.chickenkiller.upods2.utils.Logger;
 
 /**
@@ -33,14 +32,6 @@ public class HelpPagesAdapter extends FragmentStatePagerAdapter {
             ((FragmentHelpItem) currentFragment).setCloseClickListener(closeClickListener);
         }
         return currentFragment;
-    }
-
-    @Override
-    public int getItemPosition(Object object) {
-        if (object instanceof IUpdateableFragment) {
-            ((IUpdateableFragment) object).update();
-        }
-        return super.getItemPosition(object);
     }
 
     @Override

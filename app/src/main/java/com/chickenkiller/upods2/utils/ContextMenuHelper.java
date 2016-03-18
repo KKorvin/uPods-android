@@ -23,6 +23,7 @@ import com.chickenkiller.upods2.interfaces.IFragmentsManager;
 import com.chickenkiller.upods2.interfaces.IOperationFinishCallback;
 import com.chickenkiller.upods2.interfaces.IOperationFinishWithDataCallback;
 import com.chickenkiller.upods2.interfaces.IRequestCallback;
+import com.chickenkiller.upods2.models.Episode;
 import com.chickenkiller.upods2.models.MediaItem;
 import com.chickenkiller.upods2.models.Podcast;
 import com.chickenkiller.upods2.models.RadioItem;
@@ -49,8 +50,7 @@ public class ContextMenuHelper {
     }
 
     public static void showPodcastInFolder(MediaItem mediaItemData, Activity activity) {
-        String path = ProfileManager.getInstance().getDownloadedMediaItemPath(mediaItemData);
-        Uri selectedUri = Uri.parse(path);
+        Uri selectedUri = Uri.parse(((Podcast) mediaItemData).getDownloadedDirectory());
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setDataAndType(selectedUri, "*/*");
         activity.startActivity(intent);
@@ -63,9 +63,11 @@ public class ContextMenuHelper {
         dialogFragmentConfarmation.setPositiveClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String path = ProfileManager.getInstance().getDownloadedMediaItemPath(podcast);
+                String path = podcast.getDownloadedDirectory();
                 GlobalUtils.deleteDirectory(new File(path));
-                ProfileManager.getInstance().removeDownloadedMediaItem(podcast);
+                for (Episode episode : podcast.getEpisodes()) {
+                    ProfileManager.getInstance().removeDownloadedTrack(podcast, episode);
+                }
                 contextItemSelected.operationFinished();
             }
         });

@@ -34,7 +34,7 @@ public class CloudSyncTest {
         final RadioItem radioItem = new RadioItem(radioName, new StreamUrl(""), "");
 
         ProfileManager.getInstance().addSubscribedMediaItem(radioItem);
-        boolean isRadiotInFavorites = ProfileManager.getInstance().isSubscribedToMediaItem(radioItem);
+        boolean isRadiotInFavorites = ProfileManager.getInstance().getSubscribedRadioItems().contains(radioItem);
         Logger.printInfo("testGlobalTokenScenario", "Adding radio to subscribed");
         assertTrue(isRadiotInFavorites);
 
@@ -48,7 +48,7 @@ public class CloudSyncTest {
             public void operationFinished(Object data) {
                 Logger.printInfo("testGlobalTokenScenario", "Synced with cloud SYNC-> removing subscribed radioItem");
                 ProfileManager.getInstance().removeSubscribedMediaItem(radioItem);
-                boolean isRadiotInFavorites = ProfileManager.getInstance().isSubscribedToMediaItem(radioItem);
+                boolean isRadiotInFavorites = ProfileManager.getInstance().getSubscribedRadioItems().contains(radioItem);
                 assertTrue(!isRadiotInFavorites);
 
                 profileSyncMasterGET.setProfileSyncedCallback(new IOperationFinishWithDataCallback() {
@@ -60,8 +60,7 @@ public class CloudSyncTest {
                             if (((JSONObject) data).getJSONObject("result").has("profile")) {
                                 JSONObject profile = new JSONObject(((JSONObject) data).getJSONObject("result").getString("profile"));
                                 ProfileManager.getInstance().readFromJson(profile);
-                                ProfileManager.getInstance().saveToDisk(profile);
-                                isRadiotInFavorites = ProfileManager.getInstance().isSubscribedToMediaItem(radioItem);
+                                isRadiotInFavorites = ProfileManager.getInstance().getSubscribedRadioItems().contains(radioItem);
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -73,7 +72,7 @@ public class CloudSyncTest {
             }
         });
         profileSyncMasterSYNC.execute();
-        while (profileSyncMasterGET.getStatus() != AsyncTask.Status.FINISHED){
+        while (profileSyncMasterGET.getStatus() != AsyncTask.Status.FINISHED) {
             try {
                 Thread.sleep(300);
             } catch (InterruptedException e) {
