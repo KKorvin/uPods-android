@@ -384,11 +384,11 @@ public class Podcast extends MediaItem {
             if (podcast != null) {
                 podcast.id = listItem.id;
                 podcast.isExistsInDb = true;
-                if (listItem.listType == MediaListItem.SUBSCRIBED) {
+                if (listItem.listType.equals(MediaListItem.SUBSCRIBED)) {
                     podcast.isSubscribed = true;
-                } else if (listItem.listType == MediaListItem.DOWNLOADED) {
+                } else if (listItem.equals(MediaListItem.DOWNLOADED)) {
                     podcast.isDownloaded = true;
-                } else if (listItem.listType == MediaListItem.NEW) {
+                } else if (listItem.listType.equals(MediaListItem.NEW)) {
                     podcast.hasNewEpisodes = true;
                 }
                 ArrayList<Episode> existingEpisodes = Episode.withPodcastId(podcast.id);

@@ -4,6 +4,7 @@ package com.chickenkiller.upods2.controllers.adaperts;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.support.v13.app.FragmentStatePagerAdapter;
+import android.view.ViewGroup;
 
 import com.chickenkiller.upods2.R;
 import com.chickenkiller.upods2.controllers.app.ProfileManager;
@@ -12,8 +13,10 @@ import com.chickenkiller.upods2.fragments.FragmentMainFeatured;
 import com.chickenkiller.upods2.fragments.FragmentMediaItemsCategories;
 import com.chickenkiller.upods2.fragments.FragmentMediaItemsList;
 import com.chickenkiller.upods2.fragments.FragmentPodcastFeatured;
-import com.chickenkiller.upods2.models.MediaItem;
 import com.chickenkiller.upods2.utils.enums.MediaItemType;
+
+import java.lang.ref.WeakReference;
+import java.util.Hashtable;
 
 /**
  * Created by alonzilberman on 8/14/15.
@@ -26,9 +29,12 @@ public class MediaPagesAdapter extends FragmentStatePagerAdapter {
     private MediaItemType mediaItemType;
     private int pagesCount;
 
+    private Hashtable<Integer, WeakReference<Fragment>> fragmentReferences;
+
 
     public MediaPagesAdapter(FragmentManager fm, MediaItemType mediaItemType) {
         super(fm);
+        this.fragmentReferences = new Hashtable<>();
         this.mediaItemType = mediaItemType;
         if (mediaItemType == MediaItemType.RADIO) {
             this.pagesCount = RADIO_PAGES_COUNT;
@@ -48,6 +54,13 @@ public class MediaPagesAdapter extends FragmentStatePagerAdapter {
             currentFragment = getPodcastFragment(position);
         }
         return currentFragment;
+    }
+
+    @Override
+    public Object instantiateItem(ViewGroup container, int position) {
+        Fragment createdFragment = (Fragment) super.instantiateItem(container, position);
+        fragmentReferences.put(position, new WeakReference<Fragment>(createdFragment));
+        return createdFragment;
     }
 
     @Override
@@ -134,21 +147,26 @@ public class MediaPagesAdapter extends FragmentStatePagerAdapter {
 
     public void notifyChangesInFragments(ProfileManager.ProfileUpdateEvent profileUpdateEvent) {
         for (int i = 0; i < getCount(); i++) {
-            Fragment fragment = getItem(i);
-            if (fragment instanceof FragmentMediaItemsList) {
-                ((FragmentMediaItemsList) fragment).notifyMediaItemChanges(profileUpdateEvent);
-            } else if (fragment instanceof FragmentPodcastFeatured) {
-                ((FragmentPodcastFeatured) fragment).notifyDataChanged();
-            } else if (fragment instanceof FragmentMainFeatured) {
-                ((FragmentMainFeatured) fragment).notifyDataChanged();
+            WeakReference<Fragment> ref = fragmentReferences.get(i);
+            if (ref != null) {
+                Fragment fragment = ref.get();
+                if (fragment instanceof FragmentMediaItemsList) {
+                    ((FragmentMediaItemsList) fragment).notifyMediaItemChanges(profileUpdateEvent);
+                } else if (fragment instanceof FragmentPodcastFeatured) {
+                    ((FragmentPodcastFeatured) fragment).notifyDataChanged();
+                } else if (fragment instanceof FragmentMainFeatured) {
+                    ((FragmentMainFeatured) fragment).notifyDataChanged();
+                }
             }
         }
+        notifyDataSetChanged();
     }
 
     public void reloadAllFragmentsData() {
         for (int i = 0; i < getCount(); i++) {
-            Fragment fragment = getItem(i);
-            if (fragment instanceof FragmentMediaItemsList) {
+            WeakReference<Fragment> ref = fragmentReferences.get(i);
+            Fragment fragment = ref.get();
+            if (fragment != null && fragment instanceof FragmentMediaItemsList) {
                 ((FragmentMediaItemsList) fragment).reloadAllData();
             }
         }

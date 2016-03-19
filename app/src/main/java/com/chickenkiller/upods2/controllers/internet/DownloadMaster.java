@@ -11,6 +11,7 @@ import com.chickenkiller.upods2.controllers.app.ProfileManager;
 import com.chickenkiller.upods2.controllers.app.UpodsApplication;
 import com.chickenkiller.upods2.interfaces.IContentLoadListener;
 import com.chickenkiller.upods2.interfaces.IUIProgressUpdater;
+import com.chickenkiller.upods2.models.Episode;
 import com.chickenkiller.upods2.models.MediaItem;
 import com.chickenkiller.upods2.models.Track;
 import com.chickenkiller.upods2.utils.GlobalUtils;
@@ -180,7 +181,9 @@ public class DownloadMaster {
             int columnIndex = c.getColumnIndex(DownloadManager.COLUMN_STATUS);
             if (task != null) {
                 if (DownloadManager.STATUS_SUCCESSFUL == c.getInt(columnIndex)) {
-                    task.track.setAudeoUrl(task.filePath);
+                    if (task.track instanceof Episode) {
+                        ((Episode) task.track).setPathOnDisk(task.filePath);
+                    }
                     ProfileManager.getInstance().addDownloadedTrack(task.mediaItem, task.track);
                     task.contentLoadListener.onContentLoaded();
                 }

@@ -166,6 +166,7 @@ public class StreamUrl extends SQLModel {
             streamUrl.id = database.insert(TABLE, null, values);
             streamUrl.isExistsInDb = true;
         }
+        database.setTransactionSuccessful();
         database.endTransaction();
     }
 

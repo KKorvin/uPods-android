@@ -82,7 +82,7 @@ public class ProfileManager {
     private ArrayList<Podcast> getPodcastsForMediaType(String mediaType) {
         SQLiteDatabase database = UpodsApplication.getDatabaseManager().getReadableDatabase();
         ArrayList<Long> ids = getMediaListIds(MediaListItem.TYPE_PODCAST,
-                mediaType == MediaListItem.DOWNLOADED ? MediaListItem.SUBSCRIBED : MediaListItem.DOWNLOADED);
+                mediaType.equals(MediaListItem.DOWNLOADED) ? MediaListItem.SUBSCRIBED : MediaListItem.DOWNLOADED);
         ArrayList<Podcast> podcasts = new ArrayList<>();
         String[] args2 = {MediaListItem.TYPE_PODCAST, mediaType};
         Cursor cursor = database.rawQuery("SELECT p.* FROM podcasts as p\n" +
@@ -91,12 +91,12 @@ public class ProfileManager {
                 "WHERE ml.media_type = ? and ml.list_type = ?", args2);
         while (cursor.moveToNext()) {
             Podcast podcast = Podcast.withCursor(cursor);
-            if (mediaType == MediaListItem.DOWNLOADED) {
+            if (mediaType.equals(MediaListItem.DOWNLOADED)) {
                 podcast.isDownloaded = true;
                 if (ids.contains(podcast.id)) {
                     podcast.isSubscribed = true;
                 }
-            } else if (mediaType == MediaListItem.SUBSCRIBED) {
+            } else if (mediaType.equals(MediaListItem.SUBSCRIBED)) {
                 podcast.isSubscribed = true;
                 if (ids.contains(podcast.id)) {
                     podcast.isDownloaded = true;
@@ -111,7 +111,7 @@ public class ProfileManager {
     private ArrayList<RadioItem> getRadioStationsForMediaType(String mediaType) {
         SQLiteDatabase database = UpodsApplication.getDatabaseManager().getReadableDatabase();
         ArrayList<Long> ids = getMediaListIds(MediaListItem.TYPE_RADIO,
-                mediaType == MediaListItem.RECENT ? MediaListItem.SUBSCRIBED : MediaListItem.RECENT);
+                mediaType.equals(MediaListItem.RECENT) ? MediaListItem.SUBSCRIBED : MediaListItem.RECENT);
         ArrayList<RadioItem> radioItems = new ArrayList<>();
         String[] args2 = {MediaListItem.TYPE_RADIO, mediaType};
 
@@ -122,12 +122,12 @@ public class ProfileManager {
 
         while (cursor.moveToNext()) {
             RadioItem radioItem = RadioItem.withCursor(cursor);
-            if (mediaType == MediaListItem.RECENT) {
+            if (mediaType.equals(MediaListItem.RECENT)) {
                 radioItem.isRecent = true;
                 if (ids.contains(radioItem.id)) {
                     radioItem.isSubscribed = true;
                 }
-            } else if (mediaType == MediaListItem.SUBSCRIBED) {
+            } else if (mediaType.equals(MediaListItem.SUBSCRIBED)) {
                 radioItem.isSubscribed = true;
                 if (ids.contains(radioItem.id)) {
                     radioItem.isRecent = true;
@@ -144,10 +144,10 @@ public class ProfileManager {
             Podcast podcast = (Podcast) mediaItem;
             Episode episode = (Episode) track;
 
-            if (listType == MediaListItem.DOWNLOADED) {
+            if (listType.equals(MediaListItem.DOWNLOADED)) {
                 episode.isDownloaded = true;
                 podcast.isDownloaded = true;
-            } else if (listType == MediaListItem.NEW) {
+            } else if (listType.equals(MediaListItem.NEW)) {
                 episode.isNew = true;
                 podcast.hasNewEpisodes = true;
             }
@@ -160,18 +160,11 @@ public class ProfileManager {
                 values.put("media_type", MediaListItem.TYPE_PODCAST);
                 values.put("list_type", listType);
                 database.insert("media_list", null, values);
-                notifyChanges(new ProfileUpdateEvent(MediaListItem.DOWNLOADED, mediaItem, false));
-            } else {
-                if (!episode.isExistsInDb) {
-                    episode.save(podcast.id); //If episode doesn't exists save() will both save it and create podcasts_episodes_rel
-                } else {
-                    ContentValues values = new ContentValues();
-                    values.put("podcast_id", podcast.id);
-                    values.put("episode_id", episode.id);
-                    values.put("type", listType);
-                    database.insert("podcasts_episodes_rel", null, values);
-                }
             }
+            if (!episode.isExistsInDb) {
+                episode.save(podcast.id); //If episode doesn't exists save() will both save it and create podcasts_episodes_rel
+            }
+            notifyChanges(new ProfileUpdateEvent(MediaListItem.DOWNLOADED, mediaItem, false));
         }
     }
 
@@ -182,9 +175,9 @@ public class ProfileManager {
             Episode episode = (Episode) track;
             String type = Episode.DOWNLOADED;
 
-            if (listType == MediaListItem.DOWNLOADED) {
+            if (listType.equals(MediaListItem.DOWNLOADED)) {
                 episode.isDownloaded = false;
-            } else if (listType == MediaListItem.NEW) {
+            } else if (listType.equals(MediaListItem.NEW)) {
                 episode.isNew = false;
                 type = Episode.NEW;
             }
@@ -192,12 +185,12 @@ public class ProfileManager {
             String args[] = {String.valueOf(podcast.id), String.valueOf(episode.id), type};
             database.delete("podcasts_episodes_rel", "podcast_id = ? AND episode_id = ? AND type = ?", args);
 
-            if (listType == MediaListItem.DOWNLOADED && podcast.getDownloadedEpisodsCount() == 0) {
+            if (listType.equals(MediaListItem.DOWNLOADED) && podcast.getDownloadedEpisodsCount() == 0) {
                 String args2[] = {String.valueOf(podcast.id), MediaListItem.TYPE_PODCAST, MediaListItem.DOWNLOADED};
                 database.delete("media_list", "media_id = ? AND media_type = ? AND list_type = ?", args2);
                 podcast.isDownloaded = false;
                 notifyChanges(new ProfileUpdateEvent(MediaListItem.DOWNLOADED, mediaItem, true));
-            } else if (listType == MediaListItem.NEW && podcast.getDownloadedEpisodsCount() == 0) {
+            } else if (listType.equals(MediaListItem.NEW) && podcast.getDownloadedEpisodsCount() == 0) {
                 String args2[] = {String.valueOf(podcast.id), MediaListItem.TYPE_PODCAST, MediaListItem.NEW};
                 database.delete("media_list", "media_id = ? AND media_type = ? AND list_type = ?", args2);
             }
@@ -344,7 +337,7 @@ public class ProfileManager {
             RadioItem.syncWithDb(radioStations);
             for (RadioItem radioItem : radioStations) {
                 if (!radioItem.isExistsInDb) {
-                    if (listType == MediaListItem.SUBSCRIBED) {
+                    if (listType.equals(MediaListItem.SUBSCRIBED)) {
                         addSubscribedMediaItem(radioItem);
                     } else {
                         addRecentMediaItem(radioItem);

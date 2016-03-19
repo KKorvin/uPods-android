@@ -30,7 +30,11 @@ public class MediaListItem extends SQLModel {
         ArrayList<MediaListItem> mediaListItems = new ArrayList<>();
         SQLiteDatabase database = UpodsApplication.getDatabaseManager().getReadableDatabase();
         String[] args = {mediaType};
-        Cursor cursor = database.rawQuery("SELECT r.id, r.name, m.list_type FROM radio_stations as r\n" +
+        String table = "radio_stations";
+        if (mediaType.equals(TYPE_PODCAST)) {
+            table = "podcasts";
+        }
+        Cursor cursor = database.rawQuery("SELECT r.id, r.name, m.list_type FROM " + table + " as r\n" +
                 "LEFT JOIN media_list as m ON r.id = m.media_id\n" +
                 "WHERE m.media_type =  ?", args);
         while (cursor.moveToNext()) {

@@ -361,9 +361,9 @@ public class RadioItem extends MediaItem {
             if (mediaItem != null) {
                 mediaItem.id = listItem.id;
                 mediaItem.isExistsInDb = true;
-                if (listItem.listType == MediaListItem.SUBSCRIBED) {
+                if (listItem.listType.equals(MediaListItem.SUBSCRIBED)) {
                     mediaItem.isSubscribed = true;
-                } else if (listItem.listType == MediaListItem.RECENT) {
+                } else if (listItem.listType.equals(MediaListItem.RECENT)) {
                     ((RadioItem) mediaItem).isRecent = true;
                 }
             }

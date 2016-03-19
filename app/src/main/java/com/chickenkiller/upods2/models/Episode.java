@@ -222,9 +222,9 @@ public class Episode extends Track {
                 episode.pathOnDisk = cursor.getString(cursor.getColumnIndex("pathOnDisk"));
             }
 
-            if (cursor.getString(cursor.getColumnIndex("type")) == DOWNLOADED) {
+            if (cursor.getString(cursor.getColumnIndex("type")).equals(DOWNLOADED)) {
                 episode.isDownloaded = true;
-            } else if (cursor.getString(cursor.getColumnIndex("type")) == NEW) {
+            } else if (cursor.getString(cursor.getColumnIndex("type")).equals(NEW)) {
                 episode.isNew = true;
             }
 
