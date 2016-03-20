@@ -178,7 +178,7 @@ public class Episode extends Track {
     @Override
     public String getAudeoUrl() {
         if (pathOnDisk != null && !pathOnDisk.isEmpty()) {
-            return pathOnDisk.replaceFirst("/.[^/]+mp3$", "");
+            return pathOnDisk;
         }
         return audeoUrl;
     }

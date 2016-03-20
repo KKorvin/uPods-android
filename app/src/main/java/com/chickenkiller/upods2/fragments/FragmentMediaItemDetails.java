@@ -28,6 +28,7 @@ import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
 import com.chickenkiller.upods2.R;
+import com.chickenkiller.upods2.activity.ActivityMain;
 import com.chickenkiller.upods2.activity.ActivityPlayer;
 import com.chickenkiller.upods2.controllers.adaperts.TracksAdapter;
 import com.chickenkiller.upods2.controllers.app.ProfileManager;
@@ -48,6 +49,7 @@ import com.chickenkiller.upods2.utils.GlobalUtils;
 import com.chickenkiller.upods2.utils.Logger;
 import com.chickenkiller.upods2.utils.decorators.DelayedOnClickListener;
 import com.chickenkiller.upods2.utils.enums.ContextMenuType;
+import com.chickenkiller.upods2.utils.enums.MediaItemType;
 import com.chickenkiller.upods2.utils.ui.LetterBitmap;
 import com.chickenkiller.upods2.utils.ui.UIHelper;
 import com.chickenkiller.upods2.views.DetailsScrollView;
@@ -274,7 +276,7 @@ public class FragmentMediaItemDetails extends Fragment implements View.OnTouchLi
     }
 
     private void loadTracks() {
-        if (playableItem instanceof Podcast && !((Podcast) playableItem).getEpisodes().isEmpty()) {
+        if (playableItem instanceof Podcast && ActivityMain.lastChildFragmentType == MediaItemType.PODCAST_DOWNLOADED.ordinal() && !((Podcast) playableItem).getEpisodes().isEmpty()) {
             tracksAdapter.addItems(((Podcast) playableItem).getEpisodes());
             rvTracks.setVisibility(View.VISIBLE);
             pbTracks.setVisibility(View.GONE);
@@ -297,6 +299,16 @@ public class FragmentMediaItemDetails extends Fragment implements View.OnTouchLi
                                     InputSource inputSource = new InputSource(new StringReader(response));
                                     xr.parse(inputSource);
                                     ArrayList<Episode> parsedEpisodes = episodesXMLHandler.getParsedEpisods();
+
+                                    for (Episode episode : ((Podcast) playableItem).getEpisodes()) {
+                                        Episode episodeInList = Episode.getEpisodByTitle(parsedEpisodes, episode.getTitle());
+                                        if (episodeInList != null) {
+                                            episode.isDownloaded = episodeInList.isDownloaded;
+                                            episode.isNew = episodeInList.isNew;
+                                            episode.isExistsInDb = episodeInList.isExistsInDb;
+                                            episode.id = episodeInList.id;
+                                        }
+                                    }
 
                                     if (playableItem instanceof Podcast) {
                                         Podcast podcast = ((Podcast) playableItem);
