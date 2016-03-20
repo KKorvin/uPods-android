@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="48dp"
     android:orientation="horizontal"
-    android:padding="15dp">
+    android:paddingRight="16dp"
+    android:paddingLeft="16dp">
 
     <TextView
         android:id="@+id/tvLeftText"
@@ -11,6 +12,9 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:text="Some text"
+        android:layout_centerVertical="true"
+        android:textSize="@dimen/default_text_size_14"
+        android:fontFamily="sans-serif"
         android:textColor="@color/black" />
 
     <TextView
@@ -19,5 +23,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:text="100"
-        android:textColor="@color/light_blue_800" />
+        android:textSize="@dimen/default_text_size_14"
+        android:layout_centerVertical="true"
+        android:fontFamily="sans-serif-medium"
+        android:textColor="@color/blue_700" />
 </RelativeLayout>
