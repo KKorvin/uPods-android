@@ -8,8 +8,8 @@
 
     <ImageView
         android:id="@+id/imgHelpTip"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
         android:layout_marginTop="150dp"
         android:src="@drawable/help_itunes" />
 
@@ -17,7 +17,7 @@
         android:id="@+id/tvHelpTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="25dp"
         android:fontFamily="sans-serif-light"
         android:gravity="center"
         android:text="@string/enjoy_free_music"
@@ -29,7 +29,7 @@
         android:id="@+id/tvHelpText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="15dp"
         android:gravity="center"
         android:paddingLeft="20dp"
         android:paddingRight="20dp"
@@ -40,8 +40,12 @@
         android:id="@+id/btnCloseHelp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:textColor="@color/white_material"
+        android:layout_marginTop="25dp"
         android:text="Start using app"
+        android:background="@drawable/selector_btn_welcome_screen"
         android:visibility="visible" />
 
 </LinearLayout>

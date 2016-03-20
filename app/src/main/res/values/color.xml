@@ -2,8 +2,8 @@
 <resources>
 
     <!-- Some Basic Colors -->
-    <color name="color_primary">#3F51B5</color>
-    <color name="color_primary_dark">#1A237E</color>
+    <color name="color_primary">#1976D2</color>
+    <color name="color_primary_dark">#1976D2</color>
     <color name="sliding_menu_background">#FAFAFA</color>
     <color name="viewPagerNotSelectedWhite">#E8EAF6</color>
     <color name="white">#FFFFFF</color>
@@ -51,13 +51,17 @@
     <color name="indigo_900">#1A237E</color>
 
     <!-- Light Blue Material -->
-
     <color name="light_blue_200">#7ED6FD</color>
     <color name="light_blue_500">#03A9F4</color>
     <color name="light_blue_600">#039BE5</color>
     <color name="light_blue_700">#0288D1</color>
     <color name="light_blue_800">#0277BD</color>
     <color name="light_blue_900">#01579B</color>
+
+    <!-- Blue Material -->
+    <color name="blue_700">#1976D2</color>
+    <color name="blue_800">#1565C0</color>
+    <color name="welcome_button">#2CA5E0</color>
 
     <!-- Material Blue Gray -->
     <color name="blue_grey_1000">#1D262A</color>
@@ -69,6 +73,7 @@
     <color name="blue_grey_400">#78909C</color>
 
     <!-- Material  Gray -->
+    <color name="grey_200">#EEEEEE</color>
     <color name="grey_300">#E0E0E0</color>
     <color name="grey_400">#BDBDBD</color>
     <color name="grey_500">#9E9E9E</color>

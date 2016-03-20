@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/global_background"
+    android:background="@color/white_material"
     android:orientation="vertical">
 
     <LinearLayout
@@ -80,7 +80,8 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/light_blue_800"
+            android:background="@color/blue_700"
+            android:elevation="5dp"
             android:paddingTop="30dp">
 
             <ImageButton
@@ -88,17 +89,17 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
-                android:layout_marginLeft="10dp"
+                android:layout_marginLeft="16dp"
                 android:background="@drawable/selector_white_btn"
                 android:padding="10dp"
-                android:src="@drawable/ic_action_arrow_left" />
+                android:src="@drawable/ic_arrow_back_white_24dp" />
 
             <ImageButton
                 android:id="@+id/imgProfileDots"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
-                android:layout_marginRight="10dp"
+                android:layout_marginRight="16dp"
                 android:background="@drawable/selector_white_btn"
                 android:padding="10dp"
                 android:src="@drawable/ic_dots_vertical_white_24dp" />
@@ -108,9 +109,9 @@
                 android:layout_width="70dp"
                 android:layout_height="70dp"
                 android:layout_below="@+id/imgProfileArrowLeft"
-                android:layout_marginBottom="20dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="30dp"
+                android:layout_marginBottom="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="10dp"
                 android:src="@drawable/ic_temp" />
 
             <TextView
@@ -118,24 +119,26 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/imgProfileArrowLeft"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="40dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="17dp"
                 android:layout_toRightOf="@+id/imgAvatar"
-                android:text="Test title"
-                android:textColor="@color/white"
-                android:textSize="@dimen/default_text_size_18" />
+                android:text="Alan Holt"
+                android:fontFamily="sans-serif-medium"
+                android:textColor="@color/white_material"
+                android:textSize="@dimen/default_text_size_20" />
 
             <TextView
                 android:id="@+id/tvUserStatus"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/tvUserName"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="5dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="0dp"
+                android:fontFamily="sans-serif"
                 android:layout_toRightOf="@+id/imgAvatar"
                 android:text="Online"
-                android:textColor="@color/blue_grey_800"
-                android:textSize="@dimen/default_text_size_16" />
+                android:textColor="@color/white_material"
+                android:textSize="@dimen/default_text_size_14" />
         </RelativeLayout>
 
         <ListView
@@ -144,6 +147,7 @@
             android:layout_height="wrap_content"
             android:clickable="false"
             android:focusable="false"
+            android:dividerHeight="0.2dp"
             android:listSelector="@android:color/transparent"></ListView>
 
     </LinearLayout>

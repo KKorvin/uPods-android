@@ -1,23 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="48dp"
     android:orientation="horizontal"
-    android:padding="15dp">
+    android:paddingRight="16dp"
+    android:paddingLeft="16dp">
 
     <TextView
         android:id="@+id/tvLeftText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+
         android:text="Some text"
-        android:textColor="@color/black" />
+        android:fontFamily="sans-serif"
+        android:textColor="@color/gray_202020"
+        android:textSize="@dimen/default_text_size_16"
+        />
 
     <TextView
         android:id="@+id/tvRightText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+
         android:text="100"
-        android:textColor="@color/light_blue_800" />
+        android:textSize="@dimen/default_text_size_14"
+        android:fontFamily="sans-serif-medium"
+        android:textColor="@color/blue_700"
+        android:textStyle="normal"
+        />
+
 </RelativeLayout>
