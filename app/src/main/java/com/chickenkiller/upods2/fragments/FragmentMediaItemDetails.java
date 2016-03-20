@@ -220,15 +220,26 @@ public class FragmentMediaItemDetails extends Fragment implements View.OnTouchLi
      */
     private void initImagesColors() {
         if (playableItem.getCoverImageUrl() == null) {
-            final LetterBitmap letterBitmap = new LetterBitmap(getActivity());
-            Bitmap letterTile = letterBitmap.getLetterTile(playableItem.getName(), playableItem.getName(), COVER_IMAGE_SIZE, COVER_IMAGE_SIZE);
-            imgDetailedTopCover.setImageBitmap(letterTile);
-            int dominantColor = UIHelper.getDominantColor(letterTile);
-            imgBluredCover.setImageBitmap(UIHelper.createScaledBitmap(letterTile, COVER_SCALE_FACTOR));
-            viewStatusBar.setBackgroundColor(dominantColor);
-            viewDetailedHeader.setBackgroundColor(dominantColor);
-            tvDetailedDesHeader.setTextColor(dominantColor);
-            btnMediaMore.setBackground(UIHelper.getAdaptiveRippleDrawable(dominantColor, dominantColor));
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    final LetterBitmap letterBitmap = new LetterBitmap(getActivity());
+                    Bitmap letterTile = letterBitmap.getLetterTile(playableItem.getName(), playableItem.getName(), COVER_IMAGE_SIZE, COVER_IMAGE_SIZE);
+                    imgDetailedTopCover.setImageBitmap(letterTile);
+                    final int dominantColor = UIHelper.getDominantColor(letterTile);
+                    final Bitmap scaledBitmap = UIHelper.createScaledBitmap(letterTile, COVER_SCALE_FACTOR);
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            imgBluredCover.setImageBitmap(scaledBitmap);
+                            viewStatusBar.setBackgroundColor(dominantColor);
+                            viewDetailedHeader.setBackgroundColor(dominantColor);
+                            tvDetailedDesHeader.setTextColor(dominantColor);
+                            btnMediaMore.setBackground(UIHelper.getAdaptiveRippleDrawable(dominantColor, dominantColor));
+                        }
+                    });
+                }
+            }).run();
         } else {
             Glide.with(getActivity()).load(playableItem.getCoverImageUrl()).crossFade().into(new GlideDrawableImageViewTarget(imgDetailedTopCover) {
                 @Override
@@ -289,45 +300,47 @@ public class FragmentMediaItemDetails extends Fragment implements View.OnTouchLi
         BackendManager.getInstance().sendRequest(((Podcast) playableItem).getTracksFeed(), new ISimpleRequestCallback() {
                     @Override
                     public void onRequestSuccessed(final String response) {
-                        final ArrayList<Episode> parsedEpisodes = new ArrayList<Episode>();
-                        try {
-                            SAXParserFactory spf = SAXParserFactory.newInstance();
-                            SAXParser sp = spf.newSAXParser();
-                            XMLReader xr = sp.getXMLReader();
-                            EpisodesXMLHandler episodesXMLHandler = new EpisodesXMLHandler();
-                            xr.setContentHandler(episodesXMLHandler);
-                            //TODO could be encoding problem
-                            InputSource inputSource = new InputSource(new StringReader(response));
-                            xr.parse(inputSource);
-                            parsedEpisodes.addAll(episodesXMLHandler.getParsedEpisods());
+                        if (isAdded()) {
+                            final ArrayList<Episode> parsedEpisodes = new ArrayList<Episode>();
+                            try {
+                                SAXParserFactory spf = SAXParserFactory.newInstance();
+                                SAXParser sp = spf.newSAXParser();
+                                XMLReader xr = sp.getXMLReader();
+                                EpisodesXMLHandler episodesXMLHandler = new EpisodesXMLHandler();
+                                xr.setContentHandler(episodesXMLHandler);
+                                //TODO could be encoding problem
+                                InputSource inputSource = new InputSource(new StringReader(response));
+                                xr.parse(inputSource);
+                                parsedEpisodes.addAll(episodesXMLHandler.getParsedEpisods());
 
-                            for (Episode episode : ((Podcast) playableItem).getEpisodes()) {
-                                Episode episodeInList = Episode.getEpisodByTitle(parsedEpisodes, episode.getTitle());
-                                if (episodeInList != null) {
-                                    episodeInList.isDownloaded = episode.isDownloaded;
-                                    episodeInList.isNew = episode.isNew;
-                                    episodeInList.isExistsInDb = episode.isExistsInDb;
-                                    episodeInList.id = episode.id;
+                                for (Episode episode : ((Podcast) playableItem).getEpisodes()) {
+                                    Episode episodeInList = Episode.getEpisodByTitle(parsedEpisodes, episode.getTitle());
+                                    if (episodeInList != null) {
+                                        episodeInList.isDownloaded = episode.isDownloaded;
+                                        episodeInList.isNew = episode.isNew;
+                                        episodeInList.isExistsInDb = episode.isExistsInDb;
+                                        episodeInList.id = episode.id;
+                                    }
                                 }
-                            }
 
-                            if (playableItem instanceof Podcast) {
-                                Podcast podcast = ((Podcast) playableItem);
-                                podcast.setDescription(episodesXMLHandler.getPodcastSummary());
-                                podcast.setTrackCount(String.valueOf(parsedEpisodes.size()));
-                                podcast.setTracks(parsedEpisodes);
+                                if (playableItem instanceof Podcast) {
+                                    Podcast podcast = ((Podcast) playableItem);
+                                    podcast.setDescription(episodesXMLHandler.getPodcastSummary());
+                                    podcast.setTrackCount(String.valueOf(parsedEpisodes.size()));
+                                    podcast.setTracks(parsedEpisodes);
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
                             }
-                        } catch (Exception e) {
-                            e.printStackTrace();
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    tracksAdapter.addItems(parsedEpisodes);
+                                    rvTracks.setVisibility(View.VISIBLE);
+                                    pbTracks.setVisibility(View.GONE);
+                                }
+                            });
                         }
-                        getActivity().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                tracksAdapter.addItems(parsedEpisodes);
-                                rvTracks.setVisibility(View.VISIBLE);
-                                pbTracks.setVisibility(View.GONE);
-                            }
-                        });
                     }
 
                     @Override
