@@ -147,6 +147,7 @@
             android:layout_height="wrap_content"
             android:clickable="false"
             android:focusable="false"
+            android:dividerHeight="0.2dp"
             android:listSelector="@android:color/transparent"></ListView>
 
     </LinearLayout>

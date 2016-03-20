@@ -72,6 +72,7 @@
     <color name="blue_grey_400">#78909C</color>
 
     <!-- Material  Gray -->
+    <color name="grey_200">#EEEEEE</color>
     <color name="grey_300">#E0E0E0</color>
     <color name="grey_400">#BDBDBD</color>
     <color name="grey_500">#9E9E9E</color>
