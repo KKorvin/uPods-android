@@ -37,7 +37,7 @@ public class NewEpisodesTest {
 
     private static final String REAL_PODCAST_FEED_RU = "http://wylsa.com/PODCAST/podcast.xml";
 
-    private static final String REAL_PODCAST_FEED_ENG = "http://feeds.feedburner.com/FoxNewsRadio";
+    private static final String REAL_PODCAST_FEED_ENG = "https://feeds.audiometric.io/2372467022";
     private static final String REAL_PODCAST_FEED_ENG2 = "http://www.npr.org/rss/podcast.php?id=510019&uid=n1qe4e85742c986fdb81d2d38ffa0d5d53";
 
     private static final String TEST_FEED = "https://upods.io/static/podcasts/feed/test_podcast.xml";
@@ -86,7 +86,6 @@ public class NewEpisodesTest {
         return resultBucket;
     }
 
-
     @Test
     public void checkNoUpdatesENGScenario() {
         ResultBucket resultBucket = checkNoUpdates(REAL_PODCAST_FEED_ENG2);
@@ -127,6 +126,8 @@ public class NewEpisodesTest {
             Logger.printInfo("checkBasicNewEpisodesScenario", "2 new episodes added to remote feed...");
 
             ArrayList<Episode> afterUpdateparsedEpisodes = parseEpisodes(podcast.getFeedUrl());
+            podcast.setTracks(afterUpdateparsedEpisodes);
+
             hasUpdates = Feed.handleUpdates(afterUpdateparsedEpisodes, podcast);
             newEpisodesCount = podcast.getNewEpisodsCount();
             Logger.printInfo("checkBasicNewEpisodesScenario", "Checked for updates...");
@@ -149,7 +150,9 @@ public class NewEpisodesTest {
             Podcast podcast = new Podcast(podcastName, REAL_PODCAST_FEED_ENG);
 
             ArrayList<Episode> parsedEpisodes = parseEpisodes(podcast.getFeedUrl());
+            Logger.printInfo("OMG1", parsedEpisodes.size());
             parsedEpisodes.remove(parsedEpisodes.size() - EPISODES_TO_REMOVE);
+            Logger.printInfo("OMG2", parsedEpisodes.size());
 
             Logger.printInfo("checkRealPodcastNewEpisodesScenario", "Parsed episodes + removed last one...");
 
@@ -158,7 +161,10 @@ public class NewEpisodesTest {
 
             ArrayList<Episode> afterUpdateparsedEpisodes = parseEpisodes(podcast.getFeedUrl());
             hasUpdates = Feed.handleUpdates(afterUpdateparsedEpisodes, podcast);
+            podcast.setTracks(afterUpdateparsedEpisodes);
+
             newEpisodesCount = podcast.getNewEpisodsCount();
+
             Logger.printInfo("checkRealPodcastNewEpisodesScenario", "Checked for updates...");
 
         } catch (Exception e) {

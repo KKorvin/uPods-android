@@ -131,9 +131,10 @@ public class Feed {
     public static boolean handleUpdates(ArrayList<Episode> latestEpisodes, Podcast podcast) {
         boolean hasUpdates = false;
         Feed feed = getFeedIfExists(podcast.getFeedUrl());
-        if (feed != null) {
+        if (feed != null && !feed.episodes.isEmpty()) {
             for (Episode latestEpisode : latestEpisodes) {
-                if (!Episode.hasEpisodWithTitle(feed.episodes, latestEpisode)) {//Check if new eipsod is not saved in local feed
+                if (!Episode.hasEpisodWithTitle(feed.episodes, latestEpisode)) {//Check if new eipsode is not saved in local feed
+                    Logger.printInfo("OLOLOLOOLOL", "EPISODE!!!");
                     ProfileManager.getInstance().addNewTrack(podcast, latestEpisode);
                     hasUpdates = true;
                 }

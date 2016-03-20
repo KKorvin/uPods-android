@@ -13,6 +13,7 @@ import com.chickenkiller.upods2.models.MediaListItem;
 import com.chickenkiller.upods2.models.Podcast;
 import com.chickenkiller.upods2.models.RadioItem;
 import com.chickenkiller.upods2.models.Track;
+import com.chickenkiller.upods2.utils.Logger;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -150,6 +151,7 @@ public class ProfileManager {
             } else if (listType.equals(MediaListItem.NEW)) {
                 episode.isNew = true;
                 podcast.hasNewEpisodes = true;
+                Logger.printInfo("OLOLOLOOLOL", "EPISODE!!!");
             }
 
             SQLiteDatabase database = UpodsApplication.getDatabaseManager().getWritableDatabase();
@@ -163,6 +165,12 @@ public class ProfileManager {
             }
             if (!episode.isExistsInDb) {
                 episode.save(podcast.id); //If episode doesn't exists save() will both save it and create podcasts_episodes_rel
+            } else {
+                ContentValues values = new ContentValues();
+                values.put("podcast_id", mediaItem.id);
+                values.put("episode_id", episode.id);
+                values.put("type", listType);
+                database.insert("podcasts_episodes_rel", null, values);
             }
             notifyChanges(new ProfileUpdateEvent(MediaListItem.DOWNLOADED, mediaItem, false));
         }
