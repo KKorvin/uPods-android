@@ -253,6 +253,9 @@ public class FragmentMediaItemDetails extends Fragment implements View.OnTouchLi
                 if (playableItem.isSubscribed) {
                     ProfileManager.getInstance().removeSubscribedMediaItem(playableItem);
                     btnSubscribe.setText(getString(R.string.subscribe));
+                    if (playableItem instanceof Podcast) {
+                        Feed.saveAsFeed(((Podcast) playableItem).getFeedUrl(), ((Podcast) playableItem).getEpisodes(), true);
+                    }
                 } else {
                     ProfileManager.getInstance().addSubscribedMediaItem(playableItem);
                     btnSubscribe.setText(getString(R.string.unsubscribe));
@@ -286,45 +289,43 @@ public class FragmentMediaItemDetails extends Fragment implements View.OnTouchLi
         BackendManager.getInstance().sendRequest(((Podcast) playableItem).getTracksFeed(), new ISimpleRequestCallback() {
                     @Override
                     public void onRequestSuccessed(final String response) {
+                        final ArrayList<Episode> parsedEpisodes = new ArrayList<Episode>();
+                        try {
+                            SAXParserFactory spf = SAXParserFactory.newInstance();
+                            SAXParser sp = spf.newSAXParser();
+                            XMLReader xr = sp.getXMLReader();
+                            EpisodesXMLHandler episodesXMLHandler = new EpisodesXMLHandler();
+                            xr.setContentHandler(episodesXMLHandler);
+                            //TODO could be encoding problem
+                            InputSource inputSource = new InputSource(new StringReader(response));
+                            xr.parse(inputSource);
+                            parsedEpisodes.addAll(episodesXMLHandler.getParsedEpisods());
+
+                            for (Episode episode : ((Podcast) playableItem).getEpisodes()) {
+                                Episode episodeInList = Episode.getEpisodByTitle(parsedEpisodes, episode.getTitle());
+                                if (episodeInList != null) {
+                                    episodeInList.isDownloaded = episode.isDownloaded;
+                                    episodeInList.isNew = episode.isNew;
+                                    episodeInList.isExistsInDb = episode.isExistsInDb;
+                                    episodeInList.id = episode.id;
+                                }
+                            }
+
+                            if (playableItem instanceof Podcast) {
+                                Podcast podcast = ((Podcast) playableItem);
+                                podcast.setDescription(episodesXMLHandler.getPodcastSummary());
+                                podcast.setTrackCount(String.valueOf(parsedEpisodes.size()));
+                                podcast.setTracks(parsedEpisodes);
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                try {
-                                    SAXParserFactory spf = SAXParserFactory.newInstance();
-                                    SAXParser sp = spf.newSAXParser();
-                                    XMLReader xr = sp.getXMLReader();
-                                    EpisodesXMLHandler episodesXMLHandler = new EpisodesXMLHandler();
-                                    xr.setContentHandler(episodesXMLHandler);
-                                    //TODO could be encoding problem
-                                    InputSource inputSource = new InputSource(new StringReader(response));
-                                    xr.parse(inputSource);
-                                    ArrayList<Episode> parsedEpisodes = episodesXMLHandler.getParsedEpisods();
-
-                                    for (Episode episode : ((Podcast) playableItem).getEpisodes()) {
-                                        Episode episodeInList = Episode.getEpisodByTitle(parsedEpisodes, episode.getTitle());
-                                        if (episodeInList != null) {
-                                            episode.isDownloaded = episodeInList.isDownloaded;
-                                            episode.isNew = episodeInList.isNew;
-                                            episode.isExistsInDb = episodeInList.isExistsInDb;
-                                            episode.id = episodeInList.id;
-                                        }
-                                    }
-
-                                    if (playableItem instanceof Podcast) {
-                                        Podcast podcast = ((Podcast) playableItem);
-                                        podcast.setDescription(episodesXMLHandler.getPodcastSummary());
-                                        podcast.setTrackCount(String.valueOf(parsedEpisodes.size()));
-                                        podcast.setTracks(parsedEpisodes);
-                                        if (podcast.isSubscribed) {
-                                            Feed.saveAsFeed(podcast.getFeedUrl(), podcast.getEpisodes(), true);
-                                        }
-                                    }
-                                    tracksAdapter.addItems(parsedEpisodes);
-                                    rvTracks.setVisibility(View.VISIBLE);
-                                    pbTracks.setVisibility(View.GONE);
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                }
+                                tracksAdapter.addItems(parsedEpisodes);
+                                rvTracks.setVisibility(View.VISIBLE);
+                                pbTracks.setVisibility(View.GONE);
                             }
                         });
                     }
