@@ -61,6 +61,7 @@
     <!-- Blue Material -->
     <color name="blue_700">#1976D2</color>
     <color name="blue_800">#1565C0</color>
+    <color name="welcome_button">#2CA5E0</color>
 
     <!-- Material Blue Gray -->
     <color name="blue_grey_1000">#1D262A</color>
