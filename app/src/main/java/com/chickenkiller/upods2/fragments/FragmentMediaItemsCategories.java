@@ -129,10 +129,12 @@ public class FragmentMediaItemsCategories extends Fragment implements AdapterVie
                             public void run() {
                                 try {
                                     ArrayList<IMediaItemView> podcastsByCategory = new ArrayList<IMediaItemView>();
+                                    ArrayList<Podcast> podcasts = Podcast.withJsonArray(jResponse.getJSONArray("result"));
+                                    Podcast.syncWithDb(podcasts);
                                     MediaItemTitle mediaItemTitle = new MediaItemTitle(category.getName());
                                     mediaItemTitle.showButton = false;
                                     podcastsByCategory.add(mediaItemTitle);
-                                    podcastsByCategory.addAll(Podcast.withJsonArray(jResponse.getJSONArray("result")));
+                                    podcastsByCategory.addAll(podcasts);
 
                                     mediaItemsAdapter.clearItems();
                                     mediaItemsAdapter.addItems(podcastsByCategory);

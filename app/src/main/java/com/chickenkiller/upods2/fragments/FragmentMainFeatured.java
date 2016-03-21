@@ -251,11 +251,13 @@ public class FragmentMainFeatured extends Fragment implements IContentLoadListen
                     @Override
                     public void run() {
                         try {
+                            ArrayList<RadioItem> radioItems = RadioItem.withJsonArray(jResponse.getJSONArray("result"), getActivity());
+                            RadioItem.syncWithDb(radioItems);
                             ArrayList<IMediaItemView> radiosStations = new ArrayList<IMediaItemView>();
                             MediaItemTitle mediaItemTitle = new MediaItemTitle(category.getName());
                             mediaItemTitle.showButton = false;
                             radiosStations.add(mediaItemTitle);
-                            radiosStations.addAll(RadioItem.withJsonArray(jResponse.getJSONArray("result"), getActivity()));
+                            radiosStations.addAll(radioItems);
                             updateMediaItems(radiosStations);
                         } catch (Exception e) {
                             e.printStackTrace();
