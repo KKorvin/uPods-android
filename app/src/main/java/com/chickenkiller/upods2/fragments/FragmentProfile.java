@@ -204,14 +204,14 @@ public class FragmentProfile extends Fragment implements IControlStackHistory {
         profileItemsAdapter.addAll(ProfileItem.fromLoggedinUser(getActivity()));
         lvProfile.setAdapter(profileItemsAdapter);
 
-        rootView.findViewById(R.id.imgProfileArrowLeft).setOnClickListener(new DelayedOnClickListener(new View.OnClickListener() {
+        rootView.findViewById(R.id.imgProfileArrowLeft).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 getActivity().onBackPressed();
             }
-        }));
+        });
 
-        rootView.findViewById(R.id.imgProfileDots).setOnClickListener(new DelayedOnClickListener(new View.OnClickListener() {
+        rootView.findViewById(R.id.imgProfileDots).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ((IContextMenuManager) getActivity()).openContextMenu(v, ContextMenuType.PROFILE,
@@ -224,7 +224,7 @@ public class FragmentProfile extends Fragment implements IControlStackHistory {
                             }
                         });
             }
-        }));
+        });
     }
 
     public void initLoginUI(View rootView) {

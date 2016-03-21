@@ -173,7 +173,7 @@ public class FragmentMediaItemDetails extends Fragment implements View.OnTouchLi
         loadTracks();
 
         if (playableItem instanceof Podcast) {
-            btnMediaMore.setOnClickListener(new DelayedOnClickListener(new View.OnClickListener() {
+            btnMediaMore.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     ((IContextMenuManager) getActivity()).openContextMenu(v, ContextMenuType.PODCAST_MIDDLE_SCREEN, playableItem, new IOperationFinishCallback() {
@@ -183,7 +183,7 @@ public class FragmentMediaItemDetails extends Fragment implements View.OnTouchLi
                         }
                     });
                 }
-            }));
+            });
         }
     }
 
@@ -197,7 +197,7 @@ public class FragmentMediaItemDetails extends Fragment implements View.OnTouchLi
         svDetails.setEnabled(false);
         svDetails.setIMovable(this);
         tvDetailedDescription.setText(playableItem.getDescription());
-        fbDetailsPlay.setOnClickListener(new DelayedOnClickListener(new View.OnClickListener() {
+        fbDetailsPlay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (GlobalUtils.isInternetConnected()) {
@@ -212,7 +212,7 @@ public class FragmentMediaItemDetails extends Fragment implements View.OnTouchLi
                     Toast.makeText(getActivity(), getString(R.string.no_internet_access), Toast.LENGTH_SHORT).show();
                 }
             }
-        }));
+        });
     }
 
     /**

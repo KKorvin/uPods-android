@@ -26,7 +26,6 @@ import com.chickenkiller.upods2.models.MediaItem;
 import com.chickenkiller.upods2.models.Podcast;
 import com.chickenkiller.upods2.models.Track;
 import com.chickenkiller.upods2.utils.GlobalUtils;
-import com.chickenkiller.upods2.utils.decorators.DelayedOnClickListener;
 import com.chickenkiller.upods2.utils.enums.ContextMenuType;
 
 import java.util.ArrayList;
@@ -67,7 +66,7 @@ public class TracksAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         }
 
         public void setClickListner(View.OnClickListener clickListner) {
-            rootView.setOnClickListener(new DelayedOnClickListener(clickListner));
+            rootView.setOnClickListener(clickListner);
         }
 
         public void setLongClickListner(View.OnLongClickListener clickListner) {

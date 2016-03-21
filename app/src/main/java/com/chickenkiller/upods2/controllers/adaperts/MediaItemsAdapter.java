@@ -31,7 +31,6 @@ import com.chickenkiller.upods2.models.MediaItemTitle;
 import com.chickenkiller.upods2.models.Podcast;
 import com.chickenkiller.upods2.models.RoundedButtonsLayoutItem;
 import com.chickenkiller.upods2.models.ViewHolderBannersLayout;
-import com.chickenkiller.upods2.utils.decorators.DelayedOnClickListener;
 import com.chickenkiller.upods2.utils.enums.ContextMenuType;
 import com.chickenkiller.upods2.utils.enums.MediaItemType;
 import com.chickenkiller.upods2.utils.ui.LetterBitmap;
@@ -94,7 +93,7 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         }
 
         public void setCardClickListener(View.OnClickListener cardClickListener) {
-            cvSquare.setOnClickListener(new DelayedOnClickListener(cardClickListener));
+            cvSquare.setOnClickListener(cardClickListener);
         }
 
         public void setCardMenuClickListener(View.OnClickListener cardMenuClickListener) {

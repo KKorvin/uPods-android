@@ -21,7 +21,6 @@ import com.chickenkiller.upods2.models.MediaItem;
 import com.chickenkiller.upods2.models.Podcast;
 import com.chickenkiller.upods2.models.Track;
 import com.chickenkiller.upods2.utils.MediaUtils;
-import com.chickenkiller.upods2.utils.decorators.DelayedOnClickListener;
 import com.chickenkiller.upods2.utils.ui.LetterBitmap;
 import com.chickenkiller.upods2.utils.ui.UIHelper;
 
@@ -72,7 +71,7 @@ public class SmallPlayer implements IPlayerStateListener, View.OnClickListener {
         if (this.rlSmallPLayer == null) {
             return;
         }
-        rlSmallPLayer.setOnClickListener(new DelayedOnClickListener(this));
+        rlSmallPLayer.setOnClickListener(this);
         if (universalPlayer.isPrepaired) {
             this.rlSmallPLayer.setVisibility(View.VISIBLE);
             this.btnPlay.setImageResource(universalPlayer.isPlaying() ? R.drawable.ic_pause_white : R.drawable.ic_play_white);
