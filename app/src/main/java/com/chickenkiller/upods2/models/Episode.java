@@ -166,7 +166,12 @@ public class Episode extends Track {
 
     @Override
     public String getSubTitle() {
-        String size = Formatter.formatShortFileSize(UpodsApplication.getContext(), Long.valueOf(length));
+        String size;
+        try {
+            size = Formatter.formatShortFileSize(UpodsApplication.getContext(), Long.valueOf(length));
+        } catch (NumberFormatException e) {
+            size = length;
+        }
         return duration + " / " + size;
     }
 
