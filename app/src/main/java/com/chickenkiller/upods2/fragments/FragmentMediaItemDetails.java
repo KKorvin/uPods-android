@@ -28,7 +28,6 @@ import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
 import com.chickenkiller.upods2.R;
-import com.chickenkiller.upods2.activity.ActivityMain;
 import com.chickenkiller.upods2.activity.ActivityPlayer;
 import com.chickenkiller.upods2.controllers.adaperts.TracksAdapter;
 import com.chickenkiller.upods2.controllers.app.ProfileManager;
@@ -47,7 +46,6 @@ import com.chickenkiller.upods2.models.MediaItem;
 import com.chickenkiller.upods2.models.Podcast;
 import com.chickenkiller.upods2.utils.GlobalUtils;
 import com.chickenkiller.upods2.utils.Logger;
-import com.chickenkiller.upods2.utils.decorators.DelayedOnClickListener;
 import com.chickenkiller.upods2.utils.enums.ContextMenuType;
 import com.chickenkiller.upods2.utils.enums.MediaItemType;
 import com.chickenkiller.upods2.utils.ui.LetterBitmap;
@@ -100,6 +98,7 @@ public class FragmentMediaItemDetails extends Fragment implements View.OnTouchLi
 
     private int moveDeltaY;
     private int screenHeight;
+    private MediaItemType mediaItemType;
 
 
     private View.OnClickListener frgamentCloseClickListener = new View.OnClickListener() {
@@ -290,7 +289,7 @@ public class FragmentMediaItemDetails extends Fragment implements View.OnTouchLi
     }
 
     private void loadTracks() {
-        if (playableItem instanceof Podcast && ActivityMain.lastChildFragmentType == MediaItemType.PODCAST_DOWNLOADED.ordinal() && !((Podcast) playableItem).getEpisodes().isEmpty()) {
+        if (playableItem instanceof Podcast && mediaItemType == MediaItemType.PODCAST_DOWNLOADED && !((Podcast) playableItem).getEpisodes().isEmpty()) {
             tracksAdapter.addItems(((Podcast) playableItem).getEpisodes());
             rvTracks.setVisibility(View.VISIBLE);
             pbTracks.setVisibility(View.GONE);
@@ -423,5 +422,9 @@ public class FragmentMediaItemDetails extends Fragment implements View.OnTouchLi
                 }
                 break;
         }
+    }
+
+    public void setMediaItemType(MediaItemType mediaItemType) {
+        this.mediaItemType = mediaItemType;
     }
 }
