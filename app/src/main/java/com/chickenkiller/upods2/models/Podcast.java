@@ -126,6 +126,7 @@ public class Podcast extends MediaItem {
         this.trackCount = podcast.getTrackCount();
         this.country = podcast.getCountry();
         this.genre = podcast.getGenre();
+        this.id = podcast.id;
         this.isExistsInDb = podcast.isExistsInDb;
         this.isSubscribed = podcast.isSubscribed;
         this.isDownloaded = podcast.isDownloaded;
@@ -375,6 +376,16 @@ public class Podcast extends MediaItem {
             e.printStackTrace();
         }
         return items;
+    }
+
+    @Override
+    public void syncWithMediaItem(MediaItem updatedMediaItem) {
+        super.syncWithMediaItem(updatedMediaItem);
+        Podcast updatedPodcast = (Podcast) updatedMediaItem;
+        this.hasNewEpisodes = updatedPodcast.hasNewEpisodes;
+        this.isDownloaded = updatedPodcast.isDownloaded;
+        this.episodes.clear();
+        this.episodes.addAll(updatedPodcast.episodes);
     }
 
     public static void syncWithDb(ArrayList<Podcast> podcasts) {

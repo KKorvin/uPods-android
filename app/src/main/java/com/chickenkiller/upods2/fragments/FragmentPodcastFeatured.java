@@ -13,6 +13,7 @@ import android.widget.ProgressBar;
 import com.chickenkiller.upods2.R;
 import com.chickenkiller.upods2.activity.ActivityPlayer;
 import com.chickenkiller.upods2.controllers.adaperts.MediaItemsAdapter;
+import com.chickenkiller.upods2.controllers.app.ProfileManager;
 import com.chickenkiller.upods2.controllers.internet.BackendManager;
 import com.chickenkiller.upods2.interfaces.IContentLoadListener;
 import com.chickenkiller.upods2.interfaces.IFragmentsManager;
@@ -163,6 +164,12 @@ public class FragmentPodcastFeatured extends Fragment implements IContentLoadLis
     public void onContentLoaded() {
         pbLoadingFeatured.setVisibility(View.GONE);
         rvMain.setVisibility(View.VISIBLE);
+    }
+
+    public void notifyMediaItemChanges(ProfileManager.ProfileUpdateEvent profileUpdateEvent) {
+        if (mediaItemsAdapter != null && profileUpdateEvent.mediaItem instanceof Podcast) {
+            mediaItemsAdapter.updateMediaItem(profileUpdateEvent.mediaItem);
+        }
     }
 
     public void notifyDataChanged() {

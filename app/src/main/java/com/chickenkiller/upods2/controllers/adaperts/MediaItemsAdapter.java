@@ -31,6 +31,7 @@ import com.chickenkiller.upods2.models.MediaItemTitle;
 import com.chickenkiller.upods2.models.Podcast;
 import com.chickenkiller.upods2.models.RoundedButtonsLayoutItem;
 import com.chickenkiller.upods2.models.ViewHolderBannersLayout;
+import com.chickenkiller.upods2.utils.GlobalUtils;
 import com.chickenkiller.upods2.utils.enums.ContextMenuType;
 import com.chickenkiller.upods2.utils.enums.MediaItemType;
 import com.chickenkiller.upods2.utils.ui.LetterBitmap;
@@ -348,8 +349,17 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         return this.items.get(position);
     }
 
-    public boolean removeItem(IMediaItemView mediaItemView) {
-        return items.remove(mediaItemView);
+    public boolean removeMediaItem(MediaItem removedMediaItem) {
+        int i = 0;
+        for (IMediaItemView mediaItemView : items) {
+            if (mediaItemView instanceof MediaItem
+                    && GlobalUtils.safeTitleEquals(((MediaItem) mediaItemView).getName(), removedMediaItem.getName())) {
+                items.remove(i);
+                return true;
+            }
+            i++;
+        }
+        return false;
     }
 
     public void setContentLoadListener(IContentLoadListener contentLoadListener) {
@@ -371,4 +381,12 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         }
     }
 
+    public void updateMediaItem(MediaItem updatedMediaItem) {
+        for (IMediaItemView mediaItemView : items) {
+            if (mediaItemView instanceof MediaItem
+                    && GlobalUtils.safeTitleEquals(((MediaItem) mediaItemView).getName(), updatedMediaItem.getName())) {
+                ((MediaItem) mediaItemView).syncWithMediaItem(updatedMediaItem);
+            }
+        }
+    }
 }

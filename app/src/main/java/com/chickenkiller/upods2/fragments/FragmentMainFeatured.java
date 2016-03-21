@@ -17,6 +17,7 @@ import com.chickenkiller.upods2.R;
 import com.chickenkiller.upods2.activity.ActivityPlayer;
 import com.chickenkiller.upods2.controllers.adaperts.CategoriesAdapter;
 import com.chickenkiller.upods2.controllers.adaperts.MediaItemsAdapter;
+import com.chickenkiller.upods2.controllers.app.ProfileManager;
 import com.chickenkiller.upods2.controllers.internet.BackendManager;
 import com.chickenkiller.upods2.interfaces.IContentLoadListener;
 import com.chickenkiller.upods2.interfaces.ICustumziedBackPress;
@@ -27,6 +28,7 @@ import com.chickenkiller.upods2.interfaces.IRequestCallback;
 import com.chickenkiller.upods2.interfaces.IToolbarHolder;
 import com.chickenkiller.upods2.models.Category;
 import com.chickenkiller.upods2.models.MediaItemTitle;
+import com.chickenkiller.upods2.models.Podcast;
 import com.chickenkiller.upods2.models.RadioItem;
 import com.chickenkiller.upods2.models.RoundedButtonsLayoutItem;
 import com.chickenkiller.upods2.utils.Logger;
@@ -216,6 +218,12 @@ public class FragmentMainFeatured extends Fragment implements IContentLoadListen
 
                 }
         );
+    }
+
+    public void notifyMediaItemChanges(ProfileManager.ProfileUpdateEvent profileUpdateEvent) {
+        if (mediaItemsAdapter != null && profileUpdateEvent.mediaItem instanceof Podcast) {
+            mediaItemsAdapter.updateMediaItem(profileUpdateEvent.mediaItem);
+        }
     }
 
     private void updateMediaItems(ArrayList<IMediaItemView> radioStations) {

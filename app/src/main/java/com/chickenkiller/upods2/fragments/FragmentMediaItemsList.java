@@ -114,10 +114,11 @@ public class FragmentMediaItemsList extends Fragment {
     public void notifyMediaItemChanges(ProfileManager.ProfileUpdateEvent profileUpdateEvent) {
         if (mediaItemsAdapter != null) {
             MediaItem mediaItem = profileUpdateEvent.mediaItem;
+
             if (mediaItemType == MediaItemType.PODCAST_DOWNLOADED && mediaItem instanceof Podcast
                     && profileUpdateEvent.updateListType.equals(MediaListItem.DOWNLOADED)) {
                 if (profileUpdateEvent.isRemoved) {
-                    mediaItemsAdapter.removeItem(mediaItem);
+                    mediaItemsAdapter.removeMediaItem(mediaItem);
                 } else {
                     mediaItemsAdapter.addItem(mediaItem);
                 }
@@ -126,7 +127,7 @@ public class FragmentMediaItemsList extends Fragment {
             } else if (mediaItemType == MediaItemType.PODCAST_FAVORITE && mediaItem instanceof Podcast
                     && profileUpdateEvent.updateListType.equals(MediaListItem.SUBSCRIBED)) {
                 if (profileUpdateEvent.isRemoved) {
-                    mediaItemsAdapter.removeItem(mediaItem);
+                    mediaItemsAdapter.removeMediaItem(mediaItem);
                 } else {
                     mediaItemsAdapter.addItem(mediaItem);
                 }
@@ -135,7 +136,7 @@ public class FragmentMediaItemsList extends Fragment {
             } else if (mediaItemType == MediaItemType.RADIO_SUBSCRIBED && mediaItem instanceof RadioItem
                     && profileUpdateEvent.updateListType.equals(MediaListItem.SUBSCRIBED)) {
                 if (profileUpdateEvent.isRemoved) {
-                    mediaItemsAdapter.removeItem(mediaItem);
+                    mediaItemsAdapter.removeMediaItem(mediaItem);
                 } else {
                     mediaItemsAdapter.addItem(mediaItem);
                 }
@@ -144,12 +145,15 @@ public class FragmentMediaItemsList extends Fragment {
             } else if (mediaItemType == MediaItemType.RADIO_RECENT && mediaItem instanceof RadioItem
                     && profileUpdateEvent.updateListType.equals(MediaListItem.RECENT)) {
                 if (profileUpdateEvent.isRemoved) {
-                    mediaItemsAdapter.removeItem(mediaItem);
+                    mediaItemsAdapter.removeMediaItem(mediaItem);
                 } else {
                     mediaItemsAdapter.addItem(mediaItem);
                 }
                 mediaItemsAdapter.notifyDataSetChanged();
                 notifyPlaceHolder();
+            } else {
+                //Check if current list contains updatedMediaItem -> if yes sync it
+                mediaItemsAdapter.updateMediaItem(mediaItem);
             }
         }
     }

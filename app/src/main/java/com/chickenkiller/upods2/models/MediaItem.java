@@ -61,6 +61,12 @@ public abstract class MediaItem extends SQLModel implements IMediaItemView {
         return "";
     }
 
+    public void syncWithMediaItem(MediaItem updatedMediaItem) {
+        this.id = updatedMediaItem.id;
+        this.isSubscribed = updatedMediaItem.isSubscribed;
+        this.isExistsInDb = updatedMediaItem.isExistsInDb;
+    }
+
     public static boolean hasMediaItemWithName(ArrayList<? extends MediaItem> mediaItems, MediaItem mediaItemToCheck) {
         for (MediaItem mediaItem : mediaItems) {
             if (mediaItem.getName().equals(mediaItemToCheck.getName())) {

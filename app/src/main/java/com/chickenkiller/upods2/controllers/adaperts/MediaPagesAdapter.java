@@ -153,9 +153,9 @@ public class MediaPagesAdapter extends FragmentStatePagerAdapter {
                 if (fragment instanceof FragmentMediaItemsList) {
                     ((FragmentMediaItemsList) fragment).notifyMediaItemChanges(profileUpdateEvent);
                 } else if (fragment instanceof FragmentPodcastFeatured) {
-                    ((FragmentPodcastFeatured) fragment).notifyDataChanged();
+                    ((FragmentPodcastFeatured) fragment).notifyMediaItemChanges(profileUpdateEvent);
                 } else if (fragment instanceof FragmentMainFeatured) {
-                    ((FragmentMainFeatured) fragment).notifyDataChanged();
+                    ((FragmentMainFeatured) fragment).notifyMediaItemChanges(profileUpdateEvent);
                 }
             }
         }

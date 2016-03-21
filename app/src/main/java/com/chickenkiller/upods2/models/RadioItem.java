@@ -68,6 +68,7 @@ public class RadioItem extends MediaItem {
     }
 
     public RadioItem(RadioItem item) {
+        this.id = item.id;
         this.name = item.name;
         this.name = this.name.replace("\n", "").trim();
         this.selectedStreamUrl = item.selectedStreamUrl;
@@ -326,6 +327,11 @@ public class RadioItem extends MediaItem {
         return getAvailableStreams().length > 1;
     }
 
+    @Override
+    public void syncWithMediaItem(MediaItem updatedMediaItem) {
+        super.syncWithMediaItem(updatedMediaItem);
+        this.isRecent = ((RadioItem) updatedMediaItem).isRecent;
+    }
 
     public static JSONArray toJsonArray(ArrayList<RadioItem> radioItems) {
         JSONArray jsonRadioItems = new JSONArray();

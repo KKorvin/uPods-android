@@ -13,7 +13,6 @@ import com.chickenkiller.upods2.models.MediaListItem;
 import com.chickenkiller.upods2.models.Podcast;
 import com.chickenkiller.upods2.models.RadioItem;
 import com.chickenkiller.upods2.models.Track;
-import com.chickenkiller.upods2.utils.Logger;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -69,7 +68,8 @@ public class ProfileManager {
         SQLiteDatabase database = UpodsApplication.getDatabaseManager().getReadableDatabase();
         String[] args1 = {mediaType, listType};
         ArrayList<Long> ids = new ArrayList<>();
-        Cursor cursor = database.rawQuery("SELECT p.id FROM podcasts as p\n" +
+        String table = mediaType.equals(MediaListItem.TYPE_RADIO) ? "radio_stations" : "podcasts";
+        Cursor cursor = database.rawQuery("SELECT p.id FROM "+ table +" as p\n" +
                 "LEFT JOIN media_list as ml\n" +
                 "ON p.id = ml.media_id\n" +
                 "WHERE ml.media_type = ? and ml.list_type = ?", args1);
@@ -151,7 +151,6 @@ public class ProfileManager {
             } else if (listType.equals(MediaListItem.NEW)) {
                 episode.isNew = true;
                 podcast.hasNewEpisodes = true;
-                Logger.printInfo("OLOLOLOOLOL", "EPISODE!!!");
             }
 
             SQLiteDatabase database = UpodsApplication.getDatabaseManager().getWritableDatabase();
@@ -287,6 +286,12 @@ public class ProfileManager {
             String args[] = {String.valueOf(mediaItem.id), MediaListItem.TYPE_RADIO, MediaListItem.RECENT};
             database.delete("media_list", "media_id = ? AND media_type = ? AND list_type = ?", args);
             ((RadioItem) mediaItem).isRecent = false;
+
+            //Remove media item from DB if it doesn't use
+            if (!((RadioItem) mediaItem).isSubscribed) {
+                String args2[] = {String.valueOf(mediaItem.id)};
+                database.delete("radio_stations", "id = ?", args2);
+            }
         }
         notifyChanges(new ProfileUpdateEvent(MediaListItem.SUBSCRIBED, mediaItem, true));
     }
@@ -300,6 +305,16 @@ public class ProfileManager {
         mediaItem.isSubscribed = false;
         String args[] = {String.valueOf(mediaItem.id), type, MediaListItem.SUBSCRIBED};
         database.delete("media_list", "media_id = ? AND media_type = ? AND list_type = ?", args);
+
+        //Remove media item from DB if it doesn't use
+        if (mediaItem instanceof RadioItem && !((RadioItem) mediaItem).isRecent) {
+            String args2[] = {String.valueOf(mediaItem.id)};
+            database.delete("radio_stations", "id = ?", args2);
+        } else if (mediaItem instanceof Podcast && !((Podcast) mediaItem).isDownloaded && !((Podcast) mediaItem).hasNewEpisodes) {
+            String args2[] = {String.valueOf(mediaItem.id)};
+            database.delete("podcasts", "id = ?", args2);
+        }
+
         notifyChanges(new ProfileUpdateEvent(MediaListItem.SUBSCRIBED, mediaItem, true));
     }
 
