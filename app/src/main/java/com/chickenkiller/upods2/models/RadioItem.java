@@ -328,6 +328,24 @@ public class RadioItem extends MediaItem {
     }
 
     @Override
+    public void syncWithDB() {
+        SQLiteDatabase database = UpodsApplication.getDatabaseManager().getWritableDatabase();
+        String args[] = {String.valueOf(id), MediaListItem.TYPE_RADIO};
+        Cursor cursor = database.rawQuery("SELECT * FROM media_list WHERE media_id = ? AND media_type = ?", args);
+
+        this.isSubscribed = false;
+        this.isRecent = false;
+        while (cursor.moveToNext()) {
+            String listType = cursor.getString(cursor.getColumnIndex("list_type"));
+            if (listType.equals(MediaListItem.RECENT)) {
+                this.isRecent = true;
+            } else if (listType.equals(MediaListItem.SUBSCRIBED)) {
+                this.isSubscribed = true;
+            }
+        }
+    }
+
+    @Override
     public void syncWithMediaItem(MediaItem updatedMediaItem) {
         super.syncWithMediaItem(updatedMediaItem);
         this.isRecent = ((RadioItem) updatedMediaItem).isRecent;

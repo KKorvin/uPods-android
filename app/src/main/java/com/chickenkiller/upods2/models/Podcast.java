@@ -388,6 +388,38 @@ public class Podcast extends MediaItem {
         this.episodes.addAll(updatedPodcast.episodes);
     }
 
+    @Override
+    public void syncWithDB() {
+        SQLiteDatabase database = UpodsApplication.getDatabaseManager().getWritableDatabase();
+        String args[] = {String.valueOf(id), MediaListItem.TYPE_PODCAST};
+        Cursor cursor = database.rawQuery("SELECT * FROM media_list WHERE media_id = ? AND media_type = ?", args);
+
+        this.isDownloaded = false;
+        this.isSubscribed = false;
+        this.hasNewEpisodes = false;
+        while (cursor.moveToNext()) {
+            String listType = cursor.getString(cursor.getColumnIndex("list_type"));
+            if (listType.equals(MediaListItem.NEW)) {
+                this.hasNewEpisodes = true;
+            } else if (listType.equals(MediaListItem.SUBSCRIBED)) {
+                this.isSubscribed = true;
+            } else if (listType.equals(MediaListItem.DOWNLOADED)) {
+                this.isDownloaded = true;
+            }
+        }
+
+        ArrayList<Episode> existingEpisodes = Episode.withPodcastId(id);
+        for (Episode episode : existingEpisodes) {
+            Episode podcastEpisode = Episode.getEpisodByTitle(episodes, episode.getTitle());
+            if (podcastEpisode == null) {
+                episodes.add(episode);
+            } else {
+                podcastEpisode.isDownloaded = episode.isDownloaded;
+                podcastEpisode.isNew = episode.isNew;
+            }
+        }
+    }
+
     public static void syncWithDb(ArrayList<Podcast> podcasts) {
         ArrayList<MediaListItem> listItems = MediaListItem.withMediaType(MediaListItem.TYPE_PODCAST);
         for (MediaListItem listItem : listItems) {

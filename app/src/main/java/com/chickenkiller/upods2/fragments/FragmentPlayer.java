@@ -250,6 +250,7 @@ public class FragmentPlayer extends Fragment implements IPlayerStateListener {
             });
         }
 
+        playableMediaItem.syncWithDB();
         if (playableMediaItem.isSubscribed) {
             itemFavorites.setIcon(getResources().getDrawable(R.drawable.ic_heart_black_24dp));
         } else {

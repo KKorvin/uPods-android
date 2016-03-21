@@ -61,6 +61,11 @@ public abstract class MediaItem extends SQLModel implements IMediaItemView {
         return "";
     }
 
+
+    public void syncWithDB(){
+
+    }
+
     public void syncWithMediaItem(MediaItem updatedMediaItem) {
         this.id = updatedMediaItem.id;
         this.isSubscribed = updatedMediaItem.isSubscribed;
