@@ -34,9 +34,8 @@ public class CloudSyncTest {
         final RadioItem radioItem = new RadioItem(radioName, new StreamUrl(""), "");
 
         ProfileManager.getInstance().addSubscribedMediaItem(radioItem);
-        boolean isRadiotInFavorites = ProfileManager.getInstance().getSubscribedRadioItems().contains(radioItem);
         Logger.printInfo("testGlobalTokenScenario", "Adding radio to subscribed");
-        assertTrue(isRadiotInFavorites);
+        assertTrue(radioItem.isSubscribed);
 
         final String globalToken = String.valueOf(System.currentTimeMillis());
 
@@ -48,8 +47,7 @@ public class CloudSyncTest {
             public void operationFinished(Object data) {
                 Logger.printInfo("testGlobalTokenScenario", "Synced with cloud SYNC-> removing subscribed radioItem");
                 ProfileManager.getInstance().removeSubscribedMediaItem(radioItem);
-                boolean isRadiotInFavorites = ProfileManager.getInstance().getSubscribedRadioItems().contains(radioItem);
-                assertTrue(!isRadiotInFavorites);
+                assertTrue(!radioItem.isSubscribed);
 
                 profileSyncMasterGET.setProfileSyncedCallback(new IOperationFinishWithDataCallback() {
                     @Override
@@ -60,12 +58,11 @@ public class CloudSyncTest {
                             if (((JSONObject) data).getJSONObject("result").has("profile")) {
                                 JSONObject profile = new JSONObject(((JSONObject) data).getJSONObject("result").getString("profile"));
                                 ProfileManager.getInstance().readFromJson(profile);
-                                isRadiotInFavorites = ProfileManager.getInstance().getSubscribedRadioItems().contains(radioItem);
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-                        assertTrue(isRadiotInFavorites);
+                        assertTrue(radioItem.isSubscribed);
                     }
                 });
                 profileSyncMasterGET.execute();
