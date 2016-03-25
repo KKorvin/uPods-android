@@ -356,7 +356,7 @@ public class ProfileManager {
             args.add(MediaListItem.TYPE_PODCAST);
             args.add(MediaListItem.SUBSCRIBED);
             args.addAll(ids);
-            database.delete("media_list", "media_type = ? AND list_type = ? AND media_id in " + SQLdatabaseManager.makePlaceholders(ids.size()),
+            database.delete("media_list", "media_type = ? AND list_type = ? AND media_id not in (" + SQLdatabaseManager.makePlaceholders(ids.size()) + ")",
                     args.toArray(new String[args.size()]));
         } catch (Exception e) {
             e.printStackTrace();
@@ -396,7 +396,7 @@ public class ProfileManager {
             args.add(MediaListItem.TYPE_RADIO);
             args.add(listType);
             args.addAll(ids);
-            database.delete("media_list", "media_type = ? AND media_id in " + SQLdatabaseManager.makePlaceholders(ids.size()),
+            database.delete("media_list", "media_type = ? AND list_type = ? AND media_id not in (" + SQLdatabaseManager.makePlaceholders(ids.size()) + ")",
                     args.toArray(new String[args.size()]));
         } catch (Exception e) {
             e.printStackTrace();
