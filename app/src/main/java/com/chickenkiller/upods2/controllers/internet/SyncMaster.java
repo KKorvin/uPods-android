@@ -22,6 +22,8 @@ import okhttp3.RequestBody;
  */
 public class SyncMaster extends AsyncTask<Void, JSONObject, Void> {
 
+    enum Task {PULL, PUSH, SYNC}
+
     public static final String TYPE_FB = "facebook";
     public static final String TYPE_TWITTER = "twitter";
     public static final String TYPE_VK = "vkontakte";
@@ -35,6 +37,8 @@ public class SyncMaster extends AsyncTask<Void, JSONObject, Void> {
     private String token;
     private String secret;
     private boolean profilePulled;
+
+    private Task task;
 
 
     public SyncMaster(String type, String token, String secret) {
