@@ -69,7 +69,7 @@ public class ProfileManager {
         String[] args1 = {mediaType, listType};
         ArrayList<Long> ids = new ArrayList<>();
         String table = mediaType.equals(MediaListItem.TYPE_RADIO) ? "radio_stations" : "podcasts";
-        Cursor cursor = database.rawQuery("SELECT p.id FROM "+ table +" as p\n" +
+        Cursor cursor = database.rawQuery("SELECT p.id FROM " + table + " as p\n" +
                 "LEFT JOIN media_list as ml\n" +
                 "ON p.id = ml.media_id\n" +
                 "WHERE ml.media_type = ? and ml.list_type = ?", args1);
@@ -322,6 +322,11 @@ public class ProfileManager {
         if (profileSavedCallback != null) {
             profileSavedCallback.operationFinished(updateEvent);
         }
+        if (updateEvent.updateListType.equals(MediaListItem.SUBSCRIBED)
+                || updateEvent.updateListType.equals(MediaListItem.RECENT)) {
+            //Sync only subscribed + recent changes
+            LoginMaster.getInstance().syncWithCloud(null);
+        }
     }
 
     private void initSubscribedPodcasts(JSONArray jSubscribedPodcasts) {
@@ -332,18 +337,27 @@ public class ProfileManager {
                 Podcast podcast = new Podcast(jSubscribedPodcasts.getJSONObject(i));
                 subscribedPodcasts.add(podcast);
             }
+
+            if (subscribedPodcasts.isEmpty()) {
+                return;
+            }
+
             Podcast.syncWithDb(subscribedPodcasts);
             for (Podcast podcast : subscribedPodcasts) {
                 if (!podcast.isExistsInDb) {
                     addSubscribedMediaItem(podcast);
                 }
             }
+            ArrayList<String> ids = MediaItem.getIds(subscribedPodcasts);
+            if (ids.size() == 0) {
+                return;
+            }
             ArrayList<String> args = new ArrayList<>();
             args.add(MediaListItem.TYPE_PODCAST);
             args.add(MediaListItem.SUBSCRIBED);
-            args.addAll(MediaItem.getIds(subscribedPodcasts));
-            database.delete("media_list", "media_type = ? AND list_type = ? AND media_id in " + SQLdatabaseManager.makePlaceholders(args.size()),
-                    (String[]) args.toArray());
+            args.addAll(ids);
+            database.delete("media_list", "media_type = ? AND list_type = ? AND media_id in " + SQLdatabaseManager.makePlaceholders(ids.size()),
+                    args.toArray(new String[args.size()]));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -357,6 +371,11 @@ public class ProfileManager {
                 RadioItem radioItem = new RadioItem(jStations.getJSONObject(i));
                 radioStations.add(radioItem);
             }
+
+            if (radioStations.isEmpty()) {
+                return;
+            }
+
             RadioItem.syncWithDb(radioStations);
             for (RadioItem radioItem : radioStations) {
                 if (!radioItem.isExistsInDb) {
@@ -367,12 +386,18 @@ public class ProfileManager {
                     }
                 }
             }
+            ArrayList<String> ids = MediaItem.getIds(radioStations);
+
+            if (ids.size() == 0) {
+                return;
+            }
+
             ArrayList<String> args = new ArrayList<>();
             args.add(MediaListItem.TYPE_RADIO);
             args.add(listType);
-            args.addAll(MediaItem.getIds(radioStations));
-            database.delete("media_list", "media_type = ? AND list_type = ? AND media_id in " + SQLdatabaseManager.makePlaceholders(args.size()),
-                    (String[]) args.toArray());
+            args.addAll(ids);
+            database.delete("media_list", "media_type = ? AND media_id in " + SQLdatabaseManager.makePlaceholders(ids.size()),
+                    args.toArray(new String[args.size()]));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -381,13 +406,11 @@ public class ProfileManager {
     public void readFromJson(JSONObject rootProfile) {
         try {
             //Read from JSON -> syncWithDB -> save all which not exists -> remove all which not in JSON
+            // -> UI will be notified inside init... functions
 
             initSubscribedPodcasts(rootProfile.getJSONArray(JS_SUBSCRIBED_PODCASTS));
             initRadioStations(rootProfile.getJSONArray(JS_SUBSCRIBED_STATIONS), MediaListItem.SUBSCRIBED);
             initRadioStations(rootProfile.getJSONArray(JS_RECENT_STATIONS), MediaListItem.RECENT);
-
-            //TODO notify UI here
-
         } catch (JSONException e) {
             e.printStackTrace();
         }

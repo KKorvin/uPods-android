@@ -158,9 +158,9 @@ public class FragmentProfile extends Fragment implements IControlStackHistory {
     private void initUIAfterLogin() {
         lnLogein.setVisibility(View.GONE);
         progressBar.setVisibility(View.VISIBLE);
-        LoginMaster.getInstance().syncWithCloud(new IOperationFinishWithDataCallback() {
+        LoginMaster.getInstance().syncWithCloud(new IOperationFinishCallback() {
             @Override
-            public void operationFinished(Object data) {
+            public void operationFinished() {
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -198,7 +198,9 @@ public class FragmentProfile extends Fragment implements IControlStackHistory {
 
 
         ListView lvProfile = (ListView) rootView.findViewById(R.id.lvProfile);
-        lvProfile.addHeaderView(lvHeaderView);
+        if (lvProfile.getHeaderViewsCount() == 0) {
+            lvProfile.addHeaderView(lvHeaderView);
+        }
         lvProfile.setHeaderDividersEnabled(false);
         ProfileItemsAdapter profileItemsAdapter = new ProfileItemsAdapter(getActivity(), R.layout.profile_item);
         profileItemsAdapter.addAll(ProfileItem.fromLoggedinUser(getActivity()));

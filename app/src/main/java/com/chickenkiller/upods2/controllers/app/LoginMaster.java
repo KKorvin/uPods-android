@@ -3,8 +3,10 @@ package com.chickenkiller.upods2.controllers.app;
 import android.os.Bundle;
 
 import com.chickenkiller.upods2.controllers.internet.SyncMaster;
+import com.chickenkiller.upods2.interfaces.IOperationFinishCallback;
 import com.chickenkiller.upods2.interfaces.IOperationFinishWithDataCallback;
 import com.chickenkiller.upods2.models.UserProfile;
+import com.chickenkiller.upods2.utils.GlobalUtils;
 import com.chickenkiller.upods2.utils.Logger;
 import com.facebook.AccessToken;
 import com.facebook.AccessTokenTracker;
@@ -99,42 +101,11 @@ public class LoginMaster {
     }
 
 
-    public void syncWithCloud(final IOperationFinishWithDataCallback iOperationFinishCallback) {
+    public void syncWithCloud(IOperationFinishCallback iOperationFinishCallback) {
         boolean isLoggedIn = isLogedIn();
-        if (isLoggedIn) {
-            IOperationFinishWithDataCallback syncFinishedCallback = new IOperationFinishWithDataCallback() {
-                @Override
-                public void operationFinished(Object data) {
-                    try {
-                        if (getUserRetries >= MAX_GET_USERS_RETRY) {
-                            return;
-                        }
-                        if (getLoginType() != SyncMaster.TYPE_GLOBAL) {//Don't sync until global token obteined
-                            getUserRetries++;
-                            syncWithCloud(iOperationFinishCallback);
-                        }
-                        getUserRetries = 0;
-                        if (((JSONObject) data).has("result")) {
-                            if (((JSONObject) data).getJSONObject("result").has("profile")) {
-                                JSONObject profile = new JSONObject(((JSONObject) data).getJSONObject("result").getString("profile"));
-                                ProfileManager.getInstance().readFromJson(profile);
-                            }
-                            if (((JSONObject) data).getJSONObject("result").has("settings")) {
-                                JSONObject settings = new JSONObject(((JSONObject) data).getJSONObject("result").getString("settings"));
-                                SettingsManager.getInstace().readSettings(settings);
-                                SettingsManager.getInstace().saveSettings(settings, false);
-                            }
-                        }
-                        SyncMaster profileSyncMaster = new SyncMaster(getLoginType(), getToken(), getSecret(), SyncMaster.TASK_SYNC);
-                        profileSyncMaster.setProfileSyncedCallback(iOperationFinishCallback);
-                        profileSyncMaster.execute();
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-            };
-            SyncMaster profileSyncMaster = new SyncMaster(getLoginType(), getToken(), getSecret(), SyncMaster.TASK_GET_USER);
-            profileSyncMaster.setProfileSyncedCallback(syncFinishedCallback);
+        if (!SyncMaster.isRunning && isLoggedIn && GlobalUtils.isInternetConnected()) {
+            SyncMaster profileSyncMaster = new SyncMaster(getLoginType(), getToken(), getSecret());
+            profileSyncMaster.setProfileSyncedCallback(iOperationFinishCallback);
             profileSyncMaster.execute();
         }
     }

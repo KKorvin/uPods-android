@@ -154,4 +154,5 @@
     <string name="empty_favorite_podcasts">Add podcasts to favorite and it will be shown here</string>
     <string name="empty_radio_subscribed">Your subscribed radio stations will be here</string>
     <string name="empty_radio_recent">Start listening radio stations. Your recent one will be added here.</string>
+    <string name="recent_raio_station">Recent radio stations</string>
 </resources>

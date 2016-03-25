@@ -2,7 +2,6 @@ package com.chickenkiller.upods2.controllers.app;
 
 import android.util.Pair;
 
-import com.chickenkiller.upods2.controllers.internet.SyncMaster;
 import com.chickenkiller.upods2.utils.Logger;
 import com.pixplicity.easyprefs.library.Prefs;
 
@@ -194,9 +193,7 @@ public class SettingsManager {
     public void saveSettings(JSONObject settingsObject, boolean needSync) {
         if (settingsObject != null) {
             Prefs.putString(JS_SETTINGS, settingsObject.toString());
-            if (needSync && LoginMaster.getInstance().isLogedIn()) {
-                SyncMaster.saveToCloud();
-            }
+            LoginMaster.getInstance().syncWithCloud(null);
         }
     }
 

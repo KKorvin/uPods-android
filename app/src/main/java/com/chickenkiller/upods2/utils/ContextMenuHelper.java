@@ -10,10 +10,10 @@ import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.chickenkiller.upods2.R;
+import com.chickenkiller.upods2.controllers.app.LoginMaster;
 import com.chickenkiller.upods2.controllers.app.ProfileManager;
 import com.chickenkiller.upods2.controllers.app.SettingsManager;
 import com.chickenkiller.upods2.controllers.internet.BackendManager;
-import com.chickenkiller.upods2.controllers.internet.SyncMaster;
 import com.chickenkiller.upods2.controllers.player.UniversalPlayer;
 import com.chickenkiller.upods2.dialogs.DialogFragmentAddMediaItem;
 import com.chickenkiller.upods2.dialogs.DialogFragmentConfarmation;
@@ -21,7 +21,6 @@ import com.chickenkiller.upods2.dialogs.DialogFragmentMessage;
 import com.chickenkiller.upods2.fragments.FragmentPlayer;
 import com.chickenkiller.upods2.interfaces.IFragmentsManager;
 import com.chickenkiller.upods2.interfaces.IOperationFinishCallback;
-import com.chickenkiller.upods2.interfaces.IOperationFinishWithDataCallback;
 import com.chickenkiller.upods2.interfaces.IRequestCallback;
 import com.chickenkiller.upods2.models.Episode;
 import com.chickenkiller.upods2.models.MediaItem;
@@ -165,9 +164,9 @@ public class ContextMenuHelper {
                 .content(R.string.please_wait)
                 .progress(true, 0)
                 .show();
-        SyncMaster.saveToCloud(new IOperationFinishWithDataCallback() {
+        LoginMaster.getInstance().syncWithCloud(new IOperationFinishCallback() {
             @Override
-            public void operationFinished(Object data) {
+            public void operationFinished() {
                 progressDialog.dismiss();
                 if (onContextItemSelected != null) {
                     onContextItemSelected.operationFinished();
