@@ -183,7 +183,6 @@ public class FragmentMainFeatured extends Fragment implements IContentLoadListen
     }
 
     private void showTops() {
-        Logger.printInfo("PERFORMANCE", "showTops2");
         BackendManager.getInstance().loadTops(BackendManager.TopType.MAIN_FEATURED, ServerApi.RADIO_TOP, new IRequestCallback() {
                     @Override
                     public void onRequestSuccessed(final JSONObject jResponse) {
@@ -201,9 +200,7 @@ public class FragmentMainFeatured extends Fragment implements IContentLoadListen
                             getActivity().runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    Logger.printInfo("PERFORMANCE", "showTops3");
                                     updateMediaItems(topRadioStations);
-                                    Logger.printInfo("PERFORMANCE", "showTops4");
                                 }
                             });
 
@@ -219,7 +216,6 @@ public class FragmentMainFeatured extends Fragment implements IContentLoadListen
 
                 }
         );
-        Logger.printInfo("PERFORMANCE", "showTops1");
     }
 
     public void notifyMediaItemChanges(ProfileManager.ProfileUpdateEvent profileUpdateEvent) {

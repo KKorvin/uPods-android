@@ -66,12 +66,12 @@ public class FragmentHelpItem extends Fragment {
                 break;
             }
             case 1:
-                imgHelpTip.setImageResource(R.drawable.help_twitter);
+                imgHelpTip.setImageResource(R.drawable.help_tops);
                 tvHelpTitle.setText(getString(R.string.handmade_tops));
                 tvHelpText.setText(getString(R.string.help_handmade_tops));
                 break;
             case 2:
-                imgHelpTip.setImageResource(R.drawable.help_sketch);
+                imgHelpTip.setImageResource(R.drawable.help_ads);
                 tvHelpTitle.setText(getString(R.string.zero_ads));
                 tvHelpText.setText(getString(R.string.help_zero_ads));
                 break;

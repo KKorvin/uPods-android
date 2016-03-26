@@ -5,6 +5,7 @@ import android.content.Context;
 import com.chickenkiller.upods2.controllers.app.UpodsApplication;
 import com.chickenkiller.upods2.interfaces.IRequestCallback;
 import com.chickenkiller.upods2.interfaces.ISimpleRequestCallback;
+import com.chickenkiller.upods2.utils.GlobalUtils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -16,6 +17,7 @@ import java.util.ArrayList;
 import okhttp3.Cache;
 import okhttp3.Call;
 import okhttp3.Callback;
+import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -62,10 +64,19 @@ public class BackendManager {
         super();
         File cacheDir = UpodsApplication.getContext().getDir("upods_cache", Context.MODE_PRIVATE);
         Cache cache = new Cache(cacheDir, SIZE_OF_CACHE);
-
         this.client = new OkHttpClient.Builder()
-                .cache(cache)
-                .build();
+                .cache(cache).addInterceptor(new Interceptor() {
+                    @Override
+                    public Response intercept(Chain chain) throws IOException {
+                        Request request = chain.request();
+                        if (GlobalUtils.isInternetConnected()) {
+                            request = request.newBuilder().header("Cache-Control", "public, max-age=" + 60).build();
+                        } else {
+                            request = request.newBuilder().header("Cache-Control", "public, only-if-cached, max-stale=" + 60 * 60 * 24 * 7).build();
+                        }
+                        return chain.proceed(request);
+                    }
+                }).build();
     }
 
     public static synchronized BackendManager getInstance() {
