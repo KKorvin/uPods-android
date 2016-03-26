@@ -368,7 +368,7 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     }
 
     public void addItem(MediaItem mediaItem) {
-        items.add(mediaItem);
+        items.add(1, mediaItem); // Because 0 is title
     }
 
     /**
