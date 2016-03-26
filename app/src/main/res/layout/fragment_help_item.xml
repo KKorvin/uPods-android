@@ -17,7 +17,7 @@
         android:id="@+id/tvHelpTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="25dp"
+        android:layout_marginTop="35dp"
         android:fontFamily="sans-serif-light"
         android:gravity="center"
         android:text="@string/enjoy_free_music"
@@ -43,7 +43,7 @@
         android:paddingLeft="15dp"
         android:paddingRight="15dp"
         android:textColor="@color/white_material"
-        android:layout_marginTop="25dp"
+        android:layout_marginTop="35dp"
         android:text="Start using app"
         android:background="@drawable/selector_btn_welcome_screen"
         android:visibility="visible" />

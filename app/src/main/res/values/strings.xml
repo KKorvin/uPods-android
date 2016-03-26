@@ -143,13 +143,13 @@
     <string name="profile">Profile</string>
     <string name="downloaded_pod_folder">Downloaded podcasts folder</string>
     <string name="enjoy_free_music">Enjoy Free Music</string>
-    <string name="help_free_music">More than 30k of best online radio staitons and direct acsess to itunes podcasts database.</string>
+    <string name="help_free_music">More than 30k of best online radio staitons and direct acsess to itunes podcasts database</string>
     <string name="handmade_tops">Hand Made Tops</string>
-    <string name="help_handmade_tops">We are building all our tops manually, based on social media trends. </string>
+    <string name="help_handmade_tops">We are building all our tops manually,\n based on social media trends,\n and our experience in radio</string>
     <string name="zero_ads">No Advertise</string>
-    <string name="help_zero_ads">We are not showing any annoying advertise in our app. At all.</string>
+    <string name="help_zero_ads">We are not showing any annoying\n advertise in our app. At all.\n And never will add them</string>
     <string name="help_cloud_sync_title">Cloud Sync</string>
-    <string name="help_cloud_sync">Sync your profile across all devices. Desktop and IOS versions are coming soon.</string>
+    <string name="help_cloud_sync">Sync your profile across all devices. Desktop and IOS versions are coming soon</string>
     <string name="empty_dowloaded_podcasts">All your downloaded podcasts will be shown here</string>
     <string name="empty_favorite_podcasts">Add podcasts to favorite and it will be shown here</string>
     <string name="empty_radio_subscribed">Your subscribed radio stations will be here</string>
