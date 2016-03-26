@@ -55,7 +55,6 @@ dependencies {
     compile 'com.lsjwzh:recyclerviewpager:+'
     compile 'com.pixplicity.easyprefs:library:+'
     compile 'com.github.jakob-grabner:Circle-Progress-View:v1.2.3+'
-    compile 'com.github.gabrielemariotti.recyclerview:recyclerview-animators:0.3.0-SNAPSHOT@aar'
     compile 'com.github.asyl.animation:arcanimator:1.0.0'
     compile 'com.github.clans:fab:1.6.2'
 

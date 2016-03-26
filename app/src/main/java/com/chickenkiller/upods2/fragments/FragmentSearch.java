@@ -35,7 +35,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-import it.gmariotti.recyclerview.adapter.SlideInBottomAnimatorAdapter;
 
 /**
  * Created by alonzilberman on 7/10/15.
@@ -87,7 +86,7 @@ public class FragmentSearch extends Fragment implements SearchView.OnQueryTextLi
         }
 
         //Featured recycle view
-        rvSearchResults.setAdapter(new SlideInBottomAnimatorAdapter(mediaItemsAdapter, rvSearchResults));
+        rvSearchResults.setAdapter(mediaItemsAdapter);
         rvSearchResults.setLayoutManager(layoutManager);
         rvSearchResults.setVisibility(View.INVISIBLE);
         tvStartTyping.setVisibility(View.VISIBLE);
