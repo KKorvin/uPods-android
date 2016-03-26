@@ -33,8 +33,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-import it.gmariotti.recyclerview.adapter.SlideInBottomAnimatorAdapter;
-
 /**
  * Created by alonzilberman on 7/10/15.
  */
@@ -84,7 +82,7 @@ public class FragmentPodcastFeatured extends Fragment implements IContentLoadLis
         mediaItemsAdapter.setContentLoadListener(this);
         //Featured recycle view
         rvMain.setHasFixedSize(true);
-        rvMain.setAdapter(new SlideInBottomAnimatorAdapter(mediaItemsAdapter, rvMain));
+        rvMain.setAdapter(mediaItemsAdapter);
         rvMain.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
             @Override
             public int getSpanSize(int position) {
