@@ -95,6 +95,7 @@ public class SyncMaster extends AsyncTask<Void, JSONObject, Void> {
                 SettingsManager.getInstace().saveSettings(settings, false);
             }
         }
+        profilePulled = true;
         //End getting user
     }
 

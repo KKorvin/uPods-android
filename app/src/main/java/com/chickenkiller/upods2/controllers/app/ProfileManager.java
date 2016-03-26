@@ -259,9 +259,9 @@ public class ProfileManager {
                 values.put("list_type", MediaListItem.RECENT);
                 UpodsApplication.getDatabaseManager().getWritableDatabase().insert("media_list", null, values);
                 ((RadioItem) mediaItem).isRecent = true;
+                notifyChanges(new ProfileUpdateEvent(MediaListItem.RECENT, mediaItem, false));
             }
         }
-        notifyChanges(new ProfileUpdateEvent(MediaListItem.RECENT, mediaItem, false));
     }
 
     public void addNewTrack(MediaItem mediaItem, Track track) {
