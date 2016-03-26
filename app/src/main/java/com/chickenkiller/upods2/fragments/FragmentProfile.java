@@ -268,6 +268,7 @@ public class FragmentProfile extends Fragment implements IControlStackHistory {
         LoginMaster.getInstance().syncWithCloud(new IOperationFinishCallback() {
             @Override
             public void operationFinished() {
+                initUIAfterLogin();
                 progressDialog.dismiss();
             }
         }, task);
