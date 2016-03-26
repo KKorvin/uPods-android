@@ -1,9 +1,7 @@
 package com.chickenkiller.upods2.controllers.internet;
 
-import com.chickenkiller.upods2.controllers.app.SimpleCacheManager;
 import com.chickenkiller.upods2.interfaces.IRequestCallback;
 import com.chickenkiller.upods2.interfaces.ISimpleRequestCallback;
-import com.chickenkiller.upods2.utils.Logger;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -73,7 +71,7 @@ public class BackendManager {
      * @param uiUpdater - INetworkUIupdater to update UI
      */
     private void sendRequest(final Request request, final IRequestCallback uiUpdater) {
-        try {
+        /*try {
             String fromCache = SimpleCacheManager.getInstance().readFromCache(request.url().toString());
             if (fromCache != null) {
                 final JSONObject jResponse = new JSONObject(fromCache);
@@ -85,7 +83,7 @@ public class BackendManager {
             Logger.printInfo(TAG, "Can't restore cache for url: " + request.url().toString());
             uiUpdater.onRequestFailed();
             e.printStackTrace();
-        }
+        }*/
         try {
             client.newCall(request).enqueue(new Callback() {
                 @Override
@@ -100,7 +98,7 @@ public class BackendManager {
                     try {
                         final JSONObject jResponse = new JSONObject(response.body().string());
                         uiUpdater.onRequestSuccessed(jResponse);
-                        SimpleCacheManager.getInstance().cacheUrlOutput(request.url().toString(), jResponse.toString());
+                        //SimpleCacheManager.getInstance().cacheUrlOutput(request.url().toString(), jResponse.toString());
                         searchQueueNextStep();
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -116,7 +114,7 @@ public class BackendManager {
     }
 
     private void sendRequest(final Request request, final ISimpleRequestCallback uiUpdater) {
-        try {
+        /*try {
             String fromCache = SimpleCacheManager.getInstance().readFromCache(request.url().toString());
             if (fromCache != null) {
                 uiUpdater.onRequestSuccessed(fromCache);
@@ -125,7 +123,7 @@ public class BackendManager {
         } catch (Exception e) {
             Logger.printInfo(TAG, "Can't restore cache for url: " + request.url().toString());
             e.printStackTrace();
-        }
+        }*/
         try {
             client.newCall(request).enqueue(new Callback() {
                 @Override
@@ -138,7 +136,7 @@ public class BackendManager {
                 public void onResponse(Call call, Response response) throws IOException {
                     try {
                         String strResponse = response.body().string();
-                        SimpleCacheManager.getInstance().cacheUrlOutput(request.url().toString(), strResponse);
+                        //SimpleCacheManager.getInstance().cacheUrlOutput(request.url().toString(), strResponse);
                         uiUpdater.onRequestSuccessed(strResponse);
                     } catch (Exception e) {
                         e.printStackTrace();
