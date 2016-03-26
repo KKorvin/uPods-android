@@ -10,7 +10,6 @@ import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.chickenkiller.upods2.R;
-import com.chickenkiller.upods2.controllers.app.LoginMaster;
 import com.chickenkiller.upods2.controllers.app.ProfileManager;
 import com.chickenkiller.upods2.controllers.app.SettingsManager;
 import com.chickenkiller.upods2.controllers.internet.BackendManager;
@@ -153,24 +152,6 @@ public class ContextMenuHelper {
                         progressDialog.dismiss();
                     }
                 });
-            }
-        });
-    }
-
-
-    public static void syncWithCloud(Activity activity, final IOperationFinishCallback onContextItemSelected) {
-        final MaterialDialog progressDialog = new MaterialDialog.Builder(activity)
-                .title(R.string.syncing)
-                .content(R.string.please_wait)
-                .progress(true, 0)
-                .show();
-        LoginMaster.getInstance().syncWithCloud(new IOperationFinishCallback() {
-            @Override
-            public void operationFinished() {
-                progressDialog.dismiss();
-                if (onContextItemSelected != null) {
-                    onContextItemSelected.operationFinished();
-                }
             }
         });
     }

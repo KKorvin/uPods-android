@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.chickenkiller.upods2.controllers.database.SQLdatabaseManager;
 import com.chickenkiller.upods2.interfaces.IOperationFinishWithDataCallback;
 import com.chickenkiller.upods2.models.Episode;
 import com.chickenkiller.upods2.models.Feed;
@@ -321,11 +322,6 @@ public class ProfileManager {
         if (profileSavedCallback != null) {
             profileSavedCallback.operationFinished(updateEvent);
         }
-        if (updateEvent.updateListType.equals(MediaListItem.SUBSCRIBED)
-                || updateEvent.updateListType.equals(MediaListItem.RECENT)) {
-            //Sync only subscribed + recent changes
-            LoginMaster.getInstance().syncWithCloud(null);
-        }
     }
 
     private void initSubscribedPodcasts(JSONArray jSubscribedPodcasts) {
@@ -355,8 +351,8 @@ public class ProfileManager {
             args.add(MediaListItem.TYPE_PODCAST);
             args.add(MediaListItem.SUBSCRIBED);
             args.addAll(ids);
-            //database.delete("media_list", "media_type = ? AND list_type = ? AND media_id not in (" + SQLdatabaseManager.makePlaceholders(ids.size()) + ")",
-            //        args.toArray(new String[args.size()]));
+            database.delete("media_list", "media_type = ? AND list_type = ? AND media_id not in (" + SQLdatabaseManager.makePlaceholders(ids.size()) + ")",
+                    args.toArray(new String[args.size()]));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -395,8 +391,8 @@ public class ProfileManager {
             args.add(MediaListItem.TYPE_RADIO);
             args.add(listType);
             args.addAll(ids);
-            //database.delete("media_list", "media_type = ? AND list_type = ? AND media_id not in (" + SQLdatabaseManager.makePlaceholders(ids.size()) + ")",
-           //         args.toArray(new String[args.size()]));
+            database.delete("media_list", "media_type = ? AND list_type = ? AND media_id not in (" + SQLdatabaseManager.makePlaceholders(ids.size()) + ")",
+                    args.toArray(new String[args.size()]));
         } catch (Exception e) {
             e.printStackTrace();
         }

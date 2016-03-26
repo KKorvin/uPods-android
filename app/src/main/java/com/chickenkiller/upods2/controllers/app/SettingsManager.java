@@ -193,7 +193,6 @@ public class SettingsManager {
     public void saveSettings(JSONObject settingsObject, boolean needSync) {
         if (settingsObject != null) {
             Prefs.putString(JS_SETTINGS, settingsObject.toString());
-            LoginMaster.getInstance().syncWithCloud(null);
         }
     }
 

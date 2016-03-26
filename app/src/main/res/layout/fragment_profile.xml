@@ -6,7 +6,7 @@
     android:orientation="vertical">
 
     <LinearLayout
-        android:id="@+id/lnLogin"
+        android:id="@+id/lnLoggedOutState"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
@@ -71,7 +71,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/lnLogedIn"
+        android:id="@+id/lnLoggedInState"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
@@ -122,8 +122,8 @@
                 android:layout_marginLeft="16dp"
                 android:layout_marginTop="17dp"
                 android:layout_toRightOf="@+id/imgAvatar"
-                android:text="Alan Holt"
                 android:fontFamily="sans-serif-medium"
+                android:text="Alan Holt"
                 android:textColor="@color/white_material"
                 android:textSize="@dimen/default_text_size_20" />
 
@@ -134,8 +134,8 @@
                 android:layout_below="@+id/tvUserName"
                 android:layout_marginLeft="16dp"
                 android:layout_marginTop="0dp"
-                android:fontFamily="sans-serif"
                 android:layout_toRightOf="@+id/imgAvatar"
+                android:fontFamily="sans-serif"
                 android:text="Online"
                 android:textColor="@color/white_material"
                 android:textSize="@dimen/default_text_size_14" />
@@ -143,11 +143,11 @@
 
         <ListView
             android:id="@+id/lvProfile"
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:clickable="false"
-            android:focusable="false"
             android:dividerHeight="0.2dp"
+            android:focusable="false"
             android:listSelector="@android:color/transparent"></ListView>
 
     </LinearLayout>

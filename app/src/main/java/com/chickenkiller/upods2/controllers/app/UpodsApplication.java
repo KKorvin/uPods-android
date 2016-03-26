@@ -47,7 +47,6 @@ public class UpodsApplication extends Application {
         runNetworkTasksService();
         runMainService();
         setAlarmManagerTasks();
-        LoginMaster.getInstance().syncWithCloud(null); //Will sync with cloud if user logged in
     }
 
     private void runMainService() {

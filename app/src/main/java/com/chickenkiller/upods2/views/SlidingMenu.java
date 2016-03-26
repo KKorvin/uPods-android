@@ -112,4 +112,12 @@ public class SlidingMenu implements ISlidingMenuManager {
         }, isForceUpdate);
     }
 
+    public void updateHeader(UserProfile userProfile) {
+        if (slidingMenuHeader != null && slidingMenuAdapter != null) {
+            slidingMenuHeader.setEmail(userProfile.getEmail());
+            slidingMenuHeader.setName(userProfile.getName());
+            slidingMenuHeader.setImgUrl(userProfile.getProfileImageUrl());
+            slidingMenuAdapter.notifyDataSetChanged();
+        }
+    }
 }

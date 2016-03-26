@@ -137,7 +137,7 @@ public class SlidingMenuAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             final Context mContext = viewHolderHeader.headerText.getContext();
 
             viewHolderHeader.headerText.setText(headerItem.getName());
-            viewHolderHeader.headerEmail.setText(headerItem.getEmail());
+            //viewHolderHeader.headerEmail.setText(headerItem.getEmail());
 
             Glide.with(mContext).load(headerItem.getImgUrl()).asBitmap().centerCrop().into(new BitmapImageViewTarget(viewHolderHeader.headerAvater) {
                 @Override

@@ -101,10 +101,10 @@ public class LoginMaster {
     }
 
 
-    public void syncWithCloud(IOperationFinishCallback iOperationFinishCallback) {
+    public void syncWithCloud(IOperationFinishCallback iOperationFinishCallback, SyncMaster.Task task) {
         boolean isLoggedIn = isLogedIn();
         if (!SyncMaster.isRunning && isLoggedIn && GlobalUtils.isInternetConnected()) {
-            SyncMaster profileSyncMaster = new SyncMaster(getLoginType(), getToken(), getSecret());
+            SyncMaster profileSyncMaster = new SyncMaster(getLoginType(), getToken(), getSecret(), task);
             profileSyncMaster.setProfileSyncedCallback(iOperationFinishCallback);
             profileSyncMaster.execute();
         }

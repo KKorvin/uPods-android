@@ -313,8 +313,6 @@ public class ActivityMain extends BasicActivity implements IOverlayable, IToolba
             if (onContextItemSelected != null) {
                 onContextItemSelected.operationFinished();
             }
-        } else if (id == R.id.itemSync) {
-            ContextMenuHelper.syncWithCloud(this, onContextItemSelected);
         }
         return super.onContextItemSelected(item);
     }

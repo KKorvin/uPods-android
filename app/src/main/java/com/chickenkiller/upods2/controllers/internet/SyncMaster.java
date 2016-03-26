@@ -22,7 +22,7 @@ import okhttp3.RequestBody;
  */
 public class SyncMaster extends AsyncTask<Void, JSONObject, Void> {
 
-    enum Task {PULL, PUSH, SYNC}
+    public enum Task {PULL, PUSH, SYNC}
 
     public static final String TYPE_FB = "facebook";
     public static final String TYPE_TWITTER = "twitter";
@@ -41,11 +41,12 @@ public class SyncMaster extends AsyncTask<Void, JSONObject, Void> {
     private Task task;
 
 
-    public SyncMaster(String type, String token, String secret) {
+    public SyncMaster(String type, String token, String secret, Task task) {
         this.type = type;
         this.token = token;
         this.secret = secret;
         this.profilePulled = false;
+        this.task = task;
         isRunning = true;
     }
 
@@ -62,7 +63,6 @@ public class SyncMaster extends AsyncTask<Void, JSONObject, Void> {
     }
 
     private void pullUser(String link) throws Exception {
-
 
         //Start getting user (pull)
         RequestBody pullFormBody = new FormBody.Builder().
@@ -85,7 +85,9 @@ public class SyncMaster extends AsyncTask<Void, JSONObject, Void> {
             }
             if (getUserResult.getJSONObject("result").has("profile")) {
                 JSONObject profile = new JSONObject(getUserResult.getJSONObject("result").getString("profile"));
-                publishProgress(profile);
+                if (task == Task.PULL) {
+                    publishProgress(profile);
+                }
             }
             if (getUserResult.getJSONObject("result").has("settings")) {
                 JSONObject settings = new JSONObject(getUserResult.getJSONObject("result").getString("settings"));
@@ -122,11 +124,18 @@ public class SyncMaster extends AsyncTask<Void, JSONObject, Void> {
         link.append(ServerApi.USER_SYNC);
 
         try {
-            pullUser(link.toString());
-            while (!profilePulled) {
-                Thread.sleep(200);
+            if (task == Task.PULL || !Prefs.contains(GLOBAL_TOKEN)) {
+                pullUser(link.toString());
+            } else {
+                profilePulled = true;
             }
-            pushUser(link.toString());
+
+            if (task == Task.PUSH) {
+                while (!profilePulled) {
+                    Thread.sleep(200);
+                }
+                pushUser(link.toString());
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

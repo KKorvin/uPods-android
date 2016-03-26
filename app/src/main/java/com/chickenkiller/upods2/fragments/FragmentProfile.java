@@ -16,11 +16,13 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.chickenkiller.upods2.R;
 import com.chickenkiller.upods2.controllers.adaperts.ProfileItemsAdapter;
 import com.chickenkiller.upods2.controllers.app.LoginMaster;
+import com.chickenkiller.upods2.controllers.internet.SyncMaster;
 import com.chickenkiller.upods2.interfaces.IContextMenuManager;
 import com.chickenkiller.upods2.interfaces.IControlStackHistory;
 import com.chickenkiller.upods2.interfaces.IFragmentsManager;
@@ -59,8 +61,8 @@ public class FragmentProfile extends Fragment implements IControlStackHistory {
     private static final String FB_PERMISSIONS = "public_profile";
     private static final String VK_SCOPE = "email";
 
-    private LinearLayout lnLogein;
-    private LinearLayout lnUsetLogedIn;
+    private LinearLayout lnLoggedInState;
+    private LinearLayout lnLoggedOutState;
 
     private Button btnFacebookLogin;
     private Button btnTwitter;
@@ -107,8 +109,8 @@ public class FragmentProfile extends Fragment implements IControlStackHistory {
 
         rootView = inflater.inflate(R.layout.fragment_profile, container, false);
         loginManager = (ILoginManager) getActivity();
-        lnLogein = (LinearLayout) rootView.findViewById(R.id.lnLogin);
-        lnUsetLogedIn = (LinearLayout) rootView.findViewById(R.id.lnLogedIn);
+        lnLoggedInState = (LinearLayout) rootView.findViewById(R.id.lnLoggedInState);
+        lnLoggedOutState = (LinearLayout) rootView.findViewById(R.id.lnLoggedOutState);
         progressBar = (ProgressBar) rootView.findViewById(R.id.pbLoading);
 
         progressBar.setVisibility(View.GONE);
@@ -121,8 +123,8 @@ public class FragmentProfile extends Fragment implements IControlStackHistory {
         });
 
         if (LoginMaster.getInstance().isLogedIn()) {
-            lnLogein.setVisibility(View.GONE);
-            lnUsetLogedIn.setVisibility(View.VISIBLE);
+            lnLoggedOutState.setVisibility(View.GONE);
+            lnLoggedInState.setVisibility(View.VISIBLE);
             initUserProfileUI();
         } else {
             initLoginUI(rootView);
@@ -136,8 +138,6 @@ public class FragmentProfile extends Fragment implements IControlStackHistory {
         if (!VKSdk.onActivityResult(requestCode, resultCode, data, new VKCallback<VKAccessToken>() {
             @Override
             public void onResult(VKAccessToken token) {
-                lnLogein.setVisibility(View.GONE);
-                progressBar.setVisibility(View.VISIBLE);
                 initUIAfterLogin();
             }
 
@@ -156,22 +156,9 @@ public class FragmentProfile extends Fragment implements IControlStackHistory {
      * Should be called after login, will sync all changes with cloud and update UI after it.
      */
     private void initUIAfterLogin() {
-        lnLogein.setVisibility(View.GONE);
-        progressBar.setVisibility(View.VISIBLE);
-        LoginMaster.getInstance().syncWithCloud(new IOperationFinishCallback() {
-            @Override
-            public void operationFinished() {
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        progressBar.setVisibility(View.GONE);
-                        lnUsetLogedIn.setVisibility(View.VISIBLE);
-                        initUserProfileUI();
-                    }
-                });
-            }
-        });
-        ((ISlidingMenuHolder) getActivity()).getSlidingMenu().updateHeader(true);
+        lnLoggedOutState.setVisibility(View.GONE);
+        lnLoggedInState.setVisibility(View.VISIBLE);
+        initUserProfileUI();
     }
 
     private void initUserProfileUI() {
@@ -190,18 +177,41 @@ public class FragmentProfile extends Fragment implements IControlStackHistory {
                         imgAvatar.setImageDrawable(circularBitmapDrawable);
                     }
                 });
+                ((ISlidingMenuHolder) getActivity()).getSlidingMenu().updateHeader(userProfile);
             }
-        }, false);
+        }, true);
 
         LayoutInflater inflater = LayoutInflater.from(getActivity());
         View lvHeaderView = inflater.inflate(R.layout.profile_item_header, null, false);
 
+        //Foooter
+        View lvFooterView = inflater.inflate(R.layout.profile_footer, null, false);
+        Button btnSave = (Button) lvFooterView.findViewById(R.id.btnSaveToCloud);
+        btnSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sync(SyncMaster.Task.PUSH);
+            }
+        });
+        Button btnRestore = (Button) lvFooterView.findViewById(R.id.btnRestoreFromCloud);
+        btnRestore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sync(SyncMaster.Task.PULL);
+            }
+        });
+        //End footer
 
         ListView lvProfile = (ListView) rootView.findViewById(R.id.lvProfile);
         if (lvProfile.getHeaderViewsCount() == 0) {
             lvProfile.addHeaderView(lvHeaderView);
         }
+        if (lvProfile.getFooterViewsCount() == 0) {
+            lvProfile.addFooterView(lvFooterView);
+        }
+
         lvProfile.setHeaderDividersEnabled(false);
+        lvProfile.setFooterDividersEnabled(false);
         ProfileItemsAdapter profileItemsAdapter = new ProfileItemsAdapter(getActivity(), R.layout.profile_item);
         profileItemsAdapter.addAll(ProfileItem.fromLoggedinUser(getActivity()));
         lvProfile.setAdapter(profileItemsAdapter);
@@ -230,8 +240,8 @@ public class FragmentProfile extends Fragment implements IControlStackHistory {
     }
 
     public void initLoginUI(View rootView) {
-        lnLogein.setVisibility(View.VISIBLE);
-        lnUsetLogedIn.setVisibility(View.GONE);
+        lnLoggedOutState.setVisibility(View.VISIBLE);
+        lnLoggedInState.setVisibility(View.GONE);
         btnFacebookLogin = (Button) rootView.findViewById(R.id.btnFacebookLogin);
         btnTwitter = (Button) rootView.findViewById(R.id.btnTwitterLogin);
         btnFacebookLogin.setOnClickListener(new View.OnClickListener() {
@@ -249,8 +259,23 @@ public class FragmentProfile extends Fragment implements IControlStackHistory {
         });
     }
 
+    private void sync(SyncMaster.Task task) {
+        final MaterialDialog progressDialog = new MaterialDialog.Builder(getActivity())
+                .title(R.string.syncing)
+                .content(R.string.please_wait)
+                .progress(true, 0)
+                .show();
+        LoginMaster.getInstance().syncWithCloud(new IOperationFinishCallback() {
+            @Override
+            public void operationFinished() {
+                progressDialog.dismiss();
+            }
+        }, task);
+    }
+
     @Override
     public boolean shouldBeAddedToStack() {
         return !skipAddingToHistory;
     }
+
 }
