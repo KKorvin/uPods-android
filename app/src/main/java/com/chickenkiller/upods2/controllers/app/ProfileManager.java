@@ -89,7 +89,8 @@ public class ProfileManager {
         Cursor cursor = database.rawQuery("SELECT p.* FROM podcasts as p\n" +
                 "LEFT JOIN media_list as ml\n" +
                 "ON p.id = ml.media_id\n" +
-                "WHERE ml.media_type = ? and ml.list_type = ?", args2);
+                "WHERE ml.media_type = ? and ml.list_type = ? " +
+                "ORDER BY id DESC", args2);
         while (cursor.moveToNext()) {
             Podcast podcast = Podcast.withCursor(cursor);
             if (mediaType.equals(MediaListItem.DOWNLOADED)) {
@@ -119,7 +120,8 @@ public class ProfileManager {
         Cursor cursor = database.rawQuery("SELECT r.* FROM radio_stations as r\n" +
                 "LEFT JOIN media_list as ml\n" +
                 "ON r.id = ml.media_id\n" +
-                "WHERE ml.media_type = ? and ml.list_type = ?", args2);
+                "WHERE ml.media_type = ? and ml.list_type = ? " +
+                "ORDER BY id DESC", args2);
 
         while (cursor.moveToNext()) {
             RadioItem radioItem = RadioItem.withCursor(cursor);
