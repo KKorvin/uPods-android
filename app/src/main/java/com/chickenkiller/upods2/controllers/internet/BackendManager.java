@@ -1,14 +1,19 @@
 package com.chickenkiller.upods2.controllers.internet;
 
+import android.content.Context;
+
+import com.chickenkiller.upods2.controllers.app.UpodsApplication;
 import com.chickenkiller.upods2.interfaces.IRequestCallback;
 import com.chickenkiller.upods2.interfaces.ISimpleRequestCallback;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import okhttp3.Cache;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.OkHttpClient;
@@ -36,6 +41,8 @@ public class BackendManager {
     }
 
     private static final String TAG = "BackendManager";
+    private static long SIZE_OF_CACHE = 10 * 1024 * 1024; // 10 MB
+
     private final OkHttpClient client;
     private final int MAX_RETRY = 5;
     private static BackendManager backendManager;
@@ -53,7 +60,12 @@ public class BackendManager {
 
     private BackendManager() {
         super();
-        this.client = new OkHttpClient();
+        File cacheDir = UpodsApplication.getContext().getDir("upods_cache", Context.MODE_PRIVATE);
+        Cache cache = new Cache(cacheDir, SIZE_OF_CACHE);
+
+        this.client = new OkHttpClient.Builder()
+                .cache(cache)
+                .build();
     }
 
     public static synchronized BackendManager getInstance() {
@@ -218,4 +230,6 @@ public class BackendManager {
     public void clearSearchQueue() {
         searchQueue.clear();
     }
+
+
 }
