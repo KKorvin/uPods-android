@@ -96,6 +96,7 @@ public class SyncMaster extends AsyncTask<Void, JSONObject, Void> {
             }
         }
         profilePulled = true;
+        Prefs.putString(SettingsManager.PREFS_LAST_CLOUD_SYNC, GlobalUtils.getCurrentDateTimeUS());
         //End getting user
     }
 
@@ -115,7 +116,6 @@ public class SyncMaster extends AsyncTask<Void, JSONObject, Void> {
             String token = syncUserResult.getString("global_token");
             Prefs.putString(GLOBAL_TOKEN, token);
         }
-        Prefs.putString(SettingsManager.PREFS_LAST_CLOUD_SYNC, GlobalUtils.getCurrentDateTimeUS());
         printMessage(syncUserResult);
     }
 
