@@ -341,7 +341,7 @@ public class ProfileManager {
 
             Podcast.syncWithDb(subscribedPodcasts);
             for (Podcast podcast : subscribedPodcasts) {
-                if (!podcast.isExistsInDb) {
+                if (!podcast.isSubscribed) {
                     addSubscribedMediaItem(podcast);
                 }
             }
@@ -375,12 +375,10 @@ public class ProfileManager {
 
             RadioItem.syncWithDb(radioStations);
             for (RadioItem radioItem : radioStations) {
-                if (!radioItem.isExistsInDb) {
-                    if (listType.equals(MediaListItem.SUBSCRIBED)) {
-                        addSubscribedMediaItem(radioItem);
-                    } else {
-                        addRecentMediaItem(radioItem);
-                    }
+                if (!radioItem.isSubscribed && listType.equals(MediaListItem.SUBSCRIBED)) {
+                    addSubscribedMediaItem(radioItem);
+                } else if (!radioItem.isRecent && listType.equals(MediaListItem.RECENT)) {
+                    addRecentMediaItem(radioItem);
                 }
             }
             ArrayList<String> ids = MediaItem.getIds(radioStations);
