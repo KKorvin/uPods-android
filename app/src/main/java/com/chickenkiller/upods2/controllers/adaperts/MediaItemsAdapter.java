@@ -383,11 +383,13 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     }
 
     public void updateMediaItem(MediaItem updatedMediaItem) {
-        for (IMediaItemView mediaItemView : items) {
+        /*for (IMediaItemView mediaItemView : items) {
             if (mediaItemView instanceof MediaItem
                     && GlobalUtils.safeTitleEquals(((MediaItem) mediaItemView).getName(), updatedMediaItem.getName())) {
                 ((MediaItem) mediaItemView).syncWithMediaItem(updatedMediaItem);
             }
-        }
+        }*/
+
+        //There is nothing to update here.
     }
 }

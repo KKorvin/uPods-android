@@ -429,7 +429,7 @@ public class Podcast extends MediaItem {
                 podcast.isExistsInDb = true;
                 if (listItem.listType.equals(MediaListItem.SUBSCRIBED)) {
                     podcast.isSubscribed = true;
-                } else if (listItem.equals(MediaListItem.DOWNLOADED)) {
+                } else if (listItem.listType.equals(MediaListItem.DOWNLOADED)) {
                     podcast.isDownloaded = true;
                 } else if (listItem.listType.equals(MediaListItem.NEW)) {
                     podcast.hasNewEpisodes = true;

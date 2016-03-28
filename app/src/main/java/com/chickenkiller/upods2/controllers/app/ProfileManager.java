@@ -144,35 +144,48 @@ public class ProfileManager {
 
     private void addTrack(MediaItem mediaItem, Track track, String listType) {
         if (mediaItem instanceof Podcast && track instanceof Episode) {
+            SQLiteDatabase database = UpodsApplication.getDatabaseManager().getWritableDatabase();
             Podcast podcast = (Podcast) mediaItem;
             Episode episode = (Episode) track;
 
-            if (listType.equals(MediaListItem.DOWNLOADED)) {
-                episode.isDownloaded = true;
-                podcast.isDownloaded = true;
-            } else if (listType.equals(MediaListItem.NEW)) {
-                episode.isNew = true;
-                podcast.hasNewEpisodes = true;
+            //1. Save episode/podcast if needed
+            if (!podcast.isExistsInDb) {
+                podcast.save();
+            }
+            if (!episode.isExistsInDb) {
+                episode.save(podcast.id);
             }
 
-            SQLiteDatabase database = UpodsApplication.getDatabaseManager().getWritableDatabase();
-            if (!podcast.isExistsInDb) {
-                podcast.save(); //If podcast doesn't exists save() will save it and all his new or downloaded episodes
+            //2. Add podcast to media_list if needed
+            if ((!podcast.isDownloaded && listType.equals(MediaListItem.DOWNLOADED)) ||
+                    (!podcast.hasNewEpisodes && listType.equals(MediaListItem.NEW))) {
                 ContentValues values = new ContentValues();
                 values.put("media_id", mediaItem.id);
                 values.put("media_type", MediaListItem.TYPE_PODCAST);
                 values.put("list_type", listType);
                 database.insert("media_list", null, values);
             }
-            if (!episode.isExistsInDb) {
-                episode.save(podcast.id); //If episode doesn't exists save() will both save it and create podcasts_episodes_rel
-            } else {
+
+            //3. Create podcasts_episodes_rel
+            if ((!episode.isDownloaded && listType.equals(MediaListItem.DOWNLOADED)) ||
+                    (!episode.isNew && listType.equals(MediaListItem.NEW))) {
                 ContentValues values = new ContentValues();
-                values.put("podcast_id", mediaItem.id);
+                values = new ContentValues();
+                values.put("podcast_id", podcast.id);
                 values.put("episode_id", episode.id);
                 values.put("type", listType);
                 database.insert("podcasts_episodes_rel", null, values);
             }
+
+            //4. Update objects
+            if (listType.equals(MediaListItem.DOWNLOADED)) {
+                podcast.isDownloaded = true;
+                episode.isDownloaded = true;
+            } else if (listType.equals(MediaListItem.NEW)) {
+                podcast.hasNewEpisodes = true;
+                episode.isNew = true;
+            }
+
             notifyChanges(new ProfileUpdateEvent(MediaListItem.DOWNLOADED, mediaItem, false));
         }
     }

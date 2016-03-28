@@ -76,22 +76,6 @@ public class Episode extends Track {
         id = database.insert(TABLE, null, values);
         isExistsInDb = true;
 
-        if (isDownloaded) {
-            values = new ContentValues();
-            values.put("podcast_id", podcastId);
-            values.put("episode_id", id);
-            values.put("type", DOWNLOADED);
-            database.insert("podcasts_episodes_rel", null, values);
-        }
-
-        if (isNew) {
-            values = new ContentValues();
-            values.put("podcast_id", podcastId);
-            values.put("episode_id", id);
-            values.put("type", NEW);
-            database.insert("podcasts_episodes_rel", null, values);
-        }
-
         return id;
     }
 

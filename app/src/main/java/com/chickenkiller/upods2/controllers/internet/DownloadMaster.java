@@ -107,7 +107,7 @@ public class DownloadMaster {
 
     public DownloadTask getTaskByName(String itemName) {
         for (DownloadTask task : allTasks) {
-            if (task.track.getTitle().equals(itemName)) {
+            if (GlobalUtils.safeTitleEquals(task.track.getTitle(), itemName)) {
                 return task;
             }
         }
