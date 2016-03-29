@@ -72,7 +72,7 @@ public class SQLdatabaseManager extends SQLiteOpenHelper {
                 "    id         INTEGER      PRIMARY KEY AUTOINCREMENT\n" +
                 "                            UNIQUE,\n" +
                 "    podcast_id INTEGER,\n" +
-                "    episode_id,\n" +
+                "    episode_id INTEGER,\n" +
                 "    type       VARCHAR (20) \n" +
                 ");\n");
 

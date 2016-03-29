@@ -18,6 +18,7 @@ import static org.junit.Assert.assertTrue;
 
 /**
  * Created by alonzilberman on 13/03/2016.
+ * This tests check only basic functionality of profile manager.
  */
 
 @RunWith(AndroidJUnit4.class)

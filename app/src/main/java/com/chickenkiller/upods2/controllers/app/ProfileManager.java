@@ -198,6 +198,10 @@ public class ProfileManager {
             Episode episode = (Episode) track;
             String type = Episode.DOWNLOADED;
 
+            //Remove reletionships -> then remove episode
+            String args[] = {String.valueOf(podcast.id), String.valueOf(episode.id), type};
+            database.delete("podcasts_episodes_rel", "podcast_id = ? AND episode_id = ? AND type = ?", args);
+
             if (listType.equals(MediaListItem.DOWNLOADED)) {
                 File episodeFile = new File(episode.getAudeoUrl());
                 episodeFile.delete();
@@ -212,9 +216,6 @@ public class ProfileManager {
                     episode.remove();
                 }
             }
-
-            String args[] = {String.valueOf(podcast.id), String.valueOf(episode.id), type};
-            database.delete("podcasts_episodes_rel", "podcast_id = ? AND episode_id = ? AND type = ?", args);
 
             if (listType.equals(MediaListItem.DOWNLOADED) && podcast.getDownloadedEpisodsCount() == 0) {
                 String args2[] = {String.valueOf(podcast.id), MediaListItem.TYPE_PODCAST, MediaListItem.DOWNLOADED};

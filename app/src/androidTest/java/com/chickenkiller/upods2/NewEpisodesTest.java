@@ -4,22 +4,16 @@ import android.support.test.runner.AndroidJUnit4;
 import android.test.suitebuilder.annotation.SmallTest;
 
 import com.chickenkiller.upods2.controllers.internet.BackendManager;
-import com.chickenkiller.upods2.controllers.internet.EpisodesXMLHandler;
 import com.chickenkiller.upods2.models.Episode;
 import com.chickenkiller.upods2.models.Feed;
 import com.chickenkiller.upods2.models.Podcast;
+import com.chickenkiller.upods2.utils.HelpFunctions;
 import com.chickenkiller.upods2.utils.Logger;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.xml.sax.InputSource;
-import org.xml.sax.XMLReader;
 
-import java.io.StringReader;
 import java.util.ArrayList;
-
-import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.SAXParserFactory;
 
 import okhttp3.Request;
 
@@ -51,18 +45,6 @@ public class NewEpisodesTest {
         int newEpisodesCount;
     }
 
-    public ArrayList<Episode> parseEpisodes(String url) throws Exception {
-        Request episodesRequest = new Request.Builder().url(url).build();
-        String response = BackendManager.getInstance().sendSimpleSynchronicRequest(episodesRequest);
-        SAXParserFactory spf = SAXParserFactory.newInstance();
-        SAXParser sp = spf.newSAXParser();
-        XMLReader xr = sp.getXMLReader();
-        EpisodesXMLHandler episodesXMLHandler = new EpisodesXMLHandler();
-        xr.setContentHandler(episodesXMLHandler);
-        InputSource inputSource = new InputSource(new StringReader(response));
-        xr.parse(inputSource);
-        return episodesXMLHandler.getParsedEpisods();
-    }
 
     private ResultBucket checkNoUpdates(String feed) {
         ResultBucket resultBucket = new ResultBucket();
@@ -70,11 +52,11 @@ public class NewEpisodesTest {
             String podcastName = String.valueOf(System.currentTimeMillis()) + "_podcast";
             Podcast podcast = new Podcast(podcastName, feed);
 
-            ArrayList<Episode> parsedEpisodes = parseEpisodes(podcast.getFeedUrl());
+            ArrayList<Episode> parsedEpisodes = HelpFunctions.parseEpisodes(podcast.getFeedUrl());
             Feed.saveAsFeed(podcast.getFeedUrl(), parsedEpisodes);
             Logger.printInfo("checkNoUpdatesENGScenario", "Feed saved locally...");
 
-            ArrayList<Episode> afterUpdateparsedEpisodes = parseEpisodes(podcast.getFeedUrl());
+            ArrayList<Episode> afterUpdateparsedEpisodes = HelpFunctions.parseEpisodes(podcast.getFeedUrl());
             resultBucket.hasUpdates = Feed.handleUpdates(afterUpdateparsedEpisodes, podcast);
             resultBucket.newEpisodesCount = podcast.getNewEpisodsCount();
             Logger.printInfo("checkNoUpdatesENGScenario", "Checked for updates...");
@@ -114,7 +96,7 @@ public class NewEpisodesTest {
             String podcastName = String.valueOf(System.currentTimeMillis()) + "_podcast";
             Podcast podcast = new Podcast(podcastName, TEST_FEED);
 
-            ArrayList<Episode> parsedEpisodes = parseEpisodes(podcast.getFeedUrl());
+            ArrayList<Episode> parsedEpisodes = HelpFunctions.parseEpisodes(podcast.getFeedUrl());
             Logger.printInfo("checkBasicNewEpisodesScenario", "Parsed episodes...");
 
             Feed.saveAsFeed(podcast.getFeedUrl(), parsedEpisodes);
@@ -125,7 +107,7 @@ public class NewEpisodesTest {
             BackendManager.getInstance().sendSynchronicRequest(addRequest);
             Logger.printInfo("checkBasicNewEpisodesScenario", "2 new episodes added to remote feed...");
 
-            ArrayList<Episode> afterUpdateparsedEpisodes = parseEpisodes(podcast.getFeedUrl());
+            ArrayList<Episode> afterUpdateparsedEpisodes = HelpFunctions.parseEpisodes(podcast.getFeedUrl());
             podcast.setTracks(afterUpdateparsedEpisodes);
 
             hasUpdates = Feed.handleUpdates(afterUpdateparsedEpisodes, podcast);
@@ -149,17 +131,15 @@ public class NewEpisodesTest {
             String podcastName = String.valueOf(System.currentTimeMillis()) + "_podcast";
             Podcast podcast = new Podcast(podcastName, REAL_PODCAST_FEED_ENG);
 
-            ArrayList<Episode> parsedEpisodes = parseEpisodes(podcast.getFeedUrl());
-            Logger.printInfo("OMG1", parsedEpisodes.size());
+            ArrayList<Episode> parsedEpisodes = HelpFunctions.parseEpisodes(podcast.getFeedUrl());
             parsedEpisodes.remove(parsedEpisodes.size() - EPISODES_TO_REMOVE);
-            Logger.printInfo("OMG2", parsedEpisodes.size());
 
             Logger.printInfo("checkRealPodcastNewEpisodesScenario", "Parsed episodes + removed last one...");
 
             Feed.saveAsFeed(podcast.getFeedUrl(), parsedEpisodes);
             Logger.printInfo("checkRealPodcastNewEpisodesScenario", "Feed saved locally...");
 
-            ArrayList<Episode> afterUpdateparsedEpisodes = parseEpisodes(podcast.getFeedUrl());
+            ArrayList<Episode> afterUpdateparsedEpisodes = HelpFunctions.parseEpisodes(podcast.getFeedUrl());
             hasUpdates = Feed.handleUpdates(afterUpdateparsedEpisodes, podcast);
             podcast.setTracks(afterUpdateparsedEpisodes);
 

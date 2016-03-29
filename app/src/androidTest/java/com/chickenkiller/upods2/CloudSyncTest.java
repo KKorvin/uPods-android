@@ -6,15 +6,16 @@ import android.test.suitebuilder.annotation.SmallTest;
 
 import com.chickenkiller.upods2.controllers.app.ProfileManager;
 import com.chickenkiller.upods2.controllers.internet.SyncMaster;
-import com.chickenkiller.upods2.interfaces.IOperationFinishWithDataCallback;
+import com.chickenkiller.upods2.interfaces.IOperationFinishCallback;
+import com.chickenkiller.upods2.models.MediaItem;
 import com.chickenkiller.upods2.models.RadioItem;
 import com.chickenkiller.upods2.models.StreamUrl;
 import com.chickenkiller.upods2.utils.Logger;
 
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import java.util.ArrayList;
 
 import static org.junit.Assert.assertTrue;
 
@@ -35,47 +36,40 @@ public class CloudSyncTest {
 
         ProfileManager.getInstance().addSubscribedMediaItem(radioItem);
         Logger.printInfo("testGlobalTokenScenario", "Adding radio to subscribed");
-        assertTrue(radioItem.isSubscribed);
+        assertTrue(MediaItem.hasMediaItemWithName(ProfileManager.getInstance().getSubscribedRadioItems(), radioItem));
 
         final String globalToken = String.valueOf(System.currentTimeMillis());
 
-        final SyncMaster profileSyncMasterGET = new SyncMaster("global", globalToken, "", SyncMaster.TASK_GET_USER);
-
-        final SyncMaster profileSyncMasterSYNC = new SyncMaster("global", globalToken, "", SyncMaster.TASK_SYNC);
-        profileSyncMasterSYNC.setProfileSyncedCallback(new IOperationFinishWithDataCallback() {
+        final SyncMaster profileMasterGET = new SyncMaster("global", globalToken, "", SyncMaster.Task.PUSH);
+        final SyncMaster profileSyncMasterPUSH = new SyncMaster("global", globalToken, "", SyncMaster.Task.PUSH);
+        profileSyncMasterPUSH.setProfileSyncedCallback(new IOperationFinishCallback() {
             @Override
-            public void operationFinished(Object data) {
+            public void operationFinished() {
                 Logger.printInfo("testGlobalTokenScenario", "Synced with cloud SYNC-> removing subscribed radioItem");
                 ProfileManager.getInstance().removeSubscribedMediaItem(radioItem);
-                assertTrue(!radioItem.isSubscribed);
+                assertTrue(!MediaItem.hasMediaItemWithName(ProfileManager.getInstance().getSubscribedRadioItems(), radioItem));
 
-                profileSyncMasterGET.setProfileSyncedCallback(new IOperationFinishWithDataCallback() {
+                profileMasterGET.setProfileSyncedCallback(new IOperationFinishCallback() {
                     @Override
-                    public void operationFinished(Object data) {
-                        boolean isRadiotInFavorites = false;
-                        try {
-                            Logger.printInfo("testGlobalTokenScenario", "Synced with cloud GET -> checking subscribed radioItem");
-                            if (((JSONObject) data).getJSONObject("result").has("profile")) {
-                                JSONObject profile = new JSONObject(((JSONObject) data).getJSONObject("result").getString("profile"));
-                                ProfileManager.getInstance().readFromJson(profile);
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                        assertTrue(radioItem.isSubscribed);
+                    public void operationFinished() {
+                        ArrayList<RadioItem> getSubscribedRatioItems = ProfileManager.getInstance().getSubscribedRadioItems();
+                        assertTrue(MediaItem.hasMediaItemWithName(getSubscribedRatioItems, radioItem));
                     }
                 });
-                profileSyncMasterGET.execute();
+
+                profileMasterGET.execute();
             }
         });
-        profileSyncMasterSYNC.execute();
-        while (profileSyncMasterGET.getStatus() != AsyncTask.Status.FINISHED) {
+
+        profileSyncMasterPUSH.execute();
+        while (profileMasterGET.getStatus() != AsyncTask.Status.FINISHED) {
             try {
                 Thread.sleep(300);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
+
     }
 
 }
