@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    android:background="@null"
     android:gravity="top|center_horizontal"
     android:orientation="vertical">
 
@@ -40,12 +40,12 @@
         android:id="@+id/btnCloseHelp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="35dp"
+        android:background="@drawable/selector_btn_welcome_screen"
         android:paddingLeft="15dp"
         android:paddingRight="15dp"
-        android:textColor="@color/white_material"
-        android:layout_marginTop="35dp"
         android:text="Start using app"
-        android:background="@drawable/selector_btn_welcome_screen"
+        android:textColor="@color/white_material"
         android:visibility="visible" />
 
 </LinearLayout>
