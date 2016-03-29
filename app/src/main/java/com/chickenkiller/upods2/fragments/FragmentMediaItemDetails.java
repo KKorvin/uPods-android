@@ -179,6 +179,9 @@ public class FragmentMediaItemDetails extends Fragment implements View.OnTouchLi
                     ((IContextMenuManager) getActivity()).openContextMenu(v, ContextMenuType.PODCAST_MIDDLE_SCREEN, playableItem, new IOperationFinishCallback() {
                         @Override
                         public void operationFinished() {
+                            if (mediaItemType == MediaItemType.PODCAST_DOWNLOADED && !((Podcast) playableItem).isDownloaded) {
+                                getActivity().onBackPressed();
+                            }
                             tracksAdapter.notifyDataSetChanged();
                         }
                     });
