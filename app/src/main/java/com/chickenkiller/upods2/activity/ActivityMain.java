@@ -96,7 +96,7 @@ public class ActivityMain extends BasicActivity implements IOverlayable, IToolba
         slidingMenu = new SlidingMenu(this, toolbar);
 
         int startedFrom = getIntent().getIntExtra(ActivityPlayer.ACTIVITY_STARTED_FROM, -1);
-
+        //isFirstRun = false;
         if (isFirstRun && !Arrays.asList(notificationsActions).contains(startedFrom)) {
             toolbar.setVisibility(View.GONE);
             showFragment(R.id.fl_content, new FragmentWellcome(), FragmentWellcome.TAG);
@@ -306,7 +306,7 @@ public class ActivityMain extends BasicActivity implements IOverlayable, IToolba
                 && item.getTitle().equals(getString(R.string.delete))) {
             MediaItem mediaItem = ((MediaItem.MediaItemBucket) currentContextMenuData).mediaItem;
             Track track = ((MediaItem.MediaItemBucket) currentContextMenuData).track;
-            ContextMenuHelper.removeDonwloadedTrack(this, track, (MediaItem) mediaItem, onContextItemSelected);
+            ContextMenuHelper.removeDonwloadedTrack(this, track, mediaItem, onContextItemSelected);
         } else if (id == R.id.itemLogout) {
             LoginMaster.getInstance().logout();
             getSlidingMenu().updateHeader(true);

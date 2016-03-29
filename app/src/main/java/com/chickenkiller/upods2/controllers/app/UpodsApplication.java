@@ -28,6 +28,7 @@ public class UpodsApplication extends Application {
 
     @Override
     public void onCreate() {
+        //LeakCanary.install(this);
         applicationContext = getApplicationContext();
         databaseManager = new SQLdatabaseManager(applicationContext);
         FacebookSdk.sdkInitialize(applicationContext);

@@ -18,6 +18,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.util.ArrayList;
 
 /**
@@ -198,10 +199,18 @@ public class ProfileManager {
             String type = Episode.DOWNLOADED;
 
             if (listType.equals(MediaListItem.DOWNLOADED)) {
+                File episodeFile = new File(episode.getAudeoUrl());
+                episodeFile.delete();
                 episode.isDownloaded = false;
+                if(!episode.isNew){
+                    episode.remove();
+                }
             } else if (listType.equals(MediaListItem.NEW)) {
                 episode.isNew = false;
                 type = Episode.NEW;
+                if(!episode.isDownloaded){
+                    episode.remove();
+                }
             }
 
             String args[] = {String.valueOf(podcast.id), String.valueOf(episode.id), type};

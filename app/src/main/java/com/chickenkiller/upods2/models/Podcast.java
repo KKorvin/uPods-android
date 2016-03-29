@@ -11,6 +11,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.util.ArrayList;
 
 /**
@@ -227,7 +228,8 @@ public class Podcast extends MediaItem {
     public String getDownloadedDirectory() {
         for (Episode episode : episodes) {
             if (episode.isDownloaded) {
-                return episode.getAudeoUrl();
+                File podcastFolder = new File(episode.getAudeoUrl());
+                return podcastFolder.getParentFile().getPath();
             }
         }
         return null;

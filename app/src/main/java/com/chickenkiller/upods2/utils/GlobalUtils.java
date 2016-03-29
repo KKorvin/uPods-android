@@ -28,6 +28,9 @@ import java.util.regex.Pattern;
 public class GlobalUtils {
 
     public static boolean safeTitleEquals(String title1, String title2) {
+        if (title1 == null || title2 == null) {
+            return false;
+        }
         title1 = title1.trim().replaceAll("[^a-z,A-Z,0-9,.,+,-, ,!,?,_,:,;,=]", "");
         title2 = title2.trim().replaceAll("[^a-z,A-Z,0-9,.,+,-, ,!,?,_,:,;,=]", "");
         return title1.equals(title2);

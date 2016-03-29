@@ -143,6 +143,16 @@ public class Episode extends Track {
         this.pathOnDisk = pathOnDisk;
     }
 
+    public void remove() {
+        SQLiteDatabase database = UpodsApplication.getDatabaseManager().getWritableDatabase();
+        String args[] = {String.valueOf(id)};
+        database.delete("episodes", "id = ?", args);
+        isDownloaded = false;
+        isNew = false;
+        isExistsInDb = false;
+        id = -1;
+    }
+
     @Override
     public String getTitle() {
         return title;

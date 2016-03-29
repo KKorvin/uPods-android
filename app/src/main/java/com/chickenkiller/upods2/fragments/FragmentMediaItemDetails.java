@@ -160,6 +160,7 @@ public class FragmentMediaItemDetails extends Fragment implements View.OnTouchLi
         //Tracks recycle view
         tracksAdapter = new TracksAdapter(playableItem, getActivity(), R.layout.track_item);
         tracksAdapter.setFragmentsManager((IFragmentsManager) getActivity());
+        tracksAdapter.setMediaItemType(mediaItemType);
         rvTracks.setAdapter(tracksAdapter);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setOrientation(OrientationHelper.VERTICAL);
@@ -334,9 +335,11 @@ public class FragmentMediaItemDetails extends Fragment implements View.OnTouchLi
                             getActivity().runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    tracksAdapter.addItems(parsedEpisodes);
-                                    rvTracks.setVisibility(View.VISIBLE);
-                                    pbTracks.setVisibility(View.GONE);
+                                    if (tracksAdapter != null) {
+                                        tracksAdapter.addItems(parsedEpisodes);
+                                        rvTracks.setVisibility(View.VISIBLE);
+                                        pbTracks.setVisibility(View.GONE);
+                                    }
                                 }
                             });
                         }

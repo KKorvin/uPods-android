@@ -27,6 +27,7 @@ import com.chickenkiller.upods2.models.Podcast;
 import com.chickenkiller.upods2.models.Track;
 import com.chickenkiller.upods2.utils.GlobalUtils;
 import com.chickenkiller.upods2.utils.enums.ContextMenuType;
+import com.chickenkiller.upods2.utils.enums.MediaItemType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,7 +46,7 @@ public class TracksAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     private MediaItem iPlayableMediaItem;
     private Context mContext;
     private IFragmentsManager fragmentsManager;
-
+    private MediaItemType mediaItemType; //For which mediaItem type adapter is using
 
     private static class ViewHolderTrack extends RecyclerView.ViewHolder {
         public TextView tvTitle;
@@ -84,6 +85,9 @@ public class TracksAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         this.mContext = mContext;
     }
 
+    public void setMediaItemType(MediaItemType mediaItemType) {
+        this.mediaItemType = mediaItemType;
+    }
 
     public void setFragmentsManager(IFragmentsManager fragmentsManager) {
         this.fragmentsManager = fragmentsManager;
@@ -236,11 +240,17 @@ public class TracksAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 IOperationFinishCallback operationFinishCallback = new IOperationFinishCallback() {
                     @Override
                     public void operationFinished() {
+                        if (mediaItemType == MediaItemType.PODCAST_DOWNLOADED) {
+                            Episode currentEpisode = (Episode) currentTrack;
+                            if (!currentEpisode.isDownloaded) {
+                                tracks.remove(currentTrack);
+                            }
+                        }
                         notifyDataSetChanged();
                     }
                 };
                 MediaItem.MediaItemBucket bucket = new MediaItem.MediaItemBucket();
-                bucket.mediaItem = (MediaItem) iPlayableMediaItem;
+                bucket.mediaItem = iPlayableMediaItem;
                 bucket.track = currentTrack;
                 ((IContextMenuManager) mContext).openContextMenu(v, ContextMenuType.EPISODE_MIDDLE_SCREEN,
                         bucket, operationFinishCallback);
