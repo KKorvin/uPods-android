@@ -10,7 +10,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/blue_grey_1000"
+        android:background="@null"
         android:orientation="vertical"
         android:weightSum="100">
 
@@ -19,7 +19,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="60"
-            android:background="@color/red_500">
+            android:background="@null">
 
             <ImageView
                 android:id="@+id/imgPlayerCover"
@@ -134,7 +134,7 @@
                 android:max="100"
                 android:padding="0px"
                 android:progress="0"
-                android:thumbOffset="2dp" />
+                android:thumbOffset="3dp" />
         </RelativeLayout>
 
         <LinearLayout

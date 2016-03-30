@@ -6,6 +6,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.Intent;
+import android.os.SystemClock;
 
 import com.chickenkiller.upods2.controllers.database.SQLdatabaseManager;
 import com.chickenkiller.upods2.controllers.internet.NetworkTasksService;
@@ -63,10 +64,9 @@ public class UpodsApplication extends Application {
         if (SettingsManager.getInstace().getBooleanSettingsValue(SettingsManager.JS_NOTIFY_EPISODS)) {
             long intervel = SettingsManager.getInstace().getIntSettingsValue(SettingsManager.JS_PODCASTS_UPDATE_TIME);
             intervel = TimeUnit.HOURS.toMillis(intervel);
-            Logger.printInfo("Episodes update interval", String.valueOf(intervel));
             alarmMgr.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
-                    intervel,
-                    intervel, alarmIntent);
+                    SystemClock.elapsedRealtime() + intervel,
+                    SystemClock.elapsedRealtime() + intervel, alarmIntent);
             Logger.printInfo(TAG, "Alarm managers - Episods check for updates task added");
         } else {
             alarmIntent.cancel();

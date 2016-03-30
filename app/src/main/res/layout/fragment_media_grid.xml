@@ -19,8 +19,9 @@
         android:id="@+id/vpMedia"
         android:layout_width="match_parent"
         android:layout_height="0px"
+        android:background="@null"
         android:layout_weight="1"
-        android:background="@android:color/white" />
+         />
 
     <include layout="@layout/small_player"></include>
 

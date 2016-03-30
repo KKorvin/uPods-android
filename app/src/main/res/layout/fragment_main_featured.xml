@@ -15,6 +15,7 @@
         android:id="@+id/rvMain"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@null"
         android:clipToPadding="true"
         android:columnWidth="@dimen/rv_cards_column_width" />
 
@@ -22,6 +23,7 @@
         android:id="@+id/lvMain"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@null"
         android:visibility="gone" />
 
     <include layout="@layout/ln_no_internet"></include>
