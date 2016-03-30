@@ -6,6 +6,7 @@
     android:layout_height="wrap_content"
     android:layout_gravity="center"
     android:layout_margin="@dimen/card_media_item_m"
+    android:background="@color/white"
     android:clickable="true"
     android:focusable="true"
     android:foreground="@drawable/card_media_item_bckg"
@@ -13,7 +14,8 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@null">
 
         <com.chickenkiller.upods2.views.ImageViewSquare
             android:id="@+id/imgSquare"

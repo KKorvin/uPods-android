@@ -3,6 +3,7 @@
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/global_background"
     android:elevation="@dimen/drawer_elevation"
     tools:context=".ActivityMain"
     tools:ignore="MissingPrefix">
@@ -10,11 +11,13 @@
     <FrameLayout
         android:id="@+id/fl_window"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@null">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="@null"
             android:orientation="vertical">
 
             <include layout="@layout/toolbar_main"></include>
@@ -23,6 +26,7 @@
                 android:id="@+id/fl_content"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:background="@null"
                 android:orientation="vertical"></FrameLayout>
         </LinearLayout>
 
