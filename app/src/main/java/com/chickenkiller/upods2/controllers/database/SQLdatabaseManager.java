@@ -91,6 +91,13 @@ public class SQLdatabaseManager extends SQLiteOpenHelper {
                 "                position INTEGER);");
 
         db.execSQL("CREATE UNIQUE INDEX track_name_idx ON tracks_positions (track_name);");
+
+        db.execSQL("CREATE TABLE streams_quality (\n" +
+                "                id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,\n" +
+                "                media_item_name VARCHAR (300) UNIQUE,\n" +
+                "                quality VARCHAR (100));");
+
+        db.execSQL("CREATE UNIQUE INDEX media_item_name_idx ON streams_quality (media_item_name);");
     }
 
     @Override

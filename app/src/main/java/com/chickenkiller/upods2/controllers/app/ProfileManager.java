@@ -26,12 +26,9 @@ import java.util.ArrayList;
  */
 public class ProfileManager {
 
-    public static final String JS_DOWNLOADED_PODCASTS = "downloadedPodcasts";
     public static final String JS_SUBSCRIBED_PODCASTS = "subscribedPodcasts";
     public static final String JS_SUBSCRIBED_STATIONS = "subscribedStations";
     public static final String JS_RECENT_STATIONS = "recentStations";
-
-    private static final int RECTNT_RADIO_STATIONS_LIMIT = 10;
 
     public static ProfileManager profileManager;
     private IOperationFinishWithDataCallback profileSavedCallback;

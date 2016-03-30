@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.text.Html;
-import android.util.Pair;
 import android.view.View;
 import android.widget.Toast;
 
@@ -97,8 +96,7 @@ public class ContextMenuHelper {
                             new MaterialDialog.ListCallbackSingleChoice() {
                                 @Override
                                 public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
-                                    SettingsManager.getInstace().putSettingsValue(SettingsManager.JS_SELECTED_STREAM_QUALITY,
-                                            new Pair<String, String>(playableMediaItem.getName(), text.toString()));
+                                    SettingsManager.getInstace().saveStreamQualitySelection(playableMediaItem, text.toString());
                                     playableMediaItem.selectStreamUrl(text.toString());
                                     currentMediaItem.selectStreamUrl(text.toString());
                                     UniversalPlayer.getInstance().softRestart();

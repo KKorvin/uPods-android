@@ -1,7 +1,11 @@
 package com.chickenkiller.upods2.controllers.app;
 
+import android.content.ContentValues;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.util.Pair;
 
+import com.chickenkiller.upods2.models.MediaItem;
 import com.chickenkiller.upods2.utils.Logger;
 import com.pixplicity.easyprefs.library.Prefs;
 
@@ -30,7 +34,6 @@ public class SettingsManager {
     public static final String JS_START_SCREEN = "start_screen";
     public static final String JS_NOTIFY_EPISODS = "notify_episods";
     public static final String JS_STREAM_QUALITY = "stream_quality";
-    public static final String JS_SELECTED_STREAM_QUALITY = "selected_stream_quality";
 
     public static final String DEFAULT_STREAM_QUALITY = "hight";
 
@@ -62,7 +65,6 @@ public class SettingsManager {
                 settingsObject.put(JS_NOTIFY_EPISODS, DEFAULT_NOTIFY_EPISODS);
                 settingsObject.put(JS_PODCASTS_UPDATE_TIME, DEFAULT_PODCAST_UPDATE_TIME);
                 settingsObject.put(JS_STREAM_QUALITY, DEFAULT_STREAM_QUALITY);
-                settingsObject.put(JS_SELECTED_STREAM_QUALITY, new JSONArray());
                 Prefs.putString(JS_SETTINGS, settingsObject.toString());
             }
             return new JSONObject(Prefs.getString(JS_SETTINGS, null));
@@ -123,8 +125,28 @@ public class SettingsManager {
     }
 
 
+    public void saveStreamQualitySelection(MediaItem mediaItem, String quality) {
+        SQLiteDatabase database = UpodsApplication.getDatabaseManager().getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("media_item_name", mediaItem.getName());
+        values.put("quality", quality);
+        database.replace("streams_quality", null, values);
+    }
+
+    public String getStreamQuality(MediaItem mediaItem) {
+        String streamQuality = null;
+        SQLiteDatabase database = UpodsApplication.getDatabaseManager().getReadableDatabase();
+        String args[] = {mediaItem.getName()};
+        Cursor cursor = database.rawQuery("SELECT quality FROM streams_quality WHERE media_item_name = ?", args);
+        if (cursor.getCount() > 0) {
+            cursor.moveToFirst();
+            streamQuality = cursor.getString(cursor.getColumnIndex("quality"));
+        }
+        return streamQuality;
+    }
+
     /**
-     * Automaticly saves settings
+     * Automatically saves settings
      *
      * @param key
      * @param value

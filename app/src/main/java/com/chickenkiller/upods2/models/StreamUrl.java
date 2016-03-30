@@ -98,12 +98,11 @@ public class StreamUrl extends SQLModel {
         final List<StreamUrl> list = new ArrayList<StreamUrl>();
         SettingsManager settingsManager = SettingsManager.getInstace();
 
-        String alreadySetQuality = settingsManager.getPareSettingValue(SettingsManager.JS_SELECTED_STREAM_QUALITY,
-                UniversalPlayer.getInstance().getPlayingMediaItem().getName());
+        String alreadySetQuality = settingsManager.getStreamQuality(UniversalPlayer.getInstance().getPlayingMediaItem());
         for (StreamUrl streamUrl : allUrls) {
             if (streamUrl.isAlive && streamUrl.hasBitrate()) {
                 list.add(streamUrl);
-                if (!alreadySetQuality.isEmpty() && streamUrl.bitrate.equals(alreadySetQuality)) {
+                if (alreadySetQuality != null && streamUrl.bitrate.equals(alreadySetQuality)) {
                     return streamUrl; //If user already selected quality for this stream -> take it
                 }
             }
