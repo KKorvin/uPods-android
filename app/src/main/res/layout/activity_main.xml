@@ -5,7 +5,6 @@
     android:layout_height="match_parent"
     android:background="@color/global_background"
     android:elevation="@dimen/drawer_elevation"
-    tools:context=".ActivityMain"
     tools:ignore="MissingPrefix">
 
     <FrameLayout

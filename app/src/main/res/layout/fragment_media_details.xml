@@ -3,14 +3,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:fab="http://schemas.android.com/apk/res-auto"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent">
+    android:layout_height="fill_parent"
+    android:background="@null">
 
     <RelativeLayout
         android:id="@+id/rlDetailedContent"
         android:layout_width="fill_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="150dp"
-        android:background="@color/white"
+        android:background="@color/white_material"
         android:clickable="true"
         android:focusable="true"
         android:orientation="vertical">
@@ -26,7 +27,8 @@
             android:id="@+id/rlDetailsHeaderContainer"
             android:layout_width="fill_parent"
             android:layout_height="146dp"
-            android:layout_below="@+id/viewStatusBar">
+            android:layout_below="@+id/viewStatusBar"
+            android:background="@null">
 
             <ImageView
                 android:id="@+id/imgBluredCover"
@@ -59,6 +61,7 @@
                 android:layout_marginTop="8dp"
                 android:layout_toLeftOf="@+id/btnMediaMore"
                 android:layout_toRightOf="@+id/imgDetailedCover"
+                android:background="@null"
                 android:orientation="vertical">
 
                 <TextView
