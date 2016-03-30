@@ -409,7 +409,8 @@ public class Podcast extends MediaItem {
                 this.isDownloaded = true;
             }
         }
-
+        cursor.close();
+        
         ArrayList<Episode> existingEpisodes = Episode.withPodcastId(id);
         for (Episode episode : existingEpisodes) {
             Episode podcastEpisode = Episode.getEpisodByTitle(episodes, episode.getTitle());
@@ -420,6 +421,7 @@ public class Podcast extends MediaItem {
                 podcastEpisode.isNew = episode.isNew;
             }
         }
+
     }
 
     public static void syncWithDb(ArrayList<Podcast> podcasts) {

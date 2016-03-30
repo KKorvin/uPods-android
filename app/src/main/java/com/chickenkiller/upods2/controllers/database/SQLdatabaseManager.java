@@ -83,6 +83,14 @@ public class SQLdatabaseManager extends SQLiteOpenHelper {
                 "    media_type VARCHAR (20),\n" +
                 "    list_type  VARCHAR (20) \n" +
                 ");\n");
+
+        //Position in seconds
+        db.execSQL("CREATE TABLE tracks_positions (\n" +
+                "                id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,\n" +
+                "                track_name VARCHAR (300) UNIQUE,\n" +
+                "                position INTEGER);");
+
+        db.execSQL("CREATE UNIQUE INDEX track_name_idx ON tracks_positions (track_name);");
     }
 
     @Override

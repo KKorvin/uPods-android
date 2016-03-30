@@ -7,7 +7,6 @@ import android.os.Handler;
 import android.webkit.URLUtil;
 
 import com.chickenkiller.upods2.controllers.app.ProfileManager;
-import com.chickenkiller.upods2.controllers.app.SettingsManager;
 import com.chickenkiller.upods2.controllers.app.UpodsApplication;
 import com.chickenkiller.upods2.interfaces.IOperationFinishCallback;
 import com.chickenkiller.upods2.interfaces.IPlayerStateListener;
@@ -383,10 +382,9 @@ public class UniversalPlayer implements MediaPlayer.EventListener {
     @Override
     public void onEvent(MediaPlayer.Event event) {
         if (!isPrepaired && mediaItem instanceof Podcast) {//Try to continue for last position
-            String lastPosition = SettingsManager.getInstace().getPareSettingValue(SettingsManager.JS_EPISODS_POSITIONS,
-                    ((Podcast) mediaItem).getSelectedTrack().getTitle());
-            if (!lastPosition.isEmpty()) {
-                seekTo(Integer.valueOf(lastPosition));
+            int lastPosition = ProfileManager.getInstance().getTrackPosition(((Podcast) mediaItem).getSelectedTrack());
+            if (lastPosition > 0) {
+                seekTo(lastPosition);
             }
         }
         if (event.type == MediaPlayer.Event.Playing) {

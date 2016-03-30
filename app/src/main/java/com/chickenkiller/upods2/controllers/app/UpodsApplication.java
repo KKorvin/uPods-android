@@ -45,21 +45,12 @@ public class UpodsApplication extends Application {
 
         super.onCreate();
 
-        runNetworkTasksService();
         runMainService();
         setAlarmManagerTasks();
     }
 
     private void runMainService() {
         startService(new Intent(this, MainService.class));
-    }
-
-    private void runNetworkTasksService() {
-        if (SettingsManager.getInstace().getBooleanSettingsValue(SettingsManager.JS_NOTIFY_EPISODS)) {
-            Intent intent = new Intent(this, NetworkTasksService.class);
-            intent.setAction(NetworkTasksService.ACTION_CHECK_FOR_NEW_EPISODS);
-            startService(intent);
-        }
     }
 
     public static void setAlarmManagerTasks() {
@@ -72,7 +63,7 @@ public class UpodsApplication extends Application {
         if (SettingsManager.getInstace().getBooleanSettingsValue(SettingsManager.JS_NOTIFY_EPISODS)) {
             long intervel = SettingsManager.getInstace().getIntSettingsValue(SettingsManager.JS_PODCASTS_UPDATE_TIME);
             intervel = TimeUnit.HOURS.toMillis(intervel);
-            //intervel = 3000;
+            Logger.printInfo("Episodes update interval", String.valueOf(intervel));
             alarmMgr.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
                     intervel,
                     intervel, alarmIntent);

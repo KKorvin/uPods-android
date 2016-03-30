@@ -31,8 +31,6 @@ public class SettingsManager {
     public static final String JS_NOTIFY_EPISODS = "notify_episods";
     public static final String JS_STREAM_QUALITY = "stream_quality";
     public static final String JS_SELECTED_STREAM_QUALITY = "selected_stream_quality";
-    public static final String JS_PLAYED_EPISODS = "played_episods";
-    public static final String JS_EPISODS_POSITIONS = "episods_positions";
 
     public static final String DEFAULT_STREAM_QUALITY = "hight";
 
@@ -65,8 +63,6 @@ public class SettingsManager {
                 settingsObject.put(JS_PODCASTS_UPDATE_TIME, DEFAULT_PODCAST_UPDATE_TIME);
                 settingsObject.put(JS_STREAM_QUALITY, DEFAULT_STREAM_QUALITY);
                 settingsObject.put(JS_SELECTED_STREAM_QUALITY, new JSONArray());
-                settingsObject.put(JS_PLAYED_EPISODS, new JSONArray());
-                settingsObject.put(JS_EPISODS_POSITIONS, new JSONArray());
                 Prefs.putString(JS_SETTINGS, settingsObject.toString());
             }
             return new JSONObject(Prefs.getString(JS_SETTINGS, null));
@@ -134,16 +130,6 @@ public class SettingsManager {
      * @param value
      */
     public void putSettingsValue(String key, Object value) {
-        putSettingsValue(key, value, true);
-    }
-
-    /**
-     * Automaticly saves settings
-     *
-     * @param key
-     * @param value
-     */
-    public void putSettingsValue(String key, Object value, boolean needSync) {
         try {
             JSONObject settingsObject = readSettings();
             if (value instanceof Integer) {
@@ -168,7 +154,7 @@ public class SettingsManager {
                 newStreamsArray.put(streamForItem);
                 settingsObject.put(key, newStreamsArray);
             }
-            saveSettings(settingsObject, needSync);
+            saveSettings(settingsObject);
         } catch (JSONException e) {
             Logger.printInfo(TAG, "Can't put value for key: " + key + " to json settings");
             e.printStackTrace();
@@ -190,14 +176,10 @@ public class SettingsManager {
     }
 
 
-    public void saveSettings(JSONObject settingsObject, boolean needSync) {
+    public void saveSettings(JSONObject settingsObject) {
         if (settingsObject != null) {
             Prefs.putString(JS_SETTINGS, settingsObject.toString());
         }
-    }
-
-    public void saveSettings(JSONObject settings) {
-        saveSettings(settings, true);
     }
 
 }

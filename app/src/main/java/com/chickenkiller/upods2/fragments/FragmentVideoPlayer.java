@@ -18,7 +18,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.chickenkiller.upods2.R;
-import com.chickenkiller.upods2.controllers.app.SettingsManager;
+import com.chickenkiller.upods2.controllers.app.ProfileManager;
 import com.chickenkiller.upods2.controllers.player.UniversalPlayer;
 import com.chickenkiller.upods2.controllers.player.VideoPlayerPositionUpdater;
 import com.chickenkiller.upods2.interfaces.IOnPositionUpdatedCallback;
@@ -334,10 +334,12 @@ public class FragmentVideoPlayer extends Fragment implements IVLCVout.Callback, 
                 if (!isVideoPlayerReady) {
                     isVideoPlayerReady = true;
                     pbLoading.setVisibility(View.GONE);
-                    String lastPosition = SettingsManager.getInstace().getPareSettingValue(SettingsManager.JS_EPISODS_POSITIONS,
-                            ((Podcast) UniversalPlayer.getInstance().getPlayingMediaItem()).getSelectedTrack().getTitle());
-                    if (!lastPosition.isEmpty()) {
-                        mMediaPlayer.setTime(Integer.valueOf(lastPosition));
+                    MediaItem mediaItem = UniversalPlayer.getInstance().getPlayingMediaItem();
+                    if (mediaItem instanceof Podcast) {
+                        int position = ProfileManager.getInstance().getTrackPosition(((Podcast) mediaItem).getSelectedTrack());
+                        if (position > 0) {
+                            mMediaPlayer.setTime(position);
+                        }
                     }
                 }
             }

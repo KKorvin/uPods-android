@@ -92,7 +92,7 @@ public class SyncMaster extends AsyncTask<Void, JSONObject, Void> {
             if (getUserResult.getJSONObject("result").has("settings")) {
                 JSONObject settings = new JSONObject(getUserResult.getJSONObject("result").getString("settings"));
                 SettingsManager.getInstace().readSettings(settings);
-                SettingsManager.getInstace().saveSettings(settings, false);
+                SettingsManager.getInstace().saveSettings(settings);
             }
         }
         profilePulled = true;

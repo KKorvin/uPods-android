@@ -64,7 +64,6 @@ public class ProfileManager {
         this.profileSavedCallback = profileSavedCallback;
     }
 
-
     private ArrayList<Long> getMediaListIds(String mediaType, String listType) {
         SQLiteDatabase database = UpodsApplication.getDatabaseManager().getReadableDatabase();
         String[] args1 = {mediaType, listType};
@@ -206,13 +205,13 @@ public class ProfileManager {
                 File episodeFile = new File(episode.getAudeoUrl());
                 episodeFile.delete();
                 episode.isDownloaded = false;
-                if(!episode.isNew){
+                if (!episode.isNew) {
                     episode.remove();
                 }
             } else if (listType.equals(MediaListItem.NEW)) {
                 episode.isNew = false;
                 type = Episode.NEW;
-                if(!episode.isDownloaded){
+                if (!episode.isDownloaded) {
                     episode.remove();
                 }
             }
@@ -245,6 +244,17 @@ public class ProfileManager {
         return getRadioStationsForMediaType(MediaListItem.RECENT);
     }
 
+    public int getTrackPosition(Track track) {
+        int trackPostion = -1;
+        SQLiteDatabase database = UpodsApplication.getDatabaseManager().getReadableDatabase();
+        String args[] = {track.getTitle()};
+        Cursor cursor = database.rawQuery("SELECT position FROM tracks_positions WHERE track_name = ?", args);
+        if (cursor.getCount() > 0) {
+            cursor.moveToFirst();
+            trackPostion = cursor.getInt(cursor.getColumnIndex("position"));
+        }
+        return trackPostion;
+    }
 
     public void addSubscribedMediaItem(MediaItem mediaItem) {
         if (!mediaItem.isSubscribed) {
@@ -295,6 +305,14 @@ public class ProfileManager {
 
     public void addDownloadedTrack(MediaItem mediaItem, Track track) {
         addTrack(mediaItem, track, MediaListItem.DOWNLOADED);
+    }
+
+    public void saveTrackPosition(Track track, int position) {
+        SQLiteDatabase database = UpodsApplication.getDatabaseManager().getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("track_name", track.getTitle());
+        values.put("position", position);
+        database.replace("tracks_positions", null, values);
     }
 
     public void removeNewTrack(MediaItem mediaItem, Track track) {

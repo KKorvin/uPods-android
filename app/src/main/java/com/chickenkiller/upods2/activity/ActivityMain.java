@@ -77,6 +77,7 @@ public class ActivityMain extends BasicActivity implements IOverlayable, IToolba
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().setBackgroundDrawable(null);
         setContentView(R.layout.activity_main);
         vOverlay = findViewById(R.id.vOverlay);
 
