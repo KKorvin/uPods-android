@@ -38,7 +38,7 @@ public class UniversalPlayer implements MediaPlayer.EventListener {
 
     private static final long RECONNECT_RATE = 5000;
 
-    public enum State {PLAYING, PAUSED}
+    public enum State {PLAYING, PAUSED, END_REACHED}
 
     public static final String INTENT_ACTION_PLAY = "com.chickenkiller.upods2.player.PLAY";
     public static final String INTENT_ACTION_PAUSE = "com.chickenkiller.upods2.player.PAUSE";
@@ -387,6 +387,11 @@ public class UniversalPlayer implements MediaPlayer.EventListener {
                 seekTo(lastPosition);
             }
         }
+        /*if (event.type == MediaPlayer.Event.EndReached) {
+            if (playerStateListener != null) {
+                playerStateListener.onStateChanged(State.END_REACHED);
+            }
+        }*/
         if (event.type == MediaPlayer.Event.Playing) {
             isPrepaired = true;
             if (playerStateListener != null) {

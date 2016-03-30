@@ -53,7 +53,7 @@ dependencies {
     //Dependencies for core functionality
     compile 'com.github.bumptech.glide:glide:3.6.1'
     compile 'com.squareup.okhttp3:okhttp:3.0.1'
-    compile "de.mrmaffen:vlc-android-sdk:3.0.0"
+    compile "de.mrmaffen:vlc-android-sdk:1.9.0"
 
     //Dependencies for UI components
     compile 'com.lsjwzh:recyclerviewpager:+'

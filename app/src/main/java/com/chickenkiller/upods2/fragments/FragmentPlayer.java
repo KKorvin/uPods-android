@@ -76,8 +76,6 @@ public class FragmentPlayer extends Fragment implements IPlayerStateListener {
     private long maxDuration = -1;
     private boolean isChangingProgress = false;
     private boolean isFirstRun = true;
-    private boolean isPlayerUIConfiged = false;
-    private boolean isPlayerStateChanged = false;
 
     private View.OnClickListener btnPlayStopClickListener = new View.OnClickListener() {
         @Override

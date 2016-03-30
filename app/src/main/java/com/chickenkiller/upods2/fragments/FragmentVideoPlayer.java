@@ -40,7 +40,7 @@ import java.util.ArrayList;
 /**
  * Created by alonzilberman on 7/27/15.
  */
-public class FragmentVideoPlayer extends Fragment implements IVLCVout.Callback, LibVLC.HardwareAccelerationError, MediaPlayer.EventListener {
+public class FragmentVideoPlayer extends Fragment implements IVLCVout.Callback, MediaPlayer.EventListener {
 
     public static String TAG = "FragmentVideoPlayer";
 
@@ -252,7 +252,6 @@ public class FragmentVideoPlayer extends Fragment implements IVLCVout.Callback, 
             options.add("--audio-time-stretch"); // time stretching
             options.add("-vvv"); // verbosity
             libvlc = new LibVLC(options);
-            libvlc.setOnHardwareAccelerationError(this);
             shVideoHolder.setKeepScreenOn(true);
 
             // Create media player
@@ -302,15 +301,6 @@ public class FragmentVideoPlayer extends Fragment implements IVLCVout.Callback, 
         this.onPlayingFailedCallback = onPlayingFailedCallback;
     }
 
-    @Override
-    public void eventHardwareAccelerationError() {
-        // Handle errors with hardware acceleration
-        Logger.printError(TAG, "Error with hardware acceleration");
-        this.releasePlayer();
-        if (onPlayingFailedCallback != null) {
-            onPlayingFailedCallback.operationFinished();
-        }
-    }
 
     @Override
     public void onNewLayout(IVLCVout vlcVout, int width, int height, int visibleWidth, int visibleHeight, int sarNum, int sarDen) {
@@ -358,5 +348,15 @@ public class FragmentVideoPlayer extends Fragment implements IVLCVout.Callback, 
     @Override
     public void onSurfacesDestroyed(IVLCVout vlcVout) {
 
+    }
+
+    @Override
+    public void onHardwareAccelerationError(IVLCVout vlcVout) {
+        // Handle errors with hardware acceleration
+        Logger.printError(TAG, "Error with hardware acceleration");
+        this.releasePlayer();
+        if (onPlayingFailedCallback != null) {
+            onPlayingFailedCallback.operationFinished();
+        }
     }
 }
