@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -37,7 +38,7 @@ public class GlobalUtils {
     }
 
     public static String getCurrentDateTimeUS() {
-        DateFormat df = new SimpleDateFormat("d MMM, HH:mm");
+        DateFormat df = new SimpleDateFormat("d MMM, HH:mm", Locale.US);
         String date = df.format(Calendar.getInstance().getTime());
         Logger.printInfo("Sync date", date);
         return date;
@@ -45,9 +46,9 @@ public class GlobalUtils {
 
     public static String parserDateToMonth(String date) {
         try {
-            SimpleDateFormat dateFormat = new SimpleDateFormat("EEE, dd MMM yyyy hh:mm:ss Z");
+            SimpleDateFormat dateFormat = new SimpleDateFormat("EEE, dd MMM yyyy hh:mm:ss Z", Locale.US);
             Date inputDate = dateFormat.parse(date);
-            dateFormat = new SimpleDateFormat("MMM\ndd");
+            dateFormat = new SimpleDateFormat("MMM\ndd", Locale.US);
             date = dateFormat.format(inputDate);
         } catch (ParseException e) {
             e.printStackTrace();
