@@ -142,12 +142,14 @@ public class ProfileManager {
     private void addTrack(MediaItem mediaItem, Track track, String listType) {
         if (mediaItem instanceof Podcast && track instanceof Episode) {
             SQLiteDatabase database = UpodsApplication.getDatabaseManager().getWritableDatabase();
+            boolean isNotifyChanges = false;
             Podcast podcast = (Podcast) mediaItem;
             Episode episode = (Episode) track;
 
             //1. Save episode/podcast if needed
             if (!podcast.isExistsInDb) {
                 podcast.save();
+                isNotifyChanges = true;
             }
             if (!episode.isExistsInDb) {
                 episode.save(podcast.id);
@@ -167,7 +169,6 @@ public class ProfileManager {
             if ((!episode.isDownloaded && listType.equals(MediaListItem.DOWNLOADED)) ||
                     (!episode.isNew && listType.equals(MediaListItem.NEW))) {
                 ContentValues values = new ContentValues();
-                values = new ContentValues();
                 values.put("podcast_id", podcast.id);
                 values.put("episode_id", episode.id);
                 values.put("type", listType);
@@ -178,12 +179,16 @@ public class ProfileManager {
             if (listType.equals(MediaListItem.DOWNLOADED)) {
                 podcast.isDownloaded = true;
                 episode.isDownloaded = true;
+                if (isNotifyChanges) {
+                    notifyChanges(new ProfileUpdateEvent(MediaListItem.DOWNLOADED, mediaItem, false));
+                }
             } else if (listType.equals(MediaListItem.NEW)) {
                 podcast.hasNewEpisodes = true;
                 episode.isNew = true;
+                if (isNotifyChanges) {
+                    notifyChanges(new ProfileUpdateEvent(MediaListItem.NEW, mediaItem, false));
+                }
             }
-
-            notifyChanges(new ProfileUpdateEvent(MediaListItem.DOWNLOADED, mediaItem, false));
         }
     }
 

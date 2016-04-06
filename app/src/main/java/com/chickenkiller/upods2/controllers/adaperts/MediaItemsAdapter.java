@@ -382,6 +382,15 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         }
     }
 
+    public boolean containsMediaItem(MediaItem mediaItem) {
+        for (IMediaItemView mediaItemView : items) {
+            if (mediaItemView instanceof MediaItem && GlobalUtils.safeTitleEquals(mediaItem.getName(), ((MediaItem) mediaItemView).getName())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public void updateMediaItem(MediaItem updatedMediaItem) {
         /*for (IMediaItemView mediaItemView : items) {
             if (mediaItemView instanceof MediaItem

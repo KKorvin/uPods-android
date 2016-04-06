@@ -294,6 +294,7 @@ public class FragmentMediaItemDetails extends Fragment implements View.OnTouchLi
 
     private void loadTracks() {
         if (playableItem instanceof Podcast && mediaItemType == MediaItemType.PODCAST_DOWNLOADED && !((Podcast) playableItem).getEpisodes().isEmpty()) {
+            playableItem.syncWithDB();
             tracksAdapter.addItems(((Podcast) playableItem).getEpisodes());
             rvTracks.setVisibility(View.VISIBLE);
             pbTracks.setVisibility(View.GONE);
