@@ -149,7 +149,6 @@ public class ProfileManager {
             //1. Save episode/podcast if needed
             if (!podcast.isExistsInDb) {
                 podcast.save();
-                isNotifyChanges = true;
             }
             if (!episode.isExistsInDb) {
                 episode.save(podcast.id);
@@ -163,6 +162,7 @@ public class ProfileManager {
                 values.put("media_type", MediaListItem.TYPE_PODCAST);
                 values.put("list_type", listType);
                 database.insert("media_list", null, values);
+                isNotifyChanges = true;
             }
 
             //3. Create podcasts_episodes_rel
