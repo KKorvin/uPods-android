@@ -290,10 +290,11 @@ public class UniversalPlayer implements MediaPlayer.EventListener {
             return false;
         }
         if (this.mediaItem instanceof Podcast && mediaItem instanceof Podcast) {
-            return ((Podcast) this.mediaItem).getSelectedTrack().getTitle().equals(((Podcast) mediaItem).getSelectedTrack().getTitle());
+            return GlobalUtils.safeTitleEquals(((Podcast) this.mediaItem).getSelectedTrack().getTitle(),
+                    ((Podcast) mediaItem).getSelectedTrack().getTitle());
         }
 
-        return this.mediaItem.getName().equals(mediaItem.getName());
+        return GlobalUtils.safeTitleEquals(this.mediaItem.getName(), mediaItem.getName());
 
     }
 
