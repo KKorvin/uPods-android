@@ -293,11 +293,23 @@ public class FragmentMediaItemDetails extends Fragment implements View.OnTouchLi
     }
 
     private void loadTracks() {
-        if (playableItem instanceof Podcast && mediaItemType == MediaItemType.PODCAST_DOWNLOADED && !((Podcast) playableItem).getEpisodes().isEmpty()) {
-            playableItem.syncWithDB();
-            tracksAdapter.addItems(((Podcast) playableItem).getEpisodes());
-            rvTracks.setVisibility(View.VISIBLE);
-            pbTracks.setVisibility(View.GONE);
+        //If we are shwoing from downloaded fragment -> show only downloaded
+        if (playableItem instanceof Podcast && mediaItemType == MediaItemType.PODCAST_DOWNLOADED
+                && !((Podcast) playableItem).getEpisodes().isEmpty()) {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    playableItem.syncWithDB();
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            tracksAdapter.addItems(((Podcast) playableItem).getEpisodes());
+                            rvTracks.setVisibility(View.VISIBLE);
+                            pbTracks.setVisibility(View.GONE);
+                        }
+                    });
+                }
+            }).run();
             return;
         }
 
@@ -305,6 +317,9 @@ public class FragmentMediaItemDetails extends Fragment implements View.OnTouchLi
                     @Override
                     public void onRequestSuccessed(final String response) {
                         if (isAdded()) {
+                            //Before fetching episodes sync with db
+                            playableItem.syncWithDB();
+
                             final ArrayList<Episode> parsedEpisodes = new ArrayList<Episode>();
                             try {
                                 SAXParserFactory spf = SAXParserFactory.newInstance();

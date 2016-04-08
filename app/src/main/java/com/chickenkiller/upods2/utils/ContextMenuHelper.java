@@ -65,6 +65,7 @@ public class ContextMenuHelper {
                 for (Episode episode : podcast.getEpisodes()) {
                     ProfileManager.getInstance().removeDownloadedTrack(podcast, episode);
                 }
+                podcast.getEpisodes().clear();
                 contextItemSelected.operationFinished();
             }
         });
@@ -74,6 +75,12 @@ public class ContextMenuHelper {
     public static void removeDonwloadedTrack(Activity activity, Track track, MediaItem mediaItem,
                                              final IOperationFinishCallback contextItemSelected) {
         ProfileManager.getInstance().removeDownloadedTrack(mediaItem, track);
+        Podcast podcast = (Podcast) mediaItem;
+        for (int i = 0; i < podcast.getEpisodes().size(); i++) {
+            if (GlobalUtils.safeTitleEquals(podcast.getEpisodes().get(i).getTitle(), track.getTitle())) {
+                podcast.getEpisodes().remove(i);
+            }
+        }
         contextItemSelected.operationFinished();
         Toast.makeText(activity, R.string.episod_removed, Toast.LENGTH_SHORT).show();
     }

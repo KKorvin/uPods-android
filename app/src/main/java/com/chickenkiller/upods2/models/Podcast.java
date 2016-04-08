@@ -410,8 +410,10 @@ public class Podcast extends MediaItem {
             }
         }
         cursor.close();
-        
+
         ArrayList<Episode> existingEpisodes = Episode.withPodcastId(id);
+        episodes.clear();
+
         for (Episode episode : existingEpisodes) {
             Episode podcastEpisode = Episode.getEpisodByTitle(episodes, episode.getTitle());
             if (podcastEpisode == null) {
