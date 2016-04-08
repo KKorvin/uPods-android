@@ -22,6 +22,8 @@ public abstract class PlayerNotificationPanel {
     protected RemoteViews remoteView;
     protected MediaItem mediaItem;
 
+    protected UniversalPlayer.State currentState;
+
     public PlayerNotificationPanel(Context mContext, MediaItem mediaItem) {
         this.mContext = mContext;
         this.mediaItem = mediaItem;
@@ -36,7 +38,10 @@ public abstract class PlayerNotificationPanel {
     }
 
     public void updateNotificationStatus(UniversalPlayer.State state) {
-
+        currentState = state;
     }
 
+    public UniversalPlayer.State getCurrentState() {
+        return currentState;
+    }
 }

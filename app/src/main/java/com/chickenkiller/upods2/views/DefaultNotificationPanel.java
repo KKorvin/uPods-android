@@ -23,7 +23,7 @@ import com.chickenkiller.upods2.utils.ui.UIHelper;
  * Created by alonzilberman on 7/31/15.
  */
 public class DefaultNotificationPanel extends PlayerNotificationPanel {
-    private static final int COVER_IMAGE_SIZE =  UIHelper.dpToPixels(50);
+    private static final int COVER_IMAGE_SIZE = UIHelper.dpToPixels(50);
     private static int NOTIFICATION_ID = 12;
     private PendingIntent playIntent;
     private PendingIntent pauseIntent;
@@ -32,6 +32,7 @@ public class DefaultNotificationPanel extends PlayerNotificationPanel {
 
     public DefaultNotificationPanel(Context mContext, MediaItem playableMediaItem) {
         super(mContext, playableMediaItem);
+        this.currentState = UniversalPlayer.State.PLAYING;
         this.nBuilder = new NotificationCompat.Builder(mContext);
         this.nBuilder.setContentTitle(playableMediaItem.getName());
         this.nBuilder.setContentInfo(playableMediaItem.getName());

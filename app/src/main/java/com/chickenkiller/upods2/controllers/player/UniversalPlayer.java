@@ -164,6 +164,7 @@ public class UniversalPlayer implements MediaPlayer.EventListener {
                         notificationPanel.notificationCancel();
                     }
                     notificationPanel = new DefaultNotificationPanel(UpodsApplication.getContext(), mediaItem);
+                    notificationPanel.updateNotificationStatus(State.PLAYING);
                 }
             };
             mainHandler.post(myRunnable);
@@ -211,18 +212,12 @@ public class UniversalPlayer implements MediaPlayer.EventListener {
     public void start() {
         if (mediaPlayer != null) {
             mediaPlayer.play();
-            if (notificationPanel != null) {
-                notificationPanel.updateNotificationStatus(State.PLAYING);
-            }
         }
     }
 
     public void pause() {
         if (mediaPlayer != null && mediaPlayer.isPlaying()) {
             mediaPlayer.pause();
-            if (notificationPanel != null) {
-                notificationPanel.updateNotificationStatus(State.PAUSED);
-            }
         }
     }
 
@@ -387,20 +382,30 @@ public class UniversalPlayer implements MediaPlayer.EventListener {
                 seekTo(lastPosition);
             }
         }
-        /*if (event.type == MediaPlayer.Event.EndReached) {
+        if (event.type == MediaPlayer.Event.EndReached) {
             if (playerStateListener != null) {
                 playerStateListener.onStateChanged(State.END_REACHED);
             }
-        }*/
+        }
         if (event.type == MediaPlayer.Event.Playing) {
             isPrepaired = true;
             if (playerStateListener != null) {
                 playerStateListener.onStateChanged(State.PLAYING);
+
+                //To make sure notification panel is in correct state
+                if (notificationPanel != null && notificationPanel.getCurrentState() != State.PLAYING) {
+                    notificationPanel.updateNotificationStatus(State.PLAYING);
+                }
             }
         } else if (event.type == MediaPlayer.Event.Paused) {
             isPrepaired = true;
             if (playerStateListener != null) {
                 playerStateListener.onStateChanged(State.PAUSED);
+
+                //To make sure notification panel is in correct state
+                if (notificationPanel != null && notificationPanel.getCurrentState() != State.PAUSED) {
+                    notificationPanel.updateNotificationStatus(State.PAUSED);
+                }
             }
         } else if (event.type == MediaPlayer.Event.EndReached) {
             if (mediaPlayer.getLength() == 0) {
