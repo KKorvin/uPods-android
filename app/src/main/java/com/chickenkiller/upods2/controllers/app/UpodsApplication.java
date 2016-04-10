@@ -63,8 +63,8 @@ public class UpodsApplication extends Application {
 
         if (SettingsManager.getInstace().getBooleanSettingsValue(SettingsManager.JS_NOTIFY_EPISODS)) {
             long interval = SettingsManager.getInstace().getIntSettingsValue(SettingsManager.JS_PODCASTS_UPDATE_TIME);
-            //intervel = TimeUnit.HOURS.toMillis(intervel);
-            interval = TimeUnit.SECONDS.toMillis(30);
+            interval = TimeUnit.HOURS.toMillis(interval);
+            //interval = TimeUnit.SECONDS.toMillis(30);
             alarmMgr.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
                     SystemClock.elapsedRealtime(),
                     interval, alarmIntent);
