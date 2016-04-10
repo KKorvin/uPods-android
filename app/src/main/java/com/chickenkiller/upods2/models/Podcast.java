@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.chickenkiller.upods2.controllers.app.UpodsApplication;
+import com.chickenkiller.upods2.utils.GlobalUtils;
 import com.chickenkiller.upods2.utils.Logger;
 
 import org.json.JSONArray;
@@ -185,6 +186,9 @@ public class Podcast extends MediaItem {
     }
 
     public void setTracks(ArrayList<? extends Track> tracks) {
+        if (this.episodes != null) {
+            this.episodes.clear();
+        }
         this.episodes = (ArrayList<Episode>) tracks;
     }
 
@@ -452,5 +456,34 @@ public class Podcast extends MediaItem {
                 }
             }
         }
+    }
+
+
+    public static void syncNewEpisodes(ArrayList<Podcast> podcasts) {
+        SQLiteDatabase database = UpodsApplication.getDatabaseManager().getReadableDatabase();
+        String args[] = {MediaListItem.TYPE_PODCAST, MediaListItem.NEW};
+        Cursor cursor = database.rawQuery("SELECT p.id, p.name, m.list_type FROM podcasts as p " +
+                "LEFT JOIN media_list as m ON p.id = m.media_id " +
+                "WHERE m.media_type =  ? AND m.list_type =  ?", args);
+        while (cursor.moveToNext()) {
+            long id = cursor.getLong(cursor.getColumnIndex("id"));
+            for (Podcast podcast : podcasts) {
+                if (podcast.id == id) {
+                    podcast.hasNewEpisodes = true;
+                    ArrayList<Episode> existingEpisodes = Episode.withPodcastId(podcast.id);
+                    podcast.getEpisodes().addAll(existingEpisodes);
+                }
+            }
+        }
+        cursor.close();
+    }
+
+    public static boolean hasEpisodeWithTitle(Podcast podcast, Episode episodeToCheck) {
+        for (Episode episode : podcast.getEpisodes()) {
+            if (GlobalUtils.safeTitleEquals(episode.getTitle(), episodeToCheck.getTitle())) {
+                return true;
+            }
+        }
+        return false;
     }
 }

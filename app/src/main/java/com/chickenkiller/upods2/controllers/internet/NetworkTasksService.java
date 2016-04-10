@@ -118,10 +118,15 @@ public class NetworkTasksService extends IntentService {
     }
 
     private void sendNewEpisodsNotification(final Podcast podcast) {
+        StringBuilder titleStringBuilder = new StringBuilder();
+        titleStringBuilder.append(podcast.getNewEpisodsCount());
+        titleStringBuilder.append(" ");
+        titleStringBuilder.append(podcast.getNewEpisodsCount() > 0 ? getString(R.string.new_episodes) : getString(R.string.new_episode));
+
         NotificationCompat.Builder nBuilder = new NotificationCompat.Builder(this);
         nBuilder.setContentTitle(podcast.getName());
         nBuilder.setContentInfo(podcast.getName());
-        nBuilder.setContentText(String.valueOf(podcast.getNewEpisodsCount()) + " " + getString(R.string.new_episods));
+        nBuilder.setContentText(titleStringBuilder.toString());
         nBuilder.setSmallIcon(R.mipmap.ic_launcher);
 
         try {

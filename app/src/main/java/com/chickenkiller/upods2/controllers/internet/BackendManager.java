@@ -46,7 +46,6 @@ public class BackendManager {
     private static long SIZE_OF_CACHE = 10 * 1024 * 1024; // 10 MB
 
     private final OkHttpClient client;
-    private final int MAX_RETRY = 5;
     private static BackendManager backendManager;
     private ArrayList<QueueTask> searchQueue;
 

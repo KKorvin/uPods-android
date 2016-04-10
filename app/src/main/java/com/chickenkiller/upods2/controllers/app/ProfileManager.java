@@ -104,6 +104,9 @@ public class ProfileManager {
             podcasts.add(podcast);
         }
         cursor.close();
+
+        Podcast.syncNewEpisodes(podcasts);
+
         return podcasts;
     }
 
@@ -185,6 +188,9 @@ public class ProfileManager {
             } else if (listType.equals(MediaListItem.NEW)) {
                 podcast.hasNewEpisodes = true;
                 episode.isNew = true;
+                if (!Podcast.hasEpisodeWithTitle(podcast, episode)) {
+                    podcast.getEpisodes().add(episode);
+                }
                 if (isNotifyChanges) {
                     notifyChanges(new ProfileUpdateEvent(MediaListItem.NEW, mediaItem, false));
                 }
@@ -197,7 +203,7 @@ public class ProfileManager {
             SQLiteDatabase database = UpodsApplication.getDatabaseManager().getWritableDatabase();
             Podcast podcast = (Podcast) mediaItem;
             Episode episode = (Episode) track;
-            String type = Episode.DOWNLOADED;
+            String type = MediaListItem.DOWNLOADED;
 
             //Remove reletionships -> then remove episode
             String args[] = {String.valueOf(podcast.id), String.valueOf(episode.id), type};
@@ -212,7 +218,7 @@ public class ProfileManager {
                 }
             } else if (listType.equals(MediaListItem.NEW)) {
                 episode.isNew = false;
-                type = Episode.NEW;
+                type = MediaListItem.NEW;
                 if (!episode.isDownloaded) {
                     episode.remove();
                 }
@@ -267,8 +273,8 @@ public class ProfileManager {
                 if (!mediaItem.isExistsInDb) {
                     podcast.save();
                 }
+                Feed.removeFeed(podcast.getFeedUrl());
                 Feed.saveAsFeed(podcast.getFeedUrl(), podcast.getEpisodes(), true);
-
             } else if (mediaItem instanceof RadioItem) {
                 if (!mediaItem.isExistsInDb) {
                     ((RadioItem) mediaItem).save();

@@ -100,6 +100,20 @@ public class Feed {
         }
     }
 
+    public static void removeFeed(String url) {
+        url = SimpleCacheManager.getInstance().shortifyFileName(url);
+        File cacheStorage = new File(UpodsApplication.getContext().getFilesDir() + FEEDS_FOLDER);
+        if (cacheStorage != null && cacheStorage.list() != null) {
+            for (String fileName : cacheStorage.list()) {
+                if (fileName.contains(url)) {
+                    File cacheFile = new File(UpodsApplication.getContext().getFilesDir() + FEEDS_FOLDER + fileName);
+                    cacheFile.delete();
+                }
+            }
+        }
+    }
+
+
     public static Feed getFeedIfExists(String url) {
         url = SimpleCacheManager.getInstance().shortifyFileName(url);
         File cacheStorage = new File(UpodsApplication.getContext().getFilesDir() + FEEDS_FOLDER);
@@ -134,7 +148,6 @@ public class Feed {
         if (feed != null && !feed.episodes.isEmpty()) {
             for (Episode latestEpisode : latestEpisodes) {
                 if (!Episode.hasEpisodWithTitle(feed.episodes, latestEpisode)) {//Check if new eipsode is not saved in local feed
-                    Logger.printInfo("OLOLOLOOLOL", "EPISODE!!!");
                     ProfileManager.getInstance().addNewTrack(podcast, latestEpisode);
                     hasUpdates = true;
                 }

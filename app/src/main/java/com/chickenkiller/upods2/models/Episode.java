@@ -21,8 +21,6 @@ import java.util.ArrayList;
  */
 public class Episode extends Track {
     private static final String TABLE = "episodes";
-    public static final String DOWNLOADED = "downloaded";
-    public static final String NEW = "recent";
     private static String EPISODE_LOG = "EPISODE";
     private String summary;
     private String length;
@@ -221,9 +219,9 @@ public class Episode extends Track {
                 episode.pathOnDisk = cursor.getString(cursor.getColumnIndex("pathOnDisk"));
             }
 
-            if (cursor.getString(cursor.getColumnIndex("type")).equals(DOWNLOADED)) {
+            if (cursor.getString(cursor.getColumnIndex("type")).equals(MediaListItem.DOWNLOADED)) {
                 episode.isDownloaded = true;
-            } else if (cursor.getString(cursor.getColumnIndex("type")).equals(NEW)) {
+            } else if (cursor.getString(cursor.getColumnIndex("type")).equals(MediaListItem.NEW)) {
                 episode.isNew = true;
             }
 

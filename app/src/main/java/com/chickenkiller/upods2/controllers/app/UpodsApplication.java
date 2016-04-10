@@ -62,11 +62,12 @@ public class UpodsApplication extends Application {
                 PendingIntent.FLAG_UPDATE_CURRENT);
 
         if (SettingsManager.getInstace().getBooleanSettingsValue(SettingsManager.JS_NOTIFY_EPISODS)) {
-            long intervel = SettingsManager.getInstace().getIntSettingsValue(SettingsManager.JS_PODCASTS_UPDATE_TIME);
-            intervel = TimeUnit.HOURS.toMillis(intervel);
-            alarmMgr.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
-                    SystemClock.elapsedRealtime() + intervel,
-                    SystemClock.elapsedRealtime() + intervel, alarmIntent);
+            long interval = SettingsManager.getInstace().getIntSettingsValue(SettingsManager.JS_PODCASTS_UPDATE_TIME);
+            //intervel = TimeUnit.HOURS.toMillis(intervel);
+            interval = TimeUnit.SECONDS.toMillis(30);
+            alarmMgr.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
+                    SystemClock.elapsedRealtime(),
+                    interval, alarmIntent);
             Logger.printInfo(TAG, "Alarm managers - Episods check for updates task added");
         } else {
             alarmIntent.cancel();
