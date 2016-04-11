@@ -22,6 +22,8 @@ public class Feed {
 
     private static final String FEEDS_FOLDER = "/feeds/";
     private static final String LOG_TAG = "Feed";
+    private static boolean isUpdating = false;
+
     private String url;
     private ArrayList<Episode> episodes;
 
@@ -142,7 +144,11 @@ public class Feed {
         return null;
     }
 
-    public static boolean handleUpdates(ArrayList<Episode> latestEpisodes, Podcast podcast) {
+    public static synchronized boolean handleUpdates(ArrayList<Episode> latestEpisodes, Podcast podcast) {
+        if (isUpdating) {
+            return false;
+        }
+        isUpdating = true;
         //sync podcasts_episodes_rel and episodes with current episodes in feed to make sure we don't store old episodes
         Episode.syncDbWithLatestEpisodes(podcast, latestEpisodes);
         boolean hasUpdates = false;
@@ -157,6 +163,7 @@ public class Feed {
             SimpleCacheManager.getInstance().removeFromCache(podcast.getFeedUrl());
         }
         saveAsFeed(podcast.getFeedUrl(), latestEpisodes);
+        isUpdating = false;
         return hasUpdates;
     }
 

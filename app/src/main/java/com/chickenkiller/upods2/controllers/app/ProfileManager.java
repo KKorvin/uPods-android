@@ -3,6 +3,7 @@ package com.chickenkiller.upods2.controllers.app;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Looper;
 
 import com.chickenkiller.upods2.controllers.database.SQLdatabaseManager;
 import com.chickenkiller.upods2.interfaces.IOperationFinishWithDataCallback;
@@ -191,7 +192,7 @@ public class ProfileManager {
                 if (!Podcast.hasEpisodeWithTitle(podcast, episode)) {
                     podcast.getEpisodes().add(episode);
                 }
-                if (isNotifyChanges) {
+                if (Looper.myLooper() == Looper.getMainLooper()) {
                     notifyChanges(new ProfileUpdateEvent(MediaListItem.NEW, mediaItem, false));
                 }
             }

@@ -109,12 +109,14 @@ public class NetworkTasksService extends IntentService {
                     if (Feed.handleUpdates(parsedEpisodes, podcast)) {
                         sendNewEpisodsNotification(podcast);
                     }
+                    Logger.printError(TAG, "Finished for podcast with url: " + podcast.getFeedUrl());
                 } catch (Exception e) {
                     Logger.printError(TAG, "Can't check for updates for podcast with url: " + podcast.getFeedUrl());
                     e.printStackTrace();
                 }
             }
         }
+        Logger.printInfo(TAG, "Finished!");
     }
 
     private void sendNewEpisodsNotification(final Podcast podcast) {

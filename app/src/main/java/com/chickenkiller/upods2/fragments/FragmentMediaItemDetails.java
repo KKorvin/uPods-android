@@ -267,9 +267,6 @@ public class FragmentMediaItemDetails extends Fragment implements View.OnTouchLi
                 if (playableItem.isSubscribed) {
                     ProfileManager.getInstance().removeSubscribedMediaItem(playableItem);
                     btnSubscribe.setText(getString(R.string.subscribe));
-                    if (playableItem instanceof Podcast) {
-                        Feed.saveAsFeed(((Podcast) playableItem).getFeedUrl(), ((Podcast) playableItem).getEpisodes(), true);
-                    }
                 } else {
                     ProfileManager.getInstance().addSubscribedMediaItem(playableItem);
                     btnSubscribe.setText(getString(R.string.unsubscribe));
@@ -348,6 +345,7 @@ public class FragmentMediaItemDetails extends Fragment implements View.OnTouchLi
                                     Podcast podcast = ((Podcast) playableItem);
                                     podcast.setDescription(episodesXMLHandler.getPodcastSummary());
                                     podcast.setTrackCount(String.valueOf(parsedEpisodes.size()));
+                                    Feed.handleUpdates(parsedEpisodes, podcast);
                                     podcast.setTracks(parsedEpisodes);
                                 }
                             } catch (Exception e) {

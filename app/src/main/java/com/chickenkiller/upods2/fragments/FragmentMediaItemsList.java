@@ -132,6 +132,9 @@ public class FragmentMediaItemsList extends Fragment {
                 }
                 mediaItemsAdapter.notifyDataSetChanged();
                 notifyPlaceHolder();
+            } else if (mediaItemType == MediaItemType.PODCAST_FAVORITE && mediaItem instanceof Podcast
+                    && profileUpdateEvent.updateListType.equals(MediaListItem.NEW)) {
+                mediaItemsAdapter.notifyDataSetChanged();
             } else if (mediaItemType == MediaItemType.RADIO_SUBSCRIBED && mediaItem instanceof RadioItem
                     && profileUpdateEvent.updateListType.equals(MediaListItem.SUBSCRIBED)) {
                 if (profileUpdateEvent.isRemoved) {
