@@ -281,7 +281,7 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     private void initCountBlock(ViewHolderCardItem holder, MediaItem currentItem) {
         if (mediaItemType == MediaItemType.PODCAST_FAVORITE && currentItem instanceof Podcast &&
                 ((Podcast) currentItem).getNewEpisodsCount() > 0) {//only for podcasts in favorites
-            int newEpisodesCount = ((Podcast) currentItem).getNewEpisodsCount();
+            long newEpisodesCount = ((Podcast) currentItem).getNewEpisodsCount();
             holder.tvItemCount.setText(String.valueOf(newEpisodesCount));
             holder.tvItemCount.setVisibility(View.VISIBLE);
         } else {

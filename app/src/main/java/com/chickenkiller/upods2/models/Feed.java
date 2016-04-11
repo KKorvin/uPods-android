@@ -143,6 +143,8 @@ public class Feed {
     }
 
     public static boolean handleUpdates(ArrayList<Episode> latestEpisodes, Podcast podcast) {
+        //sync podcasts_episodes_rel and episodes with current episodes in feed to make sure we don't store old episodes
+        Episode.syncDbWithLatestEpisodes(podcast, latestEpisodes);
         boolean hasUpdates = false;
         Feed feed = getFeedIfExists(podcast.getFeedUrl());
         if (feed != null && !feed.episodes.isEmpty()) {

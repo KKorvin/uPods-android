@@ -42,7 +42,7 @@ public class NewEpisodesTest {
 
     public static class ResultBucket {
         boolean hasUpdates;
-        int newEpisodesCount;
+        long newEpisodesCount;
     }
 
 
@@ -86,7 +86,7 @@ public class NewEpisodesTest {
     public void checkBasicNewEpisodesScenario() {
 
         boolean hasUpdates = false;
-        int newEpisodesCount = -1;
+        long newEpisodesCount = -1;
 
         try {
             Request resetRequest = new Request.Builder().url(TEST_FEED_CONTROL + "reset").get().build();
@@ -125,7 +125,7 @@ public class NewEpisodesTest {
     @Test
     public void checkRealPodcastNewEpisodesScenario() {
         boolean hasUpdates = false;
-        int newEpisodesCount = -1;
+        long newEpisodesCount = -1;
 
         try {
             String podcastName = String.valueOf(System.currentTimeMillis()) + "_podcast";

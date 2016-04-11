@@ -318,7 +318,7 @@ public class FragmentMediaItemDetails extends Fragment implements View.OnTouchLi
                     public void onRequestSuccessed(final String response) {
                         if (isAdded()) {
                             //Before fetching episodes sync with db
-                            playableItem.syncWithDB();
+                            //playableItem.syncWithDB();
 
                             final ArrayList<Episode> parsedEpisodes = new ArrayList<Episode>();
                             try {
@@ -339,6 +339,8 @@ public class FragmentMediaItemDetails extends Fragment implements View.OnTouchLi
                                         episodeInList.isNew = episode.isNew;
                                         episodeInList.isExistsInDb = episode.isExistsInDb;
                                         episodeInList.id = episode.id;
+                                    } else if (episode.isNew) {
+                                        ProfileManager.getInstance().removeNewTrack(playableItem, episode);
                                     }
                                 }
 

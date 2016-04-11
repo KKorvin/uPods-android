@@ -105,7 +105,7 @@ public class ProfileManager {
         }
         cursor.close();
 
-        Podcast.syncNewEpisodes(podcasts);
+        Podcast.syncWithDb(podcasts);
 
         return podcasts;
     }
@@ -203,10 +203,9 @@ public class ProfileManager {
             SQLiteDatabase database = UpodsApplication.getDatabaseManager().getWritableDatabase();
             Podcast podcast = (Podcast) mediaItem;
             Episode episode = (Episode) track;
-            String type = MediaListItem.DOWNLOADED;
 
             //Remove reletionships -> then remove episode
-            String args[] = {String.valueOf(podcast.id), String.valueOf(episode.id), type};
+            String args[] = {String.valueOf(podcast.id), String.valueOf(episode.id), listType};
             database.delete("podcasts_episodes_rel", "podcast_id = ? AND episode_id = ? AND type = ?", args);
 
             if (listType.equals(MediaListItem.DOWNLOADED)) {
@@ -218,7 +217,6 @@ public class ProfileManager {
                 }
             } else if (listType.equals(MediaListItem.NEW)) {
                 episode.isNew = false;
-                type = MediaListItem.NEW;
                 if (!episode.isDownloaded) {
                     episode.remove();
                 }
@@ -229,7 +227,8 @@ public class ProfileManager {
                 database.delete("media_list", "media_id = ? AND media_type = ? AND list_type = ?", args2);
                 podcast.isDownloaded = false;
                 notifyChanges(new ProfileUpdateEvent(MediaListItem.DOWNLOADED, mediaItem, true));
-            } else if (listType.equals(MediaListItem.NEW) && podcast.getDownloadedEpisodsCount() == 0) {
+            } else if (listType.equals(MediaListItem.NEW) && podcast.getNewEpisodsCount() == 0) {
+                podcast.hasNewEpisodes = false;
                 String args2[] = {String.valueOf(podcast.id), MediaListItem.TYPE_PODCAST, MediaListItem.NEW};
                 database.delete("media_list", "media_id = ? AND media_type = ? AND list_type = ?", args2);
             }

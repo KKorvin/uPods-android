@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.text.format.Formatter;
 
+import com.chickenkiller.upods2.controllers.app.ProfileManager;
 import com.chickenkiller.upods2.controllers.app.UpodsApplication;
 import com.chickenkiller.upods2.utils.GlobalUtils;
 import com.chickenkiller.upods2.utils.Logger;
@@ -247,6 +248,16 @@ public class Episode extends Track {
             }
         }
         return null;
+    }
+
+    public static void syncDbWithLatestEpisodes(Podcast podcast, ArrayList<Episode> currentEpisodes) {
+        ArrayList<Episode> episodesInDb = withPodcastId(podcast.id);
+        for (Episode episode : episodesInDb) {
+            Episode episodeInCurrentFeed = Episode.getEpisodByTitle(currentEpisodes, episode.getTitle());
+            if (episodeInCurrentFeed == null) {
+                ProfileManager.getInstance().removeNewTrack(podcast, episode);
+            }
+        }
     }
 
 }
