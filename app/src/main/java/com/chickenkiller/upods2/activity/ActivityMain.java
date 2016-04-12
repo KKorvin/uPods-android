@@ -1,6 +1,8 @@
 package com.chickenkiller.upods2.activity;
 
 import android.animation.ObjectAnimator;
+import android.app.NotificationManager;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -16,6 +18,7 @@ import android.widget.Toast;
 import com.chickenkiller.upods2.R;
 import com.chickenkiller.upods2.controllers.app.LoginMaster;
 import com.chickenkiller.upods2.controllers.app.SettingsManager;
+import com.chickenkiller.upods2.controllers.app.UpodsApplication;
 import com.chickenkiller.upods2.controllers.internet.NetworkTasksService;
 import com.chickenkiller.upods2.fragments.FragmentHelp;
 import com.chickenkiller.upods2.fragments.FragmentMediaItemsGrid;
@@ -32,7 +35,6 @@ import com.chickenkiller.upods2.models.MediaItem;
 import com.chickenkiller.upods2.models.Podcast;
 import com.chickenkiller.upods2.models.Track;
 import com.chickenkiller.upods2.utils.ContextMenuHelper;
-import com.chickenkiller.upods2.utils.Logger;
 import com.chickenkiller.upods2.utils.enums.ContextMenuType;
 import com.chickenkiller.upods2.utils.enums.MediaItemType;
 import com.chickenkiller.upods2.utils.ui.UIHelper;
@@ -79,31 +81,19 @@ public class ActivityMain extends BasicActivity implements IOverlayable, IToolba
         super.onCreate(savedInstanceState);
         getWindow().setBackgroundDrawable(null);
         setContentView(R.layout.activity_main);
-        vOverlay = findViewById(R.id.vOverlay);
-
-        //Social
-        callbackManager = CallbackManager.Factory.create();
 
         //Toolbar
         toolbar = (Toolbar) findViewById(R.id.toolbar_main);
-        toolbar.inflateMenu(R.menu.menu_activity_main);
-        toolbar.setOnMenuItemClickListener(this);
-        toolbar.setTitleTextColor(getResources().getColor(R.color.white));
-
-        MenuItem searchMenuItem = toolbar.getMenu().findItem(R.id.action_search);
-        SearchView searchView = (SearchView) searchMenuItem.getActionView();
-        UIHelper.changeSearchViewTextColor(searchView, Color.WHITE);
-
-        slidingMenu = new SlidingMenu(this, toolbar);
 
         int startedFrom = getIntent().getIntExtra(ActivityPlayer.ACTIVITY_STARTED_FROM, -1);
-        //isFirstRun = false;
+
         if (isFirstRun && !Arrays.asList(notificationsActions).contains(startedFrom)) {
             toolbar.setVisibility(View.GONE);
             showFragment(R.id.fl_content, new FragmentWellcome(), FragmentWellcome.TAG);
+            init();
             new Handler().postDelayed(new Runnable() {
                 public void run() {
-                    if (!Prefs.getBoolean(FragmentHelp.PREF_HELP_SHOWN, false)) {
+                    if (Prefs.getBoolean(FragmentHelp.PREF_HELP_SHOWN, false)) { //!
                         showHelpFragment();
                     } else {
                         toolbar.setVisibility(View.VISIBLE);
@@ -112,6 +102,7 @@ public class ActivityMain extends BasicActivity implements IOverlayable, IToolba
                 }
             }, WELLCOME_SCREEN_TIME);
         } else {
+            init();
             toolbar.setVisibility(View.VISIBLE);
 
             int startedFragmentNumber = ActivityMain.lastChildFragmentNumber;
@@ -119,6 +110,8 @@ public class ActivityMain extends BasicActivity implements IOverlayable, IToolba
             if (startedFrom == NetworkTasksService.NOTIFICATIONS_SHOW_PODCASTS_SUBSCRIBED) {
                 startedFragmentNumber = 1;
                 startedFrom = MediaItemType.PODCAST.ordinal();
+                NotificationManager nMgr = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                nMgr.cancel(NetworkTasksService.NEW_EPISODS_NOTIFICATION_ID);
             }
 
             FragmentMediaItemsGrid fragmentMediaItemsGrid = new FragmentMediaItemsGrid();
@@ -131,6 +124,24 @@ public class ActivityMain extends BasicActivity implements IOverlayable, IToolba
         isFirstRun = false;
     }
 
+    private void init() {
+        UpodsApplication.initAllResources();
+        vOverlay = findViewById(R.id.vOverlay);
+
+        //Toolbar
+        toolbar.inflateMenu(R.menu.menu_activity_main);
+        toolbar.setOnMenuItemClickListener(this);
+        toolbar.setTitleTextColor(getResources().getColor(R.color.white));
+
+        //Social
+        callbackManager = CallbackManager.Factory.create();
+
+        MenuItem searchMenuItem = toolbar.getMenu().findItem(R.id.action_search);
+        SearchView searchView = (SearchView) searchMenuItem.getActionView();
+        UIHelper.changeSearchViewTextColor(searchView, Color.WHITE);
+
+        slidingMenu = new SlidingMenu(this, toolbar);
+    }
 
     private void showHelpFragment() {
         FragmentHelp fragmentHelp = new FragmentHelp();
@@ -180,10 +191,6 @@ public class ActivityMain extends BasicActivity implements IOverlayable, IToolba
             }
         }
 
-        //TODO change
-        slidingMenu.getAdapter().clearRowSelections();
-        slidingMenu.getAdapter().notifyDataSetChanged();
-        Logger.printInfo(LOG_TAG, "Number fragments in stack: " + String.valueOf(getFragmentManager().getBackStackEntryCount()));
         if (getFragmentManager().getBackStackEntryCount() > MIN_NUMBER_FRAGMENTS_IN_STACK) {
             if (getLatestFragmentTag().equals(FragmentSearch.TAG)) {
                 toolbar.getMenu().findItem(R.id.action_search).collapseActionView();

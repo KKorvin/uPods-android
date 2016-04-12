@@ -36,8 +36,7 @@ public class NetworkTasksService extends IntentService {
 
     public static final String ACTION_CHECK_FOR_NEW_EPISODS = "com.chickenkiller.upods2.service.check_new_episods";
     public static final int NOTIFICATIONS_SHOW_PODCASTS_SUBSCRIBED = 3501;
-
-    private static final int NEW_EPISODS_NOTIFICATION_ID = 3829;
+    public static final int NEW_EPISODS_NOTIFICATION_ID = 3829;
 
     private PowerManager.WakeLock wakeLock = null;
 

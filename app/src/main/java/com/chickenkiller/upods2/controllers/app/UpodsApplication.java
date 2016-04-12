@@ -26,12 +26,13 @@ public class UpodsApplication extends Application {
     private static final String TAG = "UpodsApplication";
     private static Context applicationContext;
     private static SQLdatabaseManager databaseManager;
+    private static boolean isLoaded;
 
     @Override
     public void onCreate() {
         //LeakCanary.install(this);
+        isLoaded = false;
         applicationContext = getApplicationContext();
-        databaseManager = new SQLdatabaseManager(applicationContext);
         FacebookSdk.sdkInitialize(applicationContext);
         LoginMaster.getInstance().init();
         new Prefs.Builder()
@@ -40,18 +41,28 @@ public class UpodsApplication extends Application {
                 .setPrefsName(getPackageName())
                 .setUseDefaultSharedPreference(true)
                 .build();
-        SettingsManager.getInstace().init();
-        Category.initPodcastsCatrgories();
-        SimpleCacheManager.getInstance().removeExpiredCache();
 
         super.onCreate();
-
-        runMainService();
-        setAlarmManagerTasks();
     }
 
-    private void runMainService() {
-        startService(new Intent(this, MainService.class));
+    /**
+     * All resources which can be loaded not in onCreate(), should be load here,
+     * this function called while splash screen is active
+     */
+    public static void initAllResources() {
+        if (!isLoaded) {
+            databaseManager = new SQLdatabaseManager(applicationContext);
+            SettingsManager.getInstace().init();
+            Category.initPodcastsCatrgories();
+            SimpleCacheManager.getInstance().removeExpiredCache();
+            runMainService();
+            setAlarmManagerTasks();
+            isLoaded = true;
+        }
+    }
+
+    private static void runMainService() {
+        applicationContext.startService(new Intent(applicationContext, MainService.class));
     }
 
     public static void setAlarmManagerTasks() {

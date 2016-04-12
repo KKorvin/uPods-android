@@ -1,5 +1,6 @@
 package com.chickenkiller.upods2.controllers.app;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 
 import com.chickenkiller.upods2.controllers.internet.SyncMaster;
@@ -44,17 +45,14 @@ public class LoginMaster {
     private static final String LOG_TAG = "LoginMaster";
     private static final String TWITTER_CONSUMER_KEY = "wr8t6lPMxtC09uMpIEayM5FBC";
     private static final String TWITTER_CONSUMER_SECRET = "dtnTy4RQfnowu60XGHToj830j4AYsKxDA82PWZBijgSdk0gnlk";
-    private static final int MAX_GET_USERS_RETRY = 5;
 
     private static LoginMaster loginMaster;
 
 
-    private int getUserRetries;
     private UserProfile userProfile;
 
     private LoginMaster() {
         this.userProfile = null;
-        this.getUserRetries = 0;
     }
 
 
@@ -106,7 +104,7 @@ public class LoginMaster {
         if (!SyncMaster.isRunning && isLoggedIn && GlobalUtils.isInternetConnected()) {
             SyncMaster profileSyncMaster = new SyncMaster(getLoginType(), getToken(), getSecret(), task);
             profileSyncMaster.setProfileSyncedCallback(iOperationFinishCallback);
-            profileSyncMaster.execute();
+            profileSyncMaster.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         }
     }
 

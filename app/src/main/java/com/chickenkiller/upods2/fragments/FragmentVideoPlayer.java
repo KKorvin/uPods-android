@@ -3,6 +3,7 @@ package com.chickenkiller.upods2.fragments;
 import android.app.Fragment;
 import android.content.res.Configuration;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.SurfaceHolder;
@@ -150,7 +151,7 @@ public class FragmentVideoPlayer extends Fragment implements IVLCVout.Callback, 
 
                 }
             }, mMediaPlayer);
-            videoPlayerPositionUpdater.execute();
+            videoPlayerPositionUpdater.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         }
     }
 

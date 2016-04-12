@@ -27,7 +27,6 @@ public class FragmentHelp extends Fragment implements ICustumziedBackPress, ICon
     private ViewPager vpHelp;
     private CircleIndicator indicatorHelp;
     private View.OnClickListener closeClickListener;
-    private boolean isFirstTime;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -36,8 +35,6 @@ public class FragmentHelp extends Fragment implements ICustumziedBackPress, ICon
         if (((IToolbarHolder) getActivity()).getToolbar() != null) {
             ((IToolbarHolder) getActivity()).getToolbar().setVisibility(View.GONE);
         }
-
-        isFirstTime = Prefs.getBoolean(FragmentHelp.PREF_HELP_SHOWN, true);
 
         vpHelp = (ViewPager) view.findViewById(R.id.vpHelp);
         indicatorHelp = (CircleIndicator) view.findViewById(R.id.indicatorHelp);
@@ -75,6 +72,6 @@ public class FragmentHelp extends Fragment implements ICustumziedBackPress, ICon
 
     @Override
     public boolean shouldBeAddedToStack() {
-        return !isFirstTime; //don't add to history if first time screen
+        return !Prefs.getBoolean(FragmentHelp.PREF_HELP_SHOWN, true); //don't add to history if first time screen
     }
 }
