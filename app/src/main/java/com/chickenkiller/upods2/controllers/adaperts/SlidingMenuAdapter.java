@@ -161,7 +161,7 @@ public class SlidingMenuAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                     SlidingMenuRow clickedMenuItem = (SlidingMenuRow) items.get(position);
                     clickedMenuItem.isSelected = true;
                     Context context = view.getContext();
-                    notifyDataSetChanged();
+                    slidingMenuManager.toggle();
                     if (clickedMenuItem.getTitle().equals(context.getString(R.string.main_settings))) {
                         FragmentSettings settingsFragment = new FragmentSettings();
                         fragmentsManager.showFragment(R.id.fl_content, settingsFragment, FragmentSettings.TAG);
@@ -187,7 +187,7 @@ public class SlidingMenuAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                     } else {
                         Toast.makeText(context, "TEST" + clickedMenuItem.getTitle(), Toast.LENGTH_SHORT).show();
                     }
-                    slidingMenuManager.toggle();
+                    notifyDataSetChanged();
                 }
             }
         });

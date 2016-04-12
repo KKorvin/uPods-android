@@ -80,6 +80,7 @@ public class FragmentPodcastFeatured extends Fragment implements IContentLoadLis
             mediaItemsAdapter.setFragmentsManager((IFragmentsManager) getActivity());
         }
         mediaItemsAdapter.setContentLoadListener(this);
+
         //Featured recycle view
         rvMain.setHasFixedSize(true);
         rvMain.setAdapter(mediaItemsAdapter);
