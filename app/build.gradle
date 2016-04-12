@@ -14,9 +14,9 @@ android {
         applicationId "com.chickenkiller.upods2"
         multiDexEnabled true
         minSdkVersion 18
-        targetSdkVersion 22
+        targetSdkVersion 23
         versionCode 2
-        versionName "0.1"
+        versionName "0.8"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
@@ -64,8 +64,8 @@ dependencies {
     compile "de.mrmaffen:vlc-android-sdk:1.9.0"
 
     //Dependencies for UI components
-    compile 'com.lsjwzh:recyclerviewpager:+'
-    compile 'com.pixplicity.easyprefs:library:+'
+    compile 'com.lsjwzh:recyclerviewpager:1.0.8'
+    compile 'com.pixplicity.easyprefs:library:1.7'
     compile 'com.github.jakob-grabner:Circle-Progress-View:v1.2.3+'
     compile 'com.github.asyl.animation:arcanimator:1.0.0'
     compile 'com.github.clans:fab:1.6.2'
