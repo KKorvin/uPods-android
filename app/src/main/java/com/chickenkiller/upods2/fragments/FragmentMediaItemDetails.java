@@ -32,7 +32,6 @@ import com.chickenkiller.upods2.activity.ActivityPlayer;
 import com.chickenkiller.upods2.controllers.adaperts.TracksAdapter;
 import com.chickenkiller.upods2.controllers.app.ProfileManager;
 import com.chickenkiller.upods2.controllers.internet.BackendManager;
-import com.chickenkiller.upods2.controllers.internet.EpisodesXMLHandler;
 import com.chickenkiller.upods2.controllers.player.UniversalPlayer;
 import com.chickenkiller.upods2.interfaces.IContextMenuManager;
 import com.chickenkiller.upods2.interfaces.IFragmentsManager;
@@ -43,6 +42,7 @@ import com.chickenkiller.upods2.interfaces.ISimpleRequestCallback;
 import com.chickenkiller.upods2.models.Episode;
 import com.chickenkiller.upods2.models.Feed;
 import com.chickenkiller.upods2.models.MediaItem;
+import com.chickenkiller.upods2.models.MediaListItem;
 import com.chickenkiller.upods2.models.Podcast;
 import com.chickenkiller.upods2.utils.GlobalUtils;
 import com.chickenkiller.upods2.utils.Logger;
@@ -53,14 +53,7 @@ import com.chickenkiller.upods2.utils.ui.UIHelper;
 import com.chickenkiller.upods2.views.DetailsScrollView;
 import com.github.clans.fab.FloatingActionButton;
 
-import org.xml.sax.InputSource;
-import org.xml.sax.XMLReader;
-
-import java.io.StringReader;
 import java.util.ArrayList;
-
-import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.SAXParserFactory;
 
 /**
  * Created by alonzilberman on 7/8/15.
@@ -310,26 +303,16 @@ public class FragmentMediaItemDetails extends Fragment implements View.OnTouchLi
             return;
         }
 
-        BackendManager.getInstance().sendRequest(((Podcast) playableItem).getTracksFeed(), new ISimpleRequestCallback() {
-                    @Override
-                    public void onRequestSuccessed(final String response) {
-                        if (isAdded()) {
-                            //Before fetching episodes sync with db
-                            //playableItem.syncWithDB();
+        if (playableItem instanceof Podcast) {
+            BackendManager.getInstance().sendRequest(((Podcast) playableItem).getTracksFeed(), new ISimpleRequestCallback() {
+                        @Override
+                        public void onRequestSuccessed(final String response) {
+                            Podcast podcast = (Podcast) playableItem;
+                            boolean hasUpdates = false;
 
-                            final ArrayList<Episode> parsedEpisodes = new ArrayList<Episode>();
-                            try {
-                                SAXParserFactory spf = SAXParserFactory.newInstance();
-                                SAXParser sp = spf.newSAXParser();
-                                XMLReader xr = sp.getXMLReader();
-                                EpisodesXMLHandler episodesXMLHandler = new EpisodesXMLHandler();
-                                xr.setContentHandler(episodesXMLHandler);
-                                //TODO could be encoding problem
-                                InputSource inputSource = new InputSource(new StringReader(response));
-                                xr.parse(inputSource);
-                                parsedEpisodes.addAll(episodesXMLHandler.getParsedEpisods());
-
-                                for (Episode episode : ((Podcast) playableItem).getEpisodes()) {
+                            if (isAdded()) {
+                                final ArrayList<Episode> parsedEpisodes = BackendManager.getInstance().fetchEpisodes(podcast.getFeedUrl(), podcast);
+                                for (Episode episode : podcast.getEpisodes()) {
                                     Episode episodeInList = Episode.getEpisodByTitle(parsedEpisodes, episode.getTitle());
                                     if (episodeInList != null) {
                                         episodeInList.isDownloaded = episode.isDownloaded;
@@ -340,40 +323,40 @@ public class FragmentMediaItemDetails extends Fragment implements View.OnTouchLi
                                         ProfileManager.getInstance().removeNewTrack(playableItem, episode);
                                     }
                                 }
+                                podcast.setTrackCount(String.valueOf(parsedEpisodes.size()));
+                                if (podcast.isSubscribed) {
+                                    hasUpdates = Feed.handleUpdates(parsedEpisodes, podcast);
+                                }
+                                podcast.setTracks(parsedEpisodes);
 
-                                if (playableItem instanceof Podcast) {
-                                    Podcast podcast = ((Podcast) playableItem);
-                                    podcast.setDescription(episodesXMLHandler.getPodcastSummary());
-                                    podcast.setTrackCount(String.valueOf(parsedEpisodes.size()));
-                                    Feed.handleUpdates(parsedEpisodes, podcast);
-                                    podcast.setTracks(parsedEpisodes);
-                                }
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-                            getActivity().runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    if (tracksAdapter != null) {
-                                        tracksAdapter.addItems(parsedEpisodes);
-                                        rvTracks.setVisibility(View.VISIBLE);
-                                        pbTracks.setVisibility(View.GONE);
+                                final boolean finalHasUpdates = hasUpdates;
+                                getActivity().runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        //We need it here because ProfileManager will not notify changes
+                                        //automatically from background thread
+                                        if (finalHasUpdates) {
+                                            ProfileManager.getInstance().notifyChanges(new ProfileManager.ProfileUpdateEvent(MediaListItem.NEW, playableItem, false));
+                                        }
+                                        if (tracksAdapter != null) {
+                                            tracksAdapter.addItems(parsedEpisodes);
+                                            rvTracks.setVisibility(View.VISIBLE);
+                                            pbTracks.setVisibility(View.GONE);
+                                        }
                                     }
-                                }
-                            });
+                                });
+                            }
+                        }
+
+                        @Override
+                        public void onRequestFailed() {
+                            rvTracks.setVisibility(View.GONE);
+                            pbTracks.setVisibility(View.GONE);
+                            lnInternetError.setVisibility(View.VISIBLE);
                         }
                     }
-
-                    @Override
-                    public void onRequestFailed() {
-                        rvTracks.setVisibility(View.GONE);
-                        pbTracks.setVisibility(View.GONE);
-                        lnInternetError.setVisibility(View.VISIBLE);
-                    }
-                }
-
-        );
-
+            );
+        }
     }
 
 

@@ -5,14 +5,23 @@ import android.content.Context;
 import com.chickenkiller.upods2.controllers.app.UpodsApplication;
 import com.chickenkiller.upods2.interfaces.IRequestCallback;
 import com.chickenkiller.upods2.interfaces.ISimpleRequestCallback;
+import com.chickenkiller.upods2.models.Episode;
+import com.chickenkiller.upods2.models.Podcast;
 import com.chickenkiller.upods2.utils.GlobalUtils;
+import com.chickenkiller.upods2.utils.Logger;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.xml.sax.InputSource;
+import org.xml.sax.XMLReader;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.StringReader;
 import java.util.ArrayList;
+
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
 
 import okhttp3.Cache;
 import okhttp3.Call;
@@ -241,5 +250,33 @@ public class BackendManager {
         searchQueue.clear();
     }
 
+    public ArrayList<Episode> fetchEpisodes(String feedUrl, Podcast podcast) {
+        try {
+            Request request = new Request.Builder().url(feedUrl).build();
+            String response = BackendManager.getInstance().sendSimpleSynchronicRequest(request);
+            SAXParserFactory spf = SAXParserFactory.newInstance();
+            SAXParser sp = spf.newSAXParser();
+            XMLReader xr = sp.getXMLReader();
+            EpisodesXMLHandler episodesXMLHandler = new EpisodesXMLHandler();
+            xr.setContentHandler(episodesXMLHandler);
+
+            //TODO could be encoding problem
+            InputSource inputSource = new InputSource(new StringReader(response));
+            xr.parse(inputSource);
+            ArrayList<Episode> parsedEpisodes = episodesXMLHandler.getParsedEpisods();
+            if (podcast != null) {
+                podcast.setDescription(episodesXMLHandler.getPodcastSummary());
+            }
+            return parsedEpisodes;
+        } catch (Exception e) {
+            Logger.printError(TAG, "Can't fetch episodes for url: " + feedUrl);
+            e.printStackTrace();
+            return new ArrayList<Episode>();
+        }
+    }
+
+    public ArrayList<Episode> fetchEpisodes(String feedUrl) {
+        return fetchEpisodes(feedUrl, null);
+    }
 
 }

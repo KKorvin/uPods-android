@@ -233,6 +233,12 @@ public class ProfileManager {
                 String args2[] = {String.valueOf(podcast.id), MediaListItem.TYPE_PODCAST, MediaListItem.NEW};
                 database.delete("media_list", "media_id = ? AND media_type = ? AND list_type = ?", args2);
             }
+
+            if (listType.equals(MediaListItem.NEW) && Looper.myLooper() == Looper.getMainLooper()) {
+                //If we are in main thread and were changes in count of new episodes -> notify provider
+                notifyChanges(new ProfileUpdateEvent(MediaListItem.NEW, mediaItem, false));
+            }
+
         }
     }
 

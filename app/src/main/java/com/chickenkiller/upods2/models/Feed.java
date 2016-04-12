@@ -3,6 +3,7 @@ package com.chickenkiller.upods2.models;
 import com.chickenkiller.upods2.controllers.app.ProfileManager;
 import com.chickenkiller.upods2.controllers.app.SimpleCacheManager;
 import com.chickenkiller.upods2.controllers.app.UpodsApplication;
+import com.chickenkiller.upods2.controllers.internet.BackendManager;
 import com.chickenkiller.upods2.utils.Logger;
 
 import org.json.JSONArray;
@@ -80,7 +81,20 @@ public class Feed {
             new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    saveAsFeed(url, episodes);
+                    //Check if podcast with only downloaded episodes given -> fetch all feed
+                    boolean fromDownloaded = true;
+                    for (Episode episode : episodes) {
+                        if (!episode.isDownloaded) {
+                            fromDownloaded = false;
+                            break;
+                        }
+                    }
+                    if (fromDownloaded) {
+                        ArrayList<Episode> parsedEpisodes = BackendManager.getInstance().fetchEpisodes(url);
+                        saveAsFeed(url, parsedEpisodes);
+                    } else {
+                        saveAsFeed(url, episodes);
+                    }
                 }
             }).run();
         } else {
@@ -154,11 +168,16 @@ public class Feed {
         boolean hasUpdates = false;
         Feed feed = getFeedIfExists(podcast.getFeedUrl());
         if (feed != null && !feed.episodes.isEmpty()) {
+            int i = 0;
             for (Episode latestEpisode : latestEpisodes) {
                 if (!Episode.hasEpisodWithTitle(feed.episodes, latestEpisode)) {//Check if new eipsode is not saved in local feed
                     ProfileManager.getInstance().addNewTrack(podcast, latestEpisode);
                     hasUpdates = true;
                 }
+                if (i >= 5) {
+                    break;
+                }
+                i++;
             }
             SimpleCacheManager.getInstance().removeFromCache(podcast.getFeedUrl());
         }

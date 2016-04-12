@@ -22,17 +22,8 @@ import com.chickenkiller.upods2.utils.Logger;
 import com.chickenkiller.upods2.utils.ui.LetterBitmap;
 import com.chickenkiller.upods2.utils.ui.UIHelper;
 
-import org.xml.sax.InputSource;
-import org.xml.sax.XMLReader;
-
-import java.io.StringReader;
 import java.net.URL;
 import java.util.ArrayList;
-
-import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.SAXParserFactory;
-
-import okhttp3.Request;
 
 /**
  * Created by alonzilberman on 12/13/15.
@@ -94,18 +85,7 @@ public class NetworkTasksService extends IntentService {
         if (subscribedPodcasts.size() > 0) {
             for (Podcast podcast : subscribedPodcasts) {
                 try {
-                    Request request = new Request.Builder().url(podcast.getFeedUrl()).build();
-                    String response = BackendManager.getInstance().sendSimpleSynchronicRequest(request);
-                    SAXParserFactory spf = SAXParserFactory.newInstance();
-                    SAXParser sp = spf.newSAXParser();
-                    XMLReader xr = sp.getXMLReader();
-                    EpisodesXMLHandler episodesXMLHandler = new EpisodesXMLHandler();
-                    xr.setContentHandler(episodesXMLHandler);
-
-                    //TODO could be encoding problem
-                    InputSource inputSource = new InputSource(new StringReader(response));
-                    xr.parse(inputSource);
-                    ArrayList<Episode> parsedEpisodes = episodesXMLHandler.getParsedEpisods();
+                    ArrayList<Episode> parsedEpisodes = BackendManager.getInstance().fetchEpisodes(podcast.getFeedUrl());
                     if (Feed.handleUpdates(parsedEpisodes, podcast)) {
                         sendNewEpisodsNotification(podcast);
                     }
