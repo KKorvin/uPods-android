@@ -28,6 +28,8 @@ public class FragmentHelp extends Fragment implements ICustumziedBackPress, ICon
     private CircleIndicator indicatorHelp;
     private View.OnClickListener closeClickListener;
 
+    public boolean isFromSlidingMenu;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_help, container, false);
@@ -72,6 +74,9 @@ public class FragmentHelp extends Fragment implements ICustumziedBackPress, ICon
 
     @Override
     public boolean shouldBeAddedToStack() {
+        if (isFromSlidingMenu) {
+            return true;
+        }
         return !Prefs.getBoolean(FragmentHelp.PREF_HELP_SHOWN, true); //don't add to history if first time screen
     }
 }

@@ -178,6 +178,7 @@ public class SlidingMenuAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                         fragmentsManager.showFragment(R.id.fl_content, fragmentProfile, FragmentProfile.TAG);
                     } else if (clickedMenuItem.getTitle().equals(context.getString(R.string.main_help))) {
                         FragmentHelp fragmentHelp = new FragmentHelp();
+                        fragmentHelp.isFromSlidingMenu = true;
                         fragmentsManager.showFragment(R.id.fl_content, fragmentHelp, FragmentHelp.TAG);
                     } else if (clickedMenuItem.getTitle().equals(context.getString(R.string.main_about))) {
                         DialogFragmentAbout dialogFragmentAbout = new DialogFragmentAbout();

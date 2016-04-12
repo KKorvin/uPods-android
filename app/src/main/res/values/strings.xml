@@ -142,7 +142,7 @@
     <string name="sync">Sync</string>
     <string name="syncing">Syncing...</string>
     <string name="profile">Profile</string>
-    <string name="downloaded_pod_folder">Downloaded podcasts folder</string>
+    <string name="open_pod_folder">Open podcasts folder</string>
     <string name="enjoy_free_music">Enjoy Free Music</string>
     <string name="help_free_music">More than 30k of best online radio staitons and direct acsess to itunes podcasts database</string>
     <string name="handmade_tops">Hand Made Tops</string>
@@ -157,4 +157,5 @@
     <string name="empty_radio_recent">Start listening radio stations. Your recent one will be added here.</string>
     <string name="recent_raio_station">Recent radio stations</string>
     <string name="save_to_cloud">Save To Cloud</string>
+    <string name="podcasts_default_folder">podcasts_default_folder</string>
 </resources>

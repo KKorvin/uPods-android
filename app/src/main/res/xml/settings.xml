@@ -17,7 +17,7 @@
 
 
         <ListPreference
-            android:defaultValue="24"
+            android:defaultValue="high"
             android:dialogTitle="@string/default_stream_quality"
             android:entries="@array/stream_quality_description"
             android:entryValues="@array/stream_quality"
@@ -44,9 +44,8 @@
             android:title="@string/checking_new_episods_rate" />
 
         <Preference
-            android:defaultValue="/airtune"
-            android:key="podcasts_default_folder"
-            android:title="@string/downloaded_pod_folder">
+            android:key="@string/podcasts_default_folder"
+            android:title="@string/open_pod_folder">
 
         </Preference>
 
