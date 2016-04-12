@@ -72,7 +72,7 @@ public class UpodsApplication extends Application {
         PendingIntent alarmIntent = PendingIntent.getService(applicationContext, CHECK_NEW_EPISODS_INTENT_CODE, intent,
                 PendingIntent.FLAG_UPDATE_CURRENT);
 
-        if (SettingsManager.getInstace().getBooleanSettingsValue(SettingsManager.JS_NOTIFY_EPISODS)) {
+        if (SettingsManager.getInstace().getBooleanSettingsValue(SettingsManager.JS_NOTIFY_EPISODES)) {
             long interval = SettingsManager.getInstace().getIntSettingsValue(SettingsManager.JS_PODCASTS_UPDATE_TIME);
             //interval = TimeUnit.HOURS.toMillis(interval);
             interval = TimeUnit.MINUTES.toMillis(60);

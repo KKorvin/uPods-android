@@ -32,10 +32,10 @@ public class SettingsManager {
 
     public static final String JS_PODCASTS_UPDATE_TIME = "podcasts_update_time";
     public static final String JS_START_SCREEN = "start_screen";
-    public static final String JS_NOTIFY_EPISODS = "notify_episods";
+    public static final String JS_NOTIFY_EPISODES = "notify_episods";
     public static final String JS_STREAM_QUALITY = "stream_quality";
 
-    public static final String DEFAULT_STREAM_QUALITY = "hight";
+    public static final String DEFAULT_STREAM_QUALITY = "high";
 
     private SettingsManager() {
         super();
@@ -62,7 +62,7 @@ public class SettingsManager {
             if (Prefs.getString(JS_SETTINGS, null) == null) {
                 JSONObject settingsObject = new JSONObject();
                 settingsObject.put(JS_START_SCREEN, DEFAULT_START_SCREEN);
-                settingsObject.put(JS_NOTIFY_EPISODS, DEFAULT_NOTIFY_EPISODS);
+                settingsObject.put(JS_NOTIFY_EPISODES, DEFAULT_NOTIFY_EPISODS);
                 settingsObject.put(JS_PODCASTS_UPDATE_TIME, DEFAULT_PODCAST_UPDATE_TIME);
                 settingsObject.put(JS_STREAM_QUALITY, DEFAULT_STREAM_QUALITY);
                 Prefs.putString(JS_SETTINGS, settingsObject.toString());
@@ -185,7 +185,7 @@ public class SettingsManager {
 
 
     public void initSettingsFromPreferences() {
-        putSettingsValue(JS_NOTIFY_EPISODS, Prefs.getBoolean(JS_NOTIFY_EPISODS, DEFAULT_NOTIFY_EPISODS));
+        putSettingsValue(JS_NOTIFY_EPISODES, Prefs.getBoolean(JS_NOTIFY_EPISODES, DEFAULT_NOTIFY_EPISODS));
         putSettingsValue(JS_START_SCREEN, Prefs.getString(JS_START_SCREEN, DEFAULT_START_SCREEN));
         putSettingsValue(JS_STREAM_QUALITY, Prefs.getString(JS_STREAM_QUALITY, DEFAULT_STREAM_QUALITY));
 
