@@ -93,7 +93,7 @@ public class ActivityMain extends BasicActivity implements IOverlayable, IToolba
             init();
             new Handler().postDelayed(new Runnable() {
                 public void run() {
-                    if (Prefs.getBoolean(FragmentHelp.PREF_HELP_SHOWN, false)) { //!
+                    if (!Prefs.getBoolean(FragmentHelp.PREF_HELP_SHOWN, false)) { //!
                         showHelpFragment();
                     } else {
                         toolbar.setVisibility(View.VISIBLE);
