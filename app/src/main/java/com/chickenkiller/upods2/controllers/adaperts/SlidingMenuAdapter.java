@@ -11,7 +11,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
@@ -21,6 +20,7 @@ import com.chickenkiller.upods2.fragments.FragmentHelp;
 import com.chickenkiller.upods2.fragments.FragmentMediaItemsGrid;
 import com.chickenkiller.upods2.fragments.FragmentProfile;
 import com.chickenkiller.upods2.fragments.FragmentSettings;
+import com.chickenkiller.upods2.fragments.FragmentWellcome;
 import com.chickenkiller.upods2.interfaces.IFragmentsManager;
 import com.chickenkiller.upods2.interfaces.ISlidingMenuManager;
 import com.chickenkiller.upods2.models.SlidingMenuHeader;
@@ -186,7 +186,8 @@ public class SlidingMenuAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                     } else if (clickedMenuItem.getTitle().equals(context.getString(R.string.main_rate_app))) {
                         GlobalUtils.rateApp(context);
                     } else {
-                        Toast.makeText(context, "TEST" + clickedMenuItem.getTitle(), Toast.LENGTH_SHORT).show();
+                        fragmentsManager.showFragment(R.id.fl_content, new FragmentWellcome(), FragmentMediaItemsGrid.TAG);
+
                     }
                     notifyDataSetChanged();
                 }
