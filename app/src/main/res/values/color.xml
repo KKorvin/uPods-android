@@ -14,6 +14,10 @@
     <color name="notification_background">#393631</color>
     <color name="black_opacity">#641D262A</color>
 
+    <!-- Splash screen -->
+    <color name="splash_screen_bckg">#e0e2e2</color>
+    <color name="splash_screen_text">#434343</color>
+
     <!-- Social color -->
     <color name="fb_color_500">#3B5998</color>
     <color name="fb_color_800">#213256</color>
