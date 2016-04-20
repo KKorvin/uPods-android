@@ -192,7 +192,7 @@ public class FragmentMediaItemDetails extends Fragment implements View.OnTouchLi
         svDetails.setVisibility(View.VISIBLE);
         svDetails.setEnabled(false);
         svDetails.setIMovable(this);
-        tvDetailedDescription.setText(playableItem.getDescription());
+        tvDetailedDescription.setText(playableItem.getDescription().isEmpty() ? getString(R.string.empty_description) : playableItem.getDescription());
         fbDetailsPlay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
