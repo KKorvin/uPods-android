@@ -1,0 +1,6 @@
+<resources>
+    <dimen name="rv_cards_column_width">120dp</dimen>
+    <dimen name="profile_logged_in_padding_top">20dp</dimen>
+    <dimen name="profile_logged_in_padding_bottom">20dp</dimen>
+
+</resources>

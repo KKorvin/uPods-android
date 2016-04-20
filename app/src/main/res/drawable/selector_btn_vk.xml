@@ -1,21 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:state_focused="true">
-        <shape xmlns:android="http://schemas.android.com/apk/res/android"
-            android:shape="rectangle">
-            <solid android:color="@color/vk_color_500" />
-        </shape>
-    </item>
-    <item android:state_pressed="true">
-        <shape xmlns:android="http://schemas.android.com/apk/res/android"
-            android:shape="rectangle">
-            <solid android:color="@color/vk_color_500" />
-        </shape>
-    </item>
-    <item>
-        <shape xmlns:android="http://schemas.android.com/apk/res/android"
-            android:shape="rectangle">
+        <shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
             <solid android:color="@color/vk_color_800" />
         </shape>
     </item>
-</layer-list>
+    <item android:state_pressed="true">
+        <shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
+            <solid android:color="@color/vk_color_800" />
+        </shape>
+    </item>
+    <item>
+        <shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
+            <solid android:color="@color/vk_color_500" />
+        </shape>
+    </item>
+</selector>

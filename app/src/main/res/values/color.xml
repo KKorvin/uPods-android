@@ -10,6 +10,7 @@
     <color name="black">#000000</color>
     <color name="global_background">#EEEEEE</color>
     <color name="card_pressed_background">#EAEAEA</color>
+    <color name="card_pressed_background_android4">#40EAEAEA</color>
     <color name="notification_grey">#878787</color>
     <color name="notification_background">#393631</color>
     <color name="black_opacity">#641D262A</color>
@@ -66,6 +67,7 @@
     <color name="blue_700">#1976D2</color>
     <color name="blue_800">#1565C0</color>
     <color name="welcome_button">#2CA5E0</color>
+    <color name="welcome_button_pressed">#0288D1</color>
 
     <!-- Material Blue Gray -->
     <color name="blue_grey_1000">#1D262A</color>

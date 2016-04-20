@@ -85,7 +85,8 @@
             android:layout_height="wrap_content"
             android:background="@color/blue_700"
             android:elevation="5dp"
-            android:paddingTop="30dp">
+            android:paddingBottom="@dimen/profile_logged_in_padding_bottom"
+            android:paddingTop="@dimen/profile_logged_in_padding_top">
 
             <ImageButton
                 android:id="@+id/imgProfileArrowLeft"

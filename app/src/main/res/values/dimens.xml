@@ -55,4 +55,8 @@
     <dimen name="pause_bar_distance">5dp</dimen>
     <dimen name="pause_bar_height">20dp</dimen>
 
+    <dimen name="profile_logged_in_padding_top">30dp</dimen>
+    <dimen name="profile_logged_in_padding_bottom">0dp</dimen>
+    <dimen name="dialog_bottom_padding">20dp</dimen>
+
 </resources>

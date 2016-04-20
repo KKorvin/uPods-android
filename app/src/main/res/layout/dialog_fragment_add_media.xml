@@ -2,17 +2,18 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="left"
     android:background="@color/transparent"
+    android:gravity="left"
     android:orientation="vertical"
     android:paddingLeft="20dp"
     android:paddingRight="20dp"
+    android:paddingBottom="@dimen/dialog_bottom_padding"
     android:paddingTop="10dp">
 
     <TextView
-        android:layout_marginTop="30dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
         android:text="Enter title" />
 
     <EditText

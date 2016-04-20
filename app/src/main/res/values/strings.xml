@@ -39,9 +39,9 @@
     <string name="main_settings">Settings</string>
 
     <!-- Toolbar -->
-    <string name="genres">Genres</string>
-    <string name="countries">Countries</string>
-    <string name="languages">Languages</string>
+    <string name="genres">GENRES</string>
+    <string name="countries">COUNTRIES</string>
+    <string name="languages">LANGUAGES</string>
     <string name="podcasts">Podcasts</string>
     <string name="search_results">Search results</string>
     <string name="media_action">Media action</string>
@@ -70,8 +70,8 @@
     <string name="top40_podcasts">Top 40 Podcasts</string>
     <string name="top40_podcasts_long">Best iTunes Ranking Podcasts</string>
     <string name="download">Download</string>
-    <string name="subscribe">Subscribe</string>
-    <string name="unsubscribe">Unsubscribe</string>
+    <string name="subscribe">SUBSCRIBE</string>
+    <string name="unsubscribe">UNSUBSCRIBED</string>
     <string name="play">Play</string>
     <string name="subscribed">SUBSCRIBED</string>
     <string name="downloaded">DOWNLOADED</string>
@@ -159,4 +159,5 @@
     <string name="save_to_cloud">Save To Cloud</string>
     <string name="podcasts_default_folder">podcasts_default_folder</string>
     <string name="upods">UPODS</string>
+    <string name="restore_from_cloud">Restore From Cloud</string>
 </resources>

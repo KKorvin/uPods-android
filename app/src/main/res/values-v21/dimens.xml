@@ -1,0 +1,5 @@
+<resources>
+
+    <dimen name="dialog_bottom_padding">0dp</dimen>
+
+</resources>

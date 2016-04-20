@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:drawable="@color/transparent" android:state_focused="true" />
-    <item android:drawable="@color/transparent" android:state_pressed="true" />
-    <item android:drawable="@color/transparent" />
+    <item android:state_focused="true">
+        <shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="oval">
+            <solid android:color="@color/card_pressed_background_android4" />
+        </shape>
+    </item>
+    <item android:state_pressed="true">
+        <shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="oval">
+            <solid android:color="@color/card_pressed_background_android4" />
+        </shape>
+    </item>
+    <item>
+        <shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="oval">
+            <solid android:color="@color/transparent" />
+        </shape>
+    </item>
 </selector>

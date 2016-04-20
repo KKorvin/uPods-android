@@ -27,6 +27,6 @@
         android:background="@drawable/selector_btn_welcome_screen"
         android:paddingLeft="15dp"
         android:paddingRight="15dp"
-        android:text="Restore From Cloud"
+        android:text="@string/restore_from_cloud"
         android:textColor="@color/white_material" />
 </LinearLayout>

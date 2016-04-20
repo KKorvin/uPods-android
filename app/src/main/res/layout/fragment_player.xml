@@ -192,8 +192,5 @@
         android:layout_alignParentBottom="true"
         android:layout_centerInParent="true"
         android:layout_marginBottom="13dp"
-        android:background="@color/orange_500"
-        android:foreground="?android:selectableItemBackground"
-        android:stateListAnimator="@anim/button_elevation"
-        android:text="Play" />
+        android:stateListAnimator="@anim/button_elevation" />
 </RelativeLayout>
