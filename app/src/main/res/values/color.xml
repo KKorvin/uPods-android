@@ -2,7 +2,7 @@
 <resources>
 
     <!-- Some Basic Colors -->
-    <color name="color_primary">#1976D2</color>
+    <color name="color_primary">#EF6C00</color>
     <color name="color_primary_dark">#1976D2</color>
     <color name="sliding_menu_background">#FAFAFA</color>
     <color name="viewPagerNotSelectedWhite">#E8EAF6</color>
@@ -66,8 +66,8 @@
     <!-- Blue Material -->
     <color name="blue_700">#1976D2</color>
     <color name="blue_800">#1565C0</color>
-    <color name="welcome_button">#2CA5E0</color>
-    <color name="welcome_button_pressed">#0288D1</color>
+    <color name="welcome_button">#EF6C00</color>
+    <color name="welcome_button_pressed">#FB8C00</color>
 
     <!-- Material Blue Gray -->
     <color name="blue_grey_1000">#1D262A</color>
