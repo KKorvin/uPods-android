@@ -1,6 +1,22 @@
+buildscript {
+    repositories {
+        maven { url 'https://maven.fabric.io/public' }
+    }
+
+    dependencies {
+        classpath 'io.fabric.tools:gradle:1.+'
+    }
+}
 apply plugin: 'com.android.application'
+apply plugin: 'io.fabric'
+
+repositories {
+    maven { url 'https://maven.fabric.io/public' }
+}
+
 // This does not break the build when Android Studio is missing the JRebel for Android plugin.
 apply plugin: 'com.zeroturnaround.jrebel.android'
+apply plugin: 'io.fabric'
 
 android {
     compileSdkVersion 23
@@ -79,7 +95,9 @@ dependencies {
         transitive = true
     }
     compile 'com.vk:androidsdk:+'
-
+    compile('com.crashlytics.sdk.android:crashlytics:2.5.5@aar') {
+        transitive = true;
+    }
     //Dependencies for Automatic tests
     androidTestCompile 'junit:junit:4.12'
     androidTestCompile 'com.android.support.test:runner:+'

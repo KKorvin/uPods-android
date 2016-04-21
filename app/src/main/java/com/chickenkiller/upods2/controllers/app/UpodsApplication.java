@@ -12,10 +12,13 @@ import com.chickenkiller.upods2.controllers.database.SQLdatabaseManager;
 import com.chickenkiller.upods2.controllers.internet.NetworkTasksService;
 import com.chickenkiller.upods2.models.Category;
 import com.chickenkiller.upods2.utils.Logger;
+import com.crashlytics.android.Crashlytics;
 import com.facebook.FacebookSdk;
 import com.pixplicity.easyprefs.library.Prefs;
 
 import java.util.concurrent.TimeUnit;
+
+import io.fabric.sdk.android.Fabric;
 
 /**
  * Created by alonzilberman on 7/31/15.
@@ -39,10 +42,10 @@ public class UpodsApplication extends Application {
                 .setContext(this)
                 .setMode(ContextWrapper.MODE_PRIVATE)
                 .setPrefsName(getPackageName())
-                .setUseDefaultSharedPreference(true)
-                .build();
+                .setUseDefaultSharedPreference(true).build();
 
         super.onCreate();
+        Fabric.with(this, new Crashlytics());
     }
 
     /**
