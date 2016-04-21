@@ -83,7 +83,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/blue_700"
+            android:background="@color/color_primary"
             android:elevation="5dp"
             android:paddingBottom="@dimen/profile_logged_in_padding_bottom"
             android:paddingTop="@dimen/profile_logged_in_padding_top">
@@ -126,7 +126,6 @@
                 android:layout_marginTop="17dp"
                 android:layout_toRightOf="@+id/imgAvatar"
                 android:fontFamily="sans-serif-medium"
-                android:text="Alan Holt"
                 android:textColor="@color/white_material"
                 android:textSize="@dimen/default_text_size_20" />
 
