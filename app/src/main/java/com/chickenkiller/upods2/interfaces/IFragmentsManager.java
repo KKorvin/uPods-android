@@ -18,6 +18,8 @@ public interface IFragmentsManager {
 
     void showFragment(int id, Fragment fragment, String tag);
 
+    void hideFragment(Fragment fragment);
+
     void showDialogFragment(DialogFragment dialogFragment);
 
     boolean hasFragment(String tag);

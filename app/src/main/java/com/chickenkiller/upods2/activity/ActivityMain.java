@@ -89,10 +89,12 @@ public class ActivityMain extends BasicActivity implements IOverlayable, IToolba
 
         if (isFirstRun && !Arrays.asList(notificationsActions).contains(startedFrom)) {
             toolbar.setVisibility(View.GONE);
-            showFragment(R.id.fl_content, new FragmentWellcome(), FragmentWellcome.TAG);
+            final FragmentWellcome fragmentWellcome = new FragmentWellcome();
+            showFragment(R.id.fl_window, fragmentWellcome, FragmentWellcome.TAG);
             init();
             new Handler().postDelayed(new Runnable() {
                 public void run() {
+                    hideFragment(fragmentWellcome);
                     if (!Prefs.getBoolean(FragmentHelp.PREF_HELP_SHOWN, false)) { //!
                         showHelpFragment();
                     } else {

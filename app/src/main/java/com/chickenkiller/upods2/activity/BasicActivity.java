@@ -68,9 +68,16 @@ public class BasicActivity extends Activity implements IFragmentsManager, IConte
         ft.commitAllowingStateLoss();
     }
 
+
     @Override
     public void showFragment(int id, Fragment fragment, String tag) {
         showFragment(id, fragment, tag, IFragmentsManager.FragmentOpenType.REPLACE, IFragmentsManager.FragmentAnimationType.DEFAULT);
+    }
+
+    @Override
+    public void hideFragment(Fragment fragment) {
+        android.app.FragmentManager fm = getFragmentManager();
+        fm.beginTransaction().remove(fragment).commit();
     }
 
     @Override
