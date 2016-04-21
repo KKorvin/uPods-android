@@ -1,10 +1,14 @@
 package com.chickenkiller.upods2.fragments;
 
+import android.Manifest;
+import android.annotation.TargetApi;
 import android.app.Fragment;
 import android.graphics.Bitmap;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.view.menu.ActionMenuItemView;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -18,6 +22,8 @@ import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.GlideBitmapDrawable;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
@@ -41,16 +47,21 @@ import com.chickenkiller.upods2.utils.MediaUtils;
 import com.chickenkiller.upods2.utils.ui.LetterBitmap;
 import com.chickenkiller.upods2.utils.ui.UIHelper;
 import com.chickenkiller.upods2.views.PlayPauseView;
+import com.pixplicity.easyprefs.library.Prefs;
 
 
 /**
  * Created by alonzilberman on 7/27/15.
  */
 public class FragmentPlayer extends Fragment implements IPlayerStateListener {
+
     public static String TAG = "fragmentPlayer";
     public static final long DEFAULT_RADIO_DURATIO = 1000000;
+
     private static final float TOOLBAR_TEXT_SIZE = 20f;
     private static final int COVER_IMAGE_SIZE = UIHelper.dpToPixels(100);
+    private static final int CODE_PERMISSIONS_PHONE_STATE = 721;
+    private static final String PREF_PHONE_PERM_ASKED = "phone_perm_asked";
 
     private MediaItem playableMediaItem;
     private UniversalPlayer universalPlayer;
@@ -137,6 +148,7 @@ public class FragmentPlayer extends Fragment implements IPlayerStateListener {
             playableMediaItem = UniversalPlayer.getInstance().getPlayingMediaItem();
         }
 
+        askPhoneStatePermissions();
         return view;
     }
 
@@ -281,6 +293,23 @@ public class FragmentPlayer extends Fragment implements IPlayerStateListener {
             if (!btnPlay.isPlay()) {
                 btnPlay.toggle();
             }
+        }
+    }
+
+    private void askPhoneStatePermissions() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            Prefs.putBoolean(PREF_PHONE_PERM_ASKED, true);
+            new MaterialDialog.Builder(getActivity())
+                    .title(R.string.phone_state_permissions)
+                    .content(R.string.phone_state_description)
+                    .positiveText(R.string.ok)
+                    .onAny(new MaterialDialog.SingleButtonCallback() {
+                        @TargetApi(Build.VERSION_CODES.M)
+                        @Override
+                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                            getActivity().requestPermissions(new String[]{Manifest.permission.READ_PHONE_STATE}, CODE_PERMISSIONS_PHONE_STATE);
+                        }
+                    }).build().show();
         }
     }
 

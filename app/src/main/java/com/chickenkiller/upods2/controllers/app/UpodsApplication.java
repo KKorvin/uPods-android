@@ -66,24 +66,34 @@ public class UpodsApplication extends Application {
     }
 
     public static void setAlarmManagerTasks() {
-        AlarmManager alarmMgr = (AlarmManager) applicationContext.getSystemService(Context.ALARM_SERVICE);
-        Intent intent = new Intent(applicationContext, NetworkTasksService.class);
-        intent.setAction(NetworkTasksService.ACTION_CHECK_FOR_NEW_EPISODS);
-        PendingIntent alarmIntent = PendingIntent.getService(applicationContext, CHECK_NEW_EPISODS_INTENT_CODE, intent,
-                PendingIntent.FLAG_UPDATE_CURRENT);
+        setAlarmManagerTasks(applicationContext);
+    }
 
-        if (SettingsManager.getInstace().getBooleanSettingsValue(SettingsManager.JS_NOTIFY_EPISODES)) {
-            long interval = SettingsManager.getInstace().getIntSettingsValue(SettingsManager.JS_PODCASTS_UPDATE_TIME);
-            //interval = TimeUnit.HOURS.toMillis(interval);
-            interval = TimeUnit.MINUTES.toMillis(60);
-            alarmMgr.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
-                    SystemClock.elapsedRealtime(),
-                    interval, alarmIntent);
-            Logger.printInfo(TAG, "Alarm managers - Episods check for updates task added");
-        } else {
-            alarmIntent.cancel();
-            alarmMgr.cancel(alarmIntent);
-            Logger.printInfo(TAG, "Alarm managers - Episods check for updates task canceled");
+    public static void setAlarmManagerTasks(Context context) {
+        try {
+
+            AlarmManager alarmMgr = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+            Intent intent = new Intent(context, NetworkTasksService.class);
+            intent.setAction(NetworkTasksService.ACTION_CHECK_FOR_NEW_EPISODS);
+            PendingIntent alarmIntent = PendingIntent.getService(context, CHECK_NEW_EPISODS_INTENT_CODE, intent,
+                    PendingIntent.FLAG_UPDATE_CURRENT);
+
+            if (SettingsManager.getInstace().getBooleanSettingsValue(SettingsManager.JS_NOTIFY_EPISODES)) {
+                long interval = SettingsManager.getInstace().getIntSettingsValue(SettingsManager.JS_PODCASTS_UPDATE_TIME);
+                //interval = TimeUnit.HOURS.toMillis(interval);
+                interval = TimeUnit.MINUTES.toMillis(60);
+                alarmMgr.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
+                        SystemClock.elapsedRealtime(),
+                        interval, alarmIntent);
+                Logger.printInfo(TAG, "Alarm managers - Episods check for updates task added");
+            } else {
+                alarmIntent.cancel();
+                alarmMgr.cancel(alarmIntent);
+                Logger.printInfo(TAG, "Alarm managers - Episods check for updates task canceled");
+            }
+        } catch (Exception e) {
+            Logger.printInfo(TAG, "Alarm managers - can't set alarm manager");
+            e.printStackTrace();
         }
     }
 

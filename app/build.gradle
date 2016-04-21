@@ -75,7 +75,7 @@ dependencies {
     compile('com.twitter.sdk.android:twitter:1.10.0@aar') {
         transitive = true;
     }
-    compile('com.github.afollestad.material-dialogs:core:0.8.5.6@aar') {
+    compile('com.github.afollestad.material-dialogs:core:0.8.5.8@aar') {
         transitive = true
     }
     compile 'com.vk:androidsdk:+'

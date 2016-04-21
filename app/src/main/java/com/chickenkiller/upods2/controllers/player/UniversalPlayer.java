@@ -37,7 +37,6 @@ public class UniversalPlayer implements MediaPlayer.EventListener {
 
 
     private static final long RECONNECT_RATE = 5000;
-    private static final long ERROR_SENDING_TIME = 3000;
 
     public enum State {PLAYING, PAUSED, END_REACHED}
 
