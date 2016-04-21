@@ -146,7 +146,7 @@
         <ListView
             android:id="@+id/lvProfile"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="fill_parent"
             android:background="@null"
             android:clickable="false"
             android:dividerHeight="0.2dp"

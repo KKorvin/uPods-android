@@ -2,21 +2,22 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@null"
+    android:clipToPadding="false"
     android:gravity="center"
     android:orientation="horizontal"
-    android:background="@null"
     android:paddingBottom="25dp"
-    android:paddingTop="25dp">
+    android:paddingTop="40dp">
 
     <Button
         android:id="@+id/btnSaveToCloud"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
+        android:layout_marginRight="10dp"
         android:background="@drawable/selector_btn_welcome_screen"
+        android:elevation="5dp"
         android:paddingLeft="15dp"
         android:paddingRight="15dp"
-        android:layout_marginRight="10dp"
-        android:elevation="5dp"
         android:text="@string/save_to_cloud"
         android:textColor="@color/white_material" />
 
@@ -26,8 +27,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginLeft="10dp"
-        android:elevation="5dp"
         android:background="@drawable/selector_btn_welcome_screen"
+        android:elevation="5dp"
         android:paddingLeft="15dp"
         android:paddingRight="15dp"
         android:text="@string/restore_from_cloud"
