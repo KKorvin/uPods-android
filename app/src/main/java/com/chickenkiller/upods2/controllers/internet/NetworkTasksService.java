@@ -80,7 +80,14 @@ public class NetworkTasksService extends IntentService {
      */
     private void checkForNewEpisods() {
         Logger.printInfo(TAG, "Checking for new episodes...");
-        ArrayList<Podcast> subscribedPodcasts = ProfileManager.getInstance().getSubscribedPodcasts();
+        ArrayList<Podcast> subscribedPodcasts;
+        try {
+            subscribedPodcasts = ProfileManager.getInstance().getSubscribedPodcasts();
+        } catch (Exception e) {
+            subscribedPodcasts = new ArrayList<>();
+            Logger.printError(TAG, "Can't get favorites");
+            e.printStackTrace();
+        }
         if (subscribedPodcasts.size() > 0) {
             for (Podcast podcast : subscribedPodcasts) {
                 try {
