@@ -340,7 +340,13 @@ public class FragmentPlayer extends Fragment implements IPlayerStateListener {
             }
         });
 
-        universalPlayer.setOnPlayingFailedCallback(MediaUtils.getPlayerFailCallback(getActivity(), playableMediaItem));
+        IOperationFinishCallback playerFailedCallback = MediaUtils.getPlayerFailCallback(getActivity(), playableMediaItem);
+
+        if (universalPlayer.isInErrorState) {
+            playerFailedCallback.operationFinished();
+        } else {
+            universalPlayer.setOnPlayingFailedCallback(playerFailedCallback);
+        }
     }
 
     private void runPositionUpdater() {

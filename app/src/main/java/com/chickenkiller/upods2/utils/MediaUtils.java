@@ -96,6 +96,7 @@ public class MediaUtils {
         return new IOperationFinishCallback() {
             @Override
             public void operationFinished() {
+                UniversalPlayer.getInstance().releasePlayer();
                 StringBuilder mesStringBuilder = new StringBuilder();
                 mesStringBuilder.append(activity.getString(R.string.cant_play));
                 mesStringBuilder.append(" ");

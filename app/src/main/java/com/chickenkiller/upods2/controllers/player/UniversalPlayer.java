@@ -37,6 +37,7 @@ public class UniversalPlayer implements MediaPlayer.EventListener {
 
 
     private static final long RECONNECT_RATE = 5000;
+    private static final long ERROR_SENDING_TIME = 3000;
 
     public enum State {PLAYING, PAUSED, END_REACHED}
 
@@ -62,6 +63,7 @@ public class UniversalPlayer implements MediaPlayer.EventListener {
 
     public boolean isLinkReadyForPlaying;
     public boolean isPrepaired;
+    public boolean isInErrorState;
 
     private UniversalPlayer() {
     }
@@ -125,11 +127,17 @@ public class UniversalPlayer implements MediaPlayer.EventListener {
         }
 
         try {
+            isInErrorState = false;
+
             if (!isLinkReadyForPlaying && !prepareLinkForPlaying()) {
                 return;
             }
 
             String audeoLink = mediaItem.getAudeoLink();
+
+            if (audeoLink.isEmpty()) {
+                throw new IllegalArgumentException("Link for playing is empty");
+            }
 
             Logger.printInfo(PLAYER_LOG, "Trying to play: " + audeoLink);
             if (mLibVLC == null) {
@@ -171,9 +179,7 @@ public class UniversalPlayer implements MediaPlayer.EventListener {
 
         } catch (Exception e) {
             Logger.printInfo(PLAYER_LOG, "Failed to call play...");
-            if (onPlayingFailedCallback != null) {
-                onPlayingFailedCallback.operationFinished();
-            }
+            threwError();
             e.printStackTrace();
         }
 
@@ -198,9 +204,7 @@ public class UniversalPlayer implements MediaPlayer.EventListener {
                 @Override
                 public void operationFinished() {  //Failed to fetch valid URL
                     isLinkReadyForPlaying = true;
-                    if (onPlayingFailedCallback != null) {
-                        onPlayingFailedCallback.operationFinished();
-                    }
+                    threwError();
                 }
             });
             return false;
@@ -255,18 +259,21 @@ public class UniversalPlayer implements MediaPlayer.EventListener {
             mediaPlayer.release();
             mediaPlayer = null;
             mediaItem = null;
-            isPrepaired = false;
-            isLinkReadyForPlaying = false;
         }
+        isPrepaired = false;
+        isLinkReadyForPlaying = false;
+        isInErrorState = false;
+        removeListeners();
         NotificationManager nMgr = (NotificationManager) UpodsApplication.getContext().getSystemService(Context.NOTIFICATION_SERVICE);
         nMgr.cancelAll();
     }
 
     public void resetPlayer() {
+        isLinkReadyForPlaying = false;
+        isPrepaired = false;
+        isInErrorState = false;
         if (mediaPlayer != null) {
             mediaPlayer.stop();
-            isLinkReadyForPlaying = false;
-            isPrepaired = false;
         }
         if (notificationPanel != null) {
             notificationPanel.notificationCancel();
@@ -355,6 +362,13 @@ public class UniversalPlayer implements MediaPlayer.EventListener {
         return mediaPlayer != null ? (int) mediaPlayer.getTime() : 0;
     }
 
+    private void threwError() {
+        isInErrorState = true;
+        if (onPlayingFailedCallback != null) {
+            onPlayingFailedCallback.operationFinished();
+        }
+    }
+
 
     private void runReconnectTask() {
         if (autoReconector == null) {
@@ -383,11 +397,6 @@ public class UniversalPlayer implements MediaPlayer.EventListener {
                 seekTo(lastPosition);
             }
         }
-        if (event.type == MediaPlayer.Event.EndReached) {
-            if (playerStateListener != null) {
-                playerStateListener.onStateChanged(State.END_REACHED);
-            }
-        }
         if (event.type == MediaPlayer.Event.Playing) {
             isPrepaired = true;
             if (playerStateListener != null) {
@@ -410,9 +419,9 @@ public class UniversalPlayer implements MediaPlayer.EventListener {
             }
         } else if (event.type == MediaPlayer.Event.EndReached) {
             if (mediaPlayer.getLength() == 0) {
-                Logger.printInfo(PLAYER_LOG, "Failed to call play...");
-                if (onPlayingFailedCallback != null) {
-                    onPlayingFailedCallback.operationFinished();
+                threwError();
+                if (playerStateListener != null) {
+                    playerStateListener.onStateChanged(State.END_REACHED);
                 }
             } /*else {
                 changeTrackToDirection(Direction.RIGHT);
