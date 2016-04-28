@@ -14,6 +14,7 @@ import com.chickenkiller.upods2.R;
 import com.chickenkiller.upods2.activity.ActivityPlayer;
 import com.chickenkiller.upods2.controllers.adaperts.MediaItemsAdapter;
 import com.chickenkiller.upods2.controllers.app.ProfileManager;
+import com.chickenkiller.upods2.controllers.app.SettingsManager;
 import com.chickenkiller.upods2.controllers.internet.BackendManager;
 import com.chickenkiller.upods2.interfaces.IContentLoadListener;
 import com.chickenkiller.upods2.interfaces.IFragmentsManager;
@@ -106,7 +107,11 @@ public class FragmentPodcastFeatured extends Fragment implements IContentLoadLis
     }
 
     private void showTops() {
-        BackendManager.getInstance().loadTops(BackendManager.TopType.MAIN_PODCAST, ServerApi.PODCASTS_TOP, new IRequestCallback() {
+        String topLang = SettingsManager.getInstace().getStringSettingValue(SettingsManager.JS_TOPS_LANGUAGE);
+        BackendManager.TopType topType = topLang.equals(SettingsManager.TOPS_RU_LANGUAGE) ? BackendManager.TopType.MAIN_PODCAST_RU
+                : BackendManager.TopType.MAIN_PODCAST;
+
+        BackendManager.getInstance().loadTops(topType, ServerApi.PODCASTS_TOP, new IRequestCallback() {
                     @Override
                     public void onRequestSuccessed(final JSONObject jResponse) {
                         try {

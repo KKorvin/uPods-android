@@ -11,6 +11,15 @@
             android:summary="%s"
             android:title="@string/start_screen" />
 
+        <ListPreference
+            android:dialogTitle="@string/tops_language"
+            android:entries="@array/tops_language_description"
+            android:entryValues="@array/tops_language_values"
+            android:key="@string/key_tops_lng"
+            android:summary="%s"
+            android:title="@string/tops_language" />
+
+
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/radio_main">

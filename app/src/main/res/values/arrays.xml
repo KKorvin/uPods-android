@@ -59,4 +59,13 @@
         <item>#ad62a7</item>
     </array>
 
+    <string-array name="tops_language_values">
+        <item>ru</item>
+        <item>en</item>
+    </string-array>
+
+    <string-array name="tops_language_description">
+        <item>Russian</item>
+        <item>English</item>
+    </string-array>
 </resources>

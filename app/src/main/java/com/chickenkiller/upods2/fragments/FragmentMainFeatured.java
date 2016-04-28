@@ -18,6 +18,7 @@ import com.chickenkiller.upods2.activity.ActivityPlayer;
 import com.chickenkiller.upods2.controllers.adaperts.CategoriesAdapter;
 import com.chickenkiller.upods2.controllers.adaperts.MediaItemsAdapter;
 import com.chickenkiller.upods2.controllers.app.ProfileManager;
+import com.chickenkiller.upods2.controllers.app.SettingsManager;
 import com.chickenkiller.upods2.controllers.internet.BackendManager;
 import com.chickenkiller.upods2.interfaces.IContentLoadListener;
 import com.chickenkiller.upods2.interfaces.ICustumziedBackPress;
@@ -183,7 +184,11 @@ public class FragmentMainFeatured extends Fragment implements IContentLoadListen
     }
 
     private void showTops() {
-        BackendManager.getInstance().loadTops(BackendManager.TopType.MAIN_FEATURED, ServerApi.RADIO_TOP, new IRequestCallback() {
+        String topLang = SettingsManager.getInstace().getStringSettingValue(SettingsManager.JS_TOPS_LANGUAGE);
+        BackendManager.TopType topType = topLang.equals(SettingsManager.TOPS_RU_LANGUAGE) ? BackendManager.TopType.MAIN_FEATURED_RU
+                : BackendManager.TopType.MAIN_FEATURED;
+
+        BackendManager.getInstance().loadTops(topType, ServerApi.RADIO_TOP, new IRequestCallback() {
                     @Override
                     public void onRequestSuccessed(final JSONObject jResponse) {
                         try {

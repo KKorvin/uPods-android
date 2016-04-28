@@ -13,6 +13,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Locale;
+
 /**
  * Created by alonzilberman on 12/12/15.
  */
@@ -28,12 +30,16 @@ public class SettingsManager {
 
     private static SettingsManager settingsManager;
 
+    public static final String TOPS_RU_LANGUAGE = "ru";
+    public static final String TOPS_ENG_LANGUAGE = "en";
+
     public static final String PREFS_LAST_CLOUD_SYNC = "last_sync";
 
     public static final String JS_PODCASTS_UPDATE_TIME = "podcasts_update_time";
     public static final String JS_START_SCREEN = "start_screen";
     public static final String JS_NOTIFY_EPISODES = "notify_episods";
     public static final String JS_STREAM_QUALITY = "stream_quality";
+    public static final String JS_TOPS_LANGUAGE = "tops_lng";
 
     public static final String DEFAULT_STREAM_QUALITY = "high";
 
@@ -65,6 +71,9 @@ public class SettingsManager {
                 settingsObject.put(JS_NOTIFY_EPISODES, DEFAULT_NOTIFY_EPISODS);
                 settingsObject.put(JS_PODCASTS_UPDATE_TIME, DEFAULT_PODCAST_UPDATE_TIME);
                 settingsObject.put(JS_STREAM_QUALITY, DEFAULT_STREAM_QUALITY);
+                settingsObject.put(JS_TOPS_LANGUAGE, Locale.getDefault().getLanguage());
+
+                Prefs.putString(JS_TOPS_LANGUAGE, Locale.getDefault().getLanguage());
                 Prefs.putString(JS_SETTINGS, settingsObject.toString());
             }
             return new JSONObject(Prefs.getString(JS_SETTINGS, null));
@@ -188,6 +197,7 @@ public class SettingsManager {
         putSettingsValue(JS_NOTIFY_EPISODES, Prefs.getBoolean(JS_NOTIFY_EPISODES, DEFAULT_NOTIFY_EPISODS));
         putSettingsValue(JS_START_SCREEN, Prefs.getString(JS_START_SCREEN, DEFAULT_START_SCREEN));
         putSettingsValue(JS_STREAM_QUALITY, Prefs.getString(JS_STREAM_QUALITY, DEFAULT_STREAM_QUALITY));
+        putSettingsValue(JS_TOPS_LANGUAGE, Prefs.getString(JS_TOPS_LANGUAGE, Locale.getDefault().getLanguage()));
 
         String pUpdateTime = Prefs.getString(JS_PODCASTS_UPDATE_TIME, String.valueOf(DEFAULT_PODCAST_UPDATE_TIME));
         putSettingsValue(JS_PODCASTS_UPDATE_TIME, Integer.valueOf(pUpdateTime));

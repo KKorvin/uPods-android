@@ -38,7 +38,8 @@ public class BackendManager {
 
     public enum TopType {
 
-        MAIN_FEATURED("main_featured"), MAIN_BANNER("main_banner"), MAIN_PODCAST("podcasts_featured");
+        MAIN_FEATURED("main_featured"), MAIN_FEATURED_RU("main_featured_ru"), MAIN_BANNER("main_banner"),
+        MAIN_PODCAST("podcasts_featured"), MAIN_PODCAST_RU("podcasts_featured_ru");
 
         private String name;
 
@@ -102,19 +103,6 @@ public class BackendManager {
      * @param uiUpdater - INetworkUIupdater to update UI
      */
     private void sendRequest(final Request request, final IRequestCallback uiUpdater) {
-        /*try {
-            String fromCache = SimpleCacheManager.getInstance().readFromCache(request.url().toString());
-            if (fromCache != null) {
-                final JSONObject jResponse = new JSONObject(fromCache);
-                uiUpdater.onRequestSuccessed(jResponse);
-                searchQueueNextStep();
-                return;
-            }
-        } catch (Exception e) {
-            Logger.printInfo(TAG, "Can't restore cache for url: " + request.url().toString());
-            uiUpdater.onRequestFailed();
-            e.printStackTrace();
-        }*/
         try {
             client.newCall(request).enqueue(new Callback() {
                 @Override
@@ -145,16 +133,6 @@ public class BackendManager {
     }
 
     private void sendRequest(final Request request, final ISimpleRequestCallback uiUpdater) {
-        /*try {
-            String fromCache = SimpleCacheManager.getInstance().readFromCache(request.url().toString());
-            if (fromCache != null) {
-                uiUpdater.onRequestSuccessed(fromCache);
-                return;
-            }
-        } catch (Exception e) {
-            Logger.printInfo(TAG, "Can't restore cache for url: " + request.url().toString());
-            e.printStackTrace();
-        }*/
         try {
             client.newCall(request).enqueue(new Callback() {
                 @Override

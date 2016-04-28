@@ -16,6 +16,8 @@ import com.chickenkiller.upods2.controllers.internet.DownloadMaster;
 import com.chickenkiller.upods2.interfaces.ISlidingMenuHolder;
 import com.chickenkiller.upods2.interfaces.IToolbarHolder;
 
+import java.util.Locale;
+
 /**
  * Created by alonzilberman on 7/8/15.
  */
