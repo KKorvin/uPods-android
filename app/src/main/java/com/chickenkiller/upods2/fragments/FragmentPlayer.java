@@ -261,7 +261,7 @@ public class FragmentPlayer extends Fragment implements IPlayerStateListener {
             });
         }
 
-        //playableMediaItem.syncWithDB();
+        playableMediaItem.syncWithDB();
         if (playableMediaItem.isSubscribed) {
             itemFavorites.setIcon(getResources().getDrawable(R.drawable.ic_heart_black_24dp));
         } else {
@@ -297,7 +297,7 @@ public class FragmentPlayer extends Fragment implements IPlayerStateListener {
     }
 
     private void askPhoneStatePermissions() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !Prefs.getBoolean(PREF_PHONE_PERM_ASKED, false)) {
             Prefs.putBoolean(PREF_PHONE_PERM_ASKED, true);
             new MaterialDialog.Builder(getActivity())
                     .title(R.string.phone_state_permissions)
