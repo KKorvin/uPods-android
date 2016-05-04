@@ -20,6 +20,7 @@ public class MainBroadcastRecivier extends BroadcastReceiver {
 
     private static boolean isInTalk;
 
+
     @Override
     public void onReceive(Context context, Intent intent) {
         Logger.printInfo(TAG, intent.getAction());

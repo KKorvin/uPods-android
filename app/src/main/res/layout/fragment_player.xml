@@ -5,7 +5,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/blue_grey_1000">
+    android:background="@color/blue_grey_1000"
+    tools:ignore="ContentDescription">
 
     <ImageView
         android:id="@+id/imgPlayerCover"
@@ -19,6 +20,7 @@
         android:id="@+id/rlPlayerInfoSection"
         android:layout_width="wrap_content"
         android:layout_below="@+id/imgPlayerCover"
+        android:background="@null"
         app:layout_heightPercent="25%">
 
         <LinearLayout
@@ -147,21 +149,16 @@
             android:src="@drawable/ic_rewind_white_right" />
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/lnPlaylist"
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rvPlaylist"
         android:layout_width="match_parent"
         android:layout_height="235dp"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="-245dp">
+        android:layout_marginBottom="-245dp"
+        android:clickable="false"
+        android:focusable="false" />
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/rvPlaylist"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:clickable="true"
-            android:focusable="false" />
-
-    </LinearLayout>
 
     <com.chickenkiller.upods2.views.PlayPauseView
         android:id="@+id/btnPlay"

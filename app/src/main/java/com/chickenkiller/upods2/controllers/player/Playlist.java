@@ -5,13 +5,13 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.content.Context;
+import android.support.percent.PercentRelativeLayout;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -30,6 +30,7 @@ import com.chickenkiller.upods2.utils.Logger;
 import com.chickenkiller.upods2.utils.MediaUtils;
 import com.chickenkiller.upods2.utils.enums.Direction;
 import com.chickenkiller.upods2.views.PlayPauseView;
+import com.chickenkiller.upods2.views.SimpleDivider;
 
 import java.util.List;
 
@@ -39,7 +40,7 @@ import io.codetail.animation.arcanimator.Side;
 /**
  * Created by alonzilberman on 11/6/15.
  */
-public class Playlist implements AdapterView.OnItemClickListener {
+public class Playlist {
 
     private static final String LOG_TAG = "Playlist";
     private static final long PLAYLIST_ANIMATION_DURATION = 400;
@@ -49,15 +50,14 @@ public class Playlist implements AdapterView.OnItemClickListener {
 
     private IOperationFinishCallback playlistTrackSelected;
 
-    private LinearLayout lnPlaylist;
     private LinearLayout lnPlayerContorls;
     private RelativeLayout rlPlayerInfoSection;
-    private ListView lvPlaylist;
+    private RecyclerView lvPlaylist;
     private RelativeLayout rlPlayerUnderbar;
     private SeekBar sbPlayerProgress;
     private PlayPauseView btnPlay;
     private Context mContext;
-    private ArrayAdapter playlistAdapter;
+    private RecyclerView.Adapter playlistAdapter;
     private ImageButton btnPlPlay;
     private TextView tvTrackCurrentTime;
     private TextView tvTrackDuration;
@@ -73,7 +73,6 @@ public class Playlist implements AdapterView.OnItemClickListener {
 
     public Playlist(Context mContext, View rootView, IOperationFinishCallback playlistTrackSelected) {
         this.mContext = mContext;
-        this.lnPlaylist = (LinearLayout) rootView.findViewById(R.id.lnPlaylist);
         this.btnPlay = (PlayPauseView) rootView.findViewById(R.id.btnPlay);
         this.lnPlayerContorls = (LinearLayout) rootView.findViewById(R.id.lnPlayerContorls);
         this.rlPlayerUnderbar = (RelativeLayout) rootView.findViewById(R.id.rlPlayerUnderbar);
@@ -82,7 +81,7 @@ public class Playlist implements AdapterView.OnItemClickListener {
         this.tvTrackDuration = (TextView) rootView.findViewById(R.id.tvTrackDuration);
         this.tvTrackCurrentTime = (TextView) rootView.findViewById(R.id.tvTrackCurrentTime);
         this.tvTrackInfo = (TextView) rootView.findViewById(R.id.tvTrackInfo);
-        this.lvPlaylist = (ListView) rootView.findViewById(R.id.lvPlaylist);
+        this.lvPlaylist = (RecyclerView) rootView.findViewById(R.id.rvPlaylist);
         this.btnPlPlay = (ImageButton) rootView.findViewById(R.id.btnPlPlay);
         this.animationFirstRun = true;
         this.playlistTrackSelected = playlistTrackSelected;
@@ -109,14 +108,19 @@ public class Playlist implements AdapterView.OnItemClickListener {
         UniversalPlayer universalPlayer = UniversalPlayer.getInstance();
         if (universalPlayer.getPlayingMediaItem() instanceof Podcast) {
             List<Track> tracks = (List<Track>) ((Podcast) universalPlayer.getPlayingMediaItem()).getTracks();
-            playlistAdapter = new PlaylistTracksAdapter(mContext, R.layout.playlist_item, tracks);
+            playlistAdapter = new PlaylistTracksAdapter(this, R.layout.playlist_item, tracks);
 
         } else if (universalPlayer.getPlayingMediaItem() instanceof RadioItem) {
             List<? extends MediaItem> mediaItems = ProfileManager.getInstance().getRecentRadioItems();
-            playlistAdapter = new PlaylistMediaItemsAdapter(mContext, R.layout.playlist_item, (List<MediaItem>) mediaItems);
+            playlistAdapter = new PlaylistMediaItemsAdapter(this, R.layout.playlist_item, (List<MediaItem>) mediaItems);
         }
         lvPlaylist.setAdapter(playlistAdapter);
-        lvPlaylist.setOnItemClickListener(this);
+        lvPlaylist.setHasFixedSize(true);
+
+        SimpleDivider divider = new SimpleDivider(mContext, R.drawable.playlist_divider);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(mContext);
+        lvPlaylist.setLayoutManager(layoutManager);
+        lvPlaylist.addItemDecoration(divider);
     }
 
     private void runOpenPlaylistAnimation() {
@@ -124,7 +128,7 @@ public class Playlist implements AdapterView.OnItemClickListener {
         tvTrackDuration.setVisibility(View.INVISIBLE);
         tvTrackCurrentTime.setVisibility(View.INVISIBLE);
         tvTrackInfo.setVisibility(View.INVISIBLE);
-        final RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) lnPlaylist.getLayoutParams();
+        final RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) lvPlaylist.getLayoutParams();
 
         if (animationFirstRun) {
             final RelativeLayout.LayoutParams btnPlayParams = (RelativeLayout.LayoutParams) btnPlay.getLayoutParams();
@@ -139,7 +143,7 @@ public class Playlist implements AdapterView.OnItemClickListener {
             DisplayMetrics metrics = new DisplayMetrics();
             ((Activity) mContext).getWindowManager().getDefaultDisplay().getMetrics(metrics);
 
-            btnFinalY = btnInitialY - lnPlaylist.getHeight() + rlPlayerUnderbar.getHeight() + btnPlayParams.bottomMargin;
+            btnFinalY = btnInitialY - lvPlaylist.getHeight() + rlPlayerUnderbar.getHeight() + btnPlayParams.bottomMargin;
             btnFinalX = metrics.widthPixels * BTN_POSITION_MULTIPLYER;
         }
 
@@ -149,7 +153,7 @@ public class Playlist implements AdapterView.OnItemClickListener {
             public void onAnimationUpdate(ValueAnimator valueAnimator) {
                 int currentValue = (Integer) valueAnimator.getAnimatedValue();
                 params.bottomMargin = currentValue;
-                lnPlaylist.requestLayout();
+                lvPlaylist.requestLayout();
             }
         });
         animator.setDuration(PLAYLIST_ANIMATION_DURATION);
@@ -161,13 +165,13 @@ public class Playlist implements AdapterView.OnItemClickListener {
     }
 
     private void runOpenInfoSectionAnimation(long duration) {
-        final LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) rlPlayerInfoSection.getLayoutParams();
+        final PercentRelativeLayout.LayoutParams params = (PercentRelativeLayout.LayoutParams) rlPlayerInfoSection.getLayoutParams();
 
         if (animationFirstRun) {
             animationFirstRun = false;
         }
 
-        int animateMarginTo = -(lnPlaylist.getHeight() - lnPlayerContorls.getHeight() - rlPlayerUnderbar.getHeight()); //should me minus value
+        int animateMarginTo = -(lvPlaylist.getHeight() - lnPlayerContorls.getHeight() - rlPlayerUnderbar.getHeight()); //should me minus value
         ValueAnimator animator = ValueAnimator.ofInt(params.topMargin, animateMarginTo);
         animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
@@ -181,7 +185,7 @@ public class Playlist implements AdapterView.OnItemClickListener {
     }
 
     private void runCloseAnimation() {
-        final RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) lnPlaylist.getLayoutParams();
+        final RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) lvPlaylist.getLayoutParams();
 
         final ValueAnimator animator = ValueAnimator.ofInt(0, initialPlayListMargin);
         animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
@@ -189,7 +193,7 @@ public class Playlist implements AdapterView.OnItemClickListener {
             public void onAnimationUpdate(ValueAnimator valueAnimator) {
                 int currentValue = (Integer) valueAnimator.getAnimatedValue();
                 params.bottomMargin = currentValue;
-                lnPlaylist.requestLayout();
+                lvPlaylist.requestLayout();
             }
         });
         animator.addListener(new AnimatorListenerAdapter() {
@@ -216,7 +220,7 @@ public class Playlist implements AdapterView.OnItemClickListener {
     }
 
     private void runCloseInfoSectionAnimation(long duration) {
-        final LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) rlPlayerInfoSection.getLayoutParams();
+        final PercentRelativeLayout.LayoutParams params = (PercentRelativeLayout.LayoutParams) rlPlayerInfoSection.getLayoutParams();
         ValueAnimator animator = ValueAnimator.ofInt(params.topMargin, 0);
         animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
@@ -235,10 +239,6 @@ public class Playlist implements AdapterView.OnItemClickListener {
         }
     }
 
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        changeTrack(position);
-    }
 
     public void goForward() {
         int changeTo = MediaUtils.calculateNextTrackNumber(Direction.RIGHT, getCurrentTrackNumber(), getTracksCount() - 1);
@@ -250,7 +250,7 @@ public class Playlist implements AdapterView.OnItemClickListener {
         changeTrack(changeTo);
     }
 
-    private void changeTrack(int position) {
+    public void changeTrack(int position) {
         UniversalPlayer universalPlayer = UniversalPlayer.getInstance();
         if (playlistAdapter instanceof PlaylistMediaItemsAdapter) {
             MediaItem clickedIPlayableMediaItem = ((PlaylistMediaItemsAdapter) playlistAdapter).getItem(position);
@@ -283,7 +283,7 @@ public class Playlist implements AdapterView.OnItemClickListener {
     }
 
     public int getTracksCount() {
-        return playlistAdapter.getCount() + 1;
+        return playlistAdapter.getItemCount() + 1;
     }
 
     public int getCurrentTrackNumber() {
