@@ -73,6 +73,7 @@ public class FragmentPlayer extends Fragment implements IPlayerStateListener {
     private ImageButton btnRewindLeft;
     private ImageButton btnRewindRight;
     private ImageView imgPlayerCover;
+    private RelativeLayout rlTopSectionBckg;
     private TextView tvPlayserSubtitle;
     private TextView tvPlayerTitle;
     private TextView tvTrackInfo;
@@ -125,6 +126,7 @@ public class FragmentPlayer extends Fragment implements IPlayerStateListener {
         btnPlay.setOnClickListener(btnPlayStopClickListener);
         btnRewindLeft.setOnClickListener(btnBackwardClickListener);
         btnRewindRight.setOnClickListener(btnForwardClickListener);
+        rlTopSectionBckg = (RelativeLayout) view.findViewById(R.id.rlTopSectionBckg);
         imgPlayerCover = (ImageView) view.findViewById(R.id.imgPlayerCover);
         tvPlayerTitle = (TextView) view.findViewById(R.id.tvPlayerTitle);
         tvPlayserSubtitle = (TextView) view.findViewById(R.id.tvPlayserSubtitle);
@@ -161,7 +163,6 @@ public class FragmentPlayer extends Fragment implements IPlayerStateListener {
                 RelativeLayout rlPlayerUnderbar = (RelativeLayout) rootView.findViewById(R.id.rlPlayerUnderbar);
                 params.bottomMargin = rlPlayerUnderbar.getHeight() - sbPlayerProgress.getHeight() / 2;
                 sbPlayerProgress.requestLayout();
-                rootView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
             }
         });
     }
@@ -215,7 +216,7 @@ public class FragmentPlayer extends Fragment implements IPlayerStateListener {
             Bitmap letterTile = letterBitmap.getLetterTile(playableMediaItem.getName(), playableMediaItem.getName(), COVER_IMAGE_SIZE, COVER_IMAGE_SIZE);
             imgPlayerCover.setImageBitmap(letterTile);
             int dominantColor = UIHelper.getDominantColor(letterTile);
-            //rlTopSectionBckg.setBackgroundColor(dominantColor);
+            rlTopSectionBckg.setBackgroundColor(dominantColor);
         } else {
             Glide.with(getActivity()).load(playableMediaItem.getCoverImageUrl()).crossFade().into(new GlideDrawableImageViewTarget(imgPlayerCover) {
                 @Override
@@ -223,7 +224,7 @@ public class FragmentPlayer extends Fragment implements IPlayerStateListener {
                     super.onResourceReady(drawable, anim);
                     Bitmap bitmap = ((GlideBitmapDrawable) drawable).getBitmap();
                     int dominantColor = UIHelper.getDominantColor(bitmap);
-                    //rlTopSectionBckg.setBackgroundColor(dominantColor);
+                    rlTopSectionBckg.setBackgroundColor(dominantColor);
                 }
             });
         }
@@ -260,7 +261,7 @@ public class FragmentPlayer extends Fragment implements IPlayerStateListener {
             });
         }
 
-        playableMediaItem.syncWithDB();
+        //playableMediaItem.syncWithDB();
         if (playableMediaItem.isSubscribed) {
             itemFavorites.setIcon(getResources().getDrawable(R.drawable.ic_heart_black_24dp));
         } else {

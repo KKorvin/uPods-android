@@ -1,18 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/rlPlaylistItem"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/selector_playlist_item"
-    android:clickable="true"
-    android:focusable="true">
+    android:descendantFocusability="blocksDescendants">
 
     <ImageButton
         android:id="@+id/btnPlPlay"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@color/transparent"
         android:clickable="false"
+        android:background="@color/transparent"
         android:padding="15dp"
         android:src="@drawable/ic_play_white" />
 
@@ -24,7 +22,6 @@
         android:layout_marginTop="15dp"
         android:layout_toLeftOf="@+id/tvPlTrackDuration"
         android:layout_toRightOf="@+id/btnPlPlay"
-        android:clickable="false"
         android:ellipsize="end"
         android:singleLine="true"
         android:text="daskclascksalcasklc"
@@ -32,7 +29,6 @@
 
     <TextView
         android:id="@+id/tvPlTrackSubTitle"
-
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/tvPlTrackTitle"
@@ -40,7 +36,6 @@
         android:layout_marginTop="5dp"
         android:layout_toLeftOf="@+id/tvPlTrackDuration"
         android:layout_toRightOf="@+id/btnPlPlay"
-        android:clickable="false"
         android:ellipsize="end"
         android:singleLine="true"
         android:text="daskclascksalcasklc"
@@ -48,13 +43,11 @@
 
     <TextView
         android:id="@+id/tvPlTrackDuration"
-
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_marginRight="15dp"
         android:layout_marginTop="25dp"
-        android:clickable="false"
         android:text="20:00"
         android:textColor="@color/whiteGray" />
 </RelativeLayout>

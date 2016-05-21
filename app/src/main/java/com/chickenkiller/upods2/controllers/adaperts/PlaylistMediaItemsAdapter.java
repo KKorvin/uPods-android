@@ -1,16 +1,14 @@
 package com.chickenkiller.upods2.controllers.adaperts;
 
-import android.os.Handler;
-import android.support.v7.widget.RecyclerView;
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.chickenkiller.upods2.R;
-import com.chickenkiller.upods2.controllers.player.Playlist;
 import com.chickenkiller.upods2.controllers.player.UniversalPlayer;
 import com.chickenkiller.upods2.interfaces.INowPlayingItemPosiontGetter;
 import com.chickenkiller.upods2.models.MediaItem;
@@ -20,76 +18,53 @@ import java.util.List;
 /**
  * Created by alonzilberman on 10/7/15.
  */
-public class PlaylistMediaItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements INowPlayingItemPosiontGetter {
+public class PlaylistMediaItemsAdapter extends ArrayAdapter<MediaItem> implements INowPlayingItemPosiontGetter {
 
     private int layaoutId;
     private UniversalPlayer universalPlayer;
     private List<? extends MediaItem> mediaItems;
-    private Playlist playlist;
 
 
-    private static class PlaylistViewHolder extends RecyclerView.ViewHolder {
+    private static class ViewHolder {
         public ImageButton btnPlPlay;
         public TextView tvPlTrackTitle;
         public TextView tvPlTrackSubTitle;
         public TextView tvPlTrackDuration;
-        public RelativeLayout rlPlaylistItem;
-
-        public PlaylistViewHolder(View view) {
-            super(view);
-            btnPlPlay = (ImageButton) view.findViewById(R.id.btnPlPlay);
-            tvPlTrackTitle = (TextView) view.findViewById(R.id.tvPlTrackTitle);
-            tvPlTrackSubTitle = (TextView) view.findViewById(R.id.tvPlTrackSubTitle);
-            tvPlTrackDuration = (TextView) view.findViewById(R.id.tvPlTrackDuration);
-            rlPlaylistItem = (RelativeLayout) view.findViewById(R.id.rlPlaylistItem);
-        }
     }
 
-    public PlaylistMediaItemsAdapter(Playlist playlist, int layaoutId, List<MediaItem> mediaItems) {
-        super();
+    public PlaylistMediaItemsAdapter(Context context, int layaoutId, List<MediaItem> mediaItems) {
+        super(context, layaoutId, mediaItems);
         this.layaoutId = layaoutId;
         this.universalPlayer = UniversalPlayer.getInstance();
         this.mediaItems = mediaItems;
-        this.playlist = playlist;
     }
 
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(layaoutId, parent, false);
-        PlaylistViewHolder viewHolder = new PlaylistViewHolder(view);
-        return viewHolder;
-    }
+    public View getView(int position, View convertView, ViewGroup parent) {
+        MediaItem mediaItem = getItem(position);
+        ViewHolder viewHolder;
 
-    @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
-        PlaylistViewHolder viewHolder = (PlaylistViewHolder) holder;
-        MediaItem currentItem = mediaItems.get(position);
-        viewHolder.tvPlTrackTitle.setText(currentItem.getName());
-        viewHolder.tvPlTrackSubTitle.setText(currentItem.getSubHeader());
-        if (universalPlayer.isPlaying() && universalPlayer.isCurrentMediaItem(currentItem)) {
+        if (convertView == null) {
+            viewHolder = new ViewHolder();
+            LayoutInflater inflater = LayoutInflater.from(getContext());
+            convertView = inflater.inflate(layaoutId, parent, false);
+            viewHolder.btnPlPlay = (ImageButton) convertView.findViewById(R.id.btnPlPlay);
+            viewHolder.tvPlTrackTitle = (TextView) convertView.findViewById(R.id.tvPlTrackTitle);
+            viewHolder.tvPlTrackSubTitle = (TextView) convertView.findViewById(R.id.tvPlTrackSubTitle);
+            viewHolder.tvPlTrackDuration = (TextView) convertView.findViewById(R.id.tvPlTrackDuration);
+            convertView.setTag(viewHolder);
+        } else {
+            viewHolder = (ViewHolder) convertView.getTag();
+        }
+        viewHolder.tvPlTrackTitle.setText(mediaItem.getName());
+        viewHolder.tvPlTrackSubTitle.setText(mediaItem.getSubHeader());
+        if (universalPlayer.isPlaying() && universalPlayer.isCurrentMediaItem(mediaItem)) {
             viewHolder.btnPlPlay.setImageResource(R.drawable.ic_pause_white);
         } else {
             viewHolder.btnPlPlay.setImageResource(R.drawable.ic_play_white);
         }
-        viewHolder.rlPlaylistItem.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(final View v) {
-                new Handler().postDelayed(new Runnable() {
-                    public void run() {
-                        playlist.changeTrack(position);
-                    }
-                }, 300);
-            }
-        });
-
-        holder.itemView.setTag(currentItem);
+        return convertView;
     }
-
-    @Override
-    public int getItemCount() {
-        return mediaItems.size();
-    }
-
 
     @Override
     public int getNowPlayingItemPosition() {
@@ -102,7 +77,4 @@ public class PlaylistMediaItemsAdapter extends RecyclerView.Adapter<RecyclerView
         return 0;
     }
 
-    public MediaItem getItem(int position) {
-        return mediaItems.get(position);
-    }
 }

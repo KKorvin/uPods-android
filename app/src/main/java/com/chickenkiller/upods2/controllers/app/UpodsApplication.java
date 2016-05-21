@@ -45,7 +45,6 @@ public class UpodsApplication extends Application {
                 .setUseDefaultSharedPreference(true).build();
 
         super.onCreate();
-        Fabric.with(this, new Crashlytics());
     }
 
     /**
