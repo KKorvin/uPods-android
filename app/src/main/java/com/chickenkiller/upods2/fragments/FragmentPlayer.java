@@ -163,6 +163,7 @@ public class FragmentPlayer extends Fragment implements IPlayerStateListener {
                 RelativeLayout rlPlayerUnderbar = (RelativeLayout) rootView.findViewById(R.id.rlPlayerUnderbar);
                 params.bottomMargin = rlPlayerUnderbar.getHeight() - sbPlayerProgress.getHeight() / 2;
                 sbPlayerProgress.requestLayout();
+                rootView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
             }
         });
     }
