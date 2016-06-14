@@ -23,13 +23,15 @@ public class MainBroadcastRecivier extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         Logger.printInfo(TAG, intent.getAction());
-        if (isInTalk && intent.getStringExtra(TelephonyManager.EXTRA_STATE).equals(TelephonyManager.EXTRA_STATE_IDLE)) {
+        if (isInTalk && intent.hasExtra(TelephonyManager.EXTRA_STATE) &&
+                intent.getStringExtra(TelephonyManager.EXTRA_STATE).equals(TelephonyManager.EXTRA_STATE_IDLE)) {
             isInTalk = false;
             UniversalPlayer universalPlayer = UniversalPlayer.getInstance();
             if (universalPlayer.isPrepaired && !universalPlayer.isPlaying()) {
                 universalPlayer.start();
             }
-        } else if (intent.getStringExtra(TelephonyManager.EXTRA_STATE).equals(TelephonyManager.EXTRA_STATE_RINGING)) {
+        } else if (intent.hasExtra(TelephonyManager.EXTRA_STATE) &&
+                intent.getStringExtra(TelephonyManager.EXTRA_STATE).equals(TelephonyManager.EXTRA_STATE_RINGING)) {
             UniversalPlayer universalPlayer = UniversalPlayer.getInstance();
             if (universalPlayer.isPrepaired && universalPlayer.isPlaying()) {
                 isInTalk = true;

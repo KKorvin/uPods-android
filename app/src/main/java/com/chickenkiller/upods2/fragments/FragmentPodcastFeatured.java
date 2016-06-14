@@ -108,9 +108,10 @@ public class FragmentPodcastFeatured extends Fragment implements IContentLoadLis
 
     private void showTops() {
         String topLang = SettingsManager.getInstace().getStringSettingValue(SettingsManager.JS_TOPS_LANGUAGE);
-        BackendManager.TopType topType = topLang.equals(SettingsManager.TOPS_RU_LANGUAGE) ? BackendManager.TopType.MAIN_PODCAST_RU
-                : BackendManager.TopType.MAIN_PODCAST;
+        // BackendManager.TopType topType = topLang.equals(SettingsManager.TOPS_RU_LANGUAGE) ? BackendManager.TopType.MAIN_PODCAST_RU
+        //        : BackendManager.TopType.MAIN_PODCAST;
 
+        BackendManager.TopType topType = BackendManager.TopType.MAIN_PODCAST;
         BackendManager.getInstance().loadTops(topType, ServerApi.PODCASTS_TOP, new IRequestCallback() {
                     @Override
                     public void onRequestSuccessed(final JSONObject jResponse) {
