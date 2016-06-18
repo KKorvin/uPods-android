@@ -32,6 +32,8 @@ public class DownloadEpisodeTest {
     public void checkBasicDownloadRemoveScenario() {
         //EMULATE downloading episode -> remove episode
         try {
+            UpodsApplication.initAllResources();
+
             String podcastName = String.valueOf(System.currentTimeMillis()) + "_podcast";
             Podcast podcast = new Podcast(podcastName, TEST_FEED1);
             ArrayList<Episode> episodes = HelpFunctions.parseEpisodes(podcast.getFeedUrl());

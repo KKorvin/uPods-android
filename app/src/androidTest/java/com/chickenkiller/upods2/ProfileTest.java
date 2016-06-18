@@ -4,6 +4,7 @@ import android.support.test.runner.AndroidJUnit4;
 import android.test.suitebuilder.annotation.SmallTest;
 
 import com.chickenkiller.upods2.controllers.app.ProfileManager;
+import com.chickenkiller.upods2.controllers.app.UpodsApplication;
 import com.chickenkiller.upods2.models.Episode;
 import com.chickenkiller.upods2.models.MediaItem;
 import com.chickenkiller.upods2.models.Podcast;
@@ -29,6 +30,8 @@ public class ProfileTest {
 
     @Test
     public void checkSubscribedScenario() {
+        UpodsApplication.initAllResources();
+
         //Testing podcast
         String podcastName = String.valueOf(System.currentTimeMillis()) + "_podcast";
         Podcast podcast = new Podcast(podcastName, TEST_FEED);
@@ -61,6 +64,8 @@ public class ProfileTest {
 
     @Test
     public void checkDownloadedScenario() {
+        UpodsApplication.initAllResources();
+
         //Testing podcast
         String podcastName = String.valueOf(System.currentTimeMillis()) + "_podcast";
         String episodeName = String.valueOf(System.currentTimeMillis()) + "_episode";
@@ -82,6 +87,8 @@ public class ProfileTest {
 
     @Test
     public void checkRecentScenario() {
+        UpodsApplication.initAllResources();
+
         //Testing radio
         String radioName = String.valueOf(System.currentTimeMillis()) + "_radio";
         RadioItem radioItem = new RadioItem(radioName, new StreamUrl(""), "");

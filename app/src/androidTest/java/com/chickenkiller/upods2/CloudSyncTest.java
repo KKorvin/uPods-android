@@ -5,6 +5,7 @@ import android.support.test.runner.AndroidJUnit4;
 import android.test.suitebuilder.annotation.SmallTest;
 
 import com.chickenkiller.upods2.controllers.app.ProfileManager;
+import com.chickenkiller.upods2.controllers.app.UpodsApplication;
 import com.chickenkiller.upods2.controllers.internet.SyncMaster;
 import com.chickenkiller.upods2.interfaces.IOperationFinishCallback;
 import com.chickenkiller.upods2.models.MediaItem;
@@ -31,6 +32,8 @@ public class CloudSyncTest {
     public void testGlobalTokenScenario() {
         //Add subscribed -> Sync with server - > remove subscribed -> get profile from server -> subscribed should be there
 
+        UpodsApplication.initAllResources();
+
         String radioName = String.valueOf(System.currentTimeMillis()) + "_radio";
         final RadioItem radioItem = new RadioItem(radioName, new StreamUrl(""), "");
 
@@ -40,7 +43,7 @@ public class CloudSyncTest {
 
         final String globalToken = String.valueOf(System.currentTimeMillis());
 
-        final SyncMaster profileMasterGET = new SyncMaster("global", globalToken, "", SyncMaster.Task.PUSH);
+        final SyncMaster profileMasterGET = new SyncMaster("global", globalToken, "", SyncMaster.Task.PULL);
         final SyncMaster profileSyncMasterPUSH = new SyncMaster("global", globalToken, "", SyncMaster.Task.PUSH);
         profileSyncMasterPUSH.setProfileSyncedCallback(new IOperationFinishCallback() {
             @Override

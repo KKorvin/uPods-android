@@ -3,6 +3,7 @@ package com.chickenkiller.upods2;
 import android.support.test.runner.AndroidJUnit4;
 import android.test.suitebuilder.annotation.SmallTest;
 
+import com.chickenkiller.upods2.controllers.app.UpodsApplication;
 import com.chickenkiller.upods2.controllers.internet.BackendManager;
 import com.chickenkiller.upods2.models.Episode;
 import com.chickenkiller.upods2.models.Feed;
@@ -17,8 +18,6 @@ import java.util.ArrayList;
 
 import okhttp3.Request;
 
-import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -70,20 +69,25 @@ public class NewEpisodesTest {
 
     @Test
     public void checkNoUpdatesENGScenario() {
+        UpodsApplication.initAllResources();
+
         ResultBucket resultBucket = checkNoUpdates(REAL_PODCAST_FEED_ENG2);
         assertTrue(!resultBucket.hasUpdates);
-        assertThat(resultBucket.newEpisodesCount, is(0));
+        assertTrue(resultBucket.newEpisodesCount == 0);
     }
 
     @Test
     public void checkNoUpdatesRUScenario() {
+        UpodsApplication.initAllResources();
+
         ResultBucket resultBucket = checkNoUpdates(REAL_PODCAST_FEED_RU);
         assertTrue(!resultBucket.hasUpdates);
-        assertThat(resultBucket.newEpisodesCount, is(0));
+        assertTrue(resultBucket.newEpisodesCount == 0);
     }
 
     @Test
     public void checkBasicNewEpisodesScenario() {
+        UpodsApplication.initAllResources();
 
         boolean hasUpdates = false;
         long newEpisodesCount = -1;
@@ -119,11 +123,13 @@ public class NewEpisodesTest {
         }
 
         assertTrue(hasUpdates);
-        assertThat(newEpisodesCount, is(NEW_EPISODES_ADDED));
+        assertTrue(newEpisodesCount == NEW_EPISODES_ADDED);
     }
 
     @Test
     public void checkRealPodcastNewEpisodesScenario() {
+        UpodsApplication.initAllResources();
+        
         boolean hasUpdates = false;
         long newEpisodesCount = -1;
 
@@ -152,6 +158,6 @@ public class NewEpisodesTest {
         }
 
         assertTrue(hasUpdates);
-        assertThat(newEpisodesCount, is(EPISODES_TO_REMOVE));
+        assertTrue(newEpisodesCount == EPISODES_TO_REMOVE);
     }
 }
