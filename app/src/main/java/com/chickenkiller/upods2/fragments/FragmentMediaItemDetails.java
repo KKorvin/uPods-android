@@ -64,6 +64,7 @@ public class FragmentMediaItemDetails extends Fragment implements View.OnTouchLi
     private static final float COVER_SCALE_FACTOR = 2f;
     private static final int COVER_IMAGE_SIZE = UIHelper.dpToPixels(80);
     private static final int STATUS_BAR_HEIGHT = UIHelper.dpToPixels(24);
+    private static final int MIN_VISIBLE_FACTOR_FOR_PLAY_BTN = 3;
     private static int bottomScrollBorder;
     private static int topScrollBorder;
     public static String TAG = "media_details";
@@ -408,6 +409,8 @@ public class FragmentMediaItemDetails extends Fragment implements View.OnTouchLi
             case MotionEvent.ACTION_MOVE:
                 if (applyMovement) {
                     int newMargin = Y - moveDeltaY < 0 ? 0 : Y - moveDeltaY;
+                    int marginDeltaY = Math.abs(lParams.topMargin - newMargin);
+
                     lParams.topMargin = newMargin;
                     lParams.bottomMargin = MAGIC_NUMBER;
                     rlDetailedContent.setLayoutParams(lParams);
@@ -419,7 +422,7 @@ public class FragmentMediaItemDetails extends Fragment implements View.OnTouchLi
                             viewStatusBar.setVisibility(View.VISIBLE);
                         }
                         svDetails.setEnabled(true);
-                    } else {
+                    } else if (marginDeltaY > MIN_VISIBLE_FACTOR_FOR_PLAY_BTN) {
                         viewStatusBar.setVisibility(View.GONE);
                         fbDetailsPlay.setVisibility(View.INVISIBLE);
                     }
