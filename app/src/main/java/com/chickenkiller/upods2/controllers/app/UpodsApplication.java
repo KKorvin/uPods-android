@@ -11,9 +11,11 @@ import android.os.SystemClock;
 import com.chickenkiller.upods2.controllers.database.SQLdatabaseManager;
 import com.chickenkiller.upods2.controllers.internet.NetworkTasksService;
 import com.chickenkiller.upods2.models.Category;
+import com.chickenkiller.upods2.utils.Analytics;
 import com.chickenkiller.upods2.utils.Logger;
 import com.facebook.FacebookSdk;
 import com.pixplicity.easyprefs.library.Prefs;
+import com.yandex.metrica.YandexMetrica;
 
 import java.util.concurrent.TimeUnit;
 
@@ -24,6 +26,7 @@ import java.util.concurrent.TimeUnit;
 public class UpodsApplication extends Application {
 
     private static final int CHECK_NEW_EPISODS_INTENT_CODE = 2302;
+
     private static final String TAG = "UpodsApplication";
     private static Context applicationContext;
     private static SQLdatabaseManager databaseManager;
@@ -34,6 +37,8 @@ public class UpodsApplication extends Application {
         //LeakCanary.install(this);
         isLoaded = false;
         applicationContext = getApplicationContext();
+        YandexMetrica.activate(getApplicationContext(), Analytics.YANDEX_METRICS_API_KEY);
+        YandexMetrica.enableActivityAutoTracking(this);
         FacebookSdk.sdkInitialize(applicationContext);
         LoginMaster.getInstance().init();
         new Prefs.Builder()

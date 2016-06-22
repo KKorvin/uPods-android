@@ -26,8 +26,10 @@ import com.chickenkiller.upods2.interfaces.ISlidingMenuManager;
 import com.chickenkiller.upods2.models.SlidingMenuHeader;
 import com.chickenkiller.upods2.models.SlidingMenuItem;
 import com.chickenkiller.upods2.models.SlidingMenuRow;
+import com.chickenkiller.upods2.utils.Analytics;
 import com.chickenkiller.upods2.utils.GlobalUtils;
 import com.chickenkiller.upods2.utils.enums.MediaItemType;
+import com.yandex.metrica.YandexMetrica;
 
 import java.util.List;
 
@@ -163,27 +165,34 @@ public class SlidingMenuAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                     Context context = view.getContext();
                     slidingMenuManager.toggle();
                     if (clickedMenuItem.getTitle().equals(context.getString(R.string.main_settings))) {
+                        YandexMetrica.reportEvent(Analytics.SLIDING_MENU_SETTINGS_CLICK);
                         FragmentSettings settingsFragment = new FragmentSettings();
                         fragmentsManager.showFragment(R.id.fl_content, settingsFragment, FragmentSettings.TAG);
                     } else if (clickedMenuItem.getTitle().equals(context.getString(R.string.podcasts_main))) {
+                        YandexMetrica.reportEvent(Analytics.SLIDING_MENU_PODCASTS_CLICK);
                         FragmentMediaItemsGrid fragmentMediaItemsGrid = new FragmentMediaItemsGrid();
                         fragmentMediaItemsGrid.setMediaItemType(MediaItemType.PODCAST);
                         fragmentsManager.showFragment(R.id.fl_content, fragmentMediaItemsGrid, FragmentMediaItemsGrid.TAG);
                     } else if (clickedMenuItem.getTitle().equals(context.getString(R.string.radio_main))) {
+                        YandexMetrica.reportEvent(Analytics.SLIDING_MENU_RADIO_CLICK);
                         FragmentMediaItemsGrid fragmentMediaItemsGrid = new FragmentMediaItemsGrid();
                         fragmentMediaItemsGrid.setMediaItemType(MediaItemType.RADIO);
                         fragmentsManager.showFragment(R.id.fl_content, fragmentMediaItemsGrid, FragmentMediaItemsGrid.TAG);
                     } else if (clickedMenuItem.getTitle().equals(context.getString(R.string.profile_my_profile))) {
+                        YandexMetrica.reportEvent(Analytics.SLIDING_MENU_PROFILE_CLICK);
                         FragmentProfile fragmentProfile = new FragmentProfile();
                         fragmentsManager.showFragment(R.id.fl_content, fragmentProfile, FragmentProfile.TAG);
                     } else if (clickedMenuItem.getTitle().equals(context.getString(R.string.main_help))) {
+                        YandexMetrica.reportEvent(Analytics.SLIDING_MENU_HELP_CLICK);
                         FragmentHelp fragmentHelp = new FragmentHelp();
                         fragmentHelp.isFromSlidingMenu = true;
                         fragmentsManager.showFragment(R.id.fl_content, fragmentHelp, FragmentHelp.TAG);
                     } else if (clickedMenuItem.getTitle().equals(context.getString(R.string.main_about))) {
+                        YandexMetrica.reportEvent(Analytics.SLIDING_MENU_ABOUT_CLICK);
                         DialogFragmentAbout dialogFragmentAbout = new DialogFragmentAbout();
                         fragmentsManager.showDialogFragment(dialogFragmentAbout);
                     } else if (clickedMenuItem.getTitle().equals(context.getString(R.string.main_rate_app))) {
+                        YandexMetrica.reportEvent(Analytics.SLIDING_MENU_RATE_CLICK);
                         GlobalUtils.rateApp(context);
                     } else {
                         fragmentsManager.showFragment(R.id.fl_content, new FragmentWellcome(), FragmentMediaItemsGrid.TAG);

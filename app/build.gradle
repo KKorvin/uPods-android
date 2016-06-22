@@ -45,6 +45,9 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
 
+    //Analytcs
+    compile 'com.yandex.android:mobmetricalib:2.42'
+
     //Google's dependencies
     compile 'com.android.support:appcompat-v7:+'
     compile 'com.android.support:cardview-v7:+'
