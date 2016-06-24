@@ -81,7 +81,6 @@ public class DownloadMaster {
         request.setDestinationUri(Uri.fromFile(new File(finalPath)));
         task.downloadId = downloadManager.enqueue(request);
         task.filePath = finalPath;
-        Logger.printInfo("path", finalPath);
         allTasks.add(task);
         Logger.printInfo(DM_LOG, "Starting download episod " + trackName + " to " + finalPath);
         runProgressUpdater();
