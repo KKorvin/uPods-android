@@ -55,7 +55,9 @@ public class FragmentMediaItemsGrid extends Fragment implements ICustumziedBackP
 
         Toolbar toolbar = ((IToolbarHolder) getActivity()).getToolbar();
         toolbar.setVisibility(View.VISIBLE);
-        toolbar.findViewById(R.id.action_search).setVisibility(View.VISIBLE);
+        toolbar.getMenu().findItem(R.id.action_search).setVisible(true);
+        toolbar.getMenu().findItem(R.id.add_podcast).setVisible(true);
+        toolbar.getMenu().findItem(R.id.add_radio).setVisible(true);
 
         if (mediaItemType == MediaItemType.RADIO) {
             vpMediaTabs.setTabMode(TabLayout.MODE_FIXED);

@@ -16,8 +16,6 @@ import com.chickenkiller.upods2.controllers.internet.DownloadMaster;
 import com.chickenkiller.upods2.interfaces.ISlidingMenuHolder;
 import com.chickenkiller.upods2.interfaces.IToolbarHolder;
 
-import java.util.Locale;
-
 /**
  * Created by alonzilberman on 7/8/15.
  */
@@ -32,7 +30,9 @@ public class FragmentSettings extends PreferenceFragment {
 
         toolbar = ((IToolbarHolder) getActivity()).getToolbar();
         toolbar.setVisibility(View.VISIBLE);
-        toolbar.findViewById(R.id.action_search).setVisibility(View.GONE);
+        toolbar.getMenu().findItem(R.id.action_search).setVisible(false);
+        toolbar.getMenu().findItem(R.id.add_podcast).setVisible(false);
+        toolbar.getMenu().findItem(R.id.add_radio).setVisible(false);
         toolbar.setTitle(R.string.action_settings);
 
         ((ISlidingMenuHolder) getActivity()).setSlidingMenuHeader(getString(R.string.action_settings));
