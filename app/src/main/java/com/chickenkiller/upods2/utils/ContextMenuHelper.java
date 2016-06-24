@@ -94,6 +94,9 @@ public class ContextMenuHelper {
     public static void selectRadioStreamQuality(final Activity activity, final FragmentPlayer fragmentPlayer, final RadioItem currentMediaItem) {
         final RadioItem playableMediaItem = (RadioItem) UniversalPlayer.getInstance().getPlayingMediaItem();
         String[] availableStreams = (playableMediaItem).getAvailableStreams();
+        for (int i = 0; i < availableStreams.length; i++) {
+            availableStreams[i] = availableStreams[i] + activity.getString(R.string.kbps);
+        }
         if (availableStreams.length == 0) {
             Toast.makeText(activity, activity.getString(R.string.not_available_for_stream), Toast.LENGTH_SHORT).show();
         } else {
@@ -103,9 +106,10 @@ public class ContextMenuHelper {
                             new MaterialDialog.ListCallbackSingleChoice() {
                                 @Override
                                 public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
-                                    SettingsManager.getInstace().saveStreamQualitySelection(playableMediaItem, text.toString());
-                                    playableMediaItem.selectStreamUrl(text.toString());
-                                    currentMediaItem.selectStreamUrl(text.toString());
+                                    String selectedStream = text.toString().replace(activity.getString(R.string.kbps), "");
+                                    SettingsManager.getInstace().saveStreamQualitySelection(playableMediaItem, selectedStream);
+                                    playableMediaItem.selectStreamUrl(selectedStream);
+                                    currentMediaItem.selectStreamUrl(selectedStream);
                                     UniversalPlayer.getInstance().softRestart();
                                     fragmentPlayer.initPlayerStateUI();
                                     return true;

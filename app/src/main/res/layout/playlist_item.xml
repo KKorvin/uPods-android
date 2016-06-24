@@ -48,6 +48,6 @@
         android:layout_alignParentRight="true"
         android:layout_marginRight="15dp"
         android:layout_marginTop="25dp"
-        android:text="20:00"
+        android:text=""
         android:textColor="@color/whiteGray" />
 </RelativeLayout>
