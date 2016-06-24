@@ -168,4 +168,5 @@
     <string name="write_external_description">We need permissions to write external storage in order to download podcasts. Please allow it in next popup.</string>
     <string name="tops_language">Tops language</string>
     <string name="key_tops_lng">tops_lng</string>
+    <string name="search_hint">Search</string>
 </resources>

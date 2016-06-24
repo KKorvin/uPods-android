@@ -6,6 +6,7 @@
         <item name="colorPrimaryDark">@color/color_primary_dark</item>
         <item name="colorControlNormal">@color/white</item>
         <item name="colorAccent">@color/red_500</item>
+        <item name="android:textColorHint">@color/grey_400</item>
     </style>
 
     <style name="MyCustomTabLayout" parent="Widget.Design.TabLayout">
@@ -18,6 +19,7 @@
         <item name="android:textColor">@color/viewPagerNotSelectedWhite</item>
         <item name="textAllCaps">true</item>
     </style>
+
 
     <style name="PlayerSeekBar" parent="Widget.AppCompat.SeekBar"></style>
 

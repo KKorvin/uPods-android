@@ -2,6 +2,7 @@ package com.chickenkiller.upods2.utils.ui;
 
 import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.RectF;
 import android.graphics.drawable.ColorDrawable;
@@ -12,11 +13,14 @@ import android.graphics.drawable.StateListDrawable;
 import android.graphics.drawable.shapes.RoundRectShape;
 import android.os.Build;
 import android.support.v7.graphics.Palette;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.TextView;
 
+import com.chickenkiller.upods2.R;
 import com.chickenkiller.upods2.controllers.app.UpodsApplication;
 
 import java.lang.reflect.Field;
@@ -73,6 +77,24 @@ public class UIHelper {
                 }
             }
         }
+    }
+
+    public static void setSearchViewStyle(SearchView searchView) {
+        if (searchView.findViewById(android.support.v7.appcompat.R.id.search_plate) != null) {
+            searchView.findViewById(android.support.v7.appcompat.R.id.search_plate).setBackground(null);
+        }
+        if (searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text) != null) {
+            EditText searchPlate = (EditText) searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
+            searchPlate.setHint(R.string.search_hint);
+            try {
+                Field mCursorDrawableRes = TextView.class.getDeclaredField("mCursorDrawableRes");
+                mCursorDrawableRes.setAccessible(true);
+                mCursorDrawableRes.set(searchPlate, R.drawable.white_cursor); //This sets the cursor resource ID to 0 or @null which will make it visible on white background
+            } catch (Exception e) {
+            }
+        }
+
+        searchView.setBackgroundColor(Color.TRANSPARENT);
     }
 
     public static int dpToPixels(int value) {
