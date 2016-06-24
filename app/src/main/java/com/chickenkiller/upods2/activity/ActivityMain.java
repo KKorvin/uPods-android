@@ -141,6 +141,7 @@ public class ActivityMain extends BasicActivity implements IOverlayable, IToolba
 
         MenuItem searchMenuItem = toolbar.getMenu().findItem(R.id.action_search);
         SearchView searchView = (SearchView) searchMenuItem.getActionView();
+        searchView.setBackgroundColor(Color.TRANSPARENT);
         UIHelper.changeSearchViewTextColor(searchView, Color.WHITE);
 
         slidingMenu = new SlidingMenu(this, toolbar);
