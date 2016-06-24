@@ -25,22 +25,23 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@null"
-        android:gravity="top|center_horizontal"
+        android:gravity="bottom|center_horizontal"
         android:orientation="vertical"
         android:visibility="gone">
 
-        <ImageView
-            android:id="@+id/imgHelpTip"
-            android:layout_width="200dp"
-            android:layout_height="200dp"
-            android:layout_marginTop="80dp"
-            android:src="@drawable/help_itunes" />
+        <!--<ImageView-->
+        <!--android:id="@+id/imgHelpTip"-->
+        <!--android:layout_width="200dp"-->
+        <!--android:layout_height="200dp"-->
+        <!--android:layout_marginTop="80dp"-->
+        <!--android:src="@drawable/help_itunes"-->
+        <!--android:visibility="gone" />-->
 
         <TextView
             android:id="@+id/tvEmptyScreenText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_marginBottom="60dp"
             android:gravity="center"
             android:paddingLeft="20dp"
             android:paddingRight="20dp"
