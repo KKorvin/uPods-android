@@ -160,9 +160,12 @@
     <string name="podcasts_default_folder">podcasts_default_folder</string>
     <string name="upods">UPODS</string>
     <string name="restore_from_cloud">Restore From Cloud</string>
-    <string name="empty_description">There is no description for this radion station.</string>
+    <string name="empty_description">There is no description for this radio station.</string>
+    <string name="permissions_not_granted">Permissions not granted</string>
     <string name="phone_state_permissions">Phone State</string>
-    <string name="phone_state_description">We need permission to read your phone state in order to automatycly pause music when you reciving call. Please allow it in next popup.</string>
+    <string name="phone_state_description">We need permission to read your phone state in order to automatically pause music when you receiving call. Please allow it in next popup.</string>
+    <string name="write_external_permissions">External storage permission</string>
+    <string name="write_external_description">We need permissions to write external storage in order to download podcasts. Please allow it in next popup.</string>
     <string name="tops_language">Tops language</string>
     <string name="key_tops_lng">tops_lng</string>
 </resources>

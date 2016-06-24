@@ -1,7 +1,13 @@
 package com.chickenkiller.upods2.controllers.adaperts;
 
+import android.Manifest;
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
+import android.content.pm.PackageManager;
+import android.os.Build;
+import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.view.LayoutInflater;
@@ -10,8 +16,12 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.chickenkiller.upods2.R;
+import com.chickenkiller.upods2.activity.ActivityMain;
 import com.chickenkiller.upods2.activity.ActivityPlayer;
+import com.chickenkiller.upods2.activity.BasicActivity;
 import com.chickenkiller.upods2.controllers.app.ProfileManager;
 import com.chickenkiller.upods2.controllers.internet.DownloadMaster;
 import com.chickenkiller.upods2.controllers.player.UniversalPlayer;
@@ -151,14 +161,40 @@ public class TracksAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             ((ViewHolderTrack) holder).btnDownload.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    DownloadMaster.DownloadTask downloadTask = new DownloadMaster.DownloadTask();
-                    downloadTask.mediaItem = iPlayableMediaItem;
-                    downloadTask.track = currentTrack;
-                    downloadTask.progressUpdater = getDownloadProgressUpdater(holder);
-                    downloadTask.contentLoadListener = getContentLoadListener(holder, position);
-                    DownloadMaster.getInstance().download(downloadTask);
-                    ((ViewHolderTrack) holder).btnDownload.setVisibility(View.INVISIBLE);
-                    ((ViewHolderTrack) holder).cvDownloadProgress.setVisibility(View.VISIBLE);
+                    final IOperationFinishCallback startDownload = new IOperationFinishCallback() {
+                        @Override
+                        public void operationFinished() {
+                            DownloadMaster.DownloadTask downloadTask = new DownloadMaster.DownloadTask();
+                            downloadTask.mediaItem = iPlayableMediaItem;
+                            downloadTask.track = currentTrack;
+                            downloadTask.progressUpdater = getDownloadProgressUpdater(holder);
+                            downloadTask.contentLoadListener = getContentLoadListener(holder, position);
+                            DownloadMaster.getInstance().download(downloadTask);
+                            if (holder != null) {
+                                ((ViewHolderTrack) holder).btnDownload.setVisibility(View.INVISIBLE);
+                                ((ViewHolderTrack) holder).cvDownloadProgress.setVisibility(View.VISIBLE);
+                            }
+                        }
+                    };
+                    int hasPermissions = ContextCompat.checkSelfPermission(mContext, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
+                            && hasPermissions != PackageManager.PERMISSION_GRANTED) {
+                        new MaterialDialog.Builder(mContext)
+                                .title(R.string.write_external_permissions)
+                                .content(R.string.write_external_description)
+                                .positiveText(R.string.ok)
+                                .onAny(new MaterialDialog.SingleButtonCallback() {
+                                    @TargetApi(Build.VERSION_CODES.M)
+                                    @Override
+                                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                        ((BasicActivity) mContext).setPermissionsGrantedCallback(startDownload);
+                                        ((BasicActivity) mContext).requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                                                ActivityMain.WRITE_EXTERNAL_PERMISSIONS_CODE);
+                                    }
+                                }).build().show();
+                    } else {
+                        startDownload.operationFinished();
+                    }
                 }
             });
         }

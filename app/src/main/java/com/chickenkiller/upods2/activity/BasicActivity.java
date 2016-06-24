@@ -4,10 +4,12 @@ import android.app.Activity;
 import android.app.DialogFragment;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.chickenkiller.upods2.R;
 import com.chickenkiller.upods2.interfaces.IContextMenuManager;
@@ -25,8 +27,11 @@ import java.util.Calendar;
  */
 public class BasicActivity extends Activity implements IFragmentsManager, IContextMenuManager {
 
-    protected final static String LOG_TAG = "BasicActivity";
     private final static String DIALOG_TAG_START = "fr_dialog_";
+
+    //Permissions
+    public static int WRITE_EXTERNAL_PERMISSIONS_CODE = 785;
+    protected IOperationFinishCallback onPermissionsGranted;
 
     //For context menus
     protected Object currentContextMenuData;
@@ -135,4 +140,20 @@ public class BasicActivity extends Activity implements IFragmentsManager, IConte
         return super.onContextItemSelected(item);
     }
 
+    public void setPermissionsGrantedCallback(IOperationFinishCallback onPermissionsGranted) {
+        this.onPermissionsGranted = onPermissionsGranted;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        if (requestCode == WRITE_EXTERNAL_PERMISSIONS_CODE &&
+                grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            if (onPermissionsGranted != null) {
+                onPermissionsGranted.operationFinished();
+            }
+        } else if (requestCode == WRITE_EXTERNAL_PERMISSIONS_CODE) {
+            Toast.makeText(this, R.string.permissions_not_granted, Toast.LENGTH_SHORT).show();
+        }
+        onPermissionsGranted = null;
+    }
 }

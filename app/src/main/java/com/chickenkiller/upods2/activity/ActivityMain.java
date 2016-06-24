@@ -44,7 +44,8 @@ import com.pixplicity.easyprefs.library.Prefs;
 
 import java.util.Arrays;
 
-public class ActivityMain extends BasicActivity implements IOverlayable, IToolbarHolder, ISlidingMenuHolder, ILoginManager, Toolbar.OnMenuItemClickListener {
+public class ActivityMain extends BasicActivity implements IOverlayable, IToolbarHolder, ISlidingMenuHolder, ILoginManager,
+        Toolbar.OnMenuItemClickListener {
 
     private static final int MIN_NUMBER_FRAGMENTS_IN_STACK = 1;
     private static final float MAX_OVERLAY_LEVEL = 0.8f;
@@ -353,4 +354,5 @@ public class ActivityMain extends BasicActivity implements IOverlayable, IToolba
         }
         return true;
     }
+
 }

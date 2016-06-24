@@ -17,6 +17,7 @@ import com.chickenkiller.upods2.models.Track;
 import com.chickenkiller.upods2.utils.GlobalUtils;
 import com.chickenkiller.upods2.utils.Logger;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -69,16 +70,18 @@ public class DownloadMaster {
         //TODO better path
         DownloadManager downloadManager = (DownloadManager) UpodsApplication.getContext().getSystemService(Context.DOWNLOAD_SERVICE);
         Uri episodUri = Uri.parse(task.track.getAudeoUrl());
+        String trackName = GlobalUtils.getCleanFileName(task.track.getTitle()) + ".mp3";
+        String mediaItemName = GlobalUtils.getCleanFileName(task.mediaItem.getName());
+        String finalPath = PODCASTS_DOWNLOAD_DIRECTORY + "/" + mediaItemName + "/" + trackName;
+        finalPath = Environment.getExternalStorageDirectory() + finalPath;
         Request request = new Request(episodUri);
         request.setAllowedNetworkTypes(Request.NETWORK_MOBILE | Request.NETWORK_WIFI);
         request.setTitle(task.track.getTitle());
         request.setDescription(task.track.getSubTitle());
-        String trackName = GlobalUtils.getCleanFileName(task.track.getTitle()) + ".mp3";
-        String mediaItemName = "/" + GlobalUtils.getCleanFileName(task.mediaItem.getName());
-        String finalPath = PODCASTS_DOWNLOAD_DIRECTORY + mediaItemName;
-        request.setDestinationInExternalPublicDir(finalPath, trackName);
+        request.setDestinationUri(Uri.fromFile(new File(finalPath)));
         task.downloadId = downloadManager.enqueue(request);
-        task.filePath = Environment.getExternalStoragePublicDirectory(finalPath) + "/" + trackName;
+        task.filePath = finalPath;
+        Logger.printInfo("path", finalPath);
         allTasks.add(task);
         Logger.printInfo(DM_LOG, "Starting download episod " + trackName + " to " + finalPath);
         runProgressUpdater();

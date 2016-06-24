@@ -15,6 +15,7 @@ import com.chickenkiller.upods2.R;
 import com.chickenkiller.upods2.activity.ActivityMain;
 import com.chickenkiller.upods2.activity.ActivityPlayer;
 import com.chickenkiller.upods2.controllers.app.ProfileManager;
+import com.chickenkiller.upods2.controllers.app.UpodsApplication;
 import com.chickenkiller.upods2.models.Episode;
 import com.chickenkiller.upods2.models.Feed;
 import com.chickenkiller.upods2.models.Podcast;
@@ -67,6 +68,7 @@ public class NetworkTasksService extends IntentService {
     protected void onHandleIntent(Intent intent) {
         Logger.printInfo(TAG, "I am starting to run by intent: " + intent.getAction());
         if (intent.getAction().equals(ACTION_CHECK_FOR_NEW_EPISODS)) {
+            UpodsApplication.initAllResources();
             checkForNewEpisods();
         }
         if (wakeLock.isHeld()) {
