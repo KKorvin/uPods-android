@@ -44,6 +44,7 @@ import com.chickenkiller.upods2.models.Feed;
 import com.chickenkiller.upods2.models.MediaItem;
 import com.chickenkiller.upods2.models.MediaListItem;
 import com.chickenkiller.upods2.models.Podcast;
+import com.chickenkiller.upods2.utils.Analytics;
 import com.chickenkiller.upods2.utils.GlobalUtils;
 import com.chickenkiller.upods2.utils.Logger;
 import com.chickenkiller.upods2.utils.enums.ContextMenuType;
@@ -52,6 +53,7 @@ import com.chickenkiller.upods2.utils.ui.LetterBitmap;
 import com.chickenkiller.upods2.utils.ui.UIHelper;
 import com.chickenkiller.upods2.views.DetailsScrollView;
 import com.github.clans.fab.FloatingActionButton;
+import com.yandex.metrica.YandexMetrica;
 
 import java.util.ArrayList;
 
@@ -208,6 +210,7 @@ public class FragmentMediaItemDetails extends Fragment implements View.OnTouchLi
                 } else {
                     Toast.makeText(getActivity(), getString(R.string.no_internet_access), Toast.LENGTH_SHORT).show();
                 }
+                YandexMetrica.reportEvent(Analytics.MIDDLE_SCREEN_PLAY_RADIO);
             }
         });
     }
@@ -261,9 +264,11 @@ public class FragmentMediaItemDetails extends Fragment implements View.OnTouchLi
                 if (playableItem.isSubscribed) {
                     ProfileManager.getInstance().removeSubscribedMediaItem(playableItem);
                     btnSubscribe.setText(getString(R.string.subscribe));
+                    YandexMetrica.reportEvent(Analytics.MIDDLE_SCREEN_UNSUBSCRIBE);
                 } else {
                     ProfileManager.getInstance().addSubscribedMediaItem(playableItem);
                     btnSubscribe.setText(getString(R.string.unsubscribe));
+                    YandexMetrica.reportEvent(Analytics.MIDDLE_SCREEN_SUBSCRIBE);
                 }
             }
         });

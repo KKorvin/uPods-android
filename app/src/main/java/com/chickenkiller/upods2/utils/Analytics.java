@@ -16,4 +16,11 @@ public class Analytics {
     public static final String SLIDING_MENU_HELP_CLICK = "sliding_menu_help_click";
     public static final String SLIDING_MENU_RATE_CLICK = "sliding_menu_rate_click";
     public static final String SLIDING_MENU_ABOUT_CLICK = "sliding_about_click";
+
+    public static final String MIDDLE_SCREEN_UNSUBSCRIBE = "middle_screen_subscribe";
+    public static final String MIDDLE_SCREEN_SUBSCRIBE = "middle_screen_unsubscribe";
+    public static final String MIDDLE_SCREEN_PLAY_RADIO = "middle_screen_play_radio";
+    public static final String MIDDLE_SCREEN_PLAY_EPISODE = "middle_screen_play_episode";
+    public static final String MIDDLE_SCREEN_DOWNLOAD_EPISODE = "middle_screen_download_episode";
+    public static final String MIDDLE_SCREEN_CANCELL_DOWNLOAD_EPISODE = "middle_screen_cancel_download";
 }

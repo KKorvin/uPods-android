@@ -35,9 +35,11 @@ import com.chickenkiller.upods2.models.Episode;
 import com.chickenkiller.upods2.models.MediaItem;
 import com.chickenkiller.upods2.models.Podcast;
 import com.chickenkiller.upods2.models.Track;
+import com.chickenkiller.upods2.utils.Analytics;
 import com.chickenkiller.upods2.utils.GlobalUtils;
 import com.chickenkiller.upods2.utils.enums.ContextMenuType;
 import com.chickenkiller.upods2.utils.enums.MediaItemType;
+import com.yandex.metrica.YandexMetrica;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -174,6 +176,7 @@ public class TracksAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                                 ((ViewHolderTrack) holder).btnDownload.setVisibility(View.INVISIBLE);
                                 ((ViewHolderTrack) holder).cvDownloadProgress.setVisibility(View.VISIBLE);
                             }
+                            YandexMetrica.reportEvent(Analytics.MIDDLE_SCREEN_DOWNLOAD_EPISODE);
                         }
                     };
                     int hasPermissions = ContextCompat.checkSelfPermission(mContext, Manifest.permission.WRITE_EXTERNAL_STORAGE);
@@ -229,6 +232,7 @@ public class TracksAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             @Override
             public void onClick(View view) {
                 DownloadMaster.getInstance().cleanProgressInterfaces();
+                YandexMetrica.reportEvent(Analytics.MIDDLE_SCREEN_PLAY_EPISODE);
                 Track track = tracks.get(position);
                 if (iPlayableMediaItem instanceof Podcast) {
                     ((Podcast) iPlayableMediaItem).selectTrack(track);
@@ -247,6 +251,7 @@ public class TracksAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             public void onClick(View view) {
                 DownloadMaster.DownloadTask task = DownloadMaster.getInstance().getTaskByName(currentTrack.getTitle());
                 if (task != null) {
+                    YandexMetrica.reportEvent(Analytics.MIDDLE_SCREEN_CANCELL_DOWNLOAD_EPISODE);
                     DownloadMaster.getInstance().cancelDownload(currentTrack.getTitle());
                     ((ViewHolderTrack) holder).btnDownload.setVisibility(View.VISIBLE);
                     ((ViewHolderTrack) holder).cvDownloadProgress.setVisibility(View.INVISIBLE);
