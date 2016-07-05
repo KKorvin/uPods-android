@@ -25,10 +25,12 @@ import com.chickenkiller.upods2.interfaces.IToolbarHolder;
 import com.chickenkiller.upods2.models.MediaItem;
 import com.chickenkiller.upods2.models.Podcast;
 import com.chickenkiller.upods2.models.RadioItem;
+import com.chickenkiller.upods2.utils.Analytics;
 import com.chickenkiller.upods2.utils.ContextMenuHelper;
 import com.chickenkiller.upods2.utils.MediaUtils;
 import com.chickenkiller.upods2.utils.enums.ContextMenuType;
 import com.chickenkiller.upods2.utils.enums.MediaItemType;
+import com.yandex.metrica.YandexMetrica;
 
 public class ActivityPlayer extends BasicActivity implements IToolbarHolder, Toolbar.OnMenuItemClickListener {
 
@@ -127,10 +129,12 @@ public class ActivityPlayer extends BasicActivity implements IToolbarHolder, Too
                 itemFavorites.setIcon(getResources().getDrawable(R.drawable.ic_heart_white_24dp));
                 ProfileManager.getInstance().removeSubscribedMediaItem(mediaItem);
                 Toast.makeText(this, getString(R.string.removed_from_favorites), Toast.LENGTH_SHORT).show();
+                YandexMetrica.reportEvent(Analytics.PLAYER_UNSUBSCRIBE);
             } else {
                 itemFavorites.setIcon(getResources().getDrawable(R.drawable.ic_heart_black_24dp));
                 ProfileManager.getInstance().addSubscribedMediaItem(mediaItem);
                 Toast.makeText(this, getString(R.string.added_to_favorites), Toast.LENGTH_SHORT).show();
+                YandexMetrica.reportEvent(Analytics.PLAYER_SUBSCRIBE);
             }
         } else if (item.getItemId() == R.id.action_player_settings) {
             openContextMenu(findViewById(R.id.action_player_settings), ContextMenuType.PLAYER_SETTINGS, null, null);
@@ -141,6 +145,7 @@ public class ActivityPlayer extends BasicActivity implements IToolbarHolder, Too
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         if (item.getTitle().equals(getString(R.string.select_stream_quality))) {
+            YandexMetrica.reportEvent(Analytics.PLAYER_STREAM_QUALITY);
             ContextMenuHelper.selectRadioStreamQuality(this, fragmentPlayer, (RadioItem) currentMediaItem);
         } else if (item.getTitle().equals("Show notes")) {
             DialogFragmentTrackInfo dialogFragmentTrackInfo = new DialogFragmentTrackInfo();
@@ -149,6 +154,7 @@ public class ActivityPlayer extends BasicActivity implements IToolbarHolder, Too
             showDialogFragment(dialogFragmentTrackInfo);
         } else if (item.getTitle().equals(getString(R.string.stream_info))) {
             ContextMenuHelper.showStreamInfoDialog(this);
+            YandexMetrica.reportEvent(Analytics.PLAYER_STREAM_INFO);
         }
         return super.onContextItemSelected(item);
     }

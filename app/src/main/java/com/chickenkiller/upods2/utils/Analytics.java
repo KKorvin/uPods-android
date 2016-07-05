@@ -23,4 +23,18 @@ public class Analytics {
     public static final String MIDDLE_SCREEN_PLAY_EPISODE = "middle_screen_play_episode";
     public static final String MIDDLE_SCREEN_DOWNLOAD_EPISODE = "middle_screen_download_episode";
     public static final String MIDDLE_SCREEN_CANCELL_DOWNLOAD_EPISODE = "middle_screen_cancel_download";
+    public static final String MIDDLE_SCREEN_ABOUT_PODCAST = "middle_screen_about_podcast";
+    public static final String MIDDLE_SCREEN_OPEN_ON_DISK = "middle_screen_open_disk";
+    public static final String MIDDLE_REMOVE_EPISODE = "middle_screen_remove_episode";
+    public static final String MIDDLE_REMOVE_ALL_EPISODES = "middle_screen_rempve_all";
+
+    
+    public static final String PLAYLIST_TOGGLE = "playlist_toggle";
+    public static final String PLAYLIST_ITEM_CLICK = "playlist_item_click";
+
+    public static final String PLAYER_STREAM_QUALITY = "player_stream_quality";
+    public static final String PLAYER_STREAM_INFO = "player_stream_info";
+    public static final String PLAYER_SUBSCRIBE = "player_subscribe";
+    public static final String PLAYER_UNSUBSCRIBE = "player_unsubscribe";
+
 }

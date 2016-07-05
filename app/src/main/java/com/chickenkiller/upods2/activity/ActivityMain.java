@@ -34,6 +34,7 @@ import com.chickenkiller.upods2.models.Episode;
 import com.chickenkiller.upods2.models.MediaItem;
 import com.chickenkiller.upods2.models.Podcast;
 import com.chickenkiller.upods2.models.Track;
+import com.chickenkiller.upods2.utils.Analytics;
 import com.chickenkiller.upods2.utils.ContextMenuHelper;
 import com.chickenkiller.upods2.utils.enums.ContextMenuType;
 import com.chickenkiller.upods2.utils.enums.MediaItemType;
@@ -41,6 +42,7 @@ import com.chickenkiller.upods2.utils.ui.UIHelper;
 import com.chickenkiller.upods2.views.SlidingMenu;
 import com.facebook.CallbackManager;
 import com.pixplicity.easyprefs.library.Prefs;
+import com.yandex.metrica.YandexMetrica;
 
 import java.util.Arrays;
 
@@ -307,15 +309,19 @@ public class ActivityMain extends BasicActivity implements IOverlayable, IToolba
         int id = item.getItemId();
         if (currentContextMenuData != null && currentContextMenuData instanceof Podcast
                 && item.getTitle().equals(getString(R.string.about_podcast))) {
+            YandexMetrica.reportEvent(Analytics.MIDDLE_SCREEN_ABOUT_PODCAST);
             ContextMenuHelper.showAboutPodcastDialog((Podcast) currentContextMenuData, this);
         } else if (currentContextMenuData != null && currentContextMenuData instanceof Podcast
                 && item.getTitle().equals(getString(R.string.open_on_disk))) {
+            YandexMetrica.reportEvent(Analytics.MIDDLE_SCREEN_OPEN_ON_DISK);
             ContextMenuHelper.showPodcastInFolder((MediaItem) currentContextMenuData, this);
         } else if (currentContextMenuData != null && currentContextMenuData instanceof Podcast
                 && item.getTitle().equals(getString(R.string.remove_all_episods))) {
+            YandexMetrica.reportEvent(Analytics.MIDDLE_REMOVE_ALL_EPISODES);
             ContextMenuHelper.removeAllDonwloadedEpisods(this, (Podcast) currentContextMenuData, onContextItemSelected);
         } else if (currentContextMenuData != null && currentContextMenuData instanceof MediaItem.MediaItemBucket
                 && item.getTitle().equals(getString(R.string.delete))) {
+            YandexMetrica.reportEvent(Analytics.MIDDLE_REMOVE_EPISODE);
             MediaItem mediaItem = ((MediaItem.MediaItemBucket) currentContextMenuData).mediaItem;
             Track track = ((MediaItem.MediaItemBucket) currentContextMenuData).track;
             ContextMenuHelper.removeDonwloadedTrack(this, track, mediaItem, onContextItemSelected);

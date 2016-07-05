@@ -26,10 +26,12 @@ import com.chickenkiller.upods2.models.MediaItem;
 import com.chickenkiller.upods2.models.Podcast;
 import com.chickenkiller.upods2.models.RadioItem;
 import com.chickenkiller.upods2.models.Track;
+import com.chickenkiller.upods2.utils.Analytics;
 import com.chickenkiller.upods2.utils.Logger;
 import com.chickenkiller.upods2.utils.MediaUtils;
 import com.chickenkiller.upods2.utils.enums.Direction;
 import com.chickenkiller.upods2.views.PlayPauseView;
+import com.yandex.metrica.YandexMetrica;
 
 import java.util.List;
 
@@ -95,6 +97,7 @@ public class Playlist implements AdapterView.OnItemClickListener {
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                YandexMetrica.reportEvent(Analytics.PLAYLIST_TOGGLE);
                 if (isOpen) {
                     runCloseAnimation();
                 } else {
@@ -237,6 +240,7 @@ public class Playlist implements AdapterView.OnItemClickListener {
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        YandexMetrica.reportEvent(Analytics.PLAYLIST_ITEM_CLICK);
         changeTrack(position);
     }
 
