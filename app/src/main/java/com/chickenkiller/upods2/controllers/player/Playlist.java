@@ -33,6 +33,7 @@ import com.chickenkiller.upods2.utils.enums.Direction;
 import com.chickenkiller.upods2.views.PlayPauseView;
 import com.yandex.metrica.YandexMetrica;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import io.codetail.animation.arcanimator.ArcAnimator;
@@ -115,8 +116,14 @@ public class Playlist implements AdapterView.OnItemClickListener {
             playlistAdapter = new PlaylistTracksAdapter(mContext, R.layout.playlist_item, tracks);
 
         } else if (universalPlayer.getPlayingMediaItem() instanceof RadioItem) {
-            List<? extends MediaItem> mediaItems = ProfileManager.getInstance().getRecentRadioItems();
-            playlistAdapter = new PlaylistMediaItemsAdapter(mContext, R.layout.playlist_item, (List<MediaItem>) mediaItems);
+            List<MediaItem> mediaItems = new ArrayList<>();
+            mediaItems.addAll(ProfileManager.getInstance().getRecentRadioItems());
+            MediaItem currentPlayingItem = MediaItem.getMediaItemByName((ArrayList<? extends MediaItem>) mediaItems, universalPlayer.getPlayingMediaItem());
+            if (currentPlayingItem != null) {
+                mediaItems.remove(currentPlayingItem);
+                mediaItems.add(0, currentPlayingItem);
+            }
+            playlistAdapter = new PlaylistMediaItemsAdapter(mContext, R.layout.playlist_item, mediaItems);
         }
         lvPlaylist.setAdapter(playlistAdapter);
         lvPlaylist.setOnItemClickListener(this);

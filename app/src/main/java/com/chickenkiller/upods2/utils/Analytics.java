@@ -28,7 +28,7 @@ public class Analytics {
     public static final String MIDDLE_REMOVE_EPISODE = "middle_screen_remove_episode";
     public static final String MIDDLE_REMOVE_ALL_EPISODES = "middle_screen_rempve_all";
 
-    
+
     public static final String PLAYLIST_TOGGLE = "playlist_toggle";
     public static final String PLAYLIST_ITEM_CLICK = "playlist_item_click";
 
