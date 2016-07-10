@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/selector_playlist_item"
@@ -9,8 +10,8 @@
         android:id="@+id/btnPlPlay"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:clickable="false"
         android:background="@color/transparent"
+        android:clickable="false"
         android:padding="15dp"
         android:src="@drawable/ic_play_white" />
 
@@ -40,6 +41,17 @@
         android:singleLine="true"
         android:text="daskclascksalcasklc"
         android:textColor="@color/whiteGray" />
+
+    <es.claucookie.miniequalizerlibrary.EqualizerView
+        android:id="@+id/eqRadio"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="25dp"
+        android:visibility="gone"
+        custom:animDuration="3500"
+        custom:foregroundColor="@color/white" />
 
     <TextView
         android:id="@+id/tvPlTrackDuration"

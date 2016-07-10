@@ -15,6 +15,8 @@ import com.chickenkiller.upods2.models.MediaItem;
 
 import java.util.List;
 
+import es.claucookie.miniequalizerlibrary.EqualizerView;
+
 /**
  * Created by alonzilberman on 10/7/15.
  */
@@ -30,6 +32,7 @@ public class PlaylistMediaItemsAdapter extends ArrayAdapter<MediaItem> implement
         public TextView tvPlTrackTitle;
         public TextView tvPlTrackSubTitle;
         public TextView tvPlTrackDuration;
+        public EqualizerView eqRadio;
     }
 
     public PlaylistMediaItemsAdapter(Context context, int layaoutId, List<MediaItem> mediaItems) {
@@ -52,15 +55,19 @@ public class PlaylistMediaItemsAdapter extends ArrayAdapter<MediaItem> implement
             viewHolder.tvPlTrackTitle = (TextView) convertView.findViewById(R.id.tvPlTrackTitle);
             viewHolder.tvPlTrackSubTitle = (TextView) convertView.findViewById(R.id.tvPlTrackSubTitle);
             viewHolder.tvPlTrackDuration = (TextView) convertView.findViewById(R.id.tvPlTrackDuration);
+            viewHolder.eqRadio = (EqualizerView) convertView.findViewById(R.id.eqRadio);
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
         viewHolder.tvPlTrackTitle.setText(mediaItem.getName());
         viewHolder.tvPlTrackSubTitle.setText(mediaItem.getSubHeader());
+        viewHolder.eqRadio.setVisibility(View.VISIBLE);
         if (universalPlayer.isPlaying() && universalPlayer.isCurrentMediaItem(mediaItem)) {
+            viewHolder.eqRadio.animateBars();
             viewHolder.btnPlPlay.setImageResource(R.drawable.ic_pause_white);
         } else {
+            viewHolder.eqRadio.stopBars();
             viewHolder.btnPlPlay.setImageResource(R.drawable.ic_play_white);
         }
         return convertView;

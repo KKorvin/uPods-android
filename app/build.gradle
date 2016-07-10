@@ -71,6 +71,7 @@ dependencies {
     compile 'com.github.jakob-grabner:Circle-Progress-View:v1.2.3+'
     compile 'com.github.asyl.animation:arcanimator:1.0.0'
     compile 'com.github.clans:fab:1.6.2'
+    compile 'com.github.claucookie.miniequalizer:library:1.0.0'
 
     //Dependencies for social networks
     compile 'com.facebook.android:facebook-android-sdk:4.6.0'
