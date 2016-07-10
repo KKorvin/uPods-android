@@ -64,10 +64,11 @@ public class PlaylistMediaItemsAdapter extends ArrayAdapter<MediaItem> implement
         viewHolder.tvPlTrackSubTitle.setText(mediaItem.getSubHeader());
         viewHolder.eqRadio.setVisibility(View.VISIBLE);
         if (universalPlayer.isPlaying() && universalPlayer.isCurrentMediaItem(mediaItem)) {
+            viewHolder.eqRadio.setVisibility(View.VISIBLE);
             viewHolder.eqRadio.animateBars();
             viewHolder.btnPlPlay.setImageResource(R.drawable.ic_pause_white);
         } else {
-            viewHolder.eqRadio.stopBars();
+            viewHolder.eqRadio.setVisibility(View.GONE);
             viewHolder.btnPlPlay.setImageResource(R.drawable.ic_play_white);
         }
         return convertView;
