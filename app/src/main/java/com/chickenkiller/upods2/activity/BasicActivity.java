@@ -82,7 +82,11 @@ public class BasicActivity extends Activity implements IFragmentsManager, IConte
     @Override
     public void hideFragment(Fragment fragment) {
         android.app.FragmentManager fm = getFragmentManager();
-        fm.beginTransaction().remove(fragment).commit();
+        try {
+            fm.beginTransaction().remove(fragment).commit();
+        } catch (Exception e) {
+            fm.beginTransaction().remove(fragment).commitAllowingStateLoss();
+        }
     }
 
     @Override
