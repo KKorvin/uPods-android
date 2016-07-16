@@ -169,4 +169,5 @@
     <string name="tops_language">Tops language</string>
     <string name="key_tops_lng">tops_lng</string>
     <string name="search_hint">Search</string>
+    <string name="clcik_back_exit">Please click BACK again to exit</string>
 </resources>

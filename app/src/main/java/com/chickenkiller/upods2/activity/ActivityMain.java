@@ -53,6 +53,7 @@ public class ActivityMain extends BasicActivity implements IOverlayable, IToolba
     private static final float MAX_OVERLAY_LEVEL = 0.8f;
     private static final int FRAGMENT_TRANSACTION_TIME = 300;
     private static final int WELLCOME_SCREEN_TIME = 2000;
+    private static final long BACK_DOUBLE_CLICK_DELAY = 2000;
 
     public static boolean isFirstRun = true;
 
@@ -75,8 +76,10 @@ public class ActivityMain extends BasicActivity implements IOverlayable, IToolba
     private SlidingMenu slidingMenu;
     private View vOverlay;
 
-    private int[] notificationsActions = {NetworkTasksService.NOTIFICATIONS_SHOW_PODCASTS_SUBSCRIBED};
     private CallbackManager callbackManager;
+
+    private int[] notificationsActions = {NetworkTasksService.NOTIFICATIONS_SHOW_PODCASTS_SUBSCRIBED};
+    private boolean doubleBackToExitPressedOnce;
 
 
     @Override
@@ -208,7 +211,20 @@ public class ActivityMain extends BasicActivity implements IOverlayable, IToolba
                 getFragmentManager().popBackStack();
             }
         } else {
-            finish();
+            if (doubleBackToExitPressedOnce) {
+                finish();
+                return;
+            }
+
+            this.doubleBackToExitPressedOnce = true;
+            Toast.makeText(this, R.string.clcik_back_exit, Toast.LENGTH_SHORT).show();
+
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    doubleBackToExitPressedOnce = false;
+                }
+            }, BACK_DOUBLE_CLICK_DELAY);
         }
 
     }

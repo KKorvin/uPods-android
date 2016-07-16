@@ -10,6 +10,7 @@ import com.chickenkiller.upods2.models.Feed;
 import com.chickenkiller.upods2.models.Podcast;
 import com.chickenkiller.upods2.utils.HelpFunctions;
 import com.chickenkiller.upods2.utils.Logger;
+import com.chickenkiller.upods2.utils.ServerApi;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -33,8 +34,8 @@ public class NewEpisodesTest {
     private static final String REAL_PODCAST_FEED_ENG = "https://feeds.audiometric.io/2372467022";
     private static final String REAL_PODCAST_FEED_ENG2 = "http://www.npr.org/rss/podcast.php?id=510019&uid=n1qe4e85742c986fdb81d2d38ffa0d5d53";
 
-    private static final String TEST_FEED = "https://upods.io/static/podcasts/feed/test_podcast.xml";
-    private static final String TEST_FEED_CONTROL = "https://upods.io/upods/api/v1.0/podcasts/test/feed?task=";
+    private static final String TEST_FEED = ServerApi.DOMAIN + "/static/podcasts/feed/test_podcast.xml";
+    private static final String TEST_FEED_CONTROL = ServerApi.DOMAIN + "/upods/api/v1.0/podcasts/test/feed?task=";
     private static final int NEW_EPISODES_ADDED = 2;
     private static final int EPISODES_TO_REMOVE = 1;
 
@@ -129,7 +130,7 @@ public class NewEpisodesTest {
     @Test
     public void checkRealPodcastNewEpisodesScenario() {
         UpodsApplication.initAllResources();
-        
+
         boolean hasUpdates = false;
         long newEpisodesCount = -1;
 

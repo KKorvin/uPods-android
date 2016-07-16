@@ -26,7 +26,7 @@ public class ServerApi {
     public static final String STREAM_INFO;
 
     static {
-        DOMAIN = "https://upods.io";
+        DOMAIN = "https://upods.xyz";
         RADIO_TOP = DOMAIN + "/upods/api/v1.0/radio-stations/top?type=";
         RADIO_SEARCH = DOMAIN + "/upods/api/v1.0/radio-stations/search?query=";
         RADIO_CATEGORIES = DOMAIN + "/upods/api/v1.0/music-genres?type=all";

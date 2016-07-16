@@ -11,6 +11,7 @@ import com.chickenkiller.upods2.models.Podcast;
 import com.chickenkiller.upods2.models.RadioItem;
 import com.chickenkiller.upods2.models.StreamUrl;
 import com.chickenkiller.upods2.utils.Logger;
+import com.chickenkiller.upods2.utils.ServerApi;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -26,7 +27,7 @@ import static org.junit.Assert.assertTrue;
 @SmallTest
 public class ProfileTest {
 
-    private static final String TEST_FEED = "https://upods.io/static/podcasts/feed/test_podcast.xml";
+    private static final String TEST_FEED = ServerApi.DOMAIN + "/static/podcasts/feed/test_podcast.xml";
 
     @Test
     public void checkSubscribedScenario() {
