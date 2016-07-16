@@ -48,6 +48,7 @@ public class RadioItem extends MediaItem {
     public RadioItem() {
         super();
         this.name = "";
+        this.description = "";
         this.selectedStreamUrl = null;
         this.streamUrls = new HashSet<>();
         this.coverImageUrl = "";
@@ -180,7 +181,7 @@ public class RadioItem extends MediaItem {
 
     @Override
     public String getDescription() {
-        return description;
+        return description != null ? description : "";
     }
 
     public void setName(String name) {
