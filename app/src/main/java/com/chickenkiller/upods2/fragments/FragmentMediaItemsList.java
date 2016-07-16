@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -194,14 +195,19 @@ public class FragmentMediaItemsList extends Fragment {
 
     private void setEmptyScreenText() {
         TextView tvEmptyScreenText = (TextView) rootView.findViewById(R.id.tvEmptyScreenText);
+        ImageView imgHelpTip = (ImageView) rootView.findViewById(R.id.imgHelpTip);
 
         if (mediaItemType == MediaItemType.PODCAST_DOWNLOADED || mediaItemType == null) {
             tvEmptyScreenText.setText(R.string.empty_dowloaded_podcasts);
+            imgHelpTip.setImageResource(R.drawable.downloaded_empty_sreen);
         } else if (mediaItemType == MediaItemType.PODCAST_FAVORITE) {
             tvEmptyScreenText.setText(R.string.empty_favorite_podcasts);
+            imgHelpTip.setImageResource(R.drawable.favorites_empty_sreen);
         } else if (mediaItemType == MediaItemType.RADIO_SUBSCRIBED) {
+            imgHelpTip.setImageResource(R.drawable.favorites_empty_sreen);
             tvEmptyScreenText.setText(R.string.empty_radio_subscribed);
         } else if (mediaItemType == MediaItemType.RADIO_RECENT) {
+            imgHelpTip.setImageResource(R.drawable.recently_empty_sreen);
             tvEmptyScreenText.setText(R.string.empty_radio_recent);
         }
     }
