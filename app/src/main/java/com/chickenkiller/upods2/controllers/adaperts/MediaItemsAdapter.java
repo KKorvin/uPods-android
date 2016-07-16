@@ -12,7 +12,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -74,12 +73,10 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         public TextView tvSquareSubTitle;
         public RatingBar rbMediaItem;
         public CardView cvSquare;
-        public ImageView imgCardMenuVert;
 
         public ViewHolderCardItem(View view) {
             super(view);
             this.imgSquare = (ImageViewSquare) view.findViewById(R.id.imgSquare);
-            this.imgCardMenuVert = (ImageView) view.findViewById(R.id.imgCardMenuVert);
             this.tvItemStatus = (TextView) view.findViewById(R.id.tvItemStatus);
             this.tvSquareTitle = (TextView) view.findViewById(R.id.tvSquareTitle);
             this.tvSquareSubTitle = (TextView) view.findViewById(R.id.tvSquareSubTitle);
@@ -95,12 +92,6 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
         public void setCardClickListener(View.OnClickListener cardClickListener) {
             cvSquare.setOnClickListener(cardClickListener);
-        }
-
-        public void setCardMenuClickListener(View.OnClickListener cardMenuClickListener) {
-            if (imgCardMenuVert != null) {
-                imgCardMenuVert.setOnClickListener(cardMenuClickListener);
-            }
         }
 
     }
@@ -259,7 +250,6 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         }
         holder.itemView.setTag(currentItem);
         ((ViewHolderCardItem) holder).setCardClickListener(getCardClickListener(position));
-        ((ViewHolderCardItem) holder).setCardMenuClickListener(getCardMenuClickListener(position));
     }
 
     /**
