@@ -27,7 +27,6 @@ import com.chickenkiller.upods2.models.RadioItem;
 import com.chickenkiller.upods2.models.Track;
 import com.chickenkiller.upods2.utils.enums.MediaItemType;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
@@ -128,40 +127,48 @@ public class ContextMenuHelper {
                 .progress(true, 0)
                 .show();
         BackendManager.getInstance().sendRequest(ServerApi.STREAM_INFO + stremLink, new IRequestCallback() {
-            @Override
-            public void onRequestSuccessed(final JSONObject jResponse) {
-                activity.runOnUiThread(new Runnable() {
                     @Override
-                    public void run() {
-                        StringBuilder info = new StringBuilder();
-                        Iterator<String> iter = jResponse.keys();
-                        while (iter.hasNext()) {
-                            String key = iter.next();
-                            try {
-                                info.append("<b>" + GlobalUtils.upperCase(jResponse.getString(key))
-                                        + ":</b>  " + jResponse.getString(key) + "<br>");
-                            } catch (JSONException e) {
-                            }
-                        }
-                        new MaterialDialog.Builder(activity)
-                                .title(R.string.stream_info)
-                                .content(Html.fromHtml(info.toString()))
-                                .positiveText(R.string.ok)
-                                .show();
-                        progressDialog.dismiss();
+                    public void onRequestSuccessed(final JSONObject jResponse) {
+                        activity.runOnUiThread(new Runnable() {
+                                                   @Override
+                                                   public void run() {
+                                                       try {
+                                                           StringBuilder info = new StringBuilder();
+                                                           Iterator<String> iter = jResponse.keys();
+                                                           while (iter.hasNext()) {
+                                                               String key = iter.next();
+                                                               String value = jResponse.has(key) ? jResponse.getString(key) : "";
+                                                               value = value.equals("null") || value.isEmpty() ?
+                                                                       activity.getString(R.string.unknown) : value;
+                                                               info.append("<b>" + GlobalUtils.upperCase(key)
+                                                                       + ":</b>  " + value + "<br>");
+                                                           }
+                                                           new MaterialDialog.Builder(activity)
+                                                                   .title(R.string.stream_info)
+                                                                   .content(Html.fromHtml(info.toString()))
+                                                                   .positiveText(R.string.ok)
+                                                                   .show();
+                                                       } catch (Exception e) {
+                                                           Toast.makeText(activity, R.string.cant_get_info, Toast.LENGTH_SHORT).show();
+                                                           e.printStackTrace();
+                                                       }
+                                                       progressDialog.dismiss();
+                                                   }
+                                               }
+                        );
                     }
-                });
-            }
 
-            @Override
-            public void onRequestFailed() {
-                activity.runOnUiThread(new Runnable() {
                     @Override
-                    public void run() {
-                        progressDialog.dismiss();
+                    public void onRequestFailed() {
+                        activity.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                progressDialog.dismiss();
+                            }
+                        });
                     }
-                });
-            }
-        });
+                }
+
+        );
     }
 }

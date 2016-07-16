@@ -170,4 +170,6 @@
     <string name="key_tops_lng">tops_lng</string>
     <string name="search_hint">Search</string>
     <string name="clcik_back_exit">Please click BACK again to exit</string>
+    <string name="unknown">unknown</string>
+    <string name="cant_get_info">Can\'t get stream info. Please try again later.</string>
 </resources>
