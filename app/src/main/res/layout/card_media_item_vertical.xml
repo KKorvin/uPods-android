@@ -30,7 +30,6 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/imgSquare"
             android:layout_marginTop="10dp"
-            android:layout_toLeftOf="@+id/imgCardMenuVert"
             android:lines="2"
             android:maxLines="2"
             android:paddingLeft="7dp"
