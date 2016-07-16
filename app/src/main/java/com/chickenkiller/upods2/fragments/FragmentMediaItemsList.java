@@ -204,7 +204,7 @@ public class FragmentMediaItemsList extends Fragment {
             tvEmptyScreenText.setText(R.string.empty_favorite_podcasts);
             imgHelpTip.setImageResource(R.drawable.favorites_empty_sreen);
         } else if (mediaItemType == MediaItemType.RADIO_SUBSCRIBED) {
-            imgHelpTip.setImageResource(R.drawable.favorites_empty_sreen);
+            imgHelpTip.setImageResource(R.drawable.subscribed_empty_sreen);
             tvEmptyScreenText.setText(R.string.empty_radio_subscribed);
         } else if (mediaItemType == MediaItemType.RADIO_RECENT) {
             imgHelpTip.setImageResource(R.drawable.recently_empty_sreen);

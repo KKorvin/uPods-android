@@ -31,8 +31,8 @@
 
         <ImageView
             android:id="@+id/imgHelpTip"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
             android:layout_marginTop="40dp"
             android:src="@drawable/help_itunes"
             android:visibility="visible" />
@@ -46,8 +46,8 @@
             android:paddingLeft="20dp"
             android:paddingRight="20dp"
             android:text="@string/empty_radio_subscribed"
-            android:textColor="@color/black"
-            android:textSize="18sp" />
+            android:textColor="@color/grey_600"
+            android:textSize="22sp" />
 
     </LinearLayout>
 
