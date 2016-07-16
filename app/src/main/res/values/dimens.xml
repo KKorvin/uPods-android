@@ -54,6 +54,7 @@
     <dimen name="pause_bar_width">5dp</dimen>
     <dimen name="pause_bar_distance">5dp</dimen>
     <dimen name="pause_bar_height">20dp</dimen>
+    <dimen name="featured_rounded_button_font_size">11sp</dimen>
 
     <dimen name="profile_logged_in_padding_top">30dp</dimen>
     <dimen name="profile_logged_in_padding_bottom">0dp</dimen>

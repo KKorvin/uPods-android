@@ -3,9 +3,9 @@
     android:layout_width="match_parent"
     android:layout_height="48dp"
     android:gravity="bottom"
+    android:orientation="horizontal"
     android:paddingLeft="5dp"
     android:paddingRight="5dp"
-    android:orientation="horizontal"
     android:weightSum="90">
 
     <Button
@@ -15,8 +15,8 @@
         android:layout_weight="30"
         android:background="@drawable/selector_btn_genres"
         android:text="@string/genres"
-        android:textSize="12sp"
-        android:textColor="@color/white" />
+        android:textColor="@color/white"
+        android:textSize="@dimen/featured_rounded_button_font_size" />
 
     <Button
         android:id="@+id/btnRoundedCountries"
@@ -29,8 +29,8 @@
         android:paddingLeft="20dp"
         android:paddingRight="20dp"
         android:text="@string/countries"
-        android:textSize="12sp"
-        android:textColor="@color/white" />
+        android:textColor="@color/white"
+        android:textSize="@dimen/featured_rounded_button_font_size" />
 
     <Button
         android:id="@+id/btnRoundedLanguages"
@@ -41,6 +41,6 @@
         android:paddingLeft="20dp"
         android:paddingRight="20dp"
         android:text="@string/languages"
-        android:textSize="12sp"
-        android:textColor="@color/white" />
+        android:textColor="@color/white"
+        android:textSize="@dimen/featured_rounded_button_font_size" />
 </LinearLayout>
