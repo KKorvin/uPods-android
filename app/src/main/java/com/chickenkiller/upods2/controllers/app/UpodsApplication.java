@@ -17,8 +17,6 @@ import com.facebook.FacebookSdk;
 import com.pixplicity.easyprefs.library.Prefs;
 import com.yandex.metrica.YandexMetrica;
 
-import java.util.concurrent.TimeUnit;
-
 
 /**
  * Created by alonzilberman on 7/31/15.
@@ -34,7 +32,6 @@ public class UpodsApplication extends Application {
 
     @Override
     public void onCreate() {
-        //LeakCanary.install(this);
         isLoaded = false;
         applicationContext = getApplicationContext();
         YandexMetrica.activate(getApplicationContext(), Analytics.YANDEX_METRICS_API_KEY);
@@ -85,8 +82,7 @@ public class UpodsApplication extends Application {
 
             if (SettingsManager.getInstace().getBooleanSettingsValue(SettingsManager.JS_NOTIFY_EPISODES)) {
                 long interval = SettingsManager.getInstace().getIntSettingsValue(SettingsManager.JS_PODCASTS_UPDATE_TIME);
-                //interval = TimeUnit.HOURS.toMillis(interval);
-                interval = TimeUnit.MINUTES.toMillis(60);
+                //interval = TimeUnit.MINUTES.toMillis(60);
                 alarmMgr.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
                         SystemClock.elapsedRealtime(),
                         interval, alarmIntent);
