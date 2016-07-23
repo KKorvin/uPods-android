@@ -36,7 +36,7 @@
                 android:background="@color/light_blue_200"
                 android:gravity="center"
                 android:padding="10dp"
-                android:text="Login in to synchronize across all devices"
+                android:text="@string/login_sync"
                 android:textSize="24sp"
                 android:textStyle="bold" />
 
@@ -130,7 +130,6 @@
                 android:textSize="@dimen/default_text_size_20" />
 
             <TextView
-                android:id="@+id/tvUserStatus"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/tvUserName"
@@ -138,7 +137,7 @@
                 android:layout_marginTop="0dp"
                 android:layout_toRightOf="@+id/imgAvatar"
                 android:fontFamily="sans-serif"
-                android:text="Online"
+                android:text="@string/online"
                 android:textColor="@color/white_material"
                 android:textSize="@dimen/default_text_size_14" />
         </RelativeLayout>

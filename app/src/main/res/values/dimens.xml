@@ -1,19 +1,14 @@
 <resources>
 
     <!-- Global -->
-    <dimen name="default_text_size_8">8sp</dimen>
     <dimen name="default_text_size_10">10sp</dimen>
     <dimen name="default_text_size_12">12sp</dimen>
     <dimen name="default_text_size_14">14sp</dimen>
     <dimen name="default_text_size_16">16sp</dimen>
     <dimen name="default_text_size_18">18sp</dimen>
-    <dimen name="default_text_size_19">19sp</dimen>
     <dimen name="default_text_size_20">20sp</dimen>
     <dimen name="default_text_size_22">22sp</dimen>
-    <dimen name="default_text_size_24">24sp</dimen>
-    <dimen name="default_text_size_26">26sp</dimen>
     <dimen name="default_card_corner_radius">2dp</dimen>
-    <dimen name="float_btn_border">0dp</dimen>
 
     <!-- Elevation -->
     <dimen name="drawer_elevation">7dp</dimen>
@@ -33,21 +28,17 @@
     <dimen name="rv_cards_column_width">120dp</dimen>
     <dimen name="rv_banners_height">140dp</dimen>
     <dimen name="card_media_item_m">0dp</dimen>
-    <dimen name="card_media_item_height">170dp</dimen>
 
     <!-- Banner -->
     <dimen name="banner_shadow_radius">2dp</dimen>
     <dimen name="banner_shadow_bottom">2dp</dimen>
 
     <!-- Default screen margins, per the Android Design guidelines. -->
-    <dimen name="activity_horizontal_margin">16dp</dimen>
-    <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="horizontal_card_side_margin">5dp</dimen>
     <dimen name="horizantal_card_top_margin">2.5dp</dimen>
 
     <!-- LetterBitmap-->
     <dimen name="tile_letter_font_size">50sp</dimen>
-    <dimen name="letter_tile_size">64dp</dimen>
     <dimen name="rounded_btn_radius">40dp</dimen>
 
     <!-- Button-->

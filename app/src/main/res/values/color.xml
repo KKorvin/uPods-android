@@ -4,12 +4,10 @@
     <!-- Some Basic Colors -->
     <color name="color_primary">#EF6C00</color>
     <color name="color_primary_dark">#1976D2</color>
-    <color name="sliding_menu_background">#FAFAFA</color>
     <color name="viewPagerNotSelectedWhite">#E8EAF6</color>
     <color name="white">#FFFFFF</color>
     <color name="black">#000000</color>
     <color name="global_background">#EEEEEE</color>
-    <color name="card_pressed_background">#EAEAEA</color>
     <color name="card_pressed_background_android4">#40EAEAEA</color>
     <color name="notification_grey">#878787</color>
     <color name="notification_background">#393631</color>
@@ -31,8 +29,6 @@
     <color name="sliding_menu_devider_color">#dcdcdc</color>
 
     <!-- Download button color -->
-    <color name="icon_download_color_green">#CDDC39</color>
-    <color name="icon_download_color_red">#F44336</color>
 
     <color name="starFullySelected">#646464</color>
     <color name="starPartiallySelected">#afafaf</color>
@@ -43,29 +39,17 @@
 
     <!-- Red Material -->
     <color name="red_500">#F44336</color>
-    <color name="red_600">#E53935</color>
-    <color name="red_700">#D32F2F</color>
     <color name="red_800">#C62828</color>
-    <color name="red_900">#B71C1C</color>
 
     <!-- Indigo Material -->
     <color name="indigo_500">#3F51B5</color>
-    <color name="indigo_600">#3949AB</color>
-    <color name="indigo_700">#303F9F</color>
     <color name="indigo_800">#283593</color>
-    <color name="indigo_900">#1A237E</color>
 
     <!-- Light Blue Material -->
     <color name="light_blue_200">#7ED6FD</color>
-    <color name="light_blue_500">#03A9F4</color>
-    <color name="light_blue_600">#039BE5</color>
-    <color name="light_blue_700">#0288D1</color>
-    <color name="light_blue_800">#0277BD</color>
-    <color name="light_blue_900">#01579B</color>
 
     <!-- Blue Material -->
     <color name="blue_700">#1976D2</color>
-    <color name="blue_800">#1565C0</color>
     <color name="welcome_button">#EF6C00</color>
     <color name="welcome_button_pressed">#FB8C00</color>
 
@@ -73,34 +57,24 @@
     <color name="blue_grey_1000">#1D262A</color>
     <color name="blue_grey_900">#2B3239</color>
     <color name="blue_grey_800">#37474F</color>
-    <color name="blue_grey_700">#455A64</color>
-    <color name="blue_grey_600">#546E7A</color>
-    <color name="blue_grey_500">#607D8B</color>
     <color name="blue_grey_400">#78909C</color>
 
     <!-- Material  Gray -->
-    <color name="grey_200">#EEEEEE</color>
     <color name="grey_300">#E0E0E0</color>
     <color name="grey_400">#BDBDBD</color>
     <color name="grey_500">#9E9E9E</color>
     <color name="grey_600">#757575</color>
-    <color name="grey_700">#616161</color>
-
-    <color name="blue_grey_fromScreenshot_verh">#35454D</color>
-    <color name="blue_grey_fromScreenshot_niz">#516A75</color>
 
     <!-- Color for Button -->
     <color name="pink_A400">#F50057</color>
 
     <!-- Color for Icons in Sliding Menu -->
-    <color name="pink_A200">#FF4081</color>
 
     <!-- Color for selection in SlidingMenu -->
     <color name="grey_A200">#E0E0E0</color>
 
     <!-- Color for Menu -->
     <color name="gray_202020">#212121</color>
-    <color name="mini_player_blue">#0C424E</color>
 
     <!-- MultiMedia Player -->
     <color name="whiteGray">#A9B0B8</color>
@@ -110,10 +84,8 @@
     <color name="green_700">#3D51B4</color>
     <color name="green_600">#43A047</color>
     <color name="green_500">#4CAF50</color>
-    <color name="light_green_800">#558B2F</color>
 
     <!-- Black and White Material -->
-    <color name="black_material">#000000</color>
     <color name="white_material">#FFFFFF</color>
 
     <!-- Color name of Podcast -->
@@ -122,7 +94,5 @@
 
     <!-- Orange material -->
     <color name="orange_800">#FF8F00</color>
-    <color name="orange_700">#FFA000</color>
-    <color name="orange_600">#FFB300</color>
     <color name="orange_500">#FFC107</color>
 </resources>

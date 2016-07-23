@@ -14,7 +14,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
-        android:text="Enter title" />
+        android:text="@string/enter_title" />
 
     <EditText
         android:id="@+id/etMediaName"
@@ -25,7 +25,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
-        android:text="Enter link" />
+        android:text="@string/enter_url" />
 
     <EditText
         android:id="@+id/etMediaUrl"

@@ -44,7 +44,7 @@
         android:background="@drawable/selector_btn_welcome_screen"
         android:paddingLeft="15dp"
         android:paddingRight="15dp"
-        android:text="Start using app"
+        android:text="@string/start_using_app"
         android:textColor="@color/white_material"
         android:visibility="visible" />
 

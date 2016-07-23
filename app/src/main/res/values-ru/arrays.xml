@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="start_screen_preference">
+        <item>Радио - Топы</item>
+        <item>Радио - Избранное</item>
+        <item>Радио - Недавние</item>
+        <item>Подкасты - Топы</item>
+        <item>Подкасты - Избранное</item>
+        <item>Подкасты - Загруженные</item>
+    </string-array>
+
+    <string-array name="start_screen_values">
+        <item>rs_featured</item>
+        <item>rs_subscribed</item>
+        <item>rs_recent</item>
+        <item>podcasts_featured</item>
+        <item>podcasts_favorites</item>
+        <item>podcasts_downloaded</item>
+    </string-array>
+
+    <string-array name="podcasts_update_time_preference">
+        <item>Каждые 24 часа</item>
+        <item>Каждые 12 часов</item>
+        <item>Каждые 6 часов</item>
+        <item>Каждые 3 часа</item>
+        <item>Каждые час</item>
+        <item>Никогда</item>
+    </string-array>
+
+    <string-array name="podcasts_update_time_values">
+        <item>24</item>
+        <item>12</item>
+        <item>6</item>
+        <item>3</item>
+        <item>1</item>
+        <item>-1</item>
+    </string-array>
+
+    <string-array name="stream_quality">
+        <item>high</item>
+        <item>low</item>
+    </string-array>
+
+    <string-array name="stream_quality_description">
+        <item>Высокое</item>
+        <item>Низкое</item>
+    </string-array>
+
+    <!-- All of the possible tile background colors for LetterBitmap -->
+    <array name="letter_tile_colors">
+        <item>#f16364</item>
+        <item>#f58559</item>
+        <item>#f9a43e</item>
+        <item>#e4c62e</item>
+        <item>#67bf74</item>
+        <item>#59a2be</item>
+        <item>#2093cd</item>
+        <item>#ad62a7</item>
+    </array>
+
+    <string-array name="tops_language_values">
+        <item>ru</item>
+        <item>en</item>
+    </string-array>
+
+    <string-array name="tops_language_description">
+        <item>Русский</item>
+        <item>Английский</item>
+    </string-array>
+</resources>

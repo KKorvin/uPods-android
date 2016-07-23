@@ -24,4 +24,40 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="1dp"
         android:text="@string/app_name" />
+
+    <TextView
+        android:id="@+id/tvContactString"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="1dp"
+        android:text="@string/contact_string" />
+
+    <TextView
+        android:id="@+id/tvEmail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="1dp"
+        android:text="@string/email" />
+
+    <TextView
+        android:id="@+id/tvCreatorsMain"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="1dp"
+        android:text="@string/creators_main" />
+
+    <TextView
+        android:id="@+id/tvCreators1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="1dp"
+        android:text="@string/creators_1" />
+
+    <TextView
+        android:id="@+id/tvCreators2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="1dp"
+        android:text="@string/creators_2" />
+
 </LinearLayout>
