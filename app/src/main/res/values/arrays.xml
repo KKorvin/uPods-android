@@ -2,9 +2,9 @@
 <resources>
 
     <string-array name="start_screen_preference">
-        <item>Radio stations - featured</item>
-        <item>Radio stations - subscribed</item>
-        <item>Radio stations - recent</item>
+        <item>Radio - featured</item>
+        <item>Radio - subscribed</item>
+        <item>Radio - recent</item>
         <item>Podcasts - featured</item>
         <item>Podcasts - favorites</item>
         <item>Podcasts - downloaded</item>
@@ -43,8 +43,8 @@
     </string-array>
 
     <string-array name="stream_quality_description">
-        <item>high</item>
-        <item>low</item>
+        <item>High</item>
+        <item>Low</item>
     </string-array>
 
     <!-- All of the possible tile background colors for LetterBitmap -->
