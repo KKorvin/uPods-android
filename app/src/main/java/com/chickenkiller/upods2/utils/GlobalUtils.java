@@ -32,8 +32,9 @@ public class GlobalUtils {
         if (title1 == null || title2 == null) {
             return false;
         }
-        title1 = title1.trim().replaceAll("[^a-z,A-Z,0-9,.,+,-, ,!,?,_,:,;,=]", "");
-        title2 = title2.trim().replaceAll("[^a-z,A-Z,0-9,.,+,-, ,!,?,_,:,;,=]", "");
+        //replaceAll("[^a-z,A-Z,0-9,.,+,-, ,!,?,_,:,;,=]", "");
+        title1 = title1.trim().replace("'","");
+        title2 = title2.trim().replace("'","");;
         return title1.equals(title2);
     }
 
