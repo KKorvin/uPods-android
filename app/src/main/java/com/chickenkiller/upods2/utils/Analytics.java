@@ -17,6 +17,10 @@ public class Analytics {
     public static final String SLIDING_MENU_RATE_CLICK = "sliding_menu_rate_click";
     public static final String SLIDING_MENU_ABOUT_CLICK = "sliding_about_click";
 
+    //Main screen
+    public static final String FEATURED_BUTTON_MORE = "featured_btn_more_click";
+
+    //Middle screen
     public static final String MIDDLE_SCREEN_UNSUBSCRIBE = "middle_screen_subscribe";
     public static final String MIDDLE_SCREEN_SUBSCRIBE = "middle_screen_unsubscribe";
     public static final String MIDDLE_SCREEN_PLAY_RADIO = "middle_screen_play_radio";
@@ -28,10 +32,11 @@ public class Analytics {
     public static final String MIDDLE_REMOVE_EPISODE = "middle_screen_remove_episode";
     public static final String MIDDLE_REMOVE_ALL_EPISODES = "middle_screen_rempve_all";
 
-
+    //Playlist
     public static final String PLAYLIST_TOGGLE = "playlist_toggle";
     public static final String PLAYLIST_ITEM_CLICK = "playlist_item_click";
 
+    //Player
     public static final String PLAYER_STREAM_QUALITY = "player_stream_quality";
     public static final String PLAYER_STREAM_INFO = "player_stream_info";
     public static final String PLAYER_SUBSCRIBE = "player_subscribe";

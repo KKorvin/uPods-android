@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.RatingBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.chickenkiller.upods2.R;
@@ -30,12 +31,14 @@ import com.chickenkiller.upods2.models.MediaItemTitle;
 import com.chickenkiller.upods2.models.Podcast;
 import com.chickenkiller.upods2.models.RoundedButtonsLayoutItem;
 import com.chickenkiller.upods2.models.ViewHolderBannersLayout;
+import com.chickenkiller.upods2.utils.Analytics;
 import com.chickenkiller.upods2.utils.GlobalUtils;
 import com.chickenkiller.upods2.utils.enums.ContextMenuType;
 import com.chickenkiller.upods2.utils.enums.MediaItemType;
 import com.chickenkiller.upods2.utils.ui.LetterBitmap;
 import com.chickenkiller.upods2.utils.ui.UIHelper;
 import com.chickenkiller.upods2.views.ImageViewSquare;
+import com.yandex.metrica.YandexMetrica;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -211,19 +214,30 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     private void bindTitleViewHolder(RecyclerView.ViewHolder holder, int position) {
         MediaItemTitle currentItem = (MediaItemTitle) items.get(position);
-        ((ViewHolderMediaItemTitle) holder).tvMediaCardTitle.setText(currentItem.getTitle());
+        ViewHolderMediaItemTitle holderMediaItemTitle = ((ViewHolderMediaItemTitle) holder);
+
+        holderMediaItemTitle.tvMediaCardTitle.setText(currentItem.getTitle());
         if (currentItem.getSubTitle().isEmpty()) {
-            ((ViewHolderMediaItemTitle) holder).tvMediaCardSubTitle.setVisibility(View.GONE);
-            RelativeLayout.LayoutParams llp = (RelativeLayout.LayoutParams) ((ViewHolderMediaItemTitle) holder).tvMediaCardTitle.getLayoutParams();
+            holderMediaItemTitle.tvMediaCardSubTitle.setVisibility(View.GONE);
+            RelativeLayout.LayoutParams llp = (RelativeLayout.LayoutParams) holderMediaItemTitle.tvMediaCardTitle.getLayoutParams();
             // Left // Top // Right // Bottom
             llp.setMargins(UIHelper.dpToPixels(15), UIHelper.dpToPixels(10), UIHelper.dpToPixels(15), UIHelper.dpToPixels(3));
-            ((ViewHolderMediaItemTitle) holder).tvMediaCardTitle.setLayoutParams(llp);
+            holderMediaItemTitle.tvMediaCardTitle.setLayoutParams(llp);
         } else {
-            ((ViewHolderMediaItemTitle) holder).tvMediaCardSubTitle.setVisibility(View.VISIBLE);
-            ((ViewHolderMediaItemTitle) holder).tvMediaCardSubTitle.setText(currentItem.getSubTitle());
+            holderMediaItemTitle.tvMediaCardSubTitle.setVisibility(View.VISIBLE);
+            holderMediaItemTitle.tvMediaCardSubTitle.setText(currentItem.getSubTitle());
         }
+
         if (!currentItem.showButton) {
-            ((ViewHolderMediaItemTitle) holder).btnMediaTitleMore.setVisibility(View.GONE);
+            holderMediaItemTitle.btnMediaTitleMore.setVisibility(View.GONE);
+        } else {
+            holderMediaItemTitle.btnMediaTitleMore.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    YandexMetrica.reportEvent(Analytics.FEATURED_BUTTON_MORE);
+                    Toast.makeText(mContext, R.string.coming_soon, Toast.LENGTH_SHORT).show();
+                }
+            });
         }
         holder.itemView.setTag(currentItem);
     }
@@ -255,7 +269,7 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         if (viewHolderCardItem.rbMediaItem != null) {
             viewHolderCardItem.rbMediaItem.setRating(currentItem.getScore());
         }
-        
+
         holder.itemView.setTag(currentItem);
         viewHolderCardItem.setCardClickListener(getCardClickListener(position));
     }
