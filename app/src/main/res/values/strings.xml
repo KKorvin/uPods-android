@@ -155,5 +155,7 @@
     <string name="creators_main">\nAuthors: </string>
     <string name="creators_1">Alon Zilberman</string>
     <string name="creators_2">Alex Berber</string>
-    <string name="contact_string">\nAny your questions, suggestions, wishes and requests send us on e-mail</string>
+    <string name="copy_rights">\n All rights reserved</string>
+    <string name="contact_details">\nAny your questions, suggestions, \nwishes and requests send us on e-mail</string>
+    <string name="smile_logo">¯\u005C_(ツ)_/¯</string>
 </resources>

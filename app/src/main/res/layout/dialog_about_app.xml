@@ -30,7 +30,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="1dp"
-        android:text="@string/contact_string" />
+        android:gravity="center"
+        android:text="@string/contact_details" />
 
     <TextView
         android:id="@+id/tvEmail"
@@ -59,5 +60,22 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="1dp"
         android:text="@string/creators_2" />
+
+    <TextView
+        android:id="@+id/tvCopyRights"
+        android:gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="1dp"
+        android:text="@string/copy_rights" />
+
+    <TextView
+        android:id="@+id/tvSmileLogo"
+        android:gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="1dp"
+        android:textStyle="bold"
+        android:text="@string/smile_logo" />
 
 </LinearLayout>
