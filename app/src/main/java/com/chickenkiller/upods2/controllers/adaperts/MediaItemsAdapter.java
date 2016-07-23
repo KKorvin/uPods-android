@@ -230,26 +230,34 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     private void bindCardViewHolder(RecyclerView.ViewHolder holder, int position) {
         MediaItem currentItem = (MediaItem) items.get(position);
+        ViewHolderCardItem viewHolderCardItem = (ViewHolderCardItem) holder;
+
+        //Cover
         if (currentItem.getCoverImageUrl() == null) {
             final LetterBitmap letterBitmap = new LetterBitmap(mContext);
             Bitmap letterTile = letterBitmap.getLetterTile(currentItem.getName(), currentItem.getName(), COVER_IMAGE_SIZE, COVER_IMAGE_SIZE);
-            ((ViewHolderCardItem) holder).imgSquare.setImageBitmap(letterTile);
+            viewHolderCardItem.imgSquare.setImageBitmap(letterTile);
         } else {
             Glide.with(mContext).load(currentItem.getCoverImageUrl()).centerCrop()
-                    .crossFade().into(((ViewHolderCardItem) holder).imgSquare);
+                    .crossFade().into(viewHolderCardItem.imgSquare);
         }
-        ((ViewHolderCardItem) holder).tvSquareTitle.setText(currentItem.getName());
-        if (((ViewHolderCardItem) holder).tvSquareSubTitle != null) {
-            ((ViewHolderCardItem) holder).tvSquareSubTitle.setText(currentItem.getSubHeader());
+
+        viewHolderCardItem.tvSquareTitle.setText(currentItem.getName());
+        if (viewHolderCardItem.tvSquareSubTitle != null) {
+            viewHolderCardItem.tvSquareSubTitle.setText(currentItem.getSubHeader());
         }
-        if (((ViewHolderCardItem) holder).tvItemStatus != null) {
-            initStatusBlock((ViewHolderCardItem) holder, currentItem);
+        if (viewHolderCardItem.tvItemStatus != null) {
+            initStatusBlock(viewHolderCardItem, currentItem);
         }
-        if (((ViewHolderCardItem) holder).tvItemCount != null) {
-            initCountBlock((ViewHolderCardItem) holder, currentItem);
+        if (viewHolderCardItem.tvItemCount != null) {
+            initCountBlock(viewHolderCardItem, currentItem);
         }
+        if (viewHolderCardItem.rbMediaItem != null) {
+            viewHolderCardItem.rbMediaItem.setRating(currentItem.getScore());
+        }
+        
         holder.itemView.setTag(currentItem);
-        ((ViewHolderCardItem) holder).setCardClickListener(getCardClickListener(position));
+        viewHolderCardItem.setCardClickListener(getCardClickListener(position));
     }
 
     /**

@@ -48,6 +48,7 @@ public class Podcast extends MediaItem {
         this.trackCount = "0";
         this.genre = "";
         this.description = "";
+        this.score = 4.5f;
     }
 
     public Podcast(String name, String feedUrl) {
@@ -88,6 +89,7 @@ public class Podcast extends MediaItem {
                 this.explicitness = jsonItem.has("collectionExplicitness") ? jsonItem.getString("collectionExplicitness") : "";
                 this.trackCount = jsonItem.has("trackCount") ? jsonItem.getString("trackCount") : "";
                 this.genre = jsonItem.has("primaryGenreName") ? jsonItem.getString("primaryGenreName") : "";
+                this.score = 4.5f;
             } else {//Our backend
                 this.id = jsonItem.has("id") ? jsonItem.getInt("id") : 0;
                 this.name = jsonItem.has("name") ? jsonItem.getString("name") : "";
@@ -100,6 +102,7 @@ public class Podcast extends MediaItem {
                 this.releaseDate = jsonItem.has("release_date") ? jsonItem.getString("release_date") : "";
                 this.explicitness = jsonItem.has("explicitness") ? jsonItem.getString("explicitness") : "";
                 this.trackCount = jsonItem.has("track_count") ? jsonItem.getString("track_count") : "";
+                this.score = jsonItem.has("score") ? (float) jsonItem.getDouble("score") : 4.5f;
                 if (jsonItem.has("genres") && jsonItem.getJSONArray("genres").length() > 0) {
                     this.genre = jsonItem.getJSONArray("genres").getString(0);
                 }
@@ -133,6 +136,7 @@ public class Podcast extends MediaItem {
         this.isSubscribed = podcast.isSubscribed;
         this.isDownloaded = podcast.isDownloaded;
         this.hasNewEpisodes = podcast.hasNewEpisodes;
+        this.score = podcast.score;
         this.episodes = new ArrayList<Episode>(podcast.episodes);
     }
 
@@ -298,6 +302,7 @@ public class Podcast extends MediaItem {
         values.put("country", country);
         values.put("genre", genre);
         values.put("track_count", trackCount);
+        values.put("score", score);
 
         id = database.insert(TABLE, null, values);
         isExistsInDb = true;
@@ -320,6 +325,7 @@ public class Podcast extends MediaItem {
             podcast.put("track_count", this.trackCount);
             podcast.put("genre", this.genre);
             podcast.put("description", this.description);
+            podcast.put("score", this.score);
             //podcast.put("episodes", Episode.toJSONArray(this.episodes, true));
         } catch (JSONException e) {
             Logger.printError(PODCAST_LOG, "Can't convert podcast to json");
@@ -365,6 +371,7 @@ public class Podcast extends MediaItem {
         podcast.country = cursor.getString(cursor.getColumnIndex("country"));
         podcast.genre = cursor.getString(cursor.getColumnIndex("genre"));
         podcast.trackCount = cursor.getString(cursor.getColumnIndex("track_count"));
+        podcast.score = cursor.getFloat(cursor.getColumnIndex("score"));
 
         podcast.episodes.addAll(Episode.withPodcastId(podcast.id));
 

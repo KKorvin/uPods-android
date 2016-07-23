@@ -58,6 +58,7 @@ public class RadioItem extends MediaItem {
         this.twitter = "";
         this.country = "";
         this.genre = "";
+        this.score = 4.5f;
     }
 
     public RadioItem(String name, StreamUrl streamUrl, String coverImageUrl) {
@@ -84,6 +85,7 @@ public class RadioItem extends MediaItem {
         this.isExistsInDb = item.isExistsInDb;
         this.isRecent = item.isRecent;
         this.isSubscribed = item.isSubscribed;
+        this.score = item.score;
     }
 
     public long save() {
@@ -97,6 +99,7 @@ public class RadioItem extends MediaItem {
         values.put("cover_image_url", coverImageUrl);
         values.put("country", country);
         values.put("genre", genre);
+        values.put("score", score);
 
         id = database.insert(TABLE, null, values);
         isExistsInDb = true;
@@ -116,6 +119,7 @@ public class RadioItem extends MediaItem {
             this.facebook = jsonItem.has("facebook") ? jsonItem.getString("facebook") : "";
             this.twitter = jsonItem.has("twitter") ? jsonItem.getString("twitter") : "";
             this.country = jsonItem.has("country") ? jsonItem.getString("country") : "";
+            this.score = jsonItem.has("score") ? (float) jsonItem.getDouble("score") : 4.5f;
             this.selectedStreamUrl = jsonItem.has("selectedStreamUrl") ? new StreamUrl(jsonItem.getJSONObject("selectedStreamUrl")) : null;
 
             if (jsonItem.has("streamUrls") && jsonItem.getJSONArray("streamUrls").length() > 0) {
@@ -222,6 +226,7 @@ public class RadioItem extends MediaItem {
             radioItem.put("twitter", this.twitter);
             radioItem.put("country", this.country);
             radioItem.put("genre", this.genre);
+            radioItem.put("score", this.score);
             if (this.selectedStreamUrl != null) {
                 radioItem.put("selectedStreamUrl", this.selectedStreamUrl.toJSON());
             }
@@ -407,6 +412,7 @@ public class RadioItem extends MediaItem {
         radioItem.coverImageUrl = cursor.getString(cursor.getColumnIndex("cover_image_url"));
         radioItem.country = cursor.getString(cursor.getColumnIndex("country"));
         radioItem.genre = cursor.getString(cursor.getColumnIndex("genre"));
+        radioItem.score = cursor.getFloat(cursor.getColumnIndex("score"));
 
         radioItem.streamUrls.addAll(StreamUrl.withRaioItemId(radioItem.id));
 

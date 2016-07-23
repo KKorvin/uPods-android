@@ -32,7 +32,8 @@ public class SQLdatabaseManager extends SQLiteOpenHelper {
                 "    explicitness    VARCHAR (255) DEFAULT '',\n" +
                 "    country         VARCHAR (100) DEFAULT '',\n" +
                 "    genre           VARCHAR (255) DEFAULT '',\n" +
-                "    track_count     VARCHAR (100) DEFAULT ''\n" +
+                "    track_count     VARCHAR (100) DEFAULT '',\n" +
+                "    score           FLOAT  DEFAULT '4.5'\n" +
                 ");");
 
         db.execSQL("CREATE TABLE radio_stations (\n" +
@@ -45,7 +46,8 @@ public class SQLdatabaseManager extends SQLiteOpenHelper {
                 "    twitter         VARCHAR (255)  DEFAULT '',\n" +
                 "    cover_image_url VARCHAR (255)  DEFAULT '',\n" +
                 "    country         VARCHAR (100)  DEFAULT '',\n" +
-                "    genre           VARCHAR (255)  DEFAULT ''\n" +
+                "    genre           VARCHAR (255)  DEFAULT '',\n" +
+                "    score           FLOAT  DEFAULT '4.5'\n" +
                 ");\n");
 
         db.execSQL("CREATE TABLE stream_link (\n" +

@@ -22,6 +22,7 @@ public abstract class MediaItem extends SQLModel implements IMediaItemView {
 
     protected String name;
     protected String coverImageUrl;
+    protected float score;
 
 
     public boolean isSubscribed;
@@ -100,5 +101,9 @@ public abstract class MediaItem extends SQLModel implements IMediaItemView {
             ids.add(String.valueOf(mediaItem.id));
         }
         return ids;
+    }
+
+    public float getScore(){
+        return score;
     }
 }
