@@ -42,4 +42,5 @@ public class Analytics {
     public static final String PLAYER_SUBSCRIBE = "player_subscribe";
     public static final String PLAYER_UNSUBSCRIBE = "player_unsubscribe";
 
+    public static String PLAY_PREFIX = "play_";
 }
