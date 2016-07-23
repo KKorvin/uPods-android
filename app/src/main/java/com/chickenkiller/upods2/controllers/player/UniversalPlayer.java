@@ -14,12 +14,14 @@ import com.chickenkiller.upods2.models.MediaItem;
 import com.chickenkiller.upods2.models.Podcast;
 import com.chickenkiller.upods2.models.RadioItem;
 import com.chickenkiller.upods2.models.Track;
+import com.chickenkiller.upods2.utils.Analytics;
 import com.chickenkiller.upods2.utils.GlobalUtils;
 import com.chickenkiller.upods2.utils.Logger;
 import com.chickenkiller.upods2.utils.MediaUtils;
 import com.chickenkiller.upods2.utils.enums.Direction;
 import com.chickenkiller.upods2.views.DefaultNotificationPanel;
 import com.chickenkiller.upods2.views.PlayerNotificationPanel;
+import com.yandex.metrica.YandexMetrica;
 
 import org.videolan.libvlc.LibVLC;
 import org.videolan.libvlc.Media;
@@ -83,6 +85,7 @@ public class UniversalPlayer implements MediaPlayer.EventListener {
         if (isCurrentMediaItem(mediaItem)) {
             return;
         }
+        YandexMetrica.reportEvent(Analytics.PLAY_PREFIX + mediaItem.getName());
         if (mediaItem instanceof RadioItem) {
             this.mediaItem = new RadioItem((RadioItem) mediaItem);
         } else if (mediaItem instanceof Podcast) {
