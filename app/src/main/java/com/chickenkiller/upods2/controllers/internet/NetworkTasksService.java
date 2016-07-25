@@ -8,7 +8,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.os.PowerManager;
 import android.support.v7.app.NotificationCompat;
 
 import com.chickenkiller.upods2.R;
@@ -32,14 +31,12 @@ import java.util.ArrayList;
 public class NetworkTasksService extends IntentService {
 
     private final static String TAG = "NetworkTasksService";
-    private final static String WAKE_LOCK_NAME = "com.chickenkiller.upods2.WAKE_LOCK";
     private static final int LARGE_ICON_SIZE = UIHelper.dpToPixels(80);
 
     public static final String ACTION_CHECK_FOR_NEW_EPISODS = "com.chickenkiller.upods2.service.check_new_episods";
     public static final int NOTIFICATIONS_SHOW_PODCASTS_SUBSCRIBED = 3501;
     public static final int NEW_EPISODS_NOTIFICATION_ID = 3829;
 
-    private PowerManager.WakeLock wakeLock = null;
 
     public NetworkTasksService() {
         super(TAG);
@@ -50,18 +47,11 @@ public class NetworkTasksService extends IntentService {
     public void onCreate() {
         super.onCreate();
         Logger.printInfo(TAG, "I am created! ");
-        PowerManager mgr = (PowerManager) getSystemService(Context.POWER_SERVICE);
-        wakeLock = mgr.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, WAKE_LOCK_NAME);
-        wakeLock.setReferenceCounted(true);
     }
 
     @Override
     public void onStart(Intent intent, final int startId) {
-        wakeLock.acquire();
         super.onStart(intent, startId);
-        if (wakeLock.isHeld()) {
-            wakeLock.release();
-        }
     }
 
     @Override
@@ -70,9 +60,6 @@ public class NetworkTasksService extends IntentService {
         if (intent.getAction().equals(ACTION_CHECK_FOR_NEW_EPISODS)) {
             UpodsApplication.initAllResources();
             checkForNewEpisods();
-        }
-        if (wakeLock.isHeld()) {
-            wakeLock.release();
         }
     }
 

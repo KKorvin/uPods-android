@@ -73,7 +73,9 @@ public class UpodsApplication extends Application {
 
     public static void setAlarmManagerTasks(Context context) {
         try {
-
+            if (ProfileManager.getInstance().getSubscribedPodcasts().size() == 0) {
+                return;
+            }
             AlarmManager alarmMgr = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
             Intent intent = new Intent(context, NetworkTasksService.class);
             intent.setAction(NetworkTasksService.ACTION_CHECK_FOR_NEW_EPISODS);

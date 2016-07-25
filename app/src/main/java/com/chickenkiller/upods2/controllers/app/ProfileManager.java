@@ -292,6 +292,10 @@ public class ProfileManager {
             values.put("list_type", MediaListItem.SUBSCRIBED);
             UpodsApplication.getDatabaseManager().getWritableDatabase().insert("media_list", null, values);
             mediaItem.isSubscribed = true;
+
+            if (mediaItem instanceof Podcast && getSubscribedPodcasts().size() == 1) {
+                UpodsApplication.setAlarmManagerTasks();
+            }
         }
         notifyChanges(new ProfileUpdateEvent(MediaListItem.SUBSCRIBED, mediaItem, false));
     }

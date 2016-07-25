@@ -29,6 +29,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Random;
 
 /**
  * Created by alonzilberman on 7/28/15.
@@ -47,7 +48,7 @@ public class UIHelper {
                 return swatch2.getPopulation() - swatch1.getPopulation();
             }
         });
-        return swatches.get(0).getRgb();
+        return swatches.size() > 0 ? swatches.get(0).getRgb() : getRandomColor();
     }
 
     /**
@@ -151,5 +152,11 @@ public class UIHelper {
         states.addState(new int[]{},
                 new ColorDrawable(normalColor));
         return states;
+    }
+
+    public static int getRandomColor() {
+        Random rnd = new Random();
+        int color = Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
+        return color;
     }
 }

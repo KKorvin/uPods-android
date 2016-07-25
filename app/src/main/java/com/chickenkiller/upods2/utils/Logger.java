@@ -7,20 +7,30 @@ import android.util.Log;
  */
 public class Logger {
 
+    private static boolean isTurnedOn = false;
+
     public static void printInfo(String tag, String text) {
-        Log.i(tag, text);
+        if (isTurnedOn) {
+            Log.i(tag, text);
+        }
     }
 
     public static void printInfo(String tag, int text) {
-        Log.i(tag, String.valueOf(text));
+        if (isTurnedOn) {
+            Log.i(tag, String.valueOf(text));
+        }
     }
 
     public static void printInfo(String tag, boolean text) {
-        Log.i(tag, String.valueOf(text));
+        if (isTurnedOn) {
+            Log.i(tag, String.valueOf(text));
+        }
     }
 
 
     public static void printError(String tag, String text) {
-        Log.i(tag, text);
+        if (isTurnedOn) {
+            Log.i(tag, text);
+        }
     }
 }
