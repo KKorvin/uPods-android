@@ -158,4 +158,5 @@
     <string name="copy_rights">\n All rights reserved</string>
     <string name="contact_details">\nAny your questions, suggestions, \nwishes and requests send us on e-mail</string>
     <string name="smile_logo">¯\u005C_(ツ)_/¯</string>
+    <string name="error_cant_play">Can\'t play media. Please try again later.</string>
 </resources>

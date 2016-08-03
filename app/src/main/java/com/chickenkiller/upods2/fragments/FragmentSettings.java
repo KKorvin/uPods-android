@@ -29,12 +29,13 @@ public class FragmentSettings extends PreferenceFragment {
         super.onCreate(savedInstanceState);
 
         toolbar = ((IToolbarHolder) getActivity()).getToolbar();
-        toolbar.setVisibility(View.VISIBLE);
-        toolbar.getMenu().findItem(R.id.action_search).setVisible(false);
-        toolbar.getMenu().findItem(R.id.add_podcast).setVisible(false);
-        toolbar.getMenu().findItem(R.id.add_radio).setVisible(false);
-        toolbar.setTitle(R.string.action_settings);
-
+        if(toolbar!=null) {
+            toolbar.setVisibility(View.VISIBLE);
+            toolbar.getMenu().findItem(R.id.action_search).setVisible(false);
+            toolbar.getMenu().findItem(R.id.add_podcast).setVisible(false);
+            toolbar.getMenu().findItem(R.id.add_radio).setVisible(false);
+            toolbar.setTitle(R.string.action_settings);
+        }
         ((ISlidingMenuHolder) getActivity()).setSlidingMenuHeader(getString(R.string.action_settings));
         addPreferencesFromResource(R.xml.settings);
 

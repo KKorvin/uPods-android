@@ -356,9 +356,14 @@ public class FragmentMediaItemDetails extends Fragment implements View.OnTouchLi
 
                         @Override
                         public void onRequestFailed() {
-                            rvTracks.setVisibility(View.GONE);
-                            pbTracks.setVisibility(View.GONE);
-                            lnInternetError.setVisibility(View.VISIBLE);
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    rvTracks.setVisibility(View.GONE);
+                                    pbTracks.setVisibility(View.GONE);
+                                    lnInternetError.setVisibility(View.VISIBLE);
+                                }
+                            });
                         }
                     }
             );

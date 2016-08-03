@@ -46,6 +46,8 @@ import com.yandex.metrica.YandexMetrica;
 
 import java.util.Arrays;
 
+import hotchemi.android.rate.AppRate;
+
 public class ActivityMain extends BasicActivity implements IOverlayable, IToolbarHolder, ISlidingMenuHolder, ILoginManager,
         Toolbar.OnMenuItemClickListener {
 
@@ -54,6 +56,9 @@ public class ActivityMain extends BasicActivity implements IOverlayable, IToolba
     private static final int FRAGMENT_TRANSACTION_TIME = 300;
     private static final int WELLCOME_SCREEN_TIME = 2000;
     private static final long BACK_DOUBLE_CLICK_DELAY = 2000;
+
+    private static final int RATE_MIN_INSTALL_DAYS = 1;
+    private static final int RATE_MIN_INSTALL_TIMES = 7;
 
     public static boolean isFirstRun = true;
 
@@ -128,6 +133,14 @@ public class ActivityMain extends BasicActivity implements IOverlayable, IToolba
                 fragmentMediaItemsGrid.setStartItemNumber(startedFragmentNumber);
             }
             showFragment(R.id.fl_content, fragmentMediaItemsGrid, FragmentMediaItemsGrid.TAG);
+            AppRate.with(this)
+                    .setInstallDays(RATE_MIN_INSTALL_DAYS)
+                    .setLaunchTimes(RATE_MIN_INSTALL_TIMES)
+                    .setShowLaterButton(true) // default true
+                    .monitor();
+
+            // Show a dialog if meets conditions
+            AppRate.showRateDialogIfMeetsConditions(this);
         }
         isFirstRun = false;
     }

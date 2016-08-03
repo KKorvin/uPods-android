@@ -131,4 +131,5 @@
     <string name="creators_2">Алекс Бербер</string>
     <string name="copy_rights">\n Все права защищены</string>
     <string name="contact_details">\nВсе вопросы и предложения\n отправляйте на нашу электронную почту</string>
+    <string name="error_cant_play">Ошибка воспроизведения. Пожалуйста попробуйте позже</string>
 </resources>

@@ -56,7 +56,9 @@ public class ActivityPlayer extends BasicActivity implements IToolbarHolder, Too
 
         currentMediaItem = UniversalPlayer.getInstance().getPlayingMediaItem();
         if (currentMediaItem == null) {
-            throw new RuntimeException("Can't run activity player, MediaItem for play not set.");
+            Toast.makeText(this, getString(R.string.error_cant_play), Toast.LENGTH_SHORT).show();
+            onBackPressed();
+            return;
         }
 
         if (getFragmentManager().getBackStackEntryCount() == 0) {
