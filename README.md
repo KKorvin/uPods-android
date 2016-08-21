@@ -44,6 +44,10 @@ In app you can find examples of next things:
  - Animations
  - okhttp3, glide, vlc-android-sdk and other popular open source libraries
  
+Building  project
+-----------------------------------------------
+To build the project you will need Config.java file which is not inside repositary. This file contains social networks and analytics api keys, you can create this file with empty strings to compile the project or use the real api keys from your accounts to make all the functionality work. You will see which variables are missing after importing the project to your IDE.
+
 Contribution
 -----------------------------------------------
 
