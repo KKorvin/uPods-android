@@ -1,0 +1,10 @@
+.gradle
+/local.properties
+/.idea/workspace.xml
+/.idea/libraries
+.DS_Store
+/upods2.iml
+*.iml
+/build
+/captures
+/app/src/main/java/com/chickenkiller/upods2/controllers/app/Config.java
