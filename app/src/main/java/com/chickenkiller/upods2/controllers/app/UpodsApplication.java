@@ -11,7 +11,6 @@ import android.os.SystemClock;
 import com.chickenkiller.upods2.controllers.database.SQLdatabaseManager;
 import com.chickenkiller.upods2.controllers.internet.NetworkTasksService;
 import com.chickenkiller.upods2.models.Category;
-import com.chickenkiller.upods2.utils.Analytics;
 import com.chickenkiller.upods2.utils.Logger;
 import com.facebook.FacebookSdk;
 import com.pixplicity.easyprefs.library.Prefs;
@@ -34,7 +33,7 @@ public class UpodsApplication extends Application {
     public void onCreate() {
         isLoaded = false;
         applicationContext = getApplicationContext();
-        YandexMetrica.activate(getApplicationContext(), Analytics.YANDEX_METRICS_API_KEY);
+        YandexMetrica.activate(getApplicationContext(), Config.YANDEX_METRICS_API_KEY);
         YandexMetrica.enableActivityAutoTracking(this);
         FacebookSdk.sdkInitialize(applicationContext);
         LoginMaster.getInstance().init();

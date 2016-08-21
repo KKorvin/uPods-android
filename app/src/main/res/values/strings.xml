@@ -1,6 +1,5 @@
 <resources>
-    <string name="facebook_app_id">916102948459538</string>
-    <string name="twitter_api_key">wr8t6lPMxtC09uMpIEayM5FBC</string>
+    <string name="facebook_app_id"></string>
     <integer name="com_vk_sdk_AppId">5171950</integer>
     <string name="app_name">uPods</string>
     <string name="profile_my_profile">My Profile</string>

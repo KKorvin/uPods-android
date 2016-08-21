@@ -6,7 +6,6 @@ package com.chickenkiller.upods2.utils;
 
 public class Analytics {
 
-    public static final String YANDEX_METRICS_API_KEY = "9f5448a6-200d-4db8-84d1-d3317ea11df7";
 
     //Sliding menu
     public static final String SLIDING_MENU_SETTINGS_CLICK = "sliding_menu_settings_click";

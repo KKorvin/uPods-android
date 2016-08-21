@@ -11,6 +11,7 @@ import com.chickenkiller.upods2.utils.GlobalUtils;
 import com.chickenkiller.upods2.utils.Logger;
 import com.facebook.AccessToken;
 import com.facebook.AccessTokenTracker;
+import com.facebook.FacebookSdk;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.login.LoginManager;
@@ -43,8 +44,6 @@ import io.fabric.sdk.android.Fabric;
 public class LoginMaster {
 
     private static final String LOG_TAG = "LoginMaster";
-    private static final String TWITTER_CONSUMER_KEY = "wr8t6lPMxtC09uMpIEayM5FBC";
-    private static final String TWITTER_CONSUMER_SECRET = "dtnTy4RQfnowu60XGHToj830j4AYsKxDA82PWZBijgSdk0gnlk";
 
     private static LoginMaster loginMaster;
 
@@ -73,6 +72,8 @@ public class LoginMaster {
     }
 
     private void initFacebook() {
+        FacebookSdk.setApplicationId(Config.FACEBOOK_APP_ID);
+
         AccessTokenTracker accessTokenTracker = new AccessTokenTracker() {
             @Override
             protected void onCurrentAccessTokenChanged(AccessToken oldAccessToken, AccessToken newAccessToken) {
@@ -83,7 +84,7 @@ public class LoginMaster {
     }
 
     private void initTwitter() {
-        TwitterAuthConfig authConfig = new TwitterAuthConfig(TWITTER_CONSUMER_KEY, TWITTER_CONSUMER_SECRET);
+        TwitterAuthConfig authConfig = new TwitterAuthConfig(Config.TWITTER_CONSUMER_KEY, Config.TWITTER_CONSUMER_SECRET);
         Fabric.with(UpodsApplication.getContext(), new Twitter(authConfig));
     }
 
