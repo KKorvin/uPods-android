@@ -53,7 +53,7 @@ import com.vk.sdk.api.VKError;
 import java.util.Arrays;
 
 /**
- * Created by alonzilberman on 8/8/15.
+ * Created by Alon Zilberman on 8/8/15.
  */
 public class FragmentProfile extends Fragment implements IControlStackHistory {
 

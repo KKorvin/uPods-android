@@ -4,7 +4,7 @@ import com.chickenkiller.upods2.R;
 import com.chickenkiller.upods2.controllers.app.UpodsApplication;
 
 /**
- * Created by alonzilberman on 12/11/15.
+ * Created by Alon Zilberman on 12/11/15.
  */
 public class UserProfile {
 

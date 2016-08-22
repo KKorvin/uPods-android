@@ -18,7 +18,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 /**
- * Created by alonzilberman on 8/31/15.
+ * Created by Alon Zilberman on 8/31/15.
  */
 public class Episode extends Track {
     private static final String TABLE = "episodes";

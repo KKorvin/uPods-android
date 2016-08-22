@@ -16,7 +16,7 @@ import javax.xml.parsers.SAXParserFactory;
 import okhttp3.Request;
 
 /**
- * Created by alonzilberman on 29/03/2016.
+ * Created by Alon Zilberman on 29/03/2016.
  */
 public class HelpFunctions {
 

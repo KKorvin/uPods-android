@@ -10,7 +10,7 @@ import org.xml.sax.helpers.DefaultHandler;
 import java.util.ArrayList;
 
 /**
- * Created by alonzilberman on 8/31/15.
+ * Created by Alon Zilberman on 8/31/15.
  */
 public class EpisodesXMLHandler extends DefaultHandler {
     private final String ITEM_TITLE = "item";

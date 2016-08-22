@@ -5,7 +5,7 @@ import android.util.AttributeSet;
 import android.widget.ImageView;
 
 /**
- * Created by alonzilberman on 7/4/15.
+ * Created by Alon Zilberman on 7/4/15.
  */
 public class ImageViewSquare extends ImageView {
 

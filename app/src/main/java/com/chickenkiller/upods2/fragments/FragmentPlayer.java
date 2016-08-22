@@ -51,7 +51,7 @@ import com.pixplicity.easyprefs.library.Prefs;
 
 
 /**
- * Created by alonzilberman on 7/27/15.
+ * Created by Alon Zilberman on 7/27/15.
  */
 public class FragmentPlayer extends Fragment implements IPlayerStateListener {
 

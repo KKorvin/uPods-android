@@ -9,7 +9,7 @@ import android.util.Log;
 import android.view.View;
 
 /**
- * Created by alonzilberman on 7/5/15.
+ * Created by Alon Zilberman on 7/5/15.
  */
 public class AutofitRecyclerView extends RecyclerView {
     private GridLayoutManager manager;

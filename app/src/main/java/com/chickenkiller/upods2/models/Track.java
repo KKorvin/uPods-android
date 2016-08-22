@@ -1,7 +1,7 @@
 package com.chickenkiller.upods2.models;
 
 /**
- * Created by alonzilberman on 8/31/15.
+ * Created by Alon Zilberman on 8/31/15.
  */
 public abstract class Track extends SQLModel {
 

@@ -17,7 +17,7 @@ import java.io.FileReader;
 import java.util.ArrayList;
 
 /**
- * Created by alonzilberman on 3/7/16.
+ * Created by Alon Zilberman on 3/7/16.
  */
 public class Feed {
 

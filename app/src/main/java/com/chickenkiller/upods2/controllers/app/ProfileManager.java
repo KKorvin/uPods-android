@@ -23,7 +23,7 @@ import java.io.File;
 import java.util.ArrayList;
 
 /**
- * Created by alonzilberman on 9/28/15.
+ * Created by Alon Zilberman on 9/28/15.
  */
 public class ProfileManager {
 

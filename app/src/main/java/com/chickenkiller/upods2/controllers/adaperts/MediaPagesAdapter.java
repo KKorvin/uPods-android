@@ -19,7 +19,7 @@ import java.lang.ref.WeakReference;
 import java.util.Hashtable;
 
 /**
- * Created by alonzilberman on 8/14/15.
+ * Created by Alon Zilberman on 8/14/15.
  * Use it for global ViewPagers with media items
  */
 public class MediaPagesAdapter extends FragmentStatePagerAdapter {

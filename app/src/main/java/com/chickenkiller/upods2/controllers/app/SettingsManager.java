@@ -16,7 +16,7 @@ import org.json.JSONObject;
 import java.util.Locale;
 
 /**
- * Created by alonzilberman on 12/12/15.
+ * Created by Alon Zilberman on 12/12/15.
  */
 public class SettingsManager {
 

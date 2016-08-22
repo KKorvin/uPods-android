@@ -39,7 +39,7 @@ import org.json.JSONObject;
 import io.fabric.sdk.android.Fabric;
 
 /**
- * Created by alonzilberman on 11/29/15.
+ * Created by Alon Zilberman on 11/29/15.
  */
 public class LoginMaster {
 

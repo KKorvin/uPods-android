@@ -45,7 +45,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by alonzilberman on 7/10/15.
+ * Created by Alon Zilberman on 7/10/15.
  */
 public class FragmentMainFeatured extends Fragment implements IContentLoadListener, AdapterView.OnItemClickListener, ICustumziedBackPress {
 

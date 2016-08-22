@@ -20,7 +20,7 @@ import com.chickenkiller.upods2.utils.ui.LetterBitmap;
 import com.chickenkiller.upods2.utils.ui.UIHelper;
 
 /**
- * Created by alonzilberman on 7/31/15.
+ * Created by Alon Zilberman on 7/31/15.
  */
 public class DefaultNotificationPanel extends PlayerNotificationPanel {
     private static final int COVER_IMAGE_SIZE = UIHelper.dpToPixels(50);

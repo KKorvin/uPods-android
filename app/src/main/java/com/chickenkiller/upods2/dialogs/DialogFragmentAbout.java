@@ -15,7 +15,7 @@ import android.widget.TextView;
 import com.chickenkiller.upods2.R;
 
 /**
- * Created by alonzilberman on 8/8/15.
+ * Created by Alon Zilberman on 8/8/15.
  */
 public class DialogFragmentAbout extends DialogFragment {
 

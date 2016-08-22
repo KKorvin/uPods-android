@@ -18,7 +18,7 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 
 /**
- * Created by alonzilberman on 1/2/16.
+ * Created by Alon Zilberman on 1/2/16.
  */
 public class SyncMaster extends AsyncTask<Void, JSONObject, Void> {
 

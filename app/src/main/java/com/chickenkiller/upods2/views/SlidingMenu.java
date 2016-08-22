@@ -25,7 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by alonzilberman on 7/4/15.
+ * Created by Alon Zilberman on 7/4/15.
  */
 public class SlidingMenu implements ISlidingMenuManager {
 

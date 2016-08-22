@@ -16,7 +16,7 @@ import java.io.File;
 import java.util.ArrayList;
 
 /**
- * Created by alonzilberman on 8/24/15.
+ * Created by Alon Zilberman on 8/24/15.
  */
 public class Podcast extends MediaItem {
     public static final String TABLE = "podcasts";

@@ -18,7 +18,7 @@ import java.util.List;
 import es.claucookie.miniequalizerlibrary.EqualizerView;
 
 /**
- * Created by alonzilberman on 10/7/15.
+ * Created by Alon Zilberman on 10/7/15.
  */
 public class PlaylistMediaItemsAdapter extends ArrayAdapter<MediaItem> implements INowPlayingItemPosiontGetter {
 

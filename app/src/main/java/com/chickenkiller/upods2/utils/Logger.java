@@ -3,7 +3,7 @@ package com.chickenkiller.upods2.utils;
 import android.util.Log;
 
 /**
- * Created by alonzilberman on 11/3/15.
+ * Created by Alon Zilberman on 11/3/15.
  */
 public class Logger {
 

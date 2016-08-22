@@ -1,7 +1,7 @@
 package com.chickenkiller.upods2.models;
 
 /**
- * Created by alonzilberman on 16/03/2016.
+ * Created by Alon Zilberman on 16/03/2016.
  */
 abstract public class SQLModel {
 

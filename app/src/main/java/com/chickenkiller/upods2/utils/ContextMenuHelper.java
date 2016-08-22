@@ -33,7 +33,7 @@ import java.io.File;
 import java.util.Iterator;
 
 /**
- * Created by alonzilberman on 10/22/15.
+ * Created by Alon Zilberman on 10/22/15.
  * Put all logic for context menu clicks here
  */
 public class ContextMenuHelper {

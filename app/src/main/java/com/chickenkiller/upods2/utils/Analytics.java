@@ -1,7 +1,7 @@
 package com.chickenkiller.upods2.utils;
 
 /**
- * Created by alonzilberman on 22/06/2016.
+ * Created by Alon Zilberman on 22/06/2016.
  */
 
 public class Analytics {

@@ -32,7 +32,7 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 /**
- * Created by alonzilberman on 7/11/15.
+ * Created by Alon Zilberman on 7/11/15.
  */
 public class BackendManager {
 

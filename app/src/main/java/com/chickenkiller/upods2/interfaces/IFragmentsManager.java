@@ -5,7 +5,7 @@ import android.app.DialogFragment;
 import android.app.Fragment;
 
 /**
- * Created by alonzilberman on 7/8/15.
+ * Created by Alon Zilberman on 7/8/15.
  */
 public interface IFragmentsManager {
 

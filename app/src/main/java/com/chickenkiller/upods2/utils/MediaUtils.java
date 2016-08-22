@@ -28,7 +28,7 @@ import okhttp3.Request;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 
 /**
- * Created by alonzilberman on 10/30/15.
+ * Created by Alon Zilberman on 10/30/15.
  */
 public class MediaUtils {
 

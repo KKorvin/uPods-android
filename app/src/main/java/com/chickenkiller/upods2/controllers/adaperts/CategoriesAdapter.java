@@ -13,7 +13,7 @@ import com.chickenkiller.upods2.models.Category;
 import java.util.List;
 
 /**
- * Created by alonzilberman on 10/7/15.
+ * Created by Alon Zilberman on 10/7/15.
  */
 public class CategoriesAdapter extends ArrayAdapter<Category> {
 

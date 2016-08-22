@@ -7,7 +7,7 @@ import android.content.Intent;
 import android.os.IBinder;
 
 /**
- * Created by alonzilberman on 1/18/16.
+ * Created by Alon Zilberman on 1/18/16.
  */
 public class MainService extends Service {
 

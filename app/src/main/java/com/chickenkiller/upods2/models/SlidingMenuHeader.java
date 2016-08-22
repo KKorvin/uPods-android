@@ -4,7 +4,7 @@ import com.chickenkiller.upods2.R;
 import com.chickenkiller.upods2.controllers.app.UpodsApplication;
 
 /**
- * Created by alonzilberman on 7/10/15.
+ * Created by Alon Zilberman on 7/10/15.
  */
 public class SlidingMenuHeader extends SlidingMenuItem {
 

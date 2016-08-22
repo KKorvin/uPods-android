@@ -10,7 +10,7 @@ import com.pixplicity.easyprefs.library.Prefs;
 import java.util.ArrayList;
 
 /**
- * Created by alonzilberman on 2/26/16.
+ * Created by Alon Zilberman on 2/26/16.
  */
 public class ProfileItem {
     public String leftText;

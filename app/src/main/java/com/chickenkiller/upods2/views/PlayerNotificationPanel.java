@@ -9,7 +9,7 @@ import com.chickenkiller.upods2.controllers.player.UniversalPlayer;
 import com.chickenkiller.upods2.models.MediaItem;
 
 /**
- * Created by alonzilberman on 7/31/15.
+ * Created by Alon Zilberman on 7/31/15.
  */
 public abstract class PlayerNotificationPanel {
 

@@ -11,7 +11,7 @@ import com.chickenkiller.upods2.models.Track;
 import com.chickenkiller.upods2.utils.Logger;
 
 /**
- * Created by alonzilberman on 11/24/15.
+ * Created by Alon Zilberman on 11/24/15.
  */
 public class PlayerPositionUpdater extends AsyncTask<Void, Integer, Void> {
 

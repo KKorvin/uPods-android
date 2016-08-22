@@ -45,7 +45,7 @@ import java.util.List;
 
 /**
  * Can be used for any layout which shows MediaItems (or only cards with IPlayableMediaItem). Supports synchronise content loading.
- * Created by alonzilberman on 7/2/15.
+ * Created by Alon Zilberman on 7/2/15.
  */
 public class MediaItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 

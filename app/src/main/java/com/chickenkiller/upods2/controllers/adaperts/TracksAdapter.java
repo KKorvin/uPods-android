@@ -47,7 +47,7 @@ import java.util.List;
 import at.grabner.circleprogress.CircleProgressView;
 
 /**
- * Created by alonzilberman on 7/2/15.
+ * Created by Alon Zilberman on 7/2/15.
  */
 public class TracksAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 

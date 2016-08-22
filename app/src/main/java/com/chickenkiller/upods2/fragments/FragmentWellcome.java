@@ -12,7 +12,7 @@ import com.chickenkiller.upods2.interfaces.IControlStackHistory;
 import com.chickenkiller.upods2.interfaces.IToolbarHolder;
 
 /**
- * Created by alonzilberman on 8/8/15.
+ * Created by Alon Zilberman on 8/8/15.
  */
 public class FragmentWellcome extends Fragment implements IControlStackHistory {
 

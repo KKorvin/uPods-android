@@ -23,7 +23,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 /**
- * Created by alonzilberman on 10/1/15.
+ * Created by Alon Zilberman on 10/1/15.
  */
 public class DownloadMaster {
 

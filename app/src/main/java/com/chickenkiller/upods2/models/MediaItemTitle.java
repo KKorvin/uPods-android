@@ -3,7 +3,7 @@ package com.chickenkiller.upods2.models;
 import com.chickenkiller.upods2.interfaces.IMediaItemView;
 
 /**
- * Created by alonzilberman on 7/7/15.
+ * Created by Alon Zilberman on 7/7/15.
  */
 public class MediaItemTitle implements IMediaItemView {
 

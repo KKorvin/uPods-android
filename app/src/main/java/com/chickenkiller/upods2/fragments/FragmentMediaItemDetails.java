@@ -58,7 +58,7 @@ import com.yandex.metrica.YandexMetrica;
 import java.util.ArrayList;
 
 /**
- * Created by alonzilberman on 7/8/15.
+ * Created by Alon Zilberman on 7/8/15.
  */
 public class FragmentMediaItemDetails extends Fragment implements View.OnTouchListener, IMovable {
     private static final int MAGIC_NUMBER = -250; //Don't know what it does

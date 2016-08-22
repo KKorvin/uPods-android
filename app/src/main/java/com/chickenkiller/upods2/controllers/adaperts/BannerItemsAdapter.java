@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by alonzilberman on 7/5/15.
+ * Created by Alon Zilberman on 7/5/15.
  */
 public class BannerItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 

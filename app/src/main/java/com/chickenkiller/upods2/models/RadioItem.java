@@ -25,7 +25,7 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * Created by alonzilberman on 7/3/15.
+ * Created by Alon Zilberman on 7/3/15.
  */
 public class RadioItem extends MediaItem {
 

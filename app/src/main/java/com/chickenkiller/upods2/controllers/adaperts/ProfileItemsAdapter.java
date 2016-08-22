@@ -11,7 +11,7 @@ import com.chickenkiller.upods2.R;
 import com.chickenkiller.upods2.models.ProfileItem;
 
 /**
- * Created by alonzilberman on 2/26/16.
+ * Created by Alon Zilberman on 2/26/16.
  */
 public class ProfileItemsAdapter extends ArrayAdapter<ProfileItem> {
 

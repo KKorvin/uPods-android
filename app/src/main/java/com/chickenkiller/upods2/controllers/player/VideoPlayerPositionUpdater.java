@@ -12,7 +12,7 @@ import java.lang.ref.WeakReference;
 import java.util.concurrent.TimeUnit;
 
 /**
- * Created by alonzilberman on 11/24/15.
+ * Created by Alon Zilberman on 11/24/15.
  */
 public class VideoPlayerPositionUpdater extends PlayerPositionUpdater {
 

@@ -22,7 +22,7 @@ import com.chickenkiller.upods2.R;
 import com.chickenkiller.upods2.utils.ui.PlayPauseDrawable;
 
 /**
- * Created by alonzilberman on 12/26/15.
+ * Created by Alon Zilberman on 12/26/15.
  */
 public class PlayPauseView extends FrameLayout {
 

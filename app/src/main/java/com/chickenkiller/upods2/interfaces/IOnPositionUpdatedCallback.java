@@ -1,7 +1,7 @@
 package com.chickenkiller.upods2.interfaces;
 
 /**
- * Created by alonzilberman on 11/11/15.
+ * Created by Alon Zilberman on 11/11/15.
  */
 public interface IOnPositionUpdatedCallback {
 

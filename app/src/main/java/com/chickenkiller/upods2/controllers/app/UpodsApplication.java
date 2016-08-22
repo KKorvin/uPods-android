@@ -18,7 +18,7 @@ import com.yandex.metrica.YandexMetrica;
 
 
 /**
- * Created by alonzilberman on 7/31/15.
+ * Created by Alon Zilberman on 7/31/15.
  */
 public class UpodsApplication extends Application {
 

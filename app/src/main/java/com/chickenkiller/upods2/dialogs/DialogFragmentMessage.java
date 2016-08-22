@@ -10,7 +10,7 @@ import com.chickenkiller.upods2.R;
 import com.chickenkiller.upods2.interfaces.IOperationFinishCallback;
 
 /**
- * Created by alonzilberman on 8/8/15.
+ * Created by Alon Zilberman on 8/8/15.
  */
 public class DialogFragmentMessage extends DialogFragment {
 

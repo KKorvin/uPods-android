@@ -5,7 +5,7 @@ import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.Shape;
 
 /**
- * Created by alonzilberman on 12/6/15.
+ * Created by Alon Zilberman on 12/6/15.
  */
 public class ShapeHolder {
     private float x = 0, y = 0;//Ô²µÄx¡¢y×ø±ê

@@ -25,7 +25,7 @@ import com.chickenkiller.upods2.utils.ui.LetterBitmap;
 import com.chickenkiller.upods2.utils.ui.UIHelper;
 
 /**
- * Created by alonzilberman on 8/5/15.
+ * Created by Alon Zilberman on 8/5/15.
  */
 public class SmallPlayer implements IPlayerStateListener, View.OnClickListener {
 

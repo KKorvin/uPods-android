@@ -17,7 +17,7 @@ import com.chickenkiller.upods2.interfaces.ISlidingMenuHolder;
 import com.chickenkiller.upods2.interfaces.IToolbarHolder;
 
 /**
- * Created by alonzilberman on 7/8/15.
+ * Created by Alon Zilberman on 7/8/15.
  */
 public class FragmentSettings extends PreferenceFragment {
 

@@ -32,7 +32,7 @@ import java.util.List;
 import java.util.Random;
 
 /**
- * Created by alonzilberman on 7/28/15.
+ * Created by Alon Zilberman on 7/28/15.
  */
 public class UIHelper {
 

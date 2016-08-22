@@ -19,7 +19,7 @@ import android.util.Property;
 import com.chickenkiller.upods2.R;
 
 /**
- * Created by alonzilberman on 12/26/15.
+ * Created by Alon Zilberman on 12/26/15.
  */
 public class PlayPauseDrawable extends Drawable {
     private static final Property<PlayPauseDrawable, Float> PROGRESS =

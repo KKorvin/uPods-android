@@ -34,7 +34,7 @@ import com.yandex.metrica.YandexMetrica;
 import java.util.List;
 
 /**
- * Created by alonzilberman on 7/4/15.
+ * Created by Alon Zilberman on 7/4/15.
  */
 public class SlidingMenuAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 

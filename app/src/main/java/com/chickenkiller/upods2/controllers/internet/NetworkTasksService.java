@@ -26,7 +26,7 @@ import java.net.URL;
 import java.util.ArrayList;
 
 /**
- * Created by alonzilberman on 12/13/15.
+ * Created by Alon Zilberman on 12/13/15.
  */
 public class NetworkTasksService extends IntentService {
 

@@ -19,7 +19,7 @@ import org.junit.runner.RunWith;
 import static org.junit.Assert.assertTrue;
 
 /**
- * Created by alonzilberman on 13/03/2016.
+ * Created by Alon Zilberman on 13/03/2016.
  * This tests check only basic functionality of profile manager.
  */
 

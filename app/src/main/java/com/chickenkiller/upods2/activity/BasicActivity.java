@@ -22,7 +22,7 @@ import com.chickenkiller.upods2.utils.enums.ContextMenuType;
 import java.util.Calendar;
 
 /**
- * Created by alonzilberman on 7/28/15.
+ * Created by Alon Zilberman on 7/28/15.
  * Extend this activity to get basic logic for context menu and fragments working
  */
 public class BasicActivity extends Activity implements IFragmentsManager, IContextMenuManager {

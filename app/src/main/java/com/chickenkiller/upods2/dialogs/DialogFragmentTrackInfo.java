@@ -15,7 +15,7 @@ import com.chickenkiller.upods2.R;
 import com.chickenkiller.upods2.models.Track;
 
 /**
- * Created by alonzilberman on 8/8/15.
+ * Created by Alon Zilberman on 8/8/15.
  */
 public class DialogFragmentTrackInfo extends DialogFragment {
 

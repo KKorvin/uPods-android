@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import static org.junit.Assert.assertTrue;
 
 /**
- * Created by alonzilberman on 3/9/16.
+ * Created by Alon Zilberman on 3/9/16.
  */
 
 @RunWith(AndroidJUnit4.class)

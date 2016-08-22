@@ -5,7 +5,7 @@ import android.view.View;
 
 /**
  * Decorated to run OnClickListener with delay
- * Created by alonzilberman on 1/20/16.
+ * Created by Alon Zilberman on 1/20/16.
  */
 public class DelayedOnClickListener implements View.OnClickListener {
 

@@ -12,7 +12,7 @@ import com.chickenkiller.upods2.utils.Logger;
 import com.chickenkiller.upods2.utils.enums.Direction;
 
 /**
- * Created by alonzilberman on 7/31/15.
+ * Created by Alon Zilberman on 7/31/15.
  */
 public class MainBroadcastRecivier extends BroadcastReceiver {
 

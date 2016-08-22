@@ -5,7 +5,7 @@ import android.view.animation.Animation;
 import android.view.animation.Transformation;
 
 /**
- * Created by alonzilberman on 11/6/15.
+ * Created by Alon Zilberman on 11/6/15.
  */
 public class ArcTranslateAnimation extends Animation {
     private int mFromXType = ABSOLUTE;

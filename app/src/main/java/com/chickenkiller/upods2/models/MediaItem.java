@@ -6,13 +6,13 @@ import com.chickenkiller.upods2.utils.GlobalUtils;
 import java.util.ArrayList;
 
 /**
- * Created by alonzilberman on 7/3/15.
+ * Created by Alon Zilberman on 7/3/15.
  * Basic class for any media item, can be show in feature screen.
  */
 public abstract class MediaItem extends SQLModel implements IMediaItemView {
 
     /**
-     * Created by alonzilberman on 10/23/15.
+     * Created by Alon Zilberman on 10/23/15.
      * Use it to transfer MediaItems and tracks in one object
      */
     public static class MediaItemBucket {

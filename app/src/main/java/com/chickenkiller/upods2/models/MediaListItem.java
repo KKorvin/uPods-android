@@ -8,7 +8,7 @@ import com.chickenkiller.upods2.controllers.app.UpodsApplication;
 import java.util.ArrayList;
 
 /**
- * Created by alonzilberman on 17/03/2016.
+ * Created by Alon Zilberman on 17/03/2016.
  */
 public class MediaListItem extends SQLModel {
 

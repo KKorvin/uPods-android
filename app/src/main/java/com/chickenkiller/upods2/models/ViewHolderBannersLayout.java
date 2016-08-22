@@ -22,7 +22,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 /**
- * Created by alonzilberman on 9/1/15.
+ * Created by Alon Zilberman on 9/1/15.
  */
 public class ViewHolderBannersLayout extends RecyclerView.ViewHolder {
     public static final int BANNER_SCROLL_TIME = 5000;//ms

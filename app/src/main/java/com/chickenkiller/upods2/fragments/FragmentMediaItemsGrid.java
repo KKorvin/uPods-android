@@ -23,7 +23,7 @@ import com.chickenkiller.upods2.views.MediaViewpager;
 import java.util.Calendar;
 
 /**
- * Created by alonzilberman on 8/8/15.
+ * Created by Alon Zilberman on 8/8/15.
  */
 public class FragmentMediaItemsGrid extends Fragment implements ICustumziedBackPress {
 

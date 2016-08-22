@@ -33,7 +33,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 /**
- * Created by alonzilberman on 7/29/15.
+ * Created by Alon Zilberman on 7/29/15.
  */
 public class UniversalPlayer implements MediaPlayer.EventListener {
 

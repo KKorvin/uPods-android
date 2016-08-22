@@ -10,7 +10,7 @@ import com.chickenkiller.upods2.fragments.FragmentHelpItem;
 import com.chickenkiller.upods2.utils.Logger;
 
 /**
- * Created by alonzilberman on 8/14/15.
+ * Created by Alon Zilberman on 8/14/15.
  * Use it for simple help viewpager
  */
 public class HelpPagesAdapter extends FragmentStatePagerAdapter {

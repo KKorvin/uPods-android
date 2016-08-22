@@ -11,7 +11,7 @@ import android.widget.ScrollView;
 import com.chickenkiller.upods2.interfaces.IMovable;
 
 /**
- * Created by alonzilberman on 7/21/15.
+ * Created by Alon Zilberman on 7/21/15.
  */
 public class DetailsScrollView extends ScrollView {
 

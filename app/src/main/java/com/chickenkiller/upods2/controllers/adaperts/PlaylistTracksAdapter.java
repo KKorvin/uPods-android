@@ -17,7 +17,7 @@ import com.chickenkiller.upods2.models.Track;
 import java.util.List;
 
 /**
- * Created by alonzilberman on 10/7/15.
+ * Created by Alon Zilberman on 10/7/15.
  */
 public class PlaylistTracksAdapter extends ArrayAdapter<Track> implements INowPlayingItemPosiontGetter {
 

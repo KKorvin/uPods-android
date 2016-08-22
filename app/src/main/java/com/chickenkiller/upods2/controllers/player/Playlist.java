@@ -40,7 +40,7 @@ import io.codetail.animation.arcanimator.ArcAnimator;
 import io.codetail.animation.arcanimator.Side;
 
 /**
- * Created by alonzilberman on 11/6/15.
+ * Created by Alon Zilberman on 11/6/15.
  */
 public class Playlist implements AdapterView.OnItemClickListener {
 

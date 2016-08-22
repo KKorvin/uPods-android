@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by alonzilberman on 10/7/15.
+ * Created by Alon Zilberman on 10/7/15.
  * Used for podcasts categories, music genres, languages and countries.
  */
 public class Category {

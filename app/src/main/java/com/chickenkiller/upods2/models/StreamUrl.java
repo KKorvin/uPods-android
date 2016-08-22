@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * Created by alonzilberman on 12/11/15.
+ * Created by Alon Zilberman on 12/11/15.
  */
 public class StreamUrl extends SQLModel {
 
